@@ -373,7 +373,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
     letter-spacing: 1px !important;
 }
 .jconfirm-content-pane {text-align: center !important;}
-.jconfirm-buttons {margin-right: 75px !important;}
+.jconfirm-buttons {margin-right: 40% !important;}
 .fc .fc-row .fc-content-skeleton table, .fc .fc-row .fc-content-skeleton td, .fc .fc-row .fc-helper-skeleton td {padding: 0px !important;}
 .fc-event:before, .fc-event-dot:before {bottom: -3px !important; width: 45px !important;}
 .fc-content .fc-title {font-size: 9px !important;}
@@ -424,6 +424,14 @@ function bookNow() {
     $(".pasthours:checked").each(function(){
         bookTime.push($(this).val());
     });
+    var arr = [];
+    var str = bookTime.toString();
+    var output = str.split(',');
+    //alert(output);
+    $.each(output,function(i) {
+        s_time = parseFloat(output[i]) + 1;
+        arr.push("<div>"+output[i]+" to "+s_time+":00</div>");
+    });
     $('#bookTime').val(bookTime);
     $.ajax({
         type:"post",
@@ -433,7 +441,7 @@ function bookNow() {
             if(returndata == 1) {
                 $.confirm({
                     title: '',
-                    content: bookTime+" Slot Booked successfuly",
+                    content: arr.join('')+" Slot Booked successfuly",
                     buttons: {
                         somethingElse: {
                             text: 'Ok',
