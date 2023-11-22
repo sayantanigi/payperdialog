@@ -182,13 +182,19 @@ if($data_request=='user'){
                                             <?php } ?>
                                             <?php //if(@$_SESSION['afrebay']['userType']=='1') { ?>
                                             <?php if(@$userinfo->userType=='1') { ?>
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-4">
                                                 <label for="last_name">
                                                     <h4>Zip Code</h4>
                                                 </label>
                                                 <input type="text" class="form-control" name="zip" id="zip" placeholder="Zip Code" value="<?php echo @$userinfo->zip;?>" onkeypress="only_number(event)" maxlength="6" />
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-4">
+                                                <label for="last_name">
+                                                    <h4>Rate per Hour</h4>
+                                                </label>
+                                                <input type="text" class="form-control" name="rateperhour" id="rateperhour" placeholder="Rate per Hour" value="<?php echo @$userinfo->rateperhour;?>"/>
+                                            </div>
+                                            <div class="col-lg-4">
                                                 <label for="last_name">
                                                     <h4>Resume upload</h4>
                                                 </label>

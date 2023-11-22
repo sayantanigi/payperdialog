@@ -179,11 +179,14 @@ class Dashboard extends CI_Controller {
 			'latitude' => $_POST['latitude'],
 			'longitude' => $_POST['longitude'],
 			'short_bio' => $_POST['short_bio'],
+			'rateperhour' => $_POST['rateperhour'],
 			//'video' => $video,
 			'resume' => $resume,
 		);
-		if ($_FILES['portfolio_file']['name'] != '') {
+		if (!empty($_FILES['portfolio_file']['size'])) {
+			// /echo "<pre>"; print_r($_FILES['portfolio_file']['size']); die();
         	$count = count($_FILES['portfolio_file']['name']);
+        	$getData = $this->db->query('DELETE FROM users_portfolio WHERE user_id = "'.$_SESSION['afrebay']['userId'].'"');
 	        for ($i=0; $i < $count; $i++) {
 	            $src = $_FILES['portfolio_file']['tmp_name'][$i];
 	            $filEnc = time();
@@ -192,25 +195,34 @@ class Dashboard extends CI_Controller {
 	            $dest = getcwd() . '/uploads/users/portfolio_file/' . $avatar1;
 	            if (move_uploaded_file($src, $dest)) {
 	                $file  = $avatar1;
-	                //@unlink('uploads/users/portfolio_file/' . $_POST['old_portfolio_file']);
 	            }
-	            $this->Crud_model->SaveData('users_portfolio',$details_data);
+	            $details_data = array(
+                    'user_id'=> $_SESSION['afrebay']['userId'],
+                    'content_title'=> $_POST['content_title'][$i],
+                    'portfolio_file'=> $file,
+                    'created_date'=> date('Y-m-d H:m:s')
+                );
+                $this->Crud_model->SaveData('users_portfolio',$details_data);
 	        }
-        } else {
+        }
+        /*else {
+        	echo "qqqqq<pre>"; print_r($_FILES['portfolio_file']['size'][0]); die();
+        	//$getData = $this->db->query("SELECT * FROM users WHERE userId = "'.$_SESSION['afrebay']['userId'].'"")->result_array();
             $file = $_POST['old_podcast_file'];
             $count = count($this->input->post('content_title'));
             for ($i=0; $i < $count; $i++) {
                 $details_data = array(
-                    'podcast_id'=> $last_id,
+                    'user_id'=> $_SESSION['afrebay']['userId'],
                     'content_title'=> $_POST['content_title'][$i],
-                    'podcast_file'=> $file,
+                    'portfolio_file'=> $file,
                     'created_date'=> date('Y-m-d H:m:s')
                 );
-                $this->Crud_model->SaveData('all_podcast_contents',$details_data);
+                $this->Crud_model->SaveData('users_portfolio',$details_data);
                 $this->session->set_flashdata('message', 'Podcast created successfully');
-                echo "2"; exit;
+                //echo "2"; exit;
             }
-        }
+        }*/
+
 		$this->Crud_model->SaveData('users', $data, "userId='" . $_POST['id'] . "'");
 		if($_POST['from_data_request']=='admin') {
 			$this->session->set_flashdata('message', 'Profile Updated Successfull !');
