@@ -88,6 +88,7 @@ $route['search-job'] = "welcome/searchjob";
 $route['addservice'] = "user/dashboard/service_form";
 $route['jobbid'] = "user/dashboard/jobbid";
 $route['availability'] = "user/dashboard/availability";
+$route['booking_history'] = "user/dashboard/booking_history";
 $route['chat'] = "user/dashboard/chat";
 $route['video'] = "user/dashboard/video_call";
 $route['product'] = "user/dashboard/products";

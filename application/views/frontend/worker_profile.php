@@ -131,88 +131,58 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                 </div>
                                 <!-- Calender -->
                                 <div class="Calender_Pick" id="calendar"></div>
-                                <!-- <div id="err-messages">Employer will not be able to add availability for employee.</div> -->
-                                <!-- Job Overview -->
-                                <!-- <?php 
-                                $availability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".$user_detail->userId."'")->result_array();
-                                if(!empty($availability)) { ?>
-                                <div class="job-overview" style="height: 382px; overflow: auto; margin-top: 0px;">
-                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">Start Date</p>
-                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">From Time</p>
-                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">To Time</p>
-                                    <p style="text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important; ">End Date</p>
-                                    <?php foreach ($availability as $value) {
-                                    $checkBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".$value['id']."'")->result_array(); 
-                                    if(!empty($checkBookSlot)) { ?>
-                                    <div style="background: #c7c7c7; margin: 5px 0 0 0 !important; padding: 8px 0 0 0;" class="job-overview">
-                                        <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['start_date']));?></p>
-                                        <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['from_time']))?></p>
-                                        <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['to_time']));?></p>
-                                        <p style="text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['end_date']))?></p>
-                                        <p style="text-align: center; margin: 0px; color: red; ">Booked</p>
-                                    </div>
-                                    <?php } else { 
-                                    if($_SESSION['afrebay']['userType'] == 1) { ?>
-                                    <div style="background: #dddddd; margin: 5px 0 0 0 !important; padding: 0;" class="job-overview">
-                                        <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['start_date']));?></p>
-                                        <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['from_time']))?></p>
-                                        <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['to_time']));?></p>
-                                        <p style="text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['end_date']))?></p>
-                                    </div>
-                                    <?php } else { ?>
-                                    <div style="background: #dddddd; margin: 5px 0 0 0 !important; padding: 0;" onclick="bookSlot(<?= $value['id']?>)" class="job-overview">
-                                        <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['start_date']));?></p>
-                                        <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['from_time']))?></p>
-                                        <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['to_time']));?></p>
-                                        <p style="text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['end_date']))?></p>
-                                    </div>
-                                    <?php } ?>
-                                    <?php } ?>
-                                <?php } ?>
-                                </div>
-                                <input type="hidden" name="employee_id" id="employee_id" value="<?= @$user_detail->userId?>">
-                                <input type="hidden" name="employer_id" id="employer_id" value="<?= @$_SESSION['afrebay']['userId']?>">
-                                <?php } else { ?>
-                                <div class="job-overview" style="text-align: center;">No data added for availability</div>
-                                <?php } ?> -->
-
                                 <?php 
-                                $availability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".@$user_detail->userId."'")->result_array();
-                                if(!empty($availability)) { ?>
-                                <div class="job-overview" style="height: 382px; overflow: auto; margin-top: 0px;">
-                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">Start Date</p>
-                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">From Time</p>
-                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">To Time</p>
-                                    <p style="wwidth: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">End Date</p>
-                                    <?php $i=1; 
-                                    foreach ($availability as $value) { ?>
-                                    <div style="background: #c7c7c7; margin: 0 0 5px 0 !important; padding: 0px; cursor: pointer;" class="job-overview job_overview_main" id="job_overview_main_<?= $i?>">
-                                        <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['start_date']));?></p>
-                                        <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['from_time']))?></p>
-                                        <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['to_time']));?></p>
-                                        <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['end_date']))?></p>
-                                    </div>
-                                    <div style="width: 100%;display: inline-block;background: #e1dfdf;margin: 0 0 5px 0;border-radius: 10px;padding: 10px;text-align: center;" id="job_overview_sub_<?= $i?>" class="job_overview_sub">
-                                    <?php 
-                                    $getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".$value['id']."'")->result_array(); 
-                                    if(!empty($getBookSlot)) { 
-                                    foreach ($getBookSlot as $val) { 
-                                    $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".$val['employer_id']."'")->result_array();?>
-                                    <div style="width: 100%; display: inline-block;">
-                                        <p style="width: 50%;display: inline-block;float: left;margin: 0px;font-size: 14px;"><strong>Booking Time:</strong> <?= date('h:i A', strtotime($val['bookingTime']))?></p>
-                                        <p style="width: 50%;display: inline-block;float: left;margin: 0px;font-size: 14px;"><strong>Booked By:</strong> <?= $getEmployer[0]['companyname'];?></p>
-                                    </div>
-                                    <?php } } else { ?>
-                                    <p>No slot Booked for this date</p>
-                                    <?php } ?>
-                                    </div>
-                                    <?php $i++; } ?>
-                                </div>
-                                <input type="hidden" name="bookTime" id="bookTime" value="">
-                                <?php } else { ?>
-                                <div class="job-overview" style="text-align: center;">No data added for availability</div>
-                                <?php } ?>
-                                
+                                if (!empty(@$_SESSION['afrebay']['userId'])) { 
+                                    $checkBookSlot = $this->db->query("SELECT user_availability.*, user_booking.* FROM user_booking JOIN user_availability ON user_availability.id = user_booking.available_id WHERE user_booking.employer_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                    if(!empty($checkBookSlot)) {
+                                        $availability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".@$user_detail->userId."'")->result_array();
+                                        if(!empty($availability)) { ?>
+                                        <div class="job-overview" style="height: 382px; overflow: auto; margin-top: 0px;">
+                                            <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">Start Date</p>
+                                            <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">From Time</p>
+                                            <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">To Time</p>
+                                            <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">End Date</p>
+                                            <?php $i=1; 
+                                            foreach ($availability as $value) { ?>
+                                            <!-- <div> -->
+                                                <div class="job-overview" style="width: 80%; background: #c7c7c7; margin: 0 0 5px 0 !important; padding: 0px; cursor: pointer;">
+                                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['start_date']));?></p>
+                                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['from_time']))?></p>
+                                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['to_time']));?></p>
+                                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['end_date']))?></p>
+                                                </div>
+                                                <div class="job-overview job_overview_main" id="job_overview_main_<?= $i?>" style="width: 15%; background: #c7c7c7; margin: 0 0 5px 10px !important; padding: 0px; cursor: pointer;">
+                                                    <p style="width: 100%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">View</p>
+                                                </div>
+                                            <!-- </div> -->
+                                            <div style="width: 100%;display: inline-block;background: #e1dfdf;margin: 0 0 5px 0;border-radius: 10px;padding: 10px;text-align: center;" id="job_overview_sub_<?= $i?>" class="job_overview_sub">
+                                            <?php $getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE employer_id ='".@$_SESSION['afrebay']['userId']."' and available_id = '".$value['id']."'")->result_array(); 
+                                            if(!empty($getBookSlot)) { ?>
+                                                <div style="width: 100%; display: inline-block;">
+                                                    <div>Booked Slot</div>
+                                                    <?php foreach ($getBookSlot as $val) { 
+                                                    $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".$val['employer_id']."'")->result_array();?>
+                                                    <div>
+                                                        <p style="width: 50%;display: inline-block;float: left;margin: 0px;font-size: 14px;"><?= date('h:i A', strtotime($val['bookingTime']))?> to <?= date('h:i A', strtotime($val['bookingTime']) + 60*60)?></p>
+                                                    </div>
+                                                    <?php } ?>
+                                                    <div>
+                                                        <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;">Total Rate: <?= count($getBookSlot)*@$user_detail->rateperhour?></p>
+                                                    </div>
+                                                </div>
+                                            <?php } else { ?>
+                                                <p style="margin: 0px;">No slot booked for this date</p>
+                                            <?php } ?>
+                                            </div>
+                                            <?php $i++; } ?>
+                                        </div>
+                                        <input type="hidden" name="bookTime" id="bookTime" value="">
+                                        <?php } else { ?>
+                                        <div class="job-overview" style="text-align: center;">No data added for availability</div>
+                                        <?php } } else { ?>
+                                        <div class="job-overview" style="height: auto; overflow: auto; margin-top: 0px; text-align: center;">No slot booked</div>
+                                    <?php } } ?> 
+
                                 <?php if (!empty($_SESSION['afrebay']['userId']) && $_SESSION['afrebay']['userType'] == 2) { ?>
                                 <div class="quick-form-job">
                                     <h3>Rate This Freelancer</h3>
@@ -238,7 +208,6 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                                 <button class="submit btn btn-info">Submit</button>
                                             </div>
                                         </div>
-                                        <!--  <span>You accepts our <a href="javascript:void(0)" title="">Terms and Conditions</a></span> -->
                                     </form>
                                 </div>
                                 <?php } ?>
@@ -360,7 +329,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
 </div>
 <?php //} ?>
 <style>
-.dashboard-gig a:focus, a:hover, a {text-decoration: none !important;}#calendar {width: 100%;margin: 0;box-shadow: 0 0 10px #dddddd;display: inline-block;padding: 20px;border-radius: 10px;margin-bottom: 20px;}.fc-event {border: 1px solid #eee !important;}.fc-content {padding: 3px !important;}.fc-content .fc-title {display: block !important;overflow: hidden;text-align: center;font-size: 12px;font-weight: 500;text-align: center;}.fc-customButton-button {font-size: 13px !important;position: absolute;top: 60px;left: 50%;transform: translateY(-50%);}.form-group {margin-bottom: 1rem;}.form-group>label {margin-bottom: 10px;}#delete-modal .modal-footer>.btn {border-radius: 3px !important;padding: 0px 8px !important;font-size: 15px;}.fc-scroller {overflow-y: hidden !important;}.context-menu {position: absolute;z-index: 1000;background-color: #fff;border: 1px solid #ccc;border-radius: 4px;box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);padding: 5px;}.context-menu ul {list-style-type: none;margin: 0;padding: 0;}.context-menu ul>li {display: block;padding: 5px 15px;list-style-type: none;color: #333;display: block;cursor: pointer;margin: 0 auto;transition: 0.10s;font-size: 13px;}.context-menu ul>li:hover {color: #fff;background-color: #007bff;border-radius: 2px;}.fa, .fas {font-size: 13px;margin-right: 4px;}button:focus {box-shadow: none !important;}.Calender_Pick .fc-header-toolbar {display: flex;flex-direction: column;}.Calender_Pick .fc-header-toolbar {display: flex;flex-direction: column;margin-bottom: 0px !important;}.Calender_Pick .fc-left {width: 100%;height: 35px;display: flex;justify-content: flex-start;align-items: flex-start;}.Calender_Pick .fc-left h2 {font-weight: 600;font-size: 18px;}.Calender_Pick .fc-center {position: relative;height: 45px;width: 100%;}.Calender_Pick .fc-center button {transform: translateY(0);position: absolute;top: 0;height: 35px;left: 0;width: 100px;border-radius: 50px;background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;border: 0;font-size: 13px !important;}.Calender_Pick .fc-right {width: 100%;height: 45px;display: flex;align-items: flex-start;justify-content: space-between;}.Calender_Pick .fc-right button {border: 0;height: 35px;width: 100px;border-radius: 50px;background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;opacity: 1;font-size: 13px !important;}.Calender_Pick .fc-button-group {height: 35px;border-radius: 50px;}.Calender_Pick .fc-button-group button {background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;border: 0;display: flex;align-items: center;justify-content: center;width: 60px !important;}.Calender_Pick .fc-button-group button span {font-size: 13px;}.Calender_Pick .fc-day-grid-container {height: auto !important;border-bottom: 1px solid #ddd;}.Calender_Pick .fc-view-container .fc-head-container {color: #ED1C24 !important;}div.modal.edit-form.Modal_Show {display: flex !important;align-items: center;justify-content: center;}.edit-form .modal-content {width: 500px;}.edit-form .modal-content .modal-body {border-radius: 0;}.edit-form .modal-content #myForm .form-group label {padding: 0;font-size: 16px;}.edit-form .modal-content #myForm .form-group #event-title {padding: 10px !important;font-size: 15px;}.edit-form .modal-content .modal-footer button {height: 35px;display: flex;align-items: center;justify-content: center;border-radius: 50px;background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;border: 0;letter-spacing: 1px;}
+.dashboard-gig a:focus, a:hover, a {text-decoration: none !important;}#calendar {width: 100%;margin: 0;box-shadow: 0 0 10px #dddddd;display: inline-block;padding: 20px;border-radius: 10px;margin-bottom: 20px;}.fc-event {border: 1px solid #eee !important;}.fc-content {padding: 3px !important;}.fc-content .fc-title {display: block !important;overflow: hidden;text-align: center;font-size: 12px;font-weight: 500;text-align: center;}.fc-customButton-button {font-size: 13px !important;position: absolute;top: 60px;left: 50%;transform: translateY(-50%);}.form-group {margin-bottom: 1rem;}.form-group>label {margin-bottom: 10px;}#delete-modal .modal-footer>.btn {border-radius: 3px !important;padding: 0px 8px !important;font-size: 15px;}.fc-scroller {overflow-y: hidden !important;}.context-menu {position: absolute;z-index: 1000;background-color: #fff;border: 1px solid #ccc;border-radius: 4px;box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);padding: 5px;}.context-menu ul {list-style-type: none;margin: 0;padding: 0;}.context-menu ul>li {display: block;padding: 5px 15px;list-style-type: none;color: #333;display: block;cursor: pointer;margin: 0 auto;transition: 0.10s;font-size: 13px;}.context-menu ul>li:hover {color: #fff;background-color: #007bff;border-radius: 2px;}.fa, .fas {font-size: 13px;margin-right: 4px;}button:focus {box-shadow: none !important;}.Calender_Pick .fc-header-toolbar {display: flex;flex-direction: column;}.Calender_Pick .fc-header-toolbar {display: flex;flex-direction: column;margin-bottom: 0px !important;}.Calender_Pick .fc-left {width: 100%;height: 35px;display: flex;justify-content: flex-start;align-items: flex-start;}.Calender_Pick .fc-left h2 {font-weight: 600;font-size: 18px;}.Calender_Pick .fc-center {position: relative;height: 45px;width: 100%; display: none;}.Calender_Pick .fc-center button {transform: translateY(0);position: absolute;top: 0;height: 35px;left: 0;width: 100px;border-radius: 50px;background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;border: 0;font-size: 13px !important;}.Calender_Pick .fc-right {width: 100%;height: 45px;display: flex;align-items: flex-start;justify-content: space-between;}.Calender_Pick .fc-right button {border: 0;height: 35px;width: 100px;border-radius: 50px;background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;opacity: 1;font-size: 13px !important;}.Calender_Pick .fc-button-group {height: 35px;border-radius: 50px;}.Calender_Pick .fc-button-group button {background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;border: 0;display: flex;align-items: center;justify-content: center;width: 60px !important;}.Calender_Pick .fc-button-group button span {font-size: 13px;}.Calender_Pick .fc-day-grid-container {height: auto !important;border-bottom: 1px solid #ddd;}.Calender_Pick .fc-view-container .fc-head-container {color: #ED1C24 !important;}div.modal.edit-form.Modal_Show {display: flex !important;align-items: center;justify-content: center;}.edit-form .modal-content {width: 500px;}.edit-form .modal-content .modal-body {border-radius: 0;}.edit-form .modal-content #myForm .form-group label {padding: 0;font-size: 16px;}.edit-form .modal-content #myForm .form-group #event-title {padding: 10px !important;font-size: 15px;}.edit-form .modal-content .modal-footer button {height: 35px;display: flex;align-items: center;justify-content: center;border-radius: 50px;background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;border: 0;letter-spacing: 1px;}
 #err-messages{display: none; text-align: center;}
 #submit-button {
     /*height: 35px !important;*/
@@ -373,13 +342,14 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
     letter-spacing: 1px !important;
 }
 .jconfirm-content-pane {text-align: center !important;}
-.jconfirm-buttons {margin-right: 40% !important;}
+/*.jconfirm-buttons {margin-right: 21% !important;}*/
 .fc .fc-row .fc-content-skeleton table, .fc .fc-row .fc-content-skeleton td, .fc .fc-row .fc-helper-skeleton td {padding: 0px !important;}
 .fc-event:before, .fc-event-dot:before {bottom: -3px !important; width: 45px !important;}
 .fc-content .fc-title {font-size: 9px !important;}
 .jobsites tbody td {padding: 5px;}
 .jobsites tbody td input {position: unset; opacity: 1; margin-right: 10px;}
 .jconfirm.jconfirm-white .jconfirm-box .jconfirm-buttons button.btn-default, .jconfirm.jconfirm-light .jconfirm-box .jconfirm-buttons button.btn-default {float: left;}
+/*.prompt_login {margin-right: 40% !important;}*/
 </style>
 <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css'>
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'>
@@ -411,7 +381,7 @@ function availTime(start_date, from_time, end_date, to_time, bookingTime) {
         if(bookingTime.indexOf(output[i]) != -1) {
             $('.bookingcontent').append('<tr><td class="pastHours"><input type="checkbox" class="pasthours" id="pastHours_'+output[i].replace(':00', '').trim()+'" name="pastHours[]" value="'+output[i]+'" required checked onclick="removeSlot('+output[i].replace(':00', '').trim()+')">'+output[i]+'</td></tr>');
         } else {
-            $('.bookingcontent').append('<tr><td class="pastHours"><input type="checkbox" class="pasthours" id="pastHours_'+output[i].replace(':00', '').trim()+'" name="pastHours[]" value="'+output[i]+'" required>'+output[i]+'</td></tr>');
+            $('.bookingcontent').append('<tr><td class="pastHours"><input type="checkbox" class="pasthours" id="pastHours_'+output[i].replace(':00', '').trim()+'" name="pastHours[]" value="'+output[i]+'" required onclick="removeSlot('+output[i].replace(':00', '').trim()+')">'+output[i]+'</td></tr>');
         }
     });
 }
@@ -528,6 +498,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const bookingModal = new bootstrap.Modal(document.getElementById('bookingmodal'));
     const myEvents =[
         <?php 
+        if(!empty($_SESSION['afrebay']['userId'])) {
         $availability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".$user_detail->userId."'")->result_array();
         if(!empty($availability)) { 
         foreach ($availability as $value) { 
@@ -546,7 +517,7 @@ document.addEventListener('DOMContentLoaded', function() {
             end: '<?= date('Y-m-d', strtotime($value['end_date']))?>',
             backgroundColor: 'green'
         },
-        <?php } } } ?>
+        <?php } } } } ?>
     ];
     const calendar = new FullCalendar.Calendar(calendarEl, {
         customButtons: {
@@ -633,7 +604,7 @@ document.addEventListener('DOMContentLoaded', function() {
         buttons: {
             somethingElse: {
                 text: 'Ok',
-                btnClass: 'btn-secondary',
+                btnClass: 'btn-secondary prompt_login',
                 keys: ['enter', 'shift'],
                 action: function(){
                     location.reload();

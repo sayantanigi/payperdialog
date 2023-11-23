@@ -479,6 +479,12 @@ class Dashboard extends CI_Controller {
 		$this->load->view('footer');
 	}
 
+	function booking_history() {
+		$this->load->view('header');
+		$this->load->view('user_dashboard/booking_history');
+		$this->load->view('footer');
+	}
+
 	////////////////////////////////// start chat functionality////////////////
 	function chat() {
 		$data['get_user'] = $this->Crud_model->get_single('users', "userId ='".$_SESSION['afrebay']['userId']."'");
@@ -1298,5 +1304,27 @@ class Dashboard extends CI_Controller {
 			$this->Crud_model->DeleteData('user_availability', "id='".$_POST['avail_id']."'");
 			echo '2';
 		}
+	}
+
+	public function getBookingDetailsforEmployer() {
+		//echo "<pre>"; print_r($_POST); die();
+		$selectDate = $_POST['selectDate'];
+		$employeeId = $_POST['employeeId'];
+		$bookingData = $this->db->query("SELECT * FROM user_availability WHERE start_date ='".@$selectDate."' AND end_date ='".@$selectDate."' AND user_id ='".@$employeeId."'")->result_array();
+		$avail_id = $bookingData[0]['id'];
+		$html .= "<div style='width: 100%; display: inline-block; text-align: center; border-radius: 10px; box-shadow: 0 0 10px #dddddd; height: 340px;'><p style='padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;'>".$selectDate."</p>";
+		$getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".@$bookingData[0]['id']."' AND employee_id ='".@$employeeId."'")->result_array();
+        if(!empty($getBookSlot)) {
+        	$html .="<div style='width: 100%; display: inline-block; padding: 0 40px'><div style='width: 100%; border: 1px solid #eee;height: auto;display: inline-block;box-shadow: 0 0 10px #dddddd;'>";
+        	foreach ($getBookSlot as $val) {
+        		$getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+        		$getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$val['employer_id']."'")->result_array();
+        		$html .="<div style='width: 33.33%;float: left;display: inline-block;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px;'>".date('h:i A', strtotime($val['bookingTime']))." to ".date('h:i A', strtotime($val['bookingTime']) + 60*60)."</p></div>";
+        	}
+        	$html .= "<div><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Total Rate: ".count($getBookSlot)*@$getEmployee[0]['rateperhour']."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Booked By: ".@$getEmployer[0]['companyname']."</p></div></div></div>";
+        } else {
+        	$html = "<div style='width: 100%; display: inline-block; text-align: center; border-radius: 10px; box-shadow: 0 0 10px #dddddd; height: 340px;'><p style='padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;'>".$selectDate."</p><div style='color: #212529;'>No slot booked for this selected date</div></div>";
+        }
+        echo $html;
 	}
 }

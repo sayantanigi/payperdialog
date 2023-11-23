@@ -315,6 +315,12 @@ $get_setting=$this->Crud_model->get_single('setting');
                                         <span class="hidden-xs hidden-sm">Availability</span>
                                     </a>
                                 </li>
+                                <li <?php if($seg1=='booking_history') { ?>class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-commenting" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Booking History</span>
+                                    </a>
+                                </li>
                                 <?php } else { ?>
                                 <li <?php if($seg1=='chat') { ?>class="active" <?php } ?>>
                                     <span class="cover"></span>
@@ -334,6 +340,12 @@ $get_setting=$this->Crud_model->get_single('setting');
                                         <span class="hidden-xs hidden-sm">Availability</span>
                                     </a>
                                 </li>
+                                <li <?php if($seg1=='booking_history') { ?>class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="<?= base_url('booking_history')?>"><i class="fa fa-calender" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Booking History</span>
+                                    </a>
+                                </li>
                                 <?php } } else { ?>
                                 <li <?php if($seg1=='chat') { ?>class="active" <?php } ?>>
                                     <span class="cover"></span>
@@ -351,6 +363,12 @@ $get_setting=$this->Crud_model->get_single('setting');
                                     <span class="cover"></span>
                                     <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-calender" aria-hidden="true"></i>
                                         <span class="hidden-xs hidden-sm">Availability</span>
+                                    </a>
+                                </li>
+                                <li <?php if($seg1=='booking_history') { ?>class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-calender" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Booking History</span>
                                     </a>
                                 </li>
                                 <?php } 
@@ -424,6 +442,7 @@ $get_setting=$this->Crud_model->get_single('setting');
 <style>
     .completeSub {display: none; text-align: center; margin-top: 20px; color: #ed1c24; font-size: 20px;}
     .completeSub1 {display: none; text-align: center; margin-top: 20px; color: #ed1c24; font-size: 20px;}
+    .User_Sidemenu .hidden-xs.display-table-cell .navi ul li a { padding: 15px 10px !important; }
 </style>
 <script>
 function completeSub() {
