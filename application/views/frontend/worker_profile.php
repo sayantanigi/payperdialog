@@ -20,7 +20,6 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
         </div>
     </div>
 </section>
-
 <section class="overlape freelancer-details-page">
     <div class="block remove-top Worker_Detail">
         <div class="container">
@@ -126,6 +125,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                             <i class="la la-mars-double"></i>
                                             <h3>Gender</h3>
                                             <span><?= @$user_detail->gender ?></span>
+                                            <input type="hidden" name="rateperhour" id="rateperhour" value="<?= @$user_detail->rateperhour?>">
                                         </li>
                                     </ul>
                                 </div>
@@ -397,11 +397,14 @@ function bookNow() {
     var arr = [];
     var str = bookTime.toString();
     var output = str.split(',');
-    //alert(output);
+    //alert(output.length);
     $.each(output,function(i) {
         s_time = parseFloat(output[i]) + 1;
         arr.push("<div>"+output[i]+" to "+s_time+":00</div>");
     });
+    var rate = output.length * $('#rateperhour').val();
+    var finalrate = "<div><p style='color: #000;'>Total Rate: "+rate+"</p><div>";
+    finalshow = arr.join('')+ "" + finalrate;
     $('#bookTime').val(bookTime);
     $.ajax({
         type:"post",
@@ -411,7 +414,7 @@ function bookNow() {
             if(returndata == 1) {
                 $.confirm({
                     title: '',
-                    content: arr.join('')+" Slot Booked successfuly",
+                    content: finalshow+" Slot Booked successfuly",
                     buttons: {
                         somethingElse: {
                             text: 'Ok',
