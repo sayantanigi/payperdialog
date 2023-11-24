@@ -246,8 +246,7 @@ $get_setting=$this->Crud_model->get_single('setting');
                         
 
                         <?php 
-                        if($get_setting->required_subscription == '1') 
-                        {
+                        if($get_setting->required_subscription == '1') {
                             if(@$_SESSION['afrebay']['userType']=='2') {
                                 $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".$_SESSION['afrebay']['userId']."' AND (status = '1' OR status = '2')")->result_array();
                                 if(!empty($get_sub_data)) {
@@ -292,7 +291,7 @@ $get_setting=$this->Crud_model->get_single('setting');
                                     </a>
                                 </li>
                                 <?php } 
-                                } else {
+                            } else {
                                 $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".$_SESSION['afrebay']['userId']."' AND (status = '1' OR status = '2')")->result_array();
                                 if(!empty($get_sub_data)) {
                                 $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
@@ -311,13 +310,13 @@ $get_setting=$this->Crud_model->get_single('setting');
                                 </li>
                                 <li <?php if($seg1=='availability') { ?>class="active" <?php } ?>>
                                     <span class="cover"></span>
-                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-commenting" aria-hidden="true"></i>
+                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-calendar" aria-hidden="true"></i>
                                         <span class="hidden-xs hidden-sm">Availability</span>
                                     </a>
                                 </li>
                                 <li <?php if($seg1=='booking_history') { ?>class="active" <?php } ?>>
                                     <span class="cover"></span>
-                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-commenting" aria-hidden="true"></i>
+                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-list" aria-hidden="true"></i>
                                         <span class="hidden-xs hidden-sm">Booking History</span>
                                     </a>
                                 </li>
@@ -342,7 +341,7 @@ $get_setting=$this->Crud_model->get_single('setting');
                                 </li>
                                 <li <?php if($seg1=='booking_history') { ?>class="active" <?php } ?>>
                                     <span class="cover"></span>
-                                    <a href="<?= base_url('booking_history')?>"><i class="fa fa-calender" aria-hidden="true"></i>
+                                    <a href="<?= base_url('booking_history')?>"><i class="fa fa-list" aria-hidden="true"></i>
                                         <span class="hidden-xs hidden-sm">Booking History</span>
                                     </a>
                                 </li>
@@ -367,7 +366,7 @@ $get_setting=$this->Crud_model->get_single('setting');
                                 </li>
                                 <li <?php if($seg1=='booking_history') { ?>class="active" <?php } ?>>
                                     <span class="cover"></span>
-                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-calender" aria-hidden="true"></i>
+                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-list" aria-hidden="true"></i>
                                         <span class="hidden-xs hidden-sm">Booking History</span>
                                     </a>
                                 </li>
@@ -419,6 +418,18 @@ $get_setting=$this->Crud_model->get_single('setting');
                                         <span class="notification notificationf"><?php echo $countMessage[0]->msgcount;?></span>
                                     </a>
                                 </li>
+                                <li <?php if($seg1=='availability') { ?>class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-calendar" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Availability</span>
+                                    </a>
+                                </li>
+                                <li <?php if($seg1=='booking_history') { ?>class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-list" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Booking History</span>
+                                    </a>
+                                </li>
                                 <?php } else { ?>
                                 <li <?php if($seg1=='chat') { ?>class="active" <?php } ?>>
                                     <span class="cover"></span>
@@ -430,6 +441,18 @@ $get_setting=$this->Crud_model->get_single('setting');
                                         <span class="notification notificationf1"><?php echo $countMessage[0]->msgcount;?></span>
                                         <?php } ?>
                                         <span class="notification notificationf"><?php echo $countMessage[0]->msgcount;?></span>
+                                    </a>
+                                </li>
+                                <li <?php if($seg1=='availability') { ?>class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="<?= base_url('availability')?>"><i class="fa fa-calendar" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Availability</span>
+                                    </a>
+                                </li>
+                                <li <?php if($seg1=='booking_history') { ?>class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="<?= base_url('booking_history')?>"><i class="fa fa-list" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Booking History</span>
                                     </a>
                                 </li>
                                 <?php } 
