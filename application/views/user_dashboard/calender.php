@@ -47,7 +47,7 @@
                                                 <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">Action</p>
                                                 <?php $i=1; 
                                                 foreach ($availability as $value) { ?>
-                                                <div style="width:80%; background: #c7c7c7; margin: 5px 0 0 0 !important; padding: 0; border-radius: 10px; box-shadow: 0 0 10px #dddddd; cursor: pointer;" class="job-overview job_overview_main" id="job_overview_main_<?= $i?>">
+                                                <div style="width:80%; background: #c7c7c7; margin: 5px 0 0 0 !important; padding: 0; border-radius: 10px; box-shadow: 0 0 10px #dddddd; cursor: pointer;" class="job-overview job_overview_main">
                                                     <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['start_date']));?></p>
                                                     <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['from_time']))?></p>
                                                     <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['to_time']));?></p>
@@ -56,20 +56,6 @@
                                                 <div>
                                                     <p style="width: 10%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;cursor: pointer;" onclick="editAvailability('<?= $value['id']?>')"><i class="fa fa-edit"></i></p>
                                                     <p style="width: 10%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;cursor: pointer;" onclick="deleteAvailability('<?= $value['id']?>')"><i class="fa fa-trash"></i></p>
-                                                </div>
-                                                <div style="width: 100%;display: inline-block;background: #e1dfdf;margin-top: 10px;border-radius: 10px;padding: 10px;text-align: center;" id="job_overview_sub_<?= $i?>" class="job_overview_sub">
-                                                <?php 
-                                                $getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".$value['id']."'")->result_array(); 
-                                                if(!empty($getBookSlot)) { 
-                                                foreach ($getBookSlot as $val) { 
-                                                $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".$val['employer_id']."'")->result_array();?>
-                                                <div style="width: 100%; display: inline-block;">
-                                                    <p style="width: 50%;display: inline-block;float: left;margin: 0px;"><strong>Booking Time:</strong> <?= date('h:i A', strtotime($val['bookingTime']))?></p>
-                                                    <p style="width: 50%;display: inline-block;float: left;margin: 0px;"><strong>Booked By:</strong> <?= $getEmployer[0]['companyname'];?></p>
-                                                </div>
-                                                <?php } } else { ?>
-                                                <p>No slot Booked for this date</p>
-                                                <?php } ?>
                                                 </div>
                                                 <?php $i++; } ?>
                                             </div>
@@ -362,15 +348,6 @@ document.addEventListener('DOMContentLoaded', function() {
     calendar.render();
 });
 
-$(document).ready(function() {
-    <?php $i=1; 
-    foreach ($availability as $value) { ?>
-    $('#job_overview_sub_<?= $i?>').hide();
-    $('#job_overview_main_<?= $i?>').on('click', function() {
-        $('#job_overview_sub_<?= $i?>').toggle();
-    })
-    <?php $i++; } ?> 
-})
 function closeAvail() {
     location.reload();
 }

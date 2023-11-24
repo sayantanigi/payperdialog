@@ -48,22 +48,20 @@
                                             <div style="width: 100%; display: inline-block; text-align: center; border-radius: 10px; box-shadow: 0 0 10px #dddddd; height: 340px;">
                                                 <p style="padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;"><?= $date; ?></p>
                                                 <?php 
-                                                $getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".@$avail_id."' AND employee_id ='".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                                $bookingTime = $getBookSlot[0]['bookingTime'];
-                                                $bookingTime = explode(',', $bookingTime);
+                                                $getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".@$bookingData[0]['id']."' AND employee_id ='".@$_SESSION['afrebay']['userId']."'")->result_array();
                                                 if(!empty($getBookSlot)) { ?>
                                                 <div style="width: 100%; display: inline-block; padding: 0 40px">
                                                     <div style="width: 100%; border: 1px solid #eee;height: auto;display: inline-block;box-shadow: 0 0 10px #dddddd;">
-                                                        <?php for($i = 0; $i < count($bookingTime); $i++) { 
+                                                        <?php foreach ($getBookSlot as $val) { 
                                                         $getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                                        $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$getBookSlot[0]['employer_id']."'")->result_array();
+                                                        $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$val['employer_id']."'")->result_array();
                                                         ?>
                                                         <div style="width: 33.33%;float: left;display: inline-block;">
-                                                            <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px;"><?= date('h:i A', strtotime($bookingTime[$i]))?> to <?= date('h:i A', strtotime($bookingTime[$i]) + 60*60)?></p>
+                                                            <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px;"><?= date('h:i A', strtotime($val['bookingTime']))?> to <?= date('h:i A', strtotime($val['bookingTime']) + 60*60)?></p>
                                                         </div>
                                                         <?php } ?>
                                                         <div>
-                                                            <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;">Total Rate: <?= count($bookingTime)*@$getEmployee[0]['rateperhour']?></p>
+                                                            <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;">Total Rate: <?= count($getBookSlot)*@$getEmployee[0]['rateperhour']?></p>
                                                             <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;">Booked By: <?= @$getEmployer[0]['companyname']?></p>
                                                         </div>
                                                     </div>
@@ -178,6 +176,16 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     calendar.on('select', function(info) {
+        /*const bookingModal = new bootstrap.Modal(document.getElementById('booking'));
+        bookingModal.show();
+        const startDateInput = document.getElementById('start-date');
+        const endDateInput = document.getElementById('end-date');
+        startDateInput.value = info.startStr;
+        const endDate = moment(info.endStr, 'YYYY-MM-DD').subtract(1, 'day').format('YYYY-MM-DD');
+        endDateInput.value = endDate;
+        if (startDateInput.value === endDate) {
+            endDateInput.value = '';
+        }*/
         var selectDate = info.startStr;
         var employeeId = $('#employee_id').val();
         $.ajax({
