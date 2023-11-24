@@ -35,6 +35,43 @@
                                         <div class="col-md-6 col-6" style="display: inline-block; float: left;">
                                             <div class="Calender_Pick" id="calendar"></div>
                                         </div>
+                                        <!-- <div class="col-md-6 col-6" style="display: inline-block; float: left;">
+                                            <?php 
+                                            $availability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".$_SESSION['afrebay']['userId']."'")->result_array();
+                                            if(!empty($availability)) { ?>
+                                            <div class="job-overview" style="height: 382px; overflow: auto; margin-top: 0px;">
+                                                <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">Start Date</p>
+                                                <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">From Time</p>
+                                                <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">To Time</p>
+                                                <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">End Date</p>
+                                                <p style="text-align: center; margin: 0px; color: red;"></p>
+                                                <?php foreach ($availability as $value) {
+                                                $checkBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".$value['id']."'")->result_array(); 
+                                                if(!empty($checkBookSlot)) { ?>
+                                                <div style="background: #c7c7c7; margin: 5px 0 0 0 !important; padding: 0; border-radius: 10px; box-shadow: 0 0 10px #dddddd;" class="job-overview" >
+                                                    <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['start_date']));?></p>
+                                                    <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['from_time']))?></p>
+                                                    <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['to_time']));?></p>
+                                                    <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['end_date']))?></p>
+                                                    <?php //$getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".$checkBookSlot[0]['employer_id']."'")->result_array();?>
+                                                    <p style="text-align: center; margin: 0px; color: red; display: flex;">Slot Booked By <?php //echo $getEmployer[0]['companyname'];?></p>
+                                                    <div>test</div>
+                                                </div>
+                                                <?php } else { ?>
+                                                <div style="background: #dddddd; margin: 5px 0 0 0 !important; padding: 0; border-radius: 10px; box-shadow: 0 0 10px #dddddd;" class="job-overview">
+                                                    <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['start_date']));?></p>
+                                                    <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['from_time']))?></p>
+                                                    <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['to_time']));?></p>
+                                                    <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['end_date']))?></p>
+                                                    <p style="text-align: center; margin: 0px; color: red;"></p>
+                                                </div>
+                                                <?php } ?>
+                                                <?php } ?>
+                                            </div>
+                                            <?php } else { ?>
+                                            <div class="job-overview" style="text-align: center;">No data added for availability</div>
+                                            <?php } ?>
+                                        </div> -->
                                         <div class="col-md-6 col-6" style="display: inline-block; float: left;">
                                             <?php 
                                             $availability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".$_SESSION['afrebay']['userId']."'")->result_array();
@@ -44,6 +81,7 @@
                                                 <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">From Time</p>
                                                 <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">To Time</p>
                                                 <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">End Date</p>
+                                                <!-- <p style="text-align: center; margin: 0px; color: red;"></p> -->
                                                 <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">Action</p>
                                                 <?php $i=1; 
                                                 foreach ($availability as $value) { ?>
@@ -182,6 +220,7 @@
                                 <th>From Time <span style="color:red;">*</span></th>
                                 <th>To Date<span style="color:red;">*</span></th>
                                 <th>To Time <span style="color:red;">*</span></th>
+                                <!-- <th><button type="button" class="btn btn-info addMoreBtn" onclick="add_row()">Add</button></th> -->
                             </tr>
                             <tbody id="clonetable_feedback1">
                                 <tr>
@@ -191,6 +230,7 @@
                                     <td><input type="time" class="form-control" name="to_time" id="to_time" required></td>
                                     <td><input type="hidden" name="user_id" id="user_id" value=""></td>
                                     <td><input type="hidden" name="avail_id" id="avail_id" value=""></td>
+                                    <!-- <td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return remove(this)">X</a></td> -->
                                 </tr>
                             </tbody>
                         </table>
@@ -238,6 +278,7 @@
 <script>
 $('#submit-button').on('click', function() {
     var user_id = $('#user_id').val();
+    //var start_date = $('#start-date').val(); alert(start_date)
     var sdateArray = new Array();
     $("input[name=startdate]").each(function() {
         sdateArray.push($(this).val());
@@ -254,6 +295,8 @@ $('#submit-button').on('click', function() {
     $("input[name=totime]").each(function() {
         totimeArray.push($(this).val());
     });
+    //var end_date = $('#end-date').val();
+    //var event_color = $('#event-color').val();
     var form_data = new FormData();
     form_data.append('user_id',user_id);
     form_data.append('start_date',sdateArray);
@@ -285,6 +328,10 @@ $('#submit-button').on('click', function() {
                         }
                     }
                 });
+                // setTimeout(function () {
+                //     location.reload();
+                // }, 10000);
+                
             } else {
                 $.alert({
                     title: '',
@@ -296,7 +343,6 @@ $('#submit-button').on('click', function() {
     });
     //return false;
 })
-
 document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
     const myModal = new bootstrap.Modal(document.getElementById('form'));
@@ -356,12 +402,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     calendar.on('select', function(info) {
+        //alert(info.startStr);
         const bookingModal = new bootstrap.Modal(document.getElementById('booking'));
         bookingModal.show();
+        /*const startDateInput = document.getElementById('start-date');
+        const endDateInput = document.getElementById('end-date');
+        startDateInput.value = info.startStr;
+        const endDate = moment(info.endStr, 'YYYY-MM-DD').subtract(1, 'day').format('YYYY-MM-DD');
+        endDateInput.value = endDate;
+        if (startDateInput.value === endDate) {
+            endDateInput.value = '';
+        }*/
     });
     calendar.render();
 });
-
 $(document).ready(function() {
     <?php $i=1; 
     foreach ($availability as $value) { ?>
