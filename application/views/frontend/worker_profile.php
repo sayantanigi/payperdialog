@@ -349,7 +349,9 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
 .jobsites tbody td {padding: 5px;}
 .jobsites tbody td input {position: unset; opacity: 1; margin-right: 10px;}
 .jconfirm.jconfirm-white .jconfirm-box .jconfirm-buttons button.btn-default, .jconfirm.jconfirm-light .jconfirm-box .jconfirm-buttons button.btn-default {float: left;}
-/*.prompt_login {margin-right: 40% !important;}*/
+.paynow_btn {margin-right: 130px !important;}
+.prompt_login {margin-right: 156px !important;}
+.book_warning {margin-right: 160px !important;}
 </style>
 <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css'>
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'>
@@ -417,8 +419,8 @@ function bookNow() {
                     content: finalshow+" Slot Booked successfuly",
                     buttons: {
                         somethingElse: {
-                            text: 'Ok',
-                            btnClass: 'btn-secondary',
+                            text: 'Pay Now',
+                            btnClass: 'btn-secondary paynow_btn',
                             keys: ['enter', 'shift'],
                             action: function(){
                                 location.reload();
@@ -592,7 +594,7 @@ document.addEventListener('DOMContentLoaded', function() {
         buttons: {
             somethingElse: {
                 text: 'Ok',
-                btnClass: 'btn-secondary',
+                btnClass: 'btn-secondary book_warning',
                 keys: ['enter', 'shift'],
                 action: function(){
                     location.reload();
