@@ -378,7 +378,7 @@ function availTime(start_date, from_time, end_date, to_time, bookingTime) {
 
     $.each(output,function(i) {
         if(bookingTime.indexOf(output[i]) != -1) {
-            $('.bookingcontent').append('<tr><td class="pastHours"><input type="checkbox" class="pasthours" id="pastHours_'+output[i].replace(':00', '').trim()+'" name="pastHours[]" value="'+output[i]+'" required checked onclick="removeSlot('+output[i].replace(':00', '').trim()+')">'+output[i]+'</td></tr>');
+            $('.bookingcontent').append('<tr class="d-none"><td class="pastHours"><input type="checkbox" class="pasthours" id="pastHours_'+output[i].replace(':00', '').trim()+'" name="pastHours[]" value="'+output[i]+'" required checked onclick="removeSlot('+output[i].replace(':00', '').trim()+')">'+output[i]+'</td></tr>');
         } else {
             $('.bookingcontent').append('<tr><td class="pastHours"><input type="checkbox" class="pasthours" id="pastHours_'+output[i].replace(':00', '').trim()+'" name="pastHours[]" value="'+output[i]+'" required onclick="removeSlot('+output[i].replace(':00', '').trim()+')">'+output[i]+'</td></tr>');
         }

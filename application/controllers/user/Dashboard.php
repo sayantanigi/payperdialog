@@ -1360,7 +1360,7 @@ class Dashboard extends CI_Controller {
 		}
 	}
 
-	public function getBookingDetailsforEmployer() {
+	/*public function getBookingDetailsforEmployer() {
 		//echo "<pre>"; print_r($_POST); die();
 		$selectDate = $_POST['selectDate'];
 		$employeeId = $_POST['employeeId'];
@@ -1381,6 +1381,36 @@ class Dashboard extends CI_Controller {
         } else {
         	$html = "<div style='width: 100%; display: inline-block; text-align: center; border-radius: 10px; box-shadow: 0 0 10px #dddddd; height: 340px;'><p style='padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;'>".$selectDate."</p><div style='color: #212529;'>No slot booked for this selected date</div></div>";
         }
+        echo $html;
+	}*/
+
+	public function getBookingDetailsforEmployer() {
+		$selectDate = $_POST['selectDate'];
+		$employeeId = $_POST['employeeId'];
+		$availableData = $this->db->query("SELECT * FROM user_availability WHERE start_date ='".$selectDate."' AND end_date ='".$selectDate."' AND user_id ='".@$employeeId."'")->result_array();
+        $avail_id = $availableData[0]['id'];
+        $html .= "<div style='width: 100%;display: inline-block;text-align: center;border-radius: 10px;box-shadow: 0 0 10px #dddddd;height: 400px;overflow-y: scroll;overflow-x: hidden;'><p style='padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;'>".$selectDate."</p>";
+        $getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".@$avail_id."' AND employee_id ='".@$employeeId."'")->result_array();
+        if(!empty($getBookSlot)) {
+        	for($i = 0; $i < count($getBookSlot); $i++) {
+        		$html .= "<div style='width: 100%; display: inline-block; padding: 0 40px; margin-bottom: 20px;'><div style='width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;'>";
+        		$booking_id = $getBookSlot[$i]['id'];
+                $employee_id = $getBookSlot[$i]['employee_id'];
+                $employer_id = $getBookSlot[$i]['employer_id'];
+                $available_id = $getBookSlot[$i]['available_id'];
+                $bookingTime = $getBookSlot[$i]['bookingTime'];
+                $bookingTime = explode(',', $bookingTime);
+                for($j = 0; $j < count($bookingTime); $j++) { 
+                    $getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                    $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$employer_id."'")->result_array();
+                    $html .= "<div style='width: 33.33%;float: left;display: inline-block;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px;'>".date('h:i A', strtotime($bookingTime[$j]))." to ".date('h:i A', strtotime($bookingTime[$j]) + 60*60)."</p></div>";
+                }
+                $html .= "<div><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Total Rate: ".count($bookingTime)*@$getEmployee[0]['rateperhour']."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Booked By: ".@$getEmployer[0]['companyname']."</p></div></div></div>";
+            }
+        } else {
+        	$html .= "<div><div style='color: #212529;'>No slot booked for this selected date</div></div>";
+        }
+        $html .= "</div>";
         echo $html;
 	}
 }

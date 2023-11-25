@@ -41,25 +41,31 @@
                                             $timezone = date_default_timezone_get();
                                             date_default_timezone_set($timezone);
                                             $date = date('Y-m-d', time());
-                                            $bookingData = $this->db->query("SELECT * FROM user_availability WHERE start_date ='".$date."' AND end_date ='".$date."' AND user_id ='".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                            //echo "<pre>"; print_r($bookingData);
-                                            $avail_id = $bookingData[0]['id'];
+                                            $availableData = $this->db->query("SELECT * FROM user_availability WHERE start_date ='".$date."' AND end_date ='".$date."' AND user_id ='".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                            //echo "<pre>"; print_r($availableData);
+                                            $avail_id = $availableData[0]['id'];
                                             ?>
-                                            <div style="width: 100%; display: inline-block; text-align: center; border-radius: 10px; box-shadow: 0 0 10px #dddddd; height: 340px;">
+                                            <div style="width: 100%;display: inline-block;text-align: center;border-radius: 10px;box-shadow: 0 0 10px #dddddd;height: 400px;overflow-y: scroll;overflow-x: hidden;">
                                                 <p style="padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;"><?= $date; ?></p>
                                                 <?php 
                                                 $getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".@$avail_id."' AND employee_id ='".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                                $bookingTime = $getBookSlot[0]['bookingTime'];
-                                                $bookingTime = explode(',', $bookingTime);
-                                                if(!empty($getBookSlot)) { ?>
-                                                <div style="width: 100%; display: inline-block; padding: 0 40px">
-                                                    <div style="width: 100%; border: 1px solid #eee;height: auto;display: inline-block;box-shadow: 0 0 10px #dddddd;">
-                                                        <?php for($i = 0; $i < count($bookingTime); $i++) { 
-                                                        $getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                                        $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$getBookSlot[0]['employer_id']."'")->result_array();
+                                                if(!empty($getBookSlot)) {
+                                                for($i = 0; $i < count($getBookSlot); $i++) { ?>
+                                                <div style="width: 100%; display: inline-block; padding: 0 40px; margin-bottom: 20px;">
+                                                    <div style="width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;">
+                                                    <?php 
+                                                        $booking_id = $getBookSlot[$i]['id'];
+                                                        $employee_id = $getBookSlot[$i]['employee_id'];
+                                                        $employer_id = $getBookSlot[$i]['employer_id'];
+                                                        $available_id = $getBookSlot[$i]['available_id'];
+                                                        $bookingTime = $getBookSlot[$i]['bookingTime'];
+                                                        $bookingTime = explode(',', $bookingTime);
+                                                        for($j = 0; $j < count($bookingTime); $j++) { 
+                                                            $getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                                            $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$employer_id."'")->result_array();
                                                         ?>
                                                         <div style="width: 33.33%;float: left;display: inline-block;">
-                                                            <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px;"><?= date('h:i A', strtotime($bookingTime[$i]))?> to <?= date('h:i A', strtotime($bookingTime[$i]) + 60*60)?></p>
+                                                            <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px;"><?= date('h:i A', strtotime($bookingTime[$j]))?> to <?= date('h:i A', strtotime($bookingTime[$j]) + 60*60)?></p>
                                                         </div>
                                                         <?php } ?>
                                                         <div>
@@ -68,6 +74,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <?php } ?>
                                                 <?php } else { ?>
                                                     <div>
                                                         <div style='color: #212529;'>No slot booked for this selected date</div>
