@@ -167,7 +167,7 @@ class Dashboard extends CI_Controller {
 			'email' => $_POST['email'],
 			'mobile' => $_POST['mobile'],
 			'gender' => $this->input->post('gender', TRUE),
-			//'experience' => $this->input->post('experience', TRUE),
+			'experience' => $this->input->post('experience', TRUE),
 			//'qualification' => $this->input->post('qualification', TRUE),
 			'skills' => $skills,
 			'profilePic' => $image,

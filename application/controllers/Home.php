@@ -280,6 +280,7 @@ class Home extends MY_Controller {
 		$title = $this->input->post('title_keyword');
 		$search_location = $this->input->post('location');
 		$specialist = $this->input->post('specialist');
+		$experience = $this->input->post('experience');
 		if($specialist) {
 			$specialist = implode(',', $specialist);
 		}
@@ -312,10 +313,10 @@ class Home extends MY_Controller {
 		$page = $this->uri->segment(3);
 		$start = ($page - 1) * $config['per_page'];
 
-		if(isset($title) || isset($search_location) || isset($specialist) || isset($userType)) {
-			$getdata=$this->Users_model->workers_fetchdata($config["per_page"], $start, $title, $search_location, $specialist, $userType);
+		if(isset($title) || isset($search_location) || isset($specialist) || isset($userType) || isset($experience)) {
+			$getdata=$this->Users_model->workers_fetchdata($config["per_page"], $start, $title, $search_location, $specialist, $userType, $experience);
 		} else {
-			$getdata=$this->Users_model->workers_fetchdata($config["per_page"], $start, $title, $search_location, $specialist, $userType);
+			$getdata=$this->Users_model->workers_fetchdata($config["per_page"], $start, $title, $search_location, $specialist, $userType, $experience);
 		}
 
 		$output = array(

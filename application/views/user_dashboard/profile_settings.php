@@ -159,7 +159,7 @@ if($data_request=='user'){
                                             </div>
                                             <?php //if(@$_SESSION['afrebay']['userType']=='1') { ?>
                                             <?php if(@$userinfo->userType=='1') { ?>
-                                            <div class="col-lg-12 key-skill">
+                                            <div class="col-lg-6 key-skill">
                                                 <span class="pf-title1">Skill Set</span>
                                                 <div class="pf-field">
                                                     <select class="form-control key_skills" multiple="multiple" name="key_skills[]" id="key_skills" style="width: 100%;">
@@ -176,6 +176,19 @@ if($data_request=='user'){
                                                             }
                                                         } ?>><?php echo $val->specialist_name;?></option>
                                                     <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 key-skill">
+                                                <span class="pf-title1">Total Experience</span>
+                                                <div class="pf-field">
+                                                    <select data-placeholder="Please Select Experience Level" class="form-control" name="experience" id="experience" required="">
+                                                        <option value="">Select Option</option>
+                                                        <option value="1" <?php if(@$userinfo->experience == 1) {echo "selected";}?>>0 to 02 Years</option>
+                                                        <option value="2" <?php if(@$userinfo->experience == 2) {echo "selected";}?>>03 to 05 Years</option>
+                                                        <option value="3" <?php if(@$userinfo->experience == 3) {echo "selected";}?>>06 to 08 Years</option>
+                                                        <option value="4" <?php if(@$userinfo->experience == 4) {echo "selected";}?>>08 to 10 Years</option>
+                                                        <option value="5" <?php if(@$userinfo->experience == 5) {echo "selected";}?>>< 10 Years</option>
                                                     </select>
                                                 </div>
                                             </div>

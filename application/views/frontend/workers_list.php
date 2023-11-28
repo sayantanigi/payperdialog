@@ -39,7 +39,7 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                 </div>
                             </div>
                             <div class="widget">
-                                <h3 class="sb-title closed">Specializations</h3>
+                                <h3 class="sb-title closed">Skill Sets</h3>
                                 <div class="specialism_widget">
                                     <div class="dropdown-field">
                                         <select id="example" class="example" name="specialist" multiple>
@@ -50,7 +50,21 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                             <?php  } } ?>
                                         </select>
                                     </div>
-
+                                </div>
+                            </div>
+                            <div class="widget">
+                                <h3 class="sb-title closed">Experience Level</h3>
+                                <div class="specialism_widget">
+                                    <div class="dropdown-field">
+                                        <select data-placeholder="Please Select Experience Level" class="form-control" name="experience" id="experience" required>
+                                            <option value="">Select Option</option>
+                                            <option value="1">0 to 02 Years</option>
+                                            <option value="2">03 to 05 Years</option>
+                                            <option value="3">06 to 08 Years</option>
+                                            <option value="4">08 to 10 Years</option>
+                                            <option value="5">> 10 Years</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -101,6 +115,7 @@ $(document).ready(function () {
         var title_keyword = $('#title_keyword').val();
         var location = $('#location').val();
         var specialist = $('#example').val();
+        var experience = $('#experience').val();
         $.ajax({
             url: base_url + "home/workerlist_fetchdata/" + page,
             method: "POST",
@@ -110,6 +125,7 @@ $(document).ready(function () {
                 title_keyword: title_keyword,
                 location: location,
                 specialist: specialist,
+                experience: experience,
             },
             success: function (data) {
                 $('#worker_list').html(data.product_list);
@@ -133,6 +149,10 @@ $(document).ready(function () {
     });
 
     $('#example').on('change', function () {
+        filter_data(1);
+    });
+
+    $('#experience').on('change', function () {
         filter_data(1);
     });
 });

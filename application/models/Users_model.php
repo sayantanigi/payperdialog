@@ -227,8 +227,8 @@ class Users_model extends My_Model {
         }
     }
 
-    function make_workers_query($title, $search_location, $specialist, $userType) {
-        if(isset($title) || isset($search_location) || isset($specialist) || isset($userType)) {
+    function make_workers_query($title, $search_location, $specialist, $userType, $experience) {
+        if(isset($title) || isset($search_location) || isset($specialist) || isset($userType) || isset($experience)) {
             $query = "SELECT * FROM users WHERE users.userType = $userType";
             if(isset($title) && !empty($title)) {
                 $query .= " AND users.companyname like '%".$title."%'";
@@ -240,6 +240,10 @@ class Users_model extends My_Model {
 
             if(isset($specialist) && !empty($specialist)) {
                 $query .= " AND instr(concat(',', skills, ','), ',$specialist,')";
+            }
+
+            if(isset($experience) && !empty($experience)) {
+                $query .= " AND users.experience = '".$experience."'";
             }
             //$query .= " AND users.userType = '2'";
             return $query;
@@ -289,9 +293,9 @@ class Users_model extends My_Model {
         return $output;
     }
 
-    function workers_fetchdata($limit, $start, $title, $search_location, $specialist, $userType) {
-        if(isset($title) || isset($search_location) || isset($specialist) || isset($userType)) {
-            $query = $this->make_workers_query($title, $search_location, $specialist, $userType);
+    function workers_fetchdata($limit, $start, $title, $search_location, $specialist, $userType, $experience) {
+        if(isset($title) || isset($search_location) || isset($specialist) || isset($userType) || isset($experience)) {
+            $query = $this->make_workers_query($title, $search_location, $specialist, $userType, $experience);
             $query .= ' AND users.status = 1 and users.email_verified = 1 ORDER BY userId DESC';
             $query .= ' LIMIT '.$start.', ' . $limit;
             $data = $this->db->query($query);

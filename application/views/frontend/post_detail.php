@@ -292,6 +292,53 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
     </div>
 </div>
 </section>
+
+<?php if(@$_SESSION['afrebay']['userType'] == '2') { ?>
+<section class="max_height">
+    <!-- <div class="block no-padding Our_Jobs Employees_Search_List"> -->
+    <div class="block no-padding Employees_Search_List">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row no-gape">
+                        <h3>Recomended Employee</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 column Employees_Search_Result">
+                    <div class="padding-left">
+                        <div class="emply-resume-sec">
+                            <div id="post_list">
+                            <?php
+                            $key_skills = explode(',', $post_data->required_key_skills);
+                            $experience = $post_data->experience_level;
+                            for ($i=0; $i < count($key_skills); $i++) {
+                                $recomendedEmployeeList = $this->db->query("SELECT * FROM users WHERE (skills = '".trim($key_skills[$i])."' OR skills LIkE '%".trim($key_skills[$i])."%') AND experience = '".$experience."'")->result_array();
+                                foreach ($recomendedEmployeeList as $value) {
+                                    $profile_pic= '<img src="'.base_url('uploads/users/'.$value['profilePic']).'" alt="" />';
+                                    if(strlen($value['short_bio'])>100) {
+                                        $desc= substr(strip_tags($value['short_bio']), 0,100).'...';
+                                    } else {
+                                        $desc= strip_tags($value['short_bio']);
+                                    }
+                                ?>
+                                <div class="emply-resume-list"> <div class="emply-resume-thumb"><?= $profile_pic ?></div> <div class="emply-resume-info"> <h3><a href="#" title=""><?= $value['firstname]']." ".$value['lastname']?></a></h3><p><i class="la la-map-marker"></i><?= $value['address']?></p> <p><?= $value['address']?><?= $desc?></p> <p></p> </div> <div class="shortlists" style="width:50px;"><a href="<?= base_url('employerdetail/'.base64_encode($value['userId']))?>" title="">View Profile<i class="la la-plus"></i></a> </div> </div>
+                                <?php }
+                            } ?>
+                            </div>
+                            <div align="center" id="pagination_link"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<?php } ?>
 <script>
 $(document).ready(function(){
     $("#bid_amount").on("keypress keyup blur", function (event) {
