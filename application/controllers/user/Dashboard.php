@@ -171,7 +171,7 @@ class Dashboard extends CI_Controller {
 			//'qualification' => $this->input->post('qualification', TRUE),
 			'skills' => $skills,
 			'profilePic' => $image,
-			'additional_image' => $additional_image,
+			//'additional_image' => $additional_image,
 			'zip' => $_POST['zip'],
 			'address' => $_POST['address'],
 			'foundedyear' => $_POST['foundedyear'],
@@ -555,7 +555,7 @@ class Dashboard extends CI_Controller {
 		} else {
 			$userpic = '<img src="' . base_url('uploads/users/user.png') . '" alt="" />';
 		}
-		$html_data = '<div class="contact-profile">' . $userpic . '<p>' . ucfirst($name) . '</p><div class="social-media"><a href="#"><i class="fa fa-phone" aria-hidden="true"></i></a><a href="javascript:void(0);" onclick="openVideoCallWindow('.$user_id.');"><i class="fa fa-video-camera" aria-hidden="true"></i></a><a href="#"><i class="fa fa-cog" aria-hidden="true"></i></a></div></div><div class="messages"><ul>';
+		$html_data = '<div class="contact-profile">' . $userpic . '<p>' . ucfirst($name) . '</p><div class="social-media"><a href="#"><i class="fa fa-phone" aria-hidden="true"></i></a><a href="javascript:void(0);" onclick="openVideoCallWindow('.$usert_id.');"><i class="fa fa-video-camera" aria-hidden="true"></i></a><a href="#"><i class="fa fa-cog" aria-hidden="true"></i></a></div></div><div class="messages"><ul>';
 		if (!empty($get_data)) {
 			foreach ($get_data as $key) {
 				if (@$key->profilePic && file_exists('uploads/users/' . @$key->profilePic) && $key->postjob_id == $_POST['post_id']) {
@@ -592,7 +592,7 @@ class Dashboard extends CI_Controller {
 		$user_id = $this->input->post('usertoid');
 		$post_id = $this->input->post('postid');
 		$get_data = $this->Users_model->getCurrentChat($userfrom_id, $user_id, $post_id);
-		$updatastatus = $this->db->query("UPDATE chat SET status = '1' WHERE (userfrom_id ='".$usert_id."' AND userto_id ='".$userdId."') OR (userto_id ='".$usert_id."' AND userfrom_id ='".$userdId."')");
+		$updatastatus = $this->db->query("UPDATE chat SET status = '1' WHERE (userfrom_id ='".$userfrom_id."' AND userto_id ='".$user_id."') OR (userto_id ='".$userfrom_id."' AND userfrom_id ='".$user_id."')");
 		$get_chatuser = $this->Crud_model->get_single('users', "userId='" . $user_id . "'");
 		if (!empty($get_chatuser->firstname)) {
 			$name = $get_chatuser->firstname . ' ' . $get_chatuser->lastname;
@@ -1412,5 +1412,67 @@ class Dashboard extends CI_Controller {
         }
         $html .= "</div>";
         echo $html;
+	}
+
+	public function recommended_jobs() {
+		$data['usersSkillsData'] = $this->db->query("SELECT userId, skills, experience FROM users WHERE userType = '1' AND userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+		$this->load->view('header');
+		$this->load->view('user_dashboard/recommended_jobs', $data);
+		$this->load->view('footer');
+	}
+
+	public function filterJobDataBySkillset() {
+		$skills = $_POST['id'];
+		$recomendedJobList = $this->db->query("SELECT users.companyname, users.profilePic, postjob.* FROM postjob JOIN users ON postjob.user_id = users.userId WHERE instr(concat(',', required_key_skills, ','), ',$skills,') AND `is_delete` = 0")->result_array();
+		//print_r($recomendedJobList);
+		$output = '';
+		if(!empty($recomendedJobList)) {
+			foreach ($recomendedJobList as $key) { 
+				if($key['userType'] == 1){
+					$name = $key['firstname'].' '.$key['lastname'];
+				} else {
+					$name = $key['companyname'];
+				}
+				if(!empty($key['profilePic']) && file_exists('uploads/users/'.$key['profilePic'])){
+					$profile_pic= '<img src="'.base_url('uploads/users/'.$key['profilePic']).'" alt="" />';
+				} else {
+					$profile_pic= '<img src="'.base_url('uploads/users/user.png').'" alt="" />';
+				}
+				$get_category=$this->Crud_model->get_single('category',"id='".$key['category_id']."'");
+				$get_subcategory=$this->Crud_model->get_single('sub_category',"id='".$key['subcategory_id']."'");
+				$string = strip_tags($key['description']);
+				if (strlen($string) > 200) {
+					$stringCut = substr($string, 0, 200);
+					$endPoint = strrpos($stringCut, ' ');
+					$string = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
+					$string .= '...';
+				}
+				$output .= '
+				<div class="emply-resume-list">
+					<div class="emply-resume-thumb">'.$profile_pic.'</div>
+					<div class="emply-resume-info">
+						<h3><a href="'.base_url('postdetail/'.base64_encode($key["id"])).'" title="">'.$key["post_title"].'</a></h3>
+						<span>'.$get_category->category_name.'</span>
+						<span>'.$get_subcategory->sub_category_name.'</span>
+						<p><i class="la la-map-marker"></i>'.$key["city"].', '.$key["state"].', '.$key["country"].'</p>
+						<span><b>Posted By:</b> '.$name.'</span>
+						<div class="Employee-Details">
+							<div class="MoreDetailsTxt_'.$key['id'].'">'.$string.'</div>
+						</div>
+					</div>
+				</div>';
+			}
+		} else {
+            $output .= '<div class="emply-resume-list"><div class="emply-resume-thumb"><h2>No Data Found</h2></div></div>';
+        }
+		echo $output;
+	}
+
+	public function recommended_employee() {
+		$data['jobTitleByemployer'] = $this->db->query("SELECT id, post_title FROM postjob WHERE user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+		$data['jobListByemployer'] = $this->db->query("SELECT * FROM users WHERE userType = '1'")->result_array();
+		$this->load->view('header');
+		$this->load->view('user_dashboard/recommended_employee', $data);
+		$this->load->view('footer');
 	}
 }

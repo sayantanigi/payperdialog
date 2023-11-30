@@ -143,6 +143,12 @@ $get_setting=$this->Crud_model->get_single('setting');
                                         <span class="hidden-xs hidden-sm">List of Bids</span>
                                     </a>
                                 </li>
+                                <li <?php if($seg1=='recommended-employee') { ?> class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-tasks" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Recomended Employee</span>
+                                    </a>
+                                </li>
                                 <?php } else { ?>
                                 <li <?php if($seg1=='myjob') { ?> class="active" <?php } ?>>
                                     <span class="cover"></span>
@@ -154,6 +160,12 @@ $get_setting=$this->Crud_model->get_single('setting');
                                     <span class="cover"></span>
                                     <a href="<?= base_url('jobbid')?>"><i class="fa fa-tasks" aria-hidden="true"></i>
                                         <span class="hidden-xs hidden-sm">List of Bids</span>
+                                    </a>
+                                </li>
+                                <li <?php if($seg1=='recommended-employee') { ?> class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="<?= base_url('jobbid')?>"><i class="fa fa-tasks" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Recomended Employee</span>
                                     </a>
                                 </li>
                                 <?php } } else { ?>
@@ -169,6 +181,12 @@ $get_setting=$this->Crud_model->get_single('setting');
                                         <span class="hidden-xs hidden-sm">List of Bids</span>
                                     </a>
                                 </li>
+                                <li <?php if($seg1=='recommended-employee') { ?> class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-tasks" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Recomended Employee</span>
+                                    </a>
+                                </li>
                                 <?php } } else {
                                 $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".$_SESSION['afrebay']['userId']."' AND (status = '1' OR status = '2')")->result_array();
                                 if(!empty($get_sub_data)) {
@@ -180,6 +198,12 @@ $get_setting=$this->Crud_model->get_single('setting');
                                         <span class="hidden-xs hidden-sm">My Jobs</span>
                                     </a>
                                 </li>
+                                <li <?php if($seg1=='recommended-jobs') { ?> class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-tasks" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Recommended Jobs</span>
+                                    </a>
+                                </li>
                                 <?php } else { ?>
                                 <li <?php if($seg1=='jobbid') { ?> class="active" <?php } ?>>
                                     <span class="cover"></span>
@@ -187,11 +211,23 @@ $get_setting=$this->Crud_model->get_single('setting');
                                         <span class="hidden-xs hidden-sm">My Jobs</span>
                                     </a>
                                 </li>
+                                <li <?php if($seg1=='recommended-jobs') { ?> class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="<?= base_url('recommended-jobs')?>"><i class="fa fa-tasks" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Recommended Jobs</span>
+                                    </a>
+                                </li>
                                 <?php } } else { ?>
                                 <li <?php if($seg1=='jobbid') { ?> class="active" <?php } ?>>
                                     <span class="cover"></span>
                                     <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-tasks" aria-hidden="true"></i>
                                         <span class="hidden-xs hidden-sm">My Jobs</span>
+                                    </a>
+                                </li>
+                                <li <?php if($seg1=='recommended-jobs') { ?> class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-tasks" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Recommended Jobs</span>
                                     </a>
                                 </li>
                                 <?php } } 
@@ -211,6 +247,12 @@ $get_setting=$this->Crud_model->get_single('setting');
                                         <span class="hidden-xs hidden-sm">List of Bids</span>
                                     </a>
                                 </li>
+                                <li <?php if($seg1=='recommended-employee') { ?> class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="javascript:void(0)" onclick="completeSub1()"><i class="fa fa-tasks" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Recommended Employee</span>
+                                    </a>
+                                </li>
                                 <?php } else { ?>
                                 <li <?php if($seg1=='myjob') { ?> class="active" <?php } ?>>
                                     <span class="cover"></span>
@@ -222,6 +264,12 @@ $get_setting=$this->Crud_model->get_single('setting');
                                     <span class="cover"></span>
                                     <a href="<?= base_url('jobbid')?>"><i class="fa fa-tasks" aria-hidden="true"></i>
                                         <span class="hidden-xs hidden-sm">List of Bids</span>
+                                    </a>
+                                </li>
+                                <li <?php if($seg1=='recommended-employee') { ?> class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="<?= base_url('recommended-employee')?>"><i class="fa fa-tasks" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Recommended Employee</span>
                                     </a>
                                 </li>
                                 <?php } } else {
@@ -238,6 +286,12 @@ $get_setting=$this->Crud_model->get_single('setting');
                                     <span class="cover"></span>
                                     <a href="<?= base_url('jobbid')?>"><i class="fa fa-tasks" aria-hidden="true"></i>
                                         <span class="hidden-xs hidden-sm">My Jobs</span>
+                                    </a>
+                                </li>
+                                <li <?php if($seg1=='recommended-jobs') { ?> class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="<?= base_url('recommended-jobs')?>"><i class="fa fa-tasks" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Recommended Jobs</span>
                                     </a>
                                 </li>
                                 <?php } 
@@ -465,7 +519,8 @@ $get_setting=$this->Crud_model->get_single('setting');
 <style>
     .completeSub {display: none; text-align: center; margin-top: 20px; color: #ed1c24; font-size: 20px;}
     .completeSub1 {display: none; text-align: center; margin-top: 20px; color: #ed1c24; font-size: 20px;}
-    .User_Sidemenu .hidden-xs.display-table-cell .navi ul li a { padding: 15px 10px !important; }
+    .User_Sidemenu .hidden-xs.display-table-cell .navi ul li a { padding: 15px 15px !important; }
+    .dashboard-gig .hidden-xs {font-size: 13px !important;}
 </style>
 <script>
 function completeSub() {
