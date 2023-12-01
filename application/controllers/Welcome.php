@@ -228,7 +228,7 @@ class Welcome extends CI_Controller {
 		}
 		$id = $_POST['id'];
 		$data=array(
-			'required_key_skills'=>implode(", ",$this->input->post('key_skills',TRUE)),
+			'required_key_skills'=>implode(",",$this->input->post('key_skills',TRUE)),
 			'category_id'=>$this->input->post('category_id',TRUE),
 			'subcategory_id'=>$this->input->post('subcategory_id',TRUE),
 			'post_title'=>$this->input->post('post_title',TRUE),
@@ -253,12 +253,6 @@ class Welcome extends CI_Controller {
 		$this->Crud_model->SaveData('postjob', $data, "id='" . $id . "'");
 		$this->session->set_flashdata('message', 'Post Job Updated Successfully !');
 		redirect(base_url('myjob'));
-		// if(!empty($_SESSION['afrebay_admin'])) {
-		// 	redirect(base_url('admin/post_job'));
-		// } else {
-		// 	redirect(base_url('myjob'));
-		// }
-
 	}
 
 	public function get_subcategory() {
@@ -285,7 +279,7 @@ class Welcome extends CI_Controller {
 		}
 		$data=array(
 			'user_id'=>$_SESSION['afrebay']['userId'],
-			'required_key_skills'=>implode(", ",$this->input->post('key_skills',TRUE)),
+			'required_key_skills'=>implode(",",$this->input->post('key_skills',TRUE)),
 			'category_id'=>$this->input->post('category_id',TRUE),
 			'subcategory_id'=>$this->input->post('subcategory_id',TRUE),
 			'post_title'=>$this->input->post('post_title',TRUE),

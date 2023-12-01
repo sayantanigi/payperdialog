@@ -168,7 +168,7 @@ if($data_request=='user'){
                                                     foreach($key_skills as $val) {?>
                                                         <option value="<?php echo $val->specialist_name; ?>"
                                                         <?php if(!empty($userinfo->skills)){
-                                                            $skills = explode(", ", $userinfo->skills);
+                                                            $skills = explode(",", $userinfo->skills);
                                                             for($i=0; $i<count($skills); $i++) {
                                                                 if($skills[$i] == $val->specialist_name){
                                                                     echo "selected";

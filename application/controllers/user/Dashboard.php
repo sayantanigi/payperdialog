@@ -155,7 +155,7 @@ class Dashboard extends CI_Controller {
 					$this->db->insert('specialist',$insrt);
 				}
 			}
-			$skills = implode(", ",$this->input->post('key_skills',TRUE));
+			$skills = implode(",",$this->input->post('key_skills',TRUE));
 		} else {
 			$skills = '';
 		}
@@ -1423,9 +1423,13 @@ class Dashboard extends CI_Controller {
 
 	public function filterJobDataBySkillset() {
 		$skills = $_POST['id'];
-		$recomendedJobList = $this->db->query("SELECT users.companyname, users.profilePic, postjob.* FROM postjob JOIN users ON postjob.user_id = users.userId WHERE instr(concat(',', required_key_skills, ','), ',$skills,') AND `is_delete` = 0")->result_array();
-		//print_r($recomendedJobList);
-		$output = '';
+		$experience = $_POST['experience'];
+		if(!empty($skills)) {
+			$recomendedJobList = $this->db->query("SELECT users.companyname, users.profilePic, postjob.* FROM postjob JOIN users ON postjob.user_id = users.userId WHERE (instr(concat(',', required_key_skills, ','), ',$skills,') OR postjob.required_key_skills = '".$skills."') AND postjob.experience_level = '".$experience."' AND `is_delete` = 0")->result_array();
+		} else {
+			$recomendedJobList = $this->db->query("SELECT users.companyname, users.profilePic, postjob.* FROM postjob JOIN users ON postjob.user_id = users.userId WHERE postjob.experience_level = '".$experience."' AND `is_delete` = 0")->result_array();
+		}
+		$output .= '<div>';
 		if(!empty($recomendedJobList)) {
 			foreach ($recomendedJobList as $key) { 
 				if($key['userType'] == 1){
@@ -1462,17 +1466,62 @@ class Dashboard extends CI_Controller {
 					</div>
 				</div>';
 			}
+			$output .='</div>'; 
 		} else {
-            $output .= '<div class="emply-resume-list"><div class="emply-resume-thumb"><h2>No Data Found</h2></div></div>';
+            $output .= '<div class="emply-resume-list"><div class="emply-resume-thumb" style="width: 100%;"><h2>No Data Found</h2></div></div>';
         }
 		echo $output;
 	}
 
 	public function recommended_employee() {
-		$data['jobTitleByemployer'] = $this->db->query("SELECT id, post_title FROM postjob WHERE user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+		$data['jobTitleByemployer'] = $this->db->query("SELECT id, post_title, required_key_skills FROM postjob WHERE user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
 		$data['jobListByemployer'] = $this->db->query("SELECT * FROM users WHERE userType = '1'")->result_array();
 		$this->load->view('header');
 		$this->load->view('user_dashboard/recommended_employee', $data);
 		$this->load->view('footer');
+	}
+
+	public function filterEmployeeByJobtitle() {
+		//echo "<pre>"; print_r($_POST); die;
+		$skills = explode(',', $_POST['skill']);
+		$count = count($skills);
+		$output = '<div>';
+		for ($s=0; $s < $count; $s++) {
+			if(!empty($skills[0])) {
+				$getUser = $this->db->query("SELECT * FROM users WHERE (instr(concat(',', skills, ','), ',$skills[$s],') OR skills = '".$skills[$s]."') AND userType = '1' AND status = '1' AND email_verified = '1'")->result_array();
+			} else {
+				$getUser = $this->db->query("SELECT * FROM users WHERE userType = '1' AND status = '1' AND email_verified = '1'")->result_array();
+			}
+			if(!empty($getUser)) {
+				foreach ($getUser as $key) {
+					if($key['userType'] == 1){
+						$name = $key['firstname'].' '.$key['lastname'];
+					} else {
+						$name = $key['companyname'];
+					}
+					if(!empty($key['profilePic']) && file_exists('uploads/users/'.$key['profilePic'])){
+						$profile_pic= '<img src="'.base_url('uploads/users/'.$key['profilePic']).'" alt="" />';
+					} else {
+						$profile_pic= '<img src="'.base_url('uploads/users/user.png').'" alt="" />';
+					}
+					$string = strip_tags($key['short_bio']);
+					if (strlen($string) > 200) {
+						$stringCut = substr($string, 0, 200);
+						$endPoint = strrpos($stringCut, ' ');
+						$string = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
+						$string .= '...';
+					}
+					$output .= '
+					<div class="emply-resume-list"><div class="emply-resume-thumb">'.$profile_pic.'</div>
+					<div class="emply-resume-info"><h3><a href="'.base_url('worker-detail/'.base64_encode($key["userId"])).'" title="">'.$name.'</a></h3>
+					<p><i class="la la-map-marker"></i>'.$key["address"].'</p>
+					<div class="Employee-Details"><div class="MoreDetailsTxt_'.$key['id'].'">'.$string.'</div></div></div></div>';
+				}
+				$output .= '';
+			} else {
+				$output .= '<div class="emply-resume-list"><div class="emply-resume-thumb" style="width: 100%;"><h2>No Data Found</h2></div></div>';
+			}
+		}
+		echo $output;
 	}
 }

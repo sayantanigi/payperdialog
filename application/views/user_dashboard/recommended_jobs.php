@@ -24,13 +24,13 @@
 </section>
 <?php $this->load->view('sidebar');?>
 <div class="col-md-12 col-md-12 col-sm-12 display-table-cell v-align">
-    <div class="col-sm-12" style="display: inline-block">
+    <!-- <div class="col-sm-12" style="display: inline-block">
         <div class="col-sm-6" style="display: inline-block; float: left;">
             <p style="text-align: right;align-items: center;display: grid; ">Filter By Skill</p>
         </div>
         <div class="col-sm-6" style="display: inline-block; float: left;">
             <select class="form-control" name="remote" id="FilterBySkill">
-                <option value="">Select Option</option>
+                <option value="">All Recommended Job</option>
                 <?php 
                 $skills = $usersSkillsData[0]['skills'];
                 $skills = explode(',', $skills);
@@ -39,75 +39,88 @@
                 <?php } ?>
             </select>
         </div>
-    </div>
+    </div> -->
     <div class="user-dashboard">
         <div class="row row-sm">
             <div class="col-xl-12 col-lg-12 col-md-12">
-                <div class="cardak custom-cardak">
-                    <table class="table table-modific" id="usersSkillsData">
-                        <tbody>
-                        <?php
-                        if(!empty($usersSkillsData)){
-                            $skills = $usersSkillsData[0]['skills'];
-                            $skills = explode(',', $skills);
-                            for ($i=0; $i < count((array)$skills); $i++) { 
-                                $skills = trim($skills[$i]);
-                                $recomendedJobList = $this->db->query("SELECT users.companyname, users.profilePic, postjob.* FROM postjob JOIN users ON postjob.user_id = users.userId WHERE instr(concat(',', required_key_skills, ','), ',$skills,') AND `is_delete` = 0")->result_array();
-                                //print_r($recomendedJobList);
-                                foreach ($recomendedJobList as $key) { 
-                                    if($key['userType'] == 1){
-                                        $name = $key['firstname'].' '.$key['lastname'];
-                                    } else {
-                                        $name = $key['companyname'];
-                                    }
-                                    if(!empty($key['profilePic']) && file_exists('uploads/users/'.$key['profilePic'])){
-                                        $profile_pic= '<img src="'.base_url('uploads/users/'.$key['profilePic']).'" alt="" />';
-                                    } else {
-                                        $profile_pic= '<img src="'.base_url('uploads/users/user.png').'" alt="" />';
-                                    }
-                                    $get_category=$this->Crud_model->get_single('category',"id='".$key['category_id']."'");
-                                    $get_subcategory=$this->Crud_model->get_single('sub_category',"id='".$key['subcategory_id']."'");
-                                    $string = strip_tags($key['description']);
-                                    if (strlen($string) > 200) {
-                                        $stringCut = substr($string, 0, 200);
-                                        $endPoint = strrpos($stringCut, ' ');
-                                        $string = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
-                                        $string .= '...';
-                                    }
-                        ?>
-                        <div class="emply-resume-list">
-                            <div class="emply-resume-thumb"><?= $profile_pic ?></div>
-                            <div class="emply-resume-info">
-                                <h3><a href="<?= base_url('postdetail/'.base64_encode($key['id']))?>" title=""><?= $key['post_title']?></a></h3>
-                                <span><?= $get_category->category_name?></span>
-                                <span><?= $get_subcategory->sub_category_name?></span>
-                                <p><i class="la la-map-marker"></i><?= $key["city"].', '.$key["state"].', '.$key["country"]?></p>
-                                <span><b>Posted By:</b> <?= $name?></span>
-                                <div class="Employee-Details">
-                                    <div class="MoreDetailsTxt_<?= $key['id']?>"><?= $string?></div>
+            <div class="container">
+                    <div class="row no-gape">
+                        <aside class="col-lg-3 column border-right Employees_Search_Panel">
+                            <div class="Employees_Search_Panel_Data">
+                                <form method="post" id="filter_form">
+                                    <div class="widget">
+                                        <h3 class="sb-title opened">Skill Sets</h3>
+                                        <div class="specialism_widget">
+                                            <div class="dropdown-field">
+                                                <select class="form-control" name="remote" id="FilterBySkill">
+                                                    <option value="">All Recommended Job</option>
+                                                    <?php 
+                                                    $skills = $usersSkillsData[0]['skills'];
+                                                    $skills = explode(',', $skills);
+                                                    for ($i = 0; $i < count($skills); $i++) { ?>
+                                                    <option value="<?= trim($skills[$i])?>"><?= trim($skills[$i])?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </aside>
+                        <div class="col-lg-9 column Employees_Search_Result">
+                            <div class="cardak custom-cardak">
+                                <div class="table table-modific" id="usersSkillsData">
+                                <?php if(!empty($usersSkillsData)) {
+                                $skills1 = $usersSkillsData[0]['skills'];
+                                $experience = $usersSkillsData[0]['experience'];
+                                $skills = explode(',', $skills1);
+                                $count =  count($skills);
+                                for ($j=0; $j < $count; $j++) {
+                                    $recomendedJobList = $this->db->query("SELECT users.companyname, users.profilePic, postjob.* FROM postjob JOIN users ON postjob.user_id = users.userId WHERE postjob.experience_level = '".$experience."' AND `is_delete` = 0")->result_array();
+                                    //$recomendedJobList = $this->db->query("SELECT users.companyname, users.profilePic, postjob.* FROM postjob JOIN users ON postjob.user_id = users.userId WHERE (instr(concat(',', required_key_skills, ','), ',$skills[$j],') OR postjob.required_key_skills = '".$skills[$j]."') AND postjob.experience_level = '".$experience."' AND `is_delete` = 0")->result_array();
+                                    foreach ($recomendedJobList as $key) { 
+                                        if($key['userType'] == 1){
+                                            $name = $key['firstname'].' '.$key['lastname'];
+                                        } else {
+                                            $name = $key['companyname'];
+                                        }
+                                        if(!empty($key['profilePic']) && file_exists('uploads/users/'.$key['profilePic'])){
+                                            $profile_pic= '<img src="'.base_url('uploads/users/'.$key['profilePic']).'" alt="" />';
+                                        } else {
+                                            $profile_pic= '<img src="'.base_url('uploads/users/user.png').'" alt="" />';
+                                        }
+                                        $get_category=$this->Crud_model->get_single('category',"id='".$key['category_id']."'");
+                                        $get_subcategory=$this->Crud_model->get_single('sub_category',"id='".$key['subcategory_id']."'");
+                                        $string = strip_tags($key['description']);
+                                        if (strlen($string) > 200) {
+                                            $stringCut = substr($string, 0, 200);
+                                            $endPoint = strrpos($stringCut, ' ');
+                                            $string = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
+                                            $string .= '...';
+                                        } 
+                                    ?>
+                                    <div class="emply-resume-list">
+                                        <div class="emply-resume-thumb"><?= $profile_pic ?></div>
+                                        <div class="emply-resume-info">
+                                            <h3><a href="<?= base_url('postdetail/'.base64_encode($key['id']))?>" title=""><?= $key['post_title']?></a></h3>
+                                            <span><?= $get_category->category_name?></span>
+                                            <span><?= $get_subcategory->sub_category_name?></span>
+                                            <p><i class="la la-map-marker"></i><?= $key["city"].', '.$key["state"].', '.$key["country"]?></p>
+                                            <span><b>Posted By:</b> <?= $name?></span>
+                                            <div class="Employee-Details">
+                                                <div class="MoreDetailsTxt_<?= $key['id']?>"><?= $string?></div>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <?php } } } else { ?>
+                                    <div>
+                                        <center>No Data Found</center>
+                                    </div>
+                                    <?php } ?>
                                 </div>
                             </div>
-                        </div> 
-                        <?php $i++; } } } else { ?>
-                        <tr>
-                            <td colspan="6">
-                                <center>No Data Found</center>
-                                <?php if(@$_SESSION['afrebay']['userType'] == '2') {
-                                $get_sub_data = $this->db->query("SELECT * FROM employer_subscription where employer_id = ".$_SESSION['afrebay']['userId']." and payment_status = 'paid'")->result_array();
-                                if(!empty($get_sub_data)) {
-                                $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) { ?>
-                                <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important; border: 0 !important; "><a href="javascript:void(0)" onclick="completeSub()">Post Jobs</a></button>
-                                <?php } else { ?>
-                                <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important; border: 0 !important; "><a href="<?= base_url('postjob')?>" title="" target="_blank">Post Jobs</a></button>
-                                <?php } } else { ?>
-                                <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important; border: 0 !important; "><a href="javascript:void(0)" onclick="completeSub()">Post Jobs</a></button>
-                                <?php } } ?>
-                            </td>
-                        </tr>
-                        <?php } ?>
-                        </tbody>
-                    </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -115,6 +128,7 @@
 </div>
 </div>
 </div>
+<input type="hidden" id="experience" name="experience" value="<?= $usersSkillsData[0]['experience']?>" >
 <div id="add_project" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -202,10 +216,11 @@ function MoreDetailsTxt(id) {
 $(document).ready(function(){
     $('#FilterBySkill').change(function(){
         var p_id = $(this).val();
+        var experience = $('#experience').val();
         $.ajax({
             url: "<?= base_url()?>user/dashboard/filterJobDataBySkillset",
             method:"POST",
-            data:{id: p_id},
+            data:{id: p_id, experience: experience},
             beforeSend : function(){
                 $("#loader").show();
             },
