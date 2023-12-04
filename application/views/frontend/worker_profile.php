@@ -326,7 +326,36 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                 </div>
                 <div class="modal-footer border-top-0 d-flex justify-content-center">
                     <!-- <button type="submit" class="btn btn-success" id="submit-button1">Schedule</button> -->
-                    <input type="button" class="btn btn-success" id="submit-button" value="Book Now" onclick="bookNow()">
+                    <input type="button" class="btn btn-success" id="submit-button" value="Book Now" onclick="aggrement()">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade edit-form" id="aggrementmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog" role="document">
+        <div class="modal-content" style="width: 510px; height: 620px; overflow: auto;">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title" id="modal-title">User's Aggrement</h5>
+                <button type="button" class="bookBtn-close btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeaggrmnt()"></button>
+            </div>
+            <form id="myForm">
+                <div class="modal-body">
+                    <div class='form-group date'>
+                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                        <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+                        <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.</p>
+                    </div>
+                    <div class="form-group date">
+                        <input type="checkbox" id="aggrchck" name="vehicle2" value="1" style="opacity: 1; z-index: 50; margin-top: 9px;">
+                        <p style="display: inline-block; margin-left: 25px; margin-top: 0px; margin-bottom: 0px;" class="user_aggrmnt">I have read and agree to PayperLLC aggrement and Policy.</p>
+                        <p class="erroraggr" style="margin: 0;width: 100%;text-align: center;color: red;font-size: 12px;">Please check the checkbox.</p>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 d-flex justify-content-center">
+                    <!-- <button type="submit" class="btn btn-success" id="submit-button1">Schedule</button> -->
+                    <input type="button" class="btn btn-success" id="submit-button" value="Next" onclick="bookNow()">
                 </div>
             </form>
         </div>
@@ -385,84 +414,96 @@ function availTime(start_date, from_time, end_date, to_time, bookingTime) {
     });
 }
 
+function aggrement() {
+    const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal'));
+    aggrementmodal. show();
+}
+
 function bookNow() {
-    var avail_id = $('#avail_id').val();
-    var startDate = $('#start_date').val();
-    var employeeID = $('#userID').val();
-    var employerID = $('#employerID').val();
-    var bookTime = [];
-    $(".pasthours:checked").each(function(){
-        bookTime.push($(this).val());
-    });
-    var arr = [];
-    var bookTime = bookTime.toString();
-    var output = bookTime.split(',');
-    //alert(output.length);
-    $.each(output,function(i) {
-        s_time = parseFloat(output[i]) + 1;
-        arr.push("<div>"+output[i]+" to "+s_time+":00</div>");
-    });
-    var rate = output.length * $('#rateperhour').val();
-    var finalrate = "<div><p style='color: #000;'>Total Rate: "+rate+"</p><div>";
-    finalshow = arr.join('')+ "" + finalrate;
-    $('#bookTime').val(bookTime);
-    $.ajax({
-        type:"post",
-        url:"<?php echo base_url()?>user/Dashboard/addBookingTimeData",
-        data:{avail_id: avail_id, startDate: startDate, employeeID: employeeID, employerID: employerID, bookTime: bookTime},
-        success:function(returndata) {
-            if(returndata == 1) {
-                $.confirm({
-                    title: '',
-                    content: finalshow+" Pay now to book your slot.",
-                    buttons: {
-                        somethingElse: {
-                            text: 'Pay Now',
-                            btnClass: 'btn-secondary paynow_btn',
-                            keys: ['enter', 'shift'],
-                            action: function(){
-                                $.ajax({
-                                    type:"post",
-                                    url:"<?php echo base_url()?>user/Dashboard/paymentforslotbook",
-                                    data:{avail_id: avail_id, employeeID: employeeID, employerID: employerID, rate: rate},
-                                    success:function(returndata) {
-                                        if(returndata == 1) {
-                                            $.confirm({
-                                                title: '',
-                                                content: rate+" Paid. Your slot booked successfuly.",
-                                                buttons: {
-                                                    somethingElse: {
-                                                        text: 'Ok',
-                                                        btnClass: 'btn-secondary paydone_btn',
-                                                        keys: ['enter', 'shift'],
-                                                        action: function(){
-                                                            location.reload();
+    if($("#aggrchck").is(":checked")) { 
+        var avail_id = $('#avail_id').val();
+        var startDate = $('#start_date').val();
+        var employeeID = $('#userID').val();
+        var employerID = $('#employerID').val();
+        var bookTime = [];
+        $(".pasthours:checked").each(function(){
+            bookTime.push($(this).val());
+        });
+        var arr = [];
+        var bookTime = bookTime.toString();
+        var output = bookTime.split(',');
+        //alert(output.length);
+        $.each(output,function(i) {
+            s_time = parseFloat(output[i]) + 1;
+            arr.push("<div>"+output[i]+" to "+s_time+":00</div>");
+        });
+        var rate = output.length * $('#rateperhour').val();
+        var finalrate = "<div><p style='color: #000;'>Total Rate: "+rate+"</p><div>";
+        finalshow = arr.join('')+ "" + finalrate;
+        $('#bookTime').val(bookTime);
+        $.ajax({
+            type:"post",
+            url:"<?php echo base_url()?>user/Dashboard/addBookingTimeData",
+            data:{avail_id: avail_id, startDate: startDate, employeeID: employeeID, employerID: employerID, bookTime: bookTime},
+            success:function(returndata) {
+                if(returndata == 1) {
+                    $.confirm({
+                        title: '',
+                        content: finalshow+" Pay now to book your slot.",
+                        buttons: {
+                            somethingElse: {
+                                text: 'Pay Now',
+                                btnClass: 'btn-secondary paynow_btn',
+                                keys: ['enter', 'shift'],
+                                action: function(){
+                                    $.ajax({
+                                        type:"post",
+                                        url:"<?php echo base_url()?>user/Dashboard/paymentforslotbook",
+                                        data:{avail_id: avail_id, employeeID: employeeID, employerID: employerID, rate: rate},
+                                        success:function(returndata) {
+                                            if(returndata == 1) {
+                                                $.confirm({
+                                                    title: '',
+                                                    content: rate+" Paid. Your slot booked successfuly.",
+                                                    buttons: {
+                                                        somethingElse: {
+                                                            text: 'Ok',
+                                                            btnClass: 'btn-secondary paydone_btn',
+                                                            keys: ['enter', 'shift'],
+                                                            action: function(){
+                                                                location.reload();
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            });
-                                        } else {
-                                            $.alert({
-                                                title: '',
-                                                content: "Something went wrong. Please try again later.",
-                                            });
-                                            return false;
+                                                });
+                                            } else {
+                                                $.alert({
+                                                    title: '',
+                                                    content: "Something went wrong. Please try again later.",
+                                                });
+                                                return false;
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                                }
                             }
                         }
-                    }
-                });
-            } else {
-                $.alert({
-                    title: '',
-                    content: "Something went wrong. Please try again later.",
-                });
-                return false;
+                    });
+                } else {
+                    $.alert({
+                        title: '',
+                        content: "Something went wrong. Please try again later.",
+                    });
+                    return false;
+                }
             }
-        }
-    });
+        });
+    } else {
+        $('.erroraggr').show();
+        setTimeout(() => {
+            $('.erroraggr').hide();
+        }, 5000);
+    }
 }
 
 $(window).on('load', function() {
@@ -476,6 +517,10 @@ $(window).on('load', function() {
 });
 
 function closeBook() {
+    location.reload();
+}
+
+function closeaggrmnt() {
     location.reload();
 }
 
@@ -645,6 +690,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 $(document).ready(function() {
+    $('.erroraggr').hide();
     <?php $i=1; 
     foreach ($availability as $value) { ?>
     $('#job_overview_sub_<?= $i?>').hide();
