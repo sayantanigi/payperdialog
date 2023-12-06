@@ -96,6 +96,12 @@
 															<input type="text" class="form-control" name="baha_link" placeholder="Bahance Link" value="<?php if(!empty($row->baha_link)){echo $row->baha_link; }?>">
 														</div>
 													</div>
+													<div class="col-md-12">
+														<div class="form-group">
+															<label>Commission</label>
+															<input type="text" class="form-control" name="commission" placeholder="Commission" value="<?php if(!empty($row->commission)){echo $row->commission; }?>">
+														</div>
+													</div>
 													<div class="col-md-4">
 														<div class="form-group">
 															<label>Header Logo</label>

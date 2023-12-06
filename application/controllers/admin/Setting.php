@@ -98,6 +98,7 @@ class Setting extends MY_Controller {
 			'lnkd_link' => $this->input->post('lnkd_link'),
 			'ptrs_link' => $this->input->post('ptrs_link'),
 			'baha_link' => $this->input->post('baha_link'),
+            'commission' => $this->input->post('commission'),
           	'logo' => $logo,
 			'flogo' => $flogo,
           	'favicon' => $favicon,
