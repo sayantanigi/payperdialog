@@ -85,7 +85,7 @@ echo $commission = $settings[0]->commission;
                             </thead>
                             <tbody>
                             <?php 
-                            echo "<pre>"; print_r($get_userdata);
+                            //echo "<pre>"; print_r($get_userdata);
                             if(!empty($get_userdata)) {
                                 $i=1;
                                 foreach ($get_userdata as $value) { ?>
@@ -116,12 +116,12 @@ echo $commission = $settings[0]->commission;
                                                 <p style="margin:0px"><?= date('h:i A', strtotime($bookingTime[$j]))?> to <?= date('h:i A', strtotime($bookingTime[$j]) + 60*60)."<br>"?></p>
                                             <?php } ?>
                                             </td>
-                                            <?php $payToemployer = @$value['rate']-(($value['rate']*$commission)/100); ?>
+                                            <?php $payToemployee = @$value['rate']-(($value['rate']*$commission)/100); ?>
                                             <td style="font-size: 14px;">Booked By <br><?= @$getEmployer[0]['companyname']?></td>
                                             <td style="font-size: 14px;">Total Amount <br> <?= @$value['rate']?></td>
-                                            <td style="font-size: 14px;">Pay to Employer <br><?= @$payToemployer?></td>
+                                            <td style="font-size: 14px;">Pay to Employee <br><?= @$payToemployee?></td>
                                             <td style="font-size: 14px;"><a href="javascript:void(0)">
-                                            <span class="btn btn-sm bg-success-light mr-2" data-toggle="modal" data-target="#editModal" data-placement="right" onclick="paytoemployer('<?= $value['employer_id']?>','<?= $value['booking_id']?>','<?= $payToemployer?>'">
+                                            <span class="btn btn-sm bg-success-light mr-2" data-toggle="modal" data-target="#editModal" data-placement="right" onclick="paytoemployee('<?= $value['employee_id']?>','<?= $value['employer_id']?>','<?= $value['id']?>','<?= $value['rate']?>','<?= $payToemployee?>')">
                                                 <i class="far fa-eye mr-1"></i>Pay
                                             </span>
                                         </a></td>
@@ -151,6 +151,14 @@ $(document).ready(function() {
     $('#userbookingdetails_<?= $i?>').click(function () {
         $('#userbookingDetails_<?= $i?>').toggle();
     })
-    <?php $i++; } }?>
+    <?php $i++; } } ?>
 });
+
+function paytoemployee(employee_id, employer_id, bookingtxn_id, rate, payToemployee) {
+    alert("employee_id ==> ", employee_id);
+    alert("employer_id ==> ", employer_id);
+    alert("bookingtxn_id ==> ", bookingtxn_id);
+    alert("rate ==> ", rate);
+    alert("payToemployee ==> ", payToemployee);
+}
 </script>
