@@ -46,12 +46,12 @@ class Users extends MY_Controller {
             // $btn .= ' | '.anchor(base_url('profile/'.base64_encode($row->userId)),'<span class="btn btn-sm bg-success-light mr-2"><i class="far fa-eye mr-1"></i>Edit</span>');
 
             $btn .= ' |  '.'<span data-placement="right" class="btn btn-sm btn-danger mr-2"  onclick="Delete(this,'.$row->userId.')" style="margin-left: 8px;"><i class="fa fa-trash mr-1"></i></span>';
-            if($row->userType==1)
-            {
+            if($row->userType==1) {
                 $type='Employee';
-            }
-            elseif($row->userType==2){
+            } elseif($row->userType==2){
                 $type='Employer';
+            } elseif($row->userType==3){
+                $type='Expert';
             }
 
             if($row->email_verified=="1"){

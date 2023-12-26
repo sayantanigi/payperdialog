@@ -337,6 +337,76 @@ class Home extends MY_Controller {
 		$this->load->view('footer');
 	}
 
+	function expert_list() {
+		$data['get_specialist'] = $this->Crud_model->GetData('specialist');
+		$data['get_banner'] = $this->Crud_model->get_single('banner', "page_name='Expert'");
+		$this->load->view('header');
+		$this->load->view('frontend/expert_list', $data);
+		$this->load->view('footer');
+	}
+
+	function expertlist_fetchdata() {
+		sleep(1);
+		$title = $this->input->post('title_keyword');
+		$search_location = $this->input->post('location');
+		$specialist = $this->input->post('specialist');
+		$experience = $this->input->post('experience');
+		if($specialist) {
+			$specialist = implode(',', $specialist);
+		}
+		$userType = 3;
+		$this->load->library('pagination');
+		$config = array();
+		$config['base_url'] = '#';
+		$config['total_rows'] = count($this->Users_model->getcount());
+		$config['per_page'] = 10;
+		$config['uri_segment'] = 3;
+		$config['use_page_numbers'] = TRUE;
+		$config['full_tag_open'] = '<ul class="pagination">';
+		$config['full_tag_close'] = '</ul>';
+		$config['first_tag_open'] = '<li>';
+		$config['first_tag_close'] = '</li>';
+		$config['last_tag_open'] = '<li>';
+		$config['last_tag_close'] = '</li>';
+		$config['next_link'] = '&gt;';
+		$config['next_tag_open'] = '<li>';
+		$config['next_tag_close'] = '</li>';
+		$config['prev_link'] = '&lt;';
+		$config['prev_tag_open'] = '<li>';
+		$config['prev_tag_close'] = '</li>';
+		$config['cur_tag_open'] = "<li class='active'><a href='#'>";
+		$config['cur_tag_close'] = '</a></li>';
+		$config['num_tag_open'] = '<li>';
+		$config['num_tag_close'] = '</li>';
+		$config['num_links'] = 3;
+		$this->pagination->initialize($config);
+		$page = $this->uri->segment(3);
+		$start = ($page - 1) * $config['per_page'];
+
+		if(isset($title) || isset($search_location) || isset($specialist) || isset($userType) || isset($experience)) {
+			$getdata=$this->Users_model->expert_fetchdata($config["per_page"], $start, $title, $search_location, $specialist, $userType, $experience);
+		} else {
+			$getdata=$this->Users_model->expert_fetchdata($config["per_page"], $start, $title, $search_location, $specialist, $userType, $experience);
+		}
+
+		$output = array(
+			'pagination_link'  => $this->pagination->create_links(),
+			'product_list'   => $getdata
+		);
+		echo json_encode($output);
+	}
+
+	public function expert_detail($user_id) {
+		$cond = "users.userType='3' and users.userId='" . base64_decode($user_id) . "'";
+		$data['user_detail'] = $this->Users_model->users_detail($cond);
+		$data['user_education'] = $this->Crud_model->GetData('user_education', '', "user_id='" . base64_decode($user_id) . "'", '', '(id)desc');
+		$data['user_work'] = $this->Crud_model->GetData('user_workexperience', '', "user_id='" . base64_decode($user_id) . "'", '', '(id)desc');
+		$data['get_banner'] = $this->Crud_model->get_single('banner', "page_name='Expert Details'");
+		$this->load->view('header');
+		$this->load->view('frontend/expert_profile', $data);
+		$this->load->view('footer');
+	}
+
 	function employer_list() {
 		$data['get_banner'] = $this->Crud_model->get_single('banner', "page_name='Businesses'");
 		$data['getcategory']=$this->Crud_model->GetData('category');

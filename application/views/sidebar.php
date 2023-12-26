@@ -46,36 +46,36 @@ $get_setting=$this->Crud_model->get_single('setting');
 
                         <?php 
                         if($get_setting->required_subscription == '1') {
-                            if(@$_SESSION['afrebay']['userType']=='1') {
+                            if(@$_SESSION['afrebay']['userType']=='1' || @$_SESSION['afrebay']['userType']=='3') {
                                 $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".$_SESSION['afrebay']['userId']."' AND (status = '1' OR status = '2')")->result_array();
                                 if(!empty($get_sub_data)) {
-                                $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio'])) { ?>
-                                <li <?php if($seg1=='education-list') { ?>class="active" <?php } ?>>
-                                    <span class="cover"></span>
-                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                                        <span class="hidden-xs hidden-sm">Education</span>
-                                    </a>
-                                </li>
-                                <li <?php if($seg1=='workexperience-list') { ?>class="active" <?php } ?>>
-                                    <span class="cover"></span>
-                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-id-card" aria-hidden="true"></i>
-                                        <span class="hidden-xs hidden-sm">Work Experience</span>
-                                    </a>
-                                </li>
+                                    $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                    if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio'])) { ?>
+                                    <li <?php if($seg1=='education-list') { ?>class="active" <?php } ?>>
+                                        <span class="cover"></span>
+                                        <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                            <span class="hidden-xs hidden-sm">Education</span>
+                                        </a>
+                                    </li>
+                                    <li <?php if($seg1=='workexperience-list') { ?>class="active" <?php } ?>>
+                                        <span class="cover"></span>
+                                        <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-id-card" aria-hidden="true"></i>
+                                            <span class="hidden-xs hidden-sm">Work Experience</span>
+                                        </a>
+                                    </li>
                                 <?php } else { ?>
-                                <li <?php if($seg1=='education-list') { ?>class="active" <?php } ?>>
-                                    <span class="cover"></span>
-                                    <a href="<?= base_url('education-list')?>"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                                        <span class="hidden-xs hidden-sm">Education</span>
-                                    </a>
-                                </li>
-                                <li <?php if($seg1=='workexperience-list') { ?>class="active" <?php } ?>>
-                                    <span class="cover"></span>
-                                    <a href="<?= base_url('workexperience-list')?>"><i class="fa fa-id-card" aria-hidden="true"></i>
-                                        <span class="hidden-xs hidden-sm">Work Experience</span>
-                                    </a>
-                                </li>
+                                    <li <?php if($seg1=='education-list') { ?>class="active" <?php } ?>>
+                                        <span class="cover"></span>
+                                        <a href="<?= base_url('education-list')?>"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                                            <span class="hidden-xs hidden-sm">Education</span>
+                                        </a>
+                                    </li>
+                                    <li <?php if($seg1=='workexperience-list') { ?>class="active" <?php } ?>>
+                                        <span class="cover"></span>
+                                        <a href="<?= base_url('workexperience-list')?>"><i class="fa fa-id-card" aria-hidden="true"></i>
+                                            <span class="hidden-xs hidden-sm">Work Experience</span>
+                                        </a>
+                                    </li>
                                 <?php } } else { ?>
                                 <li <?php if($seg1=='education-list') { ?>class="active" <?php } ?>>
                                     <span class="cover"></span>
@@ -92,7 +92,7 @@ $get_setting=$this->Crud_model->get_single('setting');
                                 <?php } 
                             } 
                         } else {
-                            if(@$_SESSION['afrebay']['userType']=='1') {
+                            if(@$_SESSION['afrebay']['userType']=='1' || @$_SESSION['afrebay']['userType']=='3') {
                             $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                             if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio'])) { ?>
                             <li <?php if($seg1=='education-list') { ?>class="active" <?php } ?>>
@@ -253,6 +253,12 @@ $get_setting=$this->Crud_model->get_single('setting');
                                         <span class="hidden-xs hidden-sm">Recommended Employee</span>
                                     </a>
                                 </li>
+                                <li <?php if($seg1=='booking-history') { ?> class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="javascript:void(0)" onclick="completeSub1()"><i class="fa fa-tasks" aria-hidden="true"></i>
+                                        <span class="hidden-xs hidden-sm">Booking History</span>
+                                    </a>
+                                </li>
                                 <?php } else { ?>
                                 <li <?php if($seg1=='myjob') { ?> class="active" <?php } ?>>
                                     <span class="cover"></span>
@@ -270,6 +276,12 @@ $get_setting=$this->Crud_model->get_single('setting');
                                     <span class="cover"></span>
                                     <a href="<?= base_url('recommended-employee')?>"><i class="fa fa-tasks" aria-hidden="true"></i>
                                         <span class="hidden-xs hidden-sm">Recommended Employee</span>
+                                    </a>
+                                </li>
+                                <li <?php if($seg1=='booking-history') { ?> class="active" <?php } ?>>
+                                    <span class="cover"></span>
+                                    <a href="<?= base_url('booking-history')?>"><i class="fa fa-tasks" aria-hidden="true"></i>
+                                    <span class="hidden-xs hidden-sm">Booking History</span>
                                     </a>
                                 </li>
                                 <?php } } else {

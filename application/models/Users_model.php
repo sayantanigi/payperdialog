@@ -335,6 +335,49 @@ class Users_model extends My_Model {
         }
         return $output;
     }
+
+    function expert_fetchdata($limit, $start, $title, $search_location, $specialist, $userType, $experience) {
+        if(isset($title) || isset($search_location) || isset($specialist) || isset($userType) || isset($experience)) {
+            $query = $this->make_workers_query($title, $search_location, $specialist, $userType, $experience);
+            $query .= ' AND users.status = 1 and users.email_verified = 1 ORDER BY userId DESC';
+            $query .= ' LIMIT '.$start.', ' . $limit;
+            $data = $this->db->query($query);
+        } else {
+            $query = "SELECT * FROM users WHERE status = '1' AND email_verified = '1' ORDER BY userId DESC";
+            $query .= ' LIMIT '.$start.', ' . $limit;
+            $data = $this->db->query($query);
+        }
+
+        $output = '';
+        if(!empty($data->result_array())) {
+            foreach($data->result_array() as $row) {
+                $get_post=$this->Crud_model->GetData('job_bid','',"user_id='".$row['userId']."'");
+                if(!empty($row['firstname'])){
+                    $name= $row['firstname'].' '.$row['lastname'];
+                } else{
+                    $name=$row['companyname'];
+                }
+
+                if(strlen($row['short_bio'])>100){
+                    $desc= substr(strip_tags($row['short_bio']), 0,100).'...';
+                } else {
+                    $desc= strip_tags($row['short_bio']);
+                }
+
+                if(!empty($row['profilePic']) && file_exists('uploads/users/'.$row['profilePic'])){
+
+                    $profile_pic= '<img src="'.base_url('uploads/users/'.$row['profilePic']).'" alt="" />';
+
+                } else {
+                    $profile_pic= '<img src="'.base_url('uploads/users/user.png').'" alt="" />';
+                }
+                $output .= '<div class="emply-resume-list"> <div class="emply-resume-thumb">'.$profile_pic.'</div> <div class="emply-resume-info"> <h3><a href="#" title="">'.$name.'</a></h3><p><i class="la la-map-marker"></i>'. $row['address'].'</p> <p>'.$desc.'</p> <p></p> </div> <div class="shortlists" style="width:50px;"> <a href="'.base_url('expert-detail/'.base64_encode($row['userId'])).'" title="">View Profile<i class="la la-plus"></i></a> </div> </div>';
+            }
+        } else {
+            $output .= '<div class="emply-resume-list"><div class="emply-resume-thumb"><h2>No Data Found</h2></div></div>';
+        }
+        return $output;
+    }
     ////////////////////// end ajax list employer///////////////////////
 
     function vendor_fetchdataForAPI($limit, $start, $title, $category_id, $subcategory_id, $search_location, $days, $userType) {

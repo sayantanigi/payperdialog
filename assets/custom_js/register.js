@@ -21,7 +21,7 @@ function btn_register() {
 		return false;
 	}
 
-	if(user_type == 1){
+	if(user_type == 1 || user_type == 3){
 		if(first_name=='') {
 			$('#err_firstname').fadeIn().html('Please enter First Name').css('color','red');
 			setTimeout(function(){$("#err_firstname").html("&nbsp;");},3000);

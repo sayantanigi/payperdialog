@@ -1524,4 +1524,19 @@ class Dashboard extends CI_Controller {
 		}
 		echo $output;
 	}
+
+	public function checktoaggrement() {
+		$userid = $_POST['userid'];;
+		$data = array(
+			"isAggreed" => 1
+		); 
+		$this->Crud_model->SaveData('users', $data, "userId='".$userid."'");
+		echo "1";
+	}
+
+	public function bookingHistory() {
+		$this->load->view('header');
+		$this->load->view('user_dashboard/bookingHistory');
+		$this->load->view('footer');
+	}
 }

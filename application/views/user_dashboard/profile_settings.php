@@ -116,7 +116,7 @@ if($data_request=='user'){
                                             </div>
 
                                             <?php //if(@$_SESSION['afrebay']['userType']=='1') { ?>
-                                            <?php if(@$userinfo->userType=='1') { ?>
+                                            <?php if(@$userinfo->userType=='1' || @$userinfo->userType=='3') { ?>
                                             <div class="col-lg-6 gender">
                                                 <label for="first_name">
                                                     <h4>Gender<span style="color:red;">*</span></h4>
@@ -158,7 +158,7 @@ if($data_request=='user'){
                                                 <input type="hidden" name="longitude" id="search_lon" value="<?= $userinfo->longitude ?> ">
                                             </div>
                                             <?php //if(@$_SESSION['afrebay']['userType']=='1') { ?>
-                                            <?php if(@$userinfo->userType=='1') { ?>
+                                            <?php if(@$userinfo->userType=='1' || @$userinfo->userType=='3') { ?>
                                             <div class="col-lg-6 key-skill">
                                                 <span class="pf-title1">Skill Set</span>
                                                 <div class="pf-field">
@@ -182,7 +182,7 @@ if($data_request=='user'){
                                             <div class="col-lg-6 key-skill">
                                                 <span class="pf-title1">Total Experience</span>
                                                 <div class="pf-field">
-                                                    <select data-placeholder="Please Select Experience Level" class="form-control" name="experience" id="experience" required="">
+                                                    <select data-placeholder="Please Select Experience Level" class="form-control" name="experience" id="experience">
                                                         <option value="">Select Option</option>
                                                         <option value="1" <?php if(@$userinfo->experience == 1) {echo "selected";}?>>0 to 02 Years</option>
                                                         <option value="2" <?php if(@$userinfo->experience == 2) {echo "selected";}?>>03 to 05 Years</option>
@@ -194,7 +194,7 @@ if($data_request=='user'){
                                             </div>
                                             <?php } ?>
                                             <?php //if(@$_SESSION['afrebay']['userType']=='1') { ?>
-                                            <?php if(@$userinfo->userType=='1') { ?>
+                                            <?php if(@$userinfo->userType=='1' || @$userinfo->userType=='3') { ?>
                                             <div class="col-lg-4">
                                                 <label for="last_name">
                                                     <h4>Zip Code</h4>
@@ -203,9 +203,9 @@ if($data_request=='user'){
                                             </div>
                                             <div class="col-lg-4">
                                                 <label for="last_name">
-                                                    <h4>Rate per Hour</h4>
+                                                    <h4>Rate per Hour <span style="color:red;">*</span></h4>
                                                 </label>
-                                                <input type="text" class="form-control" name="rateperhour" id="rateperhour" placeholder="Rate per Hour" value="<?php echo @$userinfo->rateperhour;?>"/>
+                                                <input type="text" class="form-control" name="rateperhour" id="rateperhour" placeholder="Rate per Hour" value="<?php echo @$userinfo->rateperhour;?>" required=""/>
                                             </div>
                                             <div class="col-lg-4">
                                                 <label for="last_name">
@@ -231,7 +231,7 @@ if($data_request=='user'){
                                                     <div class="panel-body">
                                                         <table class="table jobsites" id="purchaseTableclone1">
                                                             <tr class="color">
-                                                                <th>Contents <span style="color:red;">*</span></th>
+                                                                <th>Contents</th>
                                                                 <th><button type="button" class="btn btn-info addMoreBtn" onclick="add_row()" >Add Portfolio</button></th>
                                                             </tr>
                                                             <tbody id="clonetable_feedback1">
@@ -239,17 +239,17 @@ if($data_request=='user'){
                                                                 $rows=1;
                                                                 foreach ($portfolio_content as $key) { ?>
                                                                 <tr>
-                                                                    <td style="width: 72%;"><input type="text" name="content_title[]" id="content_title<?= $rows; ?>" class="form-control" placeholder="Content Title" value="<?= $key->content_title; ?>" required></td>
+                                                                    <td style="width: 72%;"><input type="text" name="content_title[]" id="content_title<?= $rows; ?>" class="form-control" placeholder="Content Title" value="<?= $key->content_title; ?>"></td>
                                                                     <td><input type="file" name="portfolio_file[]" id="portfolio_file<?= $rows; ?>" class="form-control" value="<?= $key->portfolio_file; ?>"></td>
                                                                     <td>
-                                                                        <a href="<?php echo base_url('uploads/users/resume/'.$key->portfolio_file); ?>" />
+                                                                        <a href="<?php echo base_url('uploads/users/resume/'.$key->portfolio_file); ?>">
                                                                         <input type="text" name="old_portfolio_file" value="<?= $key->portfolio_file;?>">    
                                                                     </td>
                                                                     <td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return remove(this)">X</a></td>
                                                                 </tr>
                                                                 <?php } } else { ?>
                                                                 <tr>
-                                                                    <td style="width: 72%;"><input type="text" name="content_title[]" id="content_title1" class="form-control" placeholder="Content Title" required></td>
+                                                                    <td style="width: 72%;"><input type="text" name="content_title[]" id="content_title1" class="form-control" placeholder="Content Title"></td>
                                                                     <td><input type="file" name="portfolio_file[]" id="portfolio_file1" class="form-control" required></td>
                                                                     <td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return remove(this)">X</a></td>
                                                                 </tr>
@@ -445,7 +445,7 @@ $('#short_bio').keyup(function() {
     }
 });
 $("form").submit( function(e) {
-    if($('#utype').val() == 1) {
+    if($('#utype').val() == 1 || $('#utype').val() == 3) {
         if($('#firstname').val() == ''){
             $('#firstname').focus().attr('placeholder', 'This field is required');
             $('#vld_firstname').show();

@@ -13,7 +13,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
             <div class="row">
                 <div class="col-lg-12">
                     <div class="inner-header">
-                        <h3>Employee Details</h3>
+                        <h3>Expert Details</h3>
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                         <div class="row">
                             <div class="col-lg-8 column">
                                 <div class="cand-details" id="about">
-                                    <h2>About This Employee</h2>
+                                    <h2>About This Expert</h2>
                                     <p>
                                         <?= @$user_detail->short_bio; ?>
                                     </p>
@@ -326,7 +326,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                 </div>
                 <div class="modal-footer border-top-0 d-flex justify-content-center">
                     <!-- <button type="submit" class="btn btn-success" id="submit-button1">Schedule</button> -->
-                    <input type="button" class="btn btn-success" id="submit-button" value="Book Now" onclick="aggrement()">
+                    <input type="button" class="btn btn-success" id="submit-button" value="Book Now" onclick="aggrement1()">
                 </div>
             </form>
         </div>
@@ -423,9 +423,9 @@ function availTime(start_date, from_time, end_date, to_time, bookingTime) {
     });
 }
 
-function aggrement() {
+function aggrement1() {
     const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal'));
-    aggrementmodal. show();
+    aggrementmodal.show();
 }
 
 function bookNow() {
@@ -663,10 +663,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
-    <?php } else if(@$_SESSION['afrebay']['userType'] == '1') { ?>
+    <?php } else if(@$_SESSION['afrebay']['userType'] == '1' || @$_SESSION['afrebay']['userType'] == '3') { ?>
     $.confirm({
         title: '',
-        content: "Booking feature is not available for employee",
+        content: "Booking feature is not available for employee/expert",
         buttons: {
             somethingElse: {
                 text: 'Ok',

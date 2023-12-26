@@ -31,29 +31,17 @@ $get_category=$this->Crud_model->GetData('category','',"status='Active'");
     <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=6163c52d38f8310012c86621&product=inline-share-buttons' async='async'></script>
     <style>
     .completeSub {display: none; text-align: center; margin-top: 20px; color: #fa5a1f; font-size: 20px;}
-    #completeSub {
-  position: relative;
-  display: inline-block;
-}
-
-#completeSub #completeSubtext {
-  visibility: hidden;
-      width: max-content;
-    background-color: white;
-    color: #000;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 10px;
-    position: absolute;
-    z-index: 1;
-    top: 50px;
-    font-size: 13px;
-    right: 0;
-}
-
-#completeSub:hover #completeSubtext {
-  visibility: visible;
-}
+    #completeSub {position: relative; display: inline-block;}
+    #completeSub #completeSubtext {visibility: hidden; width: max-content;background-color: white;color: #000;text-align: center;border-radius: 6px;padding: 5px 10px;position: absolute;z-index: 1;top: 50px;font-size: 13px;right: 0;}
+    #completeSub:hover #completeSubtext {visibility: visible;}
+    .menu-sec .btn-extars .post-job-btn {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;}
+    .stick-top.sticky .btn-extars a.post-job-btn {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;}
+    .job-search form button {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;}
+    .blog-sec .my-blog .nkash a {color: #ed1c24 !important;}
+    .Career .blog-metas {background: #ed1c24 !important;}
+    .blog-details a span, .Career .my-blog .blog-details a span {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;}
+    #aggrementmodal1 p {font-size: 10px; line-height: 15px; margin: 2px 0 0 0;}
+    #aggrementmodal1 .myForm {margin: 10px}
 </style>
 <script>
 function completeSub() {
@@ -164,6 +152,9 @@ $(function () {
                             </li>
                             <li class="">
                                 <a href="<?= base_url('workers-list')?>" title="">Employees</a>
+                            </li>
+                            <li class="">
+                                <a href="<?= base_url('expert-list')?>" title="">Experts</a>
                             </li>
                             <li class="">
                                 <a href="<?= base_url('ourjobs')?>" title="">Jobs</a>
@@ -290,6 +281,8 @@ $(function () {
                                             <a href="<?php echo base_url("worker-detail/".base64_encode($_SESSION['afrebay']['userId']))?>" title="">View Profile</a>
                                             <?php } else if(@$_SESSION['afrebay']['userType']=='2') { ?>
                                             <a href="<?php echo base_url("employerdetail/".base64_encode($_SESSION['afrebay']['userId']))?>" title="">View Profile</a>
+                                            <?php } else { ?>
+                                            <a href="<?php echo base_url("expert-detail/".base64_encode($_SESSION['afrebay']['userId']))?>" title="">View Profile</a>
                                             <?php } ?>
                                         </li>
                                         <li>

@@ -57,7 +57,7 @@ class Chat extends MY_Controller {
 			//}
 
 			$getJobtitle = $this->db->query("SELECT * FROM `postjob` WHERE id = '".$row['postjob_id']."'")->result_array();
-			$post_title = $getJobtitle[0]['post_title'];
+			@$post_title = $getJobtitle[0]['post_title'];
 			$no++;
 			$nestedData = array();
 			$nestedData[] = $no;

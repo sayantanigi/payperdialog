@@ -150,8 +150,20 @@ class Login extends CI_Controller {
 								redirect('dashboard');
 							}
 						}
+					} else if ($_SESSION['afrebay']['userType'] == '3') {
+						$check_sub = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".$_SESSION['afrebay']['userId']."' AND status IN (1,2)");
+						if(empty($check_sub)) {
+							redirect('subscription');
+						} else {
+							$profile_check = $this->db->query("SELECT `firstname`, `lastname`, `email`, `gender`, `address`, `zip`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+							if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['zip']) || empty($profile_check[0]['short_bio'])) {
+								redirect('profile');
+							} else {
+								redirect('jobbid');
+							}
+						}
 					} else {
-							redirect('login');
+						redirect('login');
 					}
 				} else {
 					if($_SESSION['afrebay']['userType'] == '1') {
@@ -168,8 +180,15 @@ class Login extends CI_Controller {
 						} else {
 							redirect('dashboard');
 						}
+					} else if ($_SESSION['afrebay']['userType'] == '3') {
+						$profile_check = $this->db->query("SELECT `firstname`, `lastname`, `email`, `gender`, `address`, `zip`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+						if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['zip']) || empty($profile_check[0]['short_bio'])) {
+							redirect('profile');
+						} else {
+							redirect('jobbid');
+						}
 					} else {
-							redirect('login');
+						redirect('login');
 					}
 				}
 				
