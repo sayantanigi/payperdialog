@@ -48,20 +48,16 @@
                                             //echo "<pre>"; print_r($availableData);
                                             $avail_id = $availableData[0]['id'];
                                             ?>
-                                            <div
-                                                style="width: 100%;display: inline-block;text-align: center;border-radius: 10px;box-shadow: 0 0 10px #dddddd;height: 400px;overflow-y: scroll;overflow-x: hidden;">
-                                                <p
-                                                    style="padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;">
+                                            <div style="width: 100%;display: inline-block;text-align: center;border-radius: 10px;box-shadow: 0 0 10px #dddddd;height: 400px;overflow-y: scroll;overflow-x: hidden;">
+                                                <p style="padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;">
                                                     <?= $date; ?>
                                                 </p>
                                                 <?php
                                                 $getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='" . @$avail_id . "' AND employee_id ='" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
                                                 if (!empty($getBookSlot)) {
                                                     for ($i = 0; $i < count($getBookSlot); $i++) { ?>
-                                                        <div
-                                                            style="width: 100%; display: inline-block; padding: 0 40px; margin-bottom: 20px;">
-                                                            <div
-                                                                style="width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;">
+                                                        <div style="width: 100%; display: inline-block; padding: 0 40px; margin-bottom: 20px;">
+                                                            <div style="width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;">
                                                                 <?php
                                                                 $booking_id = $getBookSlot[$i]['id'];
                                                                 $employee_id = $getBookSlot[$i]['employee_id'];
@@ -81,10 +77,8 @@
                                                                     </div>
                                                                 <?php } ?>
                                                                 <div>
-                                                                    <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;">Total Rate: <?= count($bookingTime) * @$getEmployee[0]['rateperhour'] ?>
-                                                                    </p>
-                                                                    <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;">Booked By: <?= @$getEmployer[0]['companyname'] ?>
-                                                                    </p>
+                                                                    <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;">Total Rate: <?= count($bookingTime) * @$getEmployee[0]['rateperhour'] ?></p>
+                                                                    <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;">Booked By: <?= @$getEmployer[0]['companyname'] ?></p>
                                                                 </div>
                                                             </div>
                                                         </div>
