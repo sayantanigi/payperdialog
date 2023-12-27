@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var employeeId = $('#employee_id').val();
         $.ajax({
             type:"post",
-            url:"<?php echo base_url()?>user/Dashboard/getBookingDetailsforEmployer",
+            url:"<?php echo base_url()?>user/Dashboard/getBookingDetailsforEmployee",
             data:{selectDate: selectDate, employeeId: employeeId},
             success:function(returndata) {
                 console.log(returndata);

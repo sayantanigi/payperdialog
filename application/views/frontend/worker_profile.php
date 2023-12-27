@@ -326,7 +326,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                 </div>
                 <div class="modal-footer border-top-0 d-flex justify-content-center">
                     <!-- <button type="submit" class="btn btn-success" id="submit-button1">Schedule</button> -->
-                    <input type="button" class="btn btn-success" id="submit-button" value="Book Now" onclick="aggrement()">
+                    <input type="button" class="btn btn-success" id="submit-button" value="Book Now" onclick="aggrement1()">
                 </div>
             </form>
         </div>
@@ -423,7 +423,7 @@ function availTime(start_date, from_time, end_date, to_time, bookingTime) {
     });
 }
 
-function aggrement() {
+function aggrement1() {
     const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal'));
     aggrementmodal. show();
 }
