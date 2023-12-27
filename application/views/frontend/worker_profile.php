@@ -302,7 +302,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                 <h5 class="modal-title" id="modal-title">Book Slot</h5>
                 <button type="button" class="bookBtn-close btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeBook()"></button>
             </div>
-            <form id="myForm">
+            <form id="myForm" class="avail_time">
                 <div class="modal-body">
                     <div class="alert alert-danger " role="alert" id="danger-alert" style="display: none;">
                         End date should be greater than start date.
@@ -656,10 +656,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     availTime(json[0].start_date, json[0].from_time, json[0].end_date, json[0].to_time, booking_Time);
                 } else {
-                    setTimeout(function() {
-                        alert('ss');
+                    /*setTimeout(function() {
                         $('#myForm').append('<div>No slot available for this date</div>');
-                    }, 3000)
+                    }, 3000)*/
+                    $('.avail_time').html('<div style="text-align: center; padding: 0 0 50px 0;">No slot available for this date</div>');
                 }
             }
         });
