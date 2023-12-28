@@ -64,10 +64,11 @@ if($data_request=='user'){
                                 <div class="profile-ak">
                                     <?php if(!empty($userinfo->profilePic)) { ?>
                                     <h6>Upload a different photo</h6>
+                                    <input type="file" name="profilePic" class="text-center center-block file-upload"/>
                                     <?php } else { ?>
-                                        <h6>Upload a photo</h6>
+                                    <h6>Upload a photo</h6>
+                                    <input type="file" name="profilePic" class="text-center center-block file-upload" required/>
                                     <?php } ?>
-                                    <input type="file" name="profilePic" class="text-center center-block file-upload" />
                                 </div>
                             </div>
                         </div>
@@ -129,25 +130,6 @@ if($data_request=='user'){
                                                 <div id="vld_gender" style="color:red; margin-top: 10px;">Please Select Gender.</div>
                                             </div>
                                             <?php } ?>
-                                            <!-- <div class="col-lg-6">
-                                                <label for="first_name">
-                                                    <h4>Work Experience<span style="color:red;">*</span></h4>
-                                                </label>
-                                                <input type="text" class="form-control" name="experience"  value="<?= @$userinfo->experience;?>" placeholder="Enter Experience" />
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label for="first_name">
-                                                    <h4>Highest Qualification<span style="color:red;">*</span></h4>
-                                                </label>
-                                                <input type="text" class="form-control" name="qualification"  value="<?= @$userinfo->qualification;?>" placeholder="Enter qualification" />
-                                            </div> -->
-                                            <!-- <div class="col-lg-6">
-                                                <label for="first_name">
-                                                    <h4>Skills<span style="color:red;">*</span></h4>
-                                                </label>
-                                                <br>
-                                                <input type="text" name="skills"  id="skills" class="form-control" value="<?= @$userinfo->skills?>" />
-                                            </div> -->
                                             <div class="col-lg-6 location">
                                                 <label for="last_name">
                                                     <h4>Legal Address <span style="color:red;">*</span></h4>
@@ -208,22 +190,19 @@ if($data_request=='user'){
                                                 <input type="text" class="form-control" name="rateperhour" id="rateperhour" placeholder="Rate per Hour" value="<?php echo @$userinfo->rateperhour;?>" required=""/>
                                             </div>
                                             <div class="col-lg-4">
-                                                <label for="last_name">
-                                                    <h4>Resume upload</h4>
-                                                </label>
-                                                <input type="file" class="form-control" name="resume" id="resume" />
-                                                <br>
-                                                <?php
-                                                if(!empty($userinfo->resume)){
-                                                    if(!file_exists('uploads/users/resume/'.$userinfo->resume)){
-                                                ?>
-                                                <?php } else{?>
-                                                <a href="<?php echo base_url('uploads/users/resume/'.$userinfo->resume); ?>" />
+                                                <?php if(!empty($userinfo->resume)) { ?>
+                                                <label for="last_name"><h4>Update Resume</h4></label>
+                                                <input type="file" class="form-control" name="resume" id="resume"/>
+                                                <a href="<?php echo base_url('uploads/users/resume/'.$userinfo->resume); ?>" >
                                                     <i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size:40px; color:red;"></i>
                                                     <span><?php if(strlen($userinfo->resume) > 30){ echo substr($userinfo->resume, 0,30);}else{ echo $userinfo->resume; }?></span>
                                                 </a>
-                                                <input type="hidden" name="old_resume" value="<?= $userinfo->resume ?>">
-                                                <?php } } ?>
+                                                <input type="hidden" name="old_resume" value="<?= @$userinfo->resume ?>">
+                                                <br>
+                                                <?php } else { ?>
+                                                <label for="last_name"><h4>Resume upload <span style="color:red;">*</span></h4></label>
+                                                <input type="file" class="form-control" name="resume" id="resume" required/>
+                                                <?php } ?>
                                             </div>
                                             <div class="col-lg-12">
                                                 <label>Portfolio</label>
@@ -242,7 +221,7 @@ if($data_request=='user'){
                                                                     <td style="width: 72%;"><input type="text" name="content_title[]" id="content_title<?= $rows; ?>" class="form-control" placeholder="Content Title" value="<?= $key->content_title; ?>"></td>
                                                                     <td><input type="file" name="portfolio_file[]" id="portfolio_file<?= $rows; ?>" class="form-control" value="<?= $key->portfolio_file; ?>"></td>
                                                                     <td>
-                                                                        <a href="<?php echo base_url('uploads/users/resume/'.$key->portfolio_file); ?>">
+                                                                        <a href="<?php echo base_url('uploads/users/portfolio_file/'.$key->portfolio_file); ?>" target="_blank">
                                                                         <input type="text" name="old_portfolio_file" value="<?= $key->portfolio_file;?>">    
                                                                     </td>
                                                                     <td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return remove(this)">X</a></td>
@@ -259,45 +238,6 @@ if($data_request=='user'){
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- <div class="col-lg-6">
-                                                <label for="last_name">
-                                                    <h4>Additional Images</h4>
-                                                </label>
-                                                <input type="file" class="form-control" name="additional_image" />
-                                                <br>
-                                                <?php
-                                                //if(!empty($userinfo->additional_image)){
-                                                    //if(!file_exists('uploads/users/additional_image/'.$userinfo->additional_image)){
-                                                ?>
-                                                <img class="img-circle img-responsive" src="<?php //echo base_url('uploads/no_image.png')?>" style="width:60px;height: 60px;" />
-                                                <?php //} else { ?>
-                                                <img class="img-circle img-responsive" src="<?php //echo base_url('uploads/users/additional_image/'.$userinfo->additional_image); ?>" style="width:60px;height: 60px;" /></a>
-                                                <input type="hidden" name="old_additionalimage" value="<?= $userinfo->additional_image ?>">
-                                                <?php //} } else { ?>
-                                                <img class="img-circle img-responsive" src="<?php //echo base_url('uploads/no_image.png')?>" style="width:60px;height: 60px;" />
-                                                <?php //} ?>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <label for="last_name">
-                                                    <h4>Short Video</h4>
-                                                </label>
-                                                <input type="file" class="form-control" name="video" />
-                                                <br>
-                                                <?php
-                                                if(!empty($userinfo->video)){
-                                                    if(!file_exists('uploads/video/'.$userinfo->video)){
-                                                ?>
-                                                <img class="img-circle img-responsive" src="<?php echo base_url('uploads/no_image.png')?>" style="width:60px;height: 60px;" />
-                                                <?php } else { ?>
-                                                <video width="200" controls autoplay>
-                                                    <source src="<?= base_url('uploads/video/'.$userinfo->video) ?>" style="width:50px;height:50px;" type="video/mp4">
-                                                    <source src="<?= base_url('uploads/video/'.$userinfo->video)?>" style="width:50px;height:50px;" type="video/ogg">
-                                                </video>
-                                                <input type="hidden" name="old_video" value="<?= $userinfo->video ?>">
-                                                <?php } }else{?>
-                                                <img class="img-circle img-responsive" src="<?php echo base_url('uploads/no_image.png')?>" style="width:60px;height: 60px;" />
-                                                <?php } ?>
-                                            </div> -->
                                             <?php } ?>
 
                                             <?php //if(@$_SESSION['afrebay']['userType']=='2') { ?>
@@ -353,21 +293,19 @@ if($data_request=='user'){
 .Admin_Profile .cardak .gender select {margin-bottom: 0px !important;}
 .form-design form .cardak .profile-dsd input  {margin-bottom: 0px !important;}
 .col-lg-6 {margin-bottom: 20px !important;}
-    #vld_shrtBio {display: none;}
-    #vld_firstname {display: none;}
-    #vld_lastname {display: none;}
-    #vld_gender {display: none;}
-    #vld_location {display: none;}
-    #vld_companyname {display: none;}
-    #vld_teamsize {display: none;}
-    .container:before,
-    .container:after { display: none !important; }
-    @media (min-width: 1250px) {
-        .container.Header_Menu_Nav {
-            width: 1250px !important;
-        }
-    }
-    .addMoreBtn {background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important; border: 0 !important; font-family: Open Sans; font-size: 15px !important; color: #ffffff !important; padding: 10px 27px !important; border-radius: 40px !important;}
+#vld_shrtBio {display: none;}
+#vld_firstname {display: none;}
+#vld_lastname {display: none;}
+#vld_gender {display: none;}
+#vld_location {display: none;}
+#vld_companyname {display: none;}
+#vld_teamsize {display: none;}
+.container:before,
+.container:after { display: none !important; }
+@media (min-width: 1250px) {
+    .container.Header_Menu_Nav {width: 1250px !important;}
+}
+.addMoreBtn {background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important; border: 0 !important; font-family: Open Sans; font-size: 15px !important; color: #ffffff !important; padding: 10px 27px !important; border-radius: 40px !important;}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -394,9 +332,17 @@ function add_row() {
     var new_row = y.rows[0].cloneNode(true);
     var len = y.rows.length;
     new_number=Math.round(Math.exp(Math.random()*Math.log(10000000-0+1)))+0;
-    var inp3 = new_row.cells[0].getElementsByTagName('input')[0];
-    inp3.value = '';
-    inp3.id = 'service'+(len+1);
+    var inp0 = new_row.cells[0].getElementsByTagName('input')[0];
+    inp0.value = '';
+    inp0.defaultValue = '';
+    inp0.id = 'service'+(len+1);
+    var inp1 = new_row.cells[1].getElementsByTagName('input')[0];
+    inp1.value = '';
+    inp1.defaultValue = '';
+    inp1.id = 'service'+(len+1);
+    if(new_row.cells.length > 3) {
+        new_row.cells[2].remove();
+    }
     var submit_btn =$('#submit').val();
     y.appendChild(new_row);
 }
@@ -481,15 +427,6 @@ $("form").submit( function(e) {
             setTimeout(function(){$("#vld_shrtBio").hide();},5000)
             e.preventDefault();
         }
-        // if($('#key_skills').val() == ''){
-        //     $('#key_skills').focus().attr('placeholder', 'This field is required');
-        //     $('#key_skills').focus().css('border', '1px solid red');
-        //     e.preventDefault();
-        // }
-        // if($('#zip').val() == ''){
-        //     $('#zip').focus().attr('placeholder', 'This field is required');
-        //     e.preventDefault();
-        // }
     } else {
         if($('#companyname').val() == ''){
             $('#companyname').focus().attr('placeholder', 'This field is required');
@@ -520,12 +457,5 @@ $("form").submit( function(e) {
             e.preventDefault();
         }
     }
-    // var messageLength = CKEDITOR.instances['short_bio'].getData().replace(/<[^>]*>/gi, '').length;
-    // if(!messageLength) {
-    //     $('#vld_shrtBio').show();
-    //     CKEDITOR.instances['short_bio'].focus();
-    //     setTimeout(function(){$("#vld_shrtBio").hide();},5000)
-    //     e.preventDefault();
-    // }
 });
 </script>

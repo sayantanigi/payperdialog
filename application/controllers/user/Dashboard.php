@@ -78,53 +78,6 @@ class Dashboard extends CI_Controller {
 			$image  = $_POST['old_image'];
 		}
 
-		/*if ($_FILES['additional_image']['name'] != '') {
-			$_POST['additional_image'] = rand(0000, 9999) . "_" . $_FILES['additional_image']['name'];
-			$config2['image_library'] = 'gd2';
-			$config2['source_image'] =  $_FILES['additional_image']['tmp_name'];
-			$config2['new_image'] =   getcwd() . '/uploads/users/additional_image/' . $_POST['additional_image'];
-			$config2['upload_path'] =  getcwd() . '/uploads/users/additional_image/';
-			$config2['allowed_types'] = 'JPG|PNG|JPEG|jpg|png|jpeg';
-			$config2['maintain_ratio'] = FALSE;
-			$this->image_lib->initialize($config2);
-			if (!$this->image_lib->resize()) {
-				echo ('<pre>');
-				echo ($this->image_lib->display_errors());
-				exit;
-			} else {
-				$additional_image  = $_POST['additional_image'];
-				@unlink('uploads/users/additional_image/' . $_POST['old_additionalimage']);
-			}
-		} else {
-			if(!empty($_POST['old_additionalimage'])) {
-				$additional_image  = $_POST['old_additionalimage'];
-			} else {
-				$additional_image  = '';
-			}
-		}
-
-		if ($_FILES['video']['error'] == '') {
-			$file_element_name = 'video';
-			$config['upload_path'] = getcwd() . '/uploads/video/';
-			$config['allowed_types'] = '*';
-			$config['encrypt_name'] = TRUE;
-			$this->load->library('upload', $config);
-			$this->upload->initialize($config);
-			if (!$this->upload->do_upload($file_element_name)) {
-				$error = $this->upload->display_errors('<p style="color:#AF5655;">', '</p>');
-				$data = array('error' => $error);
-			}
-			$upload_quotation_file = $this->upload->data();
-			$video = $upload_quotation_file['file_name'];
-			@unlink('uploads/video/' . $_POST['old_video']);
-		} else {
-			if(!empty($_POST['old_video'])) {
-				$video = $_POST['old_video'];
-			} else {
-				$video  = '';
-			}
-		}*/
-
 		if ($_FILES['resume']['name'] != '') {
 			$src = $_FILES['resume']['tmp_name'];
 			$filEnc = time();
@@ -168,10 +121,8 @@ class Dashboard extends CI_Controller {
 			'mobile' => $_POST['mobile'],
 			'gender' => $this->input->post('gender', TRUE),
 			'experience' => $this->input->post('experience', TRUE),
-			//'qualification' => $this->input->post('qualification', TRUE),
 			'skills' => $skills,
 			'profilePic' => $image,
-			//'additional_image' => $additional_image,
 			'zip' => $_POST['zip'],
 			'address' => $_POST['address'],
 			'foundedyear' => $_POST['foundedyear'],
@@ -180,11 +131,10 @@ class Dashboard extends CI_Controller {
 			'longitude' => $_POST['longitude'],
 			'short_bio' => $_POST['short_bio'],
 			'rateperhour' => $_POST['rateperhour'],
-			//'video' => $video,
 			'resume' => $resume,
 		);
+		//echo "<pre>"; print_r($_FILES['portfolio_file']); die;
 		if (!empty($_FILES['portfolio_file']['size'])) {
-			// /echo "<pre>"; print_r($_FILES['portfolio_file']['size']); die();
         	$count = count($_FILES['portfolio_file']['name']);
         	$getData = $this->db->query('DELETE FROM users_portfolio WHERE user_id = "'.$_SESSION['afrebay']['userId'].'"');
 	        for ($i=0; $i < $count; $i++) {
@@ -194,8 +144,15 @@ class Dashboard extends CI_Controller {
 	            $avatar1 = str_replace(array('(', ')', ' '), '', $avatar);
 	            $dest = getcwd() . '/uploads/users/portfolio_file/' . $avatar1;
 	            if (move_uploaded_file($src, $dest)) {
-	                $file  = $avatar1;
+	                $file1  = $avatar1;
 	            }
+				if(!empty($file1)) {
+					$file  = $file1;
+				} else if(!empty($_POST['old_portfolio_file'])) {
+					$file  = $_POST['old_portfolio_file'];
+				} else {
+					$file  = "";
+				}
 	            $details_data = array(
                     'user_id'=> $_SESSION['afrebay']['userId'],
                     'content_title'=> $_POST['content_title'][$i],
@@ -205,23 +162,6 @@ class Dashboard extends CI_Controller {
                 $this->Crud_model->SaveData('users_portfolio',$details_data);
 	        }
         }
-        /*else {
-        	echo "qqqqq<pre>"; print_r($_FILES['portfolio_file']['size'][0]); die();
-        	//$getData = $this->db->query("SELECT * FROM users WHERE userId = "'.$_SESSION['afrebay']['userId'].'"")->result_array();
-            $file = $_POST['old_podcast_file'];
-            $count = count($this->input->post('content_title'));
-            for ($i=0; $i < $count; $i++) {
-                $details_data = array(
-                    'user_id'=> $_SESSION['afrebay']['userId'],
-                    'content_title'=> $_POST['content_title'][$i],
-                    'portfolio_file'=> $file,
-                    'created_date'=> date('Y-m-d H:m:s')
-                );
-                $this->Crud_model->SaveData('users_portfolio',$details_data);
-                $this->session->set_flashdata('message', 'Podcast created successfully');
-                //echo "2"; exit;
-            }
-        }*/
 
 		$this->Crud_model->SaveData('users', $data, "userId='" . $_POST['id'] . "'");
 		if($_POST['from_data_request']=='admin') {

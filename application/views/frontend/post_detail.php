@@ -223,13 +223,23 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                 </ul>
                             </div>
                         </div>
-                        <?php if (@$_SESSION['afrebay']['userType'] == '1' || empty(@$_SESSION['afrebay']['userType'])) { ?>
+                        <?php if (@$_SESSION['afrebay']['userType'] == '1' || empty(@$_SESSION['afrebay']['userType'])) { 
+                        $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                        if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio']) || empty($profile_check[0]['rateperhour']) || empty($profile_check[0]['resume'])) { ?>
+                        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12" style="position: relative;">
+                        <p style=" font-size: 24px; margin-top: 50%; text-align: center; line-height: 30px; color: red;">Please complete your profile tab to unlock this option</p>
+                        <?php } else { ?>
                         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
+                        <?php } ?>
                             <?php $userBidData = $this->db->query("SELECT * FROM `job_bid` WHERE postjob_id = '".$post_data->id."' and user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                             if(!empty($userBidData)) { ?>
                             <div class="bd-form"><a href="<?= base_url()?>jobbid" class="cstm_viewbid_btn"> View Bid</a></div>
                             <?php } else { ?>
-                            <form class="bd-form" action="<?= base_url('user/dashboard/save_postbid') ?>" method="post">
+                            <?php if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio']) || empty($profile_check[0]['rateperhour']) || empty($profile_check[0]['resume'])) { ?>
+                            <form class="bd-form" action="<?= base_url('user/dashboard/save_postbid') ?>" method="post" style="position: absolute; top: 0; left: 0; opacity: 0.2; z-index: -999999;">
+                            <?php } else { ?>
+                                <form class="bd-form" action="<?= base_url('user/dashboard/save_postbid') ?>" method="post">
+                            <?php } ?>
                                 <h3 class="job-bid">Job Bidding</h3>
                                 <div class="row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
