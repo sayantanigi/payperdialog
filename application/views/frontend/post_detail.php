@@ -227,7 +227,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                         $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                         if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio']) || empty($profile_check[0]['rateperhour']) || empty($profile_check[0]['resume'])) { ?>
                         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12" style="position: relative;">
-                        <p style=" font-size: 24px; margin-top: 50%; text-align: center; line-height: 30px; color: red;">Please complete your profile tab to unlock this option</p>
+                        <p style=" font-size: 24px; margin-top: 50%; text-align: center; line-height: 30px; color: red;">Please complete your profile tab to place your bid</p>
                         <?php } else { ?>
                         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
                         <?php } ?>
