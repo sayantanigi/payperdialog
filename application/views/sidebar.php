@@ -6,7 +6,7 @@ redirect(base_url('login'));
 $seg1=$this->uri->segment(1);
 $get_setting=$this->Crud_model->get_single('setting');
 ?>
-<section class="dashboard-gig User_Sidemenu max_height">
+<section class="dashboard-gig User_Sidemenu max_height EmployersTheme ExpertsTheme EmployeesTheme">
     <div class="container display-table" style="display: block;">
         <div class="completeSub">Please activate a subscription package and complete your profile to proceed with further activities within your dashboard</div>
         <div class="completeSub1">Please complete your profile to proceed with further activities within your dashboard</div>
@@ -533,6 +533,51 @@ $get_setting=$this->Crud_model->get_single('setting');
     .completeSub1 {display: none; text-align: center; margin-top: 20px; color: #ed1c24; font-size: 20px;}
     .User_Sidemenu .hidden-xs.display-table-cell .navi ul li a { padding: 15px 15px !important; }
     .dashboard-gig .hidden-xs {font-size: 13px !important;}
+
+    <?php if($_SESSION['afrebay']['userType'] == '2') { ?>
+    /* Theme 1 */
+    .dashboard-gig.EmployersTheme,
+    .dashboard-gig.EmployersTheme .cardak,
+    .dashboard-gig.EmployersTheme .navi ul li span.cover,
+    .dashboard-gig.EmployersTheme .navi ul li.active a,
+    .dashboard-gig.EmployersTheme .navi ul li a:hover,
+    .dashboard-gig.EmployersTheme .navi ul,
+    .dashboard-gig.EmployersTheme .navi ul li a {background: #def7ff !important; color: #39839b !important;}
+    .dashboard-gig.EmployersTheme .navi ul li a i {color: #39839b !important;}
+    .dashboard-gig.EmployersTheme hr {border-top: 1px solid #39839b !important;}
+    .dashboard-gig.EmployersTheme .form-design form .cardak .profile-dsd input {background: #fff !important;}
+    .dashboard-gig.EmployersTheme .text-success-msg {color: #39839b !important;}
+    <?php } else if($_SESSION['afrebay']['userType'] == '3') {?>
+     /* Theme 2 */
+    .dashboard-gig.ExpertsTheme,
+    .dashboard-gig.ExpertsTheme .cardak,
+    .dashboard-gig.ExpertsTheme .navi ul li span.cover,
+    .dashboard-gig.ExpertsTheme .navi ul li.active a,
+    .dashboard-gig.ExpertsTheme .navi ul li a:hover,
+    .dashboard-gig.ExpertsTheme .navi ul,
+    .dashboard-gig.ExpertsTheme .navi ul li a {background: #f0fff0 !important; color: #318131 !important;}
+    .dashboard-gig.ExpertsTheme .navi ul li a i {color: #318131 !important;}
+    .dashboard-gig.ExpertsTheme hr {border-top: 1px solid #318131 !important;}
+    .dashboard-gig.ExpertsTheme .form-design form .cardak .profile-dsd input {background: #fff !important;}
+    .dashboard-gig.EmployersTheme .text-success-msg {color: #318131 !important;}
+    <?php } else { ?>
+    .dashboard-gig.EmployeesTheme,
+    .dashboard-gig.EmployeesTheme .cardak,
+    .dashboard-gig.EmployeesTheme .navi ul li span.cover,
+    .dashboard-gig.EmployeesTheme .navi ul li.active a,
+    .dashboard-gig.EmployeesTheme .navi ul li a:hover,
+    .dashboard-gig.EmployeesTheme .navi ul,
+    .dashboard-gig.EmployeesTheme .navi ul li a {background: #fff !important;}
+    .dashboard-gig.EmployeesTheme .navi ul li.active a,
+    .dashboard-gig.EmployeesTheme .navi ul li a:hover,
+    .dashboard-gig.EmployeesTheme .navi ul li a {color: #ED1C24 !important;}
+    .dashboard-gig.EmployeesTheme .navi ul li a i {color: #ED1C24 !important;}
+    .dashboard-gig.EmployeesTheme hr {border-top: 1px solid #ddd !important;}
+    .dashboard-gig.EmployeesTheme .form-design form .cardak .profile-dsd input,
+    .dashboard-gig.EmployeesTheme .Admin_Profile .cardak .gender select {background: #fff !important;}
+    .dashboard-gig.EmployeesTheme .Admin_Profile .cardak .key-skill .pf-field {padding: 0 !important;}
+    .dashboard-gig.EmployeesTheme .text-success-msg {color: #ED1C24 !important;}
+    <?php } ?>
 </style>
 <script>
 function completeSub() {

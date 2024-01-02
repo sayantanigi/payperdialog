@@ -26429,7 +26429,8 @@ ul {
    height: 100%;
 
    width: 100%;
-   margin-top: 15px;
+   /* margin-top: 15px; */
+   padding: 0 !important;
 
 }
 
@@ -38594,11 +38595,11 @@ footer .social {
 
 
 
-.dashboard-gig .display-table .hidden-xs.display-table-cell .navi ul li a i {
+/* .dashboard-gig .display-table .hidden-xs.display-table-cell .navi ul li a i {
 
    color: #ED1C24 !important;
 
-}
+} */
 
 
 
@@ -39180,7 +39181,7 @@ footer .social {
 
    border-radius: 10px;
 
-   color: #ED1C24 !important;
+   /* color: #ED1C24 !important; */
 
    padding: 15px 20px !important;
 
@@ -39224,7 +39225,7 @@ footer .social {
 
 .User_Sidemenu .hidden-xs.display-table-cell .navi ul li.active a {
 
-   background: #ffffff !important;
+   /* background: #ffffff !important; */
 
    box-shadow: inset 3px 3px 5px #cbcbcb, inset -3px -3px 5px #ffffff;
 
@@ -40275,7 +40276,7 @@ section.topak .job-search-sec .job-search form .custom-select .same-as-selected 
 }
 
 .text-success-msg {
-   color: #ED1C24 !important;
+   /* color: #ED1C24 !important; */
    font-size: 20px !important;
    margin-bottom: 20px !important;
 }
@@ -40525,7 +40526,7 @@ section.topak .job-search-sec .job-search form .custom-select .same-as-selected 
 }
 
 .Admin_Profile .cardak .gender select {
-   background: transparent !important;
+   /* background: transparent !important; */
    font-size: 14px;
    margin-bottom: 20px !important;
    padding: 10px 10px !important;
@@ -40544,7 +40545,7 @@ section.topak .job-search-sec .job-search form .custom-select .same-as-selected 
    background: transparent !important;
    font-size: 14px;
    margin-bottom: 20px !important;
-   padding: 10px 10px !important;
+   /* padding: 10px 10px !important; */
    border-bottom: 2px solid #B1B1B1;
    border-radius: 10px !important;
    box-shadow: 0 0 10px #E1E1E1;
