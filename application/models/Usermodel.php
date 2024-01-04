@@ -10,7 +10,7 @@ class Usermodel extends My_Model {
 			$msg = "Invalid Username.";
 		} else {
 			$user = $this->get_by('admin', true, $where);
-			if (md5($password)!= @$user->password) {
+			if (base64_encode($password)!= @$user->password) {
 				$msg = "Invalid Password";
 			} elseif (@$user->status == 0) {
 				$msg = "Your account has been deactivated. Please contact master admin for details.";

@@ -117,9 +117,9 @@ class Login extends MY_Controller {
 
 	function change_password() {
 		$get_user=$this->Crud_model->get_single('admin',"userId='".$_SESSION['afrebay_admin']['id']."'");
-	    if($get_user->password==md5($_POST['cur_password'])) {
+	    if($get_user->password==base64_encode($_POST['cur_password'])) {
 			$data=array(
-				'password'=>md5($_POST['new_password'])
+				'password'=>base64_encode($_POST['new_password'])
 			);
 			$this->Crud_model->SaveData('admin',$data,"userId='".$_SESSION['afrebay_admin']['id']."'");
 			$this->session->set_flashdata('message', 'Password reset successfully.');

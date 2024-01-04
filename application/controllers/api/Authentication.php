@@ -29,7 +29,7 @@ class Authentication extends CI_Controller {
 					'address' => $formdata['location'],
 					'latitude' => $formdata['latitude'],
 					'longitude' => $formdata['longitude'],
-					'password' => md5($formdata['password']),
+					'password' => base64_encode($formdata['password']),
 					'created'=> date('Y-m-d H:i:s'),
 					'status'=> 0
 				);
@@ -84,7 +84,7 @@ class Authentication extends CI_Controller {
 	        $formdata = json_decode(file_get_contents('php://input'), true);
 	        $email = $formdata["email"];
 			$password = $formdata["password"];
-			$check_user = $this->db->query("SELECT * FROM users WHERE email = '".$email."' AND password = '".md5($password)."' AND status = '1'")->result_array();
+			$check_user = $this->db->query("SELECT * FROM users WHERE email = '".$email."' AND password = '".base64_encode($password)."' AND status = '1'")->result_array();
 			if(!empty($check_user)) {
 	            $msg = 'Logged in successfully';
 	            if($check_user['0']['userType'] == '1') {
@@ -136,7 +136,7 @@ class Authentication extends CI_Controller {
             $formdata = json_decode(file_get_contents('php://input'), true);
             $email = $formdata["email"];
     		$password = $formdata["password"];
-			$check_user = $this->db->query("SELECT * FROM users WHERE email = '".$email."' AND password = '".md5($password)."' AND status = '1'")->result_array();
+			$check_user = $this->db->query("SELECT * FROM users WHERE email = '".$email."' AND password = '".base64_encode($password)."' AND status = '1'")->result_array();
 			if(!empty($check_user)) {
                 $msg = 'Logged in successfully';
                 $get_setting=$this->Crud_model->get_single('setting');

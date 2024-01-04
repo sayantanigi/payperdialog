@@ -48,7 +48,7 @@ class Mymodel extends MY_Model {
 		$this->db->select ( "*" );
 		$this->db->from("users");
 		$this->db->where("email", $email);
-		$this->db->where("password", md5($password));
+		$this->db->where("password", base64_encode($password));
         $this->db->where("status", '1');
 		$query = $this->db->get();
 		if($query->num_rows() > 0) {
