@@ -762,7 +762,7 @@ class User_dashboard extends CI_Controller {
 					'prod_description' => $this->input->post('prod_description'),
 					'id' =>  $this->input->post('id')
 				);
-				$updateQuery = $this->Crud_model->SaveData('user_product', $data, "id='".$id."'");
+				$updateQuery = $this->Crud_model->SaveData('user_product', $data, "id='".$this->input->post('id')."'");
 				if (!empty($_FILES['prod_image']['name'][0])) {
 					$cpt = count($_FILES['prod_image']['name']);
 					for($i=0; $i<$cpt; $i++) {
