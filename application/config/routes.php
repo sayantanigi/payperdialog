@@ -133,7 +133,63 @@ $route['admin/update-postjob/(:any)'] = "admin/Post_job/update_post_job/$1";
 //API URLS
 $route['api/registration'] = 'api/Authentication/registration';
 $route['api/login'] = 'api/Authentication/login';
-$route['api/profile'] = 'api/User_dashboard/profile_settings';
-$route['api/update_profile'] = 'api/User_dashboard/update_profile';
+$route['api/user_agreement'] = 'api/Authentication/user_agreement';
 $route['api/send_forget_password'] = 'api/Authentication/send_forget_password';
+$route['api/set_new_password'] = 'api/Authentication/set_new_password';
 $route['api/logout'] = 'api/Authentication/logout';
+
+/*$route['api/profile'] = 'api/User_dashboard/profile_settings';
+$route['api/update_profile'] = 'api/User_dashboard/update_profile';*/
+
+$route['api/user_subscription'] = "api/User_dashboard/userSubscription";
+$route['api/user_subscription_details'] = "api/User_dashboard/subscription_details";
+$route['api/getUserSubscriptionDetails'] = "api/User_dashboard/getUserSubscriptionDetails";
+
+$route['api/home_list'] = 'api/Home/home_list';
+$route['api/vendor_lists'] = "api/Home/vendor_lists";
+$route['api/vendor_detail'] = "api/Home/vendor_details";
+$route['api/product_details'] = "api/Home/product_details";
+$route['api/expert_lists'] = "api/Home/freelancer_lists";
+$route['api/expert_details'] = "api/Home/freelancer_details";
+$route['api/post_details'] = 'api/Home/post_details';
+$route['api/business_pricing'] = 'api/Home/vendor_pricing';
+$route['api/expert_pricing'] = 'api/Home/freelancer_pricing';
+$route['api/about'] = 'api/Home/about';
+$route['api/contact'] = 'api/Home/contact';
+$route['api/save_contact'] = 'api/Home/save_contact';
+$route['api/product_contact'] = 'api/Home/product_contact';
+$route['api/privacy'] = 'api/Home/privacy';
+$route['api/term_and_conditions'] = 'api/Home/term_and_conditions';
+$route['api/careertips_details'] = 'api/Home/careertips_details';
+$route['api/search_job'] = 'api/Home/search_job';
+
+
+
+$route['api/education_list'] = "api/User_dashboard/education_list";
+$route['api/save_education'] = "api/User_dashboard/save_education";
+$route['api/get_educationDetails'] = "api/User_dashboard/get_educationDetails";
+$route['api/update_education'] = "api/User_dashboard/update_education";
+$route['api/delete_education'] = "api/User_dashboard/delete_education";
+$route['api/save_postjob'] = "api/User_dashboard/save_postjob";
+$route['api/workexperience_list'] = "api/User_dashboard/workexperience_list";
+$route['api/save_workexperience'] = "api/User_dashboard/save_workexperience";
+$route['api/get_workexperience'] = "api/User_dashboard/get_workexperience";
+$route['api/update_workexperience'] = "api/User_dashboard/update_workexperience";
+$route['api/delete_workexperience'] = "api/User_dashboard/delete_workexperience";
+$route['api/myjob'] = "api/User_dashboard/myjob";
+$route['api/edit_post_job'] = "api/User_dashboard/edit_post_job";
+$route['api/update_post_job'] = "api/User_dashboard/update_post_job";
+$route['api/save_postbid'] = "api/User_dashboard/save_postbid";
+$route['api/jobbid'] = "api/User_dashboard/jobbid";
+$route['api/delete_job'] = "api/User_dashboard/delete_job";
+$route['api/products'] = "api/User_dashboard/products";
+$route['api/add_product'] = "api/User_dashboard/add_product";
+$route['api/edit_product'] = "api/User_dashboard/edit_product";
+$route['api/update_product'] = "api/User_dashboard/update_product";
+$route['api/delete_product'] = "api/User_dashboard/delete_product";
+$route['api/delete_product_image'] = "api/User_dashboard/delete_product_image";
+$route['api/save_employer_rating'] = "api/User_dashboard/save_employer_rating";
+$route['api/chatUser_list'] = "api/User_dashboard/chatUser_list";
+$route['api/showmessage_count'] = "api/User_dashboard/showmessage_count";
+$route['api/showmessageCountEach'] = "api/User_dashboard/showmessageCountEach";
+$route['api/showmessage_list'] = "api/User_dashboard/showmessage_list";

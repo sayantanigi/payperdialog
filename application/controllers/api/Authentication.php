@@ -183,6 +183,21 @@ class Authentication extends CI_Controller {
         echo json_encode($response);
     }
 
+	public function user_agreement() {
+		try {
+			$formdata = json_decode(file_get_contents('php://input'), true);
+			$userId = $formdata['userid'];
+			$agreement = $formdata['isagree'];
+			$data = array('isAggreed' => $agreement);
+			$this->Crud_model->SaveData('users', $data, "userId = '".$userId."'");
+			$msg = 'Agreed';
+			$response = array('status'=> 'success','result'=> $msg);
+		} catch (\Throwable $th) {
+			$response = array('status'=> 'error','result'=> $th->getMessage());
+		}
+		echo json_encode($response);
+	}
+
     public function send_forget_password() {
         try {
             $formdata = json_decode(file_get_contents('php://input'), true);
@@ -195,12 +210,10 @@ class Authentication extends CI_Controller {
     				);
     				$this->Crud_model->SaveData('users',$data1,"email = '".$get_email->email."'");
 					$get_setting = $this->Crud_model->get_single('setting');
-    				//$htmlContent = $this->load->view('email_template/forgot_password',$data,TRUE);
                  	$htmlContent = "<div style='width:600px;margin: 0 auto;background: #fff; border: 1px solid #e6e6e6;'><div style='padding: 30px 30px 15px 30px;box-sizing: border-box;'><img src='cid:Logo' style='width:100px;float: right;margin-top: 0 auto;'><h3 style='padding-top:40px; line-height: 30px;'>Greetings from<span style='font-weight: 900;font-size: 25px;color: #505050; display: block;'>Pay Per Dialog</span></h3><p style='font-size: 24px; margin: 0;'>Verification code</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Please use the verification code below to sign in.</p><p style='font-size: 22px; margin: 5px 0 0 0;'><b>$numbers</b></p><p style='font-size: 17px; margin: 5px 0 0 0;'>If you didn’t request this, you can ignore this email.</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Thank you!</p><p style='font-size: 17px; margin: 5px 0 0 0; list-style: none;'>Sincerly</p><p style='list-style: none;margin: 5px 0 0 0;font-size: 15px;'><b>Pay Per Dialog</b></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Visit us:</b><span>$get_setting->address</span></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Email us:</b><span>$get_setting->email</span></p></div><table style='width: 100%;'><tr><td style='height:30px; width:100%; background: #7e0e14; padding: 10px 0px; font-size:13px; color: #fff; text-align: center;'>Copyright &copy; <?=date('Y')?> Pay Per Dialog. All rights reserved.</td></tr></table></div>";
     				require 'vendor/autoload.php';
     				$mail = new PHPMailer(true);
     				try {
-    					//Server settings
     					$mail->CharSet = 'UTF-8';
     					$mail->SetFrom('no-reply@goigi.com', 'Pay Per Dialog');
     					$mail->AddAddress($formdata['email']);
@@ -208,7 +221,6 @@ class Authentication extends CI_Controller {
     					$mail->Subject = "Forgot Password Confirmation message from Pay Per Dialog";
     					$mail->AddEmbeddedImage('uploads/logo/'.$get_setting->flogo, 'Logo');
     					$mail->Body = $htmlContent;
-    					//Send email via SMTP
     					$mail->IsSMTP();
     					$mail->SMTPAuth = true;
     					$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
@@ -245,7 +257,7 @@ class Authentication extends CI_Controller {
 		 		if(!empty($check_otp)) {
 		 			$get_email = $this->Crud_model->GetData('users','',"forgot_otp='".$formdata['u_otp']."'",'','','','1');
 		 			if(!empty($get_email)) {
-						$data = array('password' => md5($formdata['new_password']));
+						$data = array('password' => base64_encode($formdata['new_password']));
 					 	$con="userId='".$get_email->userId."'";
 					 	$this->Crud_model->SaveData('users',$data, $con);
 					 	$data1 = array(
