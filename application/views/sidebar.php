@@ -244,13 +244,13 @@ $get_setting=$this->Crud_model->get_single('setting');
                                 <li <?php if($seg1=='jobbid') { ?> class="active" <?php } ?>>
                                     <span class="cover"></span>
                                     <a href="javascript:void(0)" onclick="completeSub1()"><i class="fa fa-tasks" aria-hidden="true"></i>
-                                        <span class="hidden-xs hidden-sm">List of Bids</span>
+                                        <span class="hidden-xs hidden-sm">Applications to your jobs</span>
                                     </a>
                                 </li>
                                 <li <?php if($seg1=='recommended-employee') { ?> class="active" <?php } ?>>
                                     <span class="cover"></span>
                                     <a href="javascript:void(0)" onclick="completeSub1()"><i class="fa fa-tasks" aria-hidden="true"></i>
-                                        <span class="hidden-xs hidden-sm">Recommended Employee</span>
+                                        <span class="hidden-xs hidden-sm">Ready for Interview</span>
                                     </a>
                                 </li>
                                 <li <?php if($seg1=='booking-history') { ?> class="active" <?php } ?>>
@@ -269,13 +269,13 @@ $get_setting=$this->Crud_model->get_single('setting');
                                 <li <?php if($seg1=='jobbid') { ?> class="active" <?php } ?>>
                                     <span class="cover"></span>
                                     <a href="<?= base_url('jobbid')?>"><i class="fa fa-tasks" aria-hidden="true"></i>
-                                        <span class="hidden-xs hidden-sm">List of Bids</span>
+                                        <span class="hidden-xs hidden-sm">Applications to your jobs</span>
                                     </a>
                                 </li>
                                 <li <?php if($seg1=='recommended-employee') { ?> class="active" <?php } ?>>
                                     <span class="cover"></span>
                                     <a href="<?= base_url('recommended-employee')?>"><i class="fa fa-tasks" aria-hidden="true"></i>
-                                        <span class="hidden-xs hidden-sm">Recommended Employee</span>
+                                        <span class="hidden-xs hidden-sm">Ready for Interview</span>
                                     </a>
                                 </li>
                                 <li <?php if($seg1=='booking-history') { ?> class="active" <?php } ?>>

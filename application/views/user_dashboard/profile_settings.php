@@ -67,7 +67,7 @@ if($data_request=='user'){
                                     <input type="file" name="profilePic" class="text-center center-block file-upload"/>
                                     <?php } else { ?>
                                     <h6>Upload a photo</h6>
-                                    <input type="file" name="profilePic" class="text-center center-block file-upload" required/>
+                                    <input type="file" name="profilePic" class="text-center center-block file-upload"/>
                                     <?php } ?>
                                 </div>
                             </div>

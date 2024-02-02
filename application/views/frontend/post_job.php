@@ -89,11 +89,19 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                     <div class="col-lg-6">
                                         <span class="pf-title">Approximate Duration</span>
                                         <div class="pf-field">
-                                            <input type="text" placeholder="Enter Duration" name="duration" class="form-control " value="<?= @$duration; ?>"/>
+                                            <!-- <input type="text" placeholder="Enter Duration" name="duration" class="form-control " value="<?= @$duration; ?>"/> -->
+                                            <select data-placeholder="Please Select Category" class="form-control" name="duration">
+                                                <option value="">Select Category</option>
+                                                <option value="Less than a Week" <?php if(@$duration == 'Less than a Week') {echo "selected"; }?>>Less than a Week</option>
+                                                <option value="1-2 Weeks" <?php if(@$duration == '1-2 Weeks') {echo "selected"; }?>>1-2 Weeks</option>
+                                                <option value="2-4 Weeks" <?php if(@$duration == '2-4 Weeks') {echo "selected"; }?>>2-4 Weeks</option>
+                                                <option value="1-2 Months" <?php if(@$duration == '1-2 Months') {echo "selected"; }?>>1-2 Months</option>
+                                                <option value="More than 2 Months" <?php if(@$duration == 'More than 2 Months') {echo "selected"; }?>>More than 2 Months</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <span class="pf-title">Approximate Remuneration ($)</span>
+                                        <span class="pf-title">Hourly Remuneration ($)</span>
                                         <div style="width: 75px;">
                                         <?php if($countryName == 'Nigeria') { ?>
                                             <input type="text" class="form-control f1" name="currency" id="currency" value="NGN (₦)" readonly style=" padding: 15px; ">
@@ -106,7 +114,7 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <span class="pf-title">Categories <span style="color:red;">*</span></span>
+                                        <span class="pf-title">Industry <span style="color:red;">*</span></span>
                                         <div class="pf-field">
                                             <select data-placeholder="Please Select Category" class="form-control" name="category_id" onchange="get_subcategory(this.value)" required>
                                                 <option value="">Select Category</option>
@@ -119,9 +127,9 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
-                                        <span class="pf-title">Sub Categories <span style="color:red;">*</span></span>
+                                        <span class="pf-title">Sub Categories </span>
                                         <div class="pf-field">
-                                            <select data-placeholder="Please Select " class="form-control" name="subcategory_id" value="" id="subcategory_id" required>
+                                            <select data-placeholder="Please Select " class="form-control" name="subcategory_id" value="" id="subcategory_id">
                                                 <?php if(empty($id)) { ?>
                                                 <option>Select Subcategory</option>
                                                 <?php } else { ?>
@@ -136,12 +144,12 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                         </div>
                                     </div>
                                     <div class="col-lg-3">
-                                        <span class="pf-title">Remote <span style="color:red;">*</span></span>
+                                        <span class="pf-title">Remote Only <span style="color:red;">*</span></span>
                                         <div class="pf-field">
                                             <select data-placeholder="Please Select an Option" class="form-control" name="remote" required>
                                                 <option value="">Select Option</option>
-                                                <option value="1" <?php if(@$remote == 1) {echo 'selected';}?>>Yes</option>
-                                                <option value="2" <?php if(@$remote == 2) {echo 'selected';}?>>No</option>
+                                                <option value="2" <?php if(@$remote == 2) {echo 'selected';}?>>a&#41; No</option>
+                                                <option value="1" <?php if(@$remote == 1) {echo 'selected';}?>>b&#41; Yes</option>
                                             </select>
                                         </div>
                                     </div>
