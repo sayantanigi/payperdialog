@@ -37,8 +37,8 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                     <h3>Sign Up</h3>
                                     <span>Let's create your account! Choose to sign up as either a Employer or a Employee.</span>
                                     <div class="select-user">
-                                        <span class="user-tab active" user_type="1" onclick="get_value(1)">Employer</span>
-                                        <span class="user-tab" user_type="2" onclick="get_value(2)">Employee</span>
+                                        <span class="user-tab active" user_type="1" onclick="get_value(1)">Employee</span>
+                                        <span class="user-tab" user_type="2" onclick="get_value(2)">Employer</span>
                                     </div>
                                     <div class="select-user" style="margin-top: 0px !important; margin-left: 20px;">
                                         <span class="user-tab" user_type="3" onclick="get_value(3)">Subject Matter Expert</span>
@@ -147,6 +147,8 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
 <style>
 #loader {display: none; width: 40px;}
 .company_name {display: none}
+.Sign_Up .account-popup .SignUp_Left .select-user>span.active {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;}
+.Sign_Up .account-popup .SignUp_Right .SignUp_Btn .btn {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;}
 </style>
 <script src="<?= base_url('assets/js/jquery.min.js')?>" type="text/javascript"></script>
 <script type="text/javascript">
@@ -156,6 +158,7 @@ $(document).ready(function(){
 function get_value(id) {
     $('#user_type').val(id);
     if(id == 1){
+        $('#signUp_form')[0].reset();
         $('.company_name').hide();
         $('.first_name').show();
         $('.last_name').show();
@@ -164,6 +167,7 @@ function get_value(id) {
         $('.c_pass').show();
         $('.addrss').show();
     } else if(id == 2) {
+        $('#signUp_form')[0].reset();
         $('.company_name').show();
         $('.first_name').hide();
         $('.last_name').hide();
@@ -172,6 +176,7 @@ function get_value(id) {
         $('.c_pass').show();
         $('.addrss').show();
     } else {
+        $('#signUp_form')[0].reset();
         $('.company_name').hide();
         $('.first_name').show();
         $('.last_name').show();

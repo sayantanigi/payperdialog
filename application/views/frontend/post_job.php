@@ -224,17 +224,7 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                         <span class="pf-title">State <span style="color:red;">*</span></span>
                                         <div class="pf-field">
                                             <select class="form-control" name="state-dropdown" id="state-dropdown">
-                                            <?php if(empty($id)) { ?>
-                                                <option value="">Select State</option>
-                                                <?php } else { ?>
-                                                <option>Select State</option>
-                                                <!-- <option value="<?= $state; ?>" selected><?php echo $state;?></option> -->
-                                                <?php
-                                                //$get_state = $this->Crud_model->GetData('states', 'id, name', "");
-                                                //foreach($get_state as $key) {?>
-                                                    <!-- <option value="<?= $key->name; ?>" <?php if($key->name == @$state) {echo "selected"; }?>><?php echo $key->name;?></option> -->
-                                                <?php //} ?>
-                                            <?php } ?>
+                                                <option value="">Select Country</option>
                                             </select>
                                             <input type="hidden" id="select_state_dropdown" value="<?php echo @$state; ?>">
                                         </div>

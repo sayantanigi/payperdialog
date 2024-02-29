@@ -98,7 +98,7 @@
 													</div>
 													<div class="col-md-12">
 														<div class="form-group">
-															<label>Commission</label>
+															<label>Admin Commission</label>
 															<input type="text" class="form-control" name="commission" placeholder="Commission" value="<?php if(!empty($row->commission)){echo $row->commission; }?>">
 														</div>
 													</div>

@@ -99,11 +99,11 @@
                                         if(!empty($get_sub_data)) {
                                         $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                                         if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) { ?>
-                                        <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important; border: 0 !important; "><a href="javascript:void(0)" onclick="completeSub()">Post Jobs</a></button>
+                                        <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; border: 0 !important; "><a href="javascript:void(0)" onclick="completeSub()">Post Jobs</a></button>
                                         <?php } else { ?>
-                                        <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important; border: 0 !important; "><a href="<?= base_url('postjob')?>" title="" target="_blank">Post Jobs</a></button>
+                                        <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; border: 0 !important; "><a href="<?= base_url('postjob')?>" title="" target="_blank">Post Jobs</a></button>
                                         <?php } } else { ?>
-                                        <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important; border: 0 !important; "><a href="javascript:void(0)" onclick="completeSub()">Post Jobs</a></button>
+                                        <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; border: 0 !important; "><a href="javascript:void(0)" onclick="completeSub()">Post Jobs</a></button>
                                         <?php } } ?>
                                     </td>
                                 </tr>

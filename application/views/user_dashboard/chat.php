@@ -221,6 +221,7 @@
     .notificationf1 {left: 270px !important; top: 6px; font-size: 15px !important; width: 20px !important; height: 20px !important;}
     .EachvChat{display: none;}
     .EachfChat{display: none;}
+    .Chat_User #frame #sidepanel {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;}
 </style>
 <!-- <link rel="stylesheet" href="https://unpkg.com/placeholder-loading/dist/css/placeholder-loading.min.css"> -->
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -436,5 +437,4 @@ $(function () {
         $(".modal").removeClass('showBidListContent');
     });
 })
-
 </script>

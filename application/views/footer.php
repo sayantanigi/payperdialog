@@ -123,7 +123,7 @@ if(!empty($_SESSION['afrebay']['userId'])){
 <?php }
 } ?>
 <div class="modal fade edit-form" id="aggrementmodal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height: fit-content;">
-    <div class="modal-dialog modal-dialog" role="document" style="margin: 20% auto !important;">
+    <div class="modal-dialog modal-dialog" role="document" style="margin: 15% auto !important;">
         <div class="modal-content" style="width: 510px; height: 620px; overflow: auto;">
             <div class="modal-header border-bottom-0">
                 <h5 class="modal-title" id="modal-title">User's Aggrement</h5>
@@ -144,11 +144,11 @@ if(!empty($_SESSION['afrebay']['userId'])){
                             <p><?= ucwords($terms[0]['title']); ?></p>
                             <div><?= ucwords($privacy[0]['description']); ?></div>
                         </div>
-                    </div>
-                    <div class="form-group date">
-                        <input type="checkbox" id="aggrchck" name="vehicle2" value="1" style="opacity: 1; z-index: 50; margin-top: 9px;">
-                        <p style="display: inline-block; margin-left: 25px; margin-top: 0px; margin-bottom: 0px;" class="user_aggrmnt">I have read and agree to PayperLLC aggrement and Policy.</p>
-                        <p class="erroraggr" style="margin: 0;width: 100%;text-align: center;color: red;font-size: 12px;">Please check the checkbox.</p>
+                        <div class="form-group date">
+                            <input type="checkbox" id="aggrchck" name="vehicle2" value="1" style="opacity: 1; z-index: 50; margin-top: 9px;">
+                            <p style="display: inline-block; margin-left: 25px; margin-top: 0px; margin-bottom: 0px;" class="user_aggrmnt">I have read and agree to PayperLLC aggrement and Policy.</p>
+                            <p class="erroraggr" style="margin: 0;width: 100%;text-align: center;color: red;font-size: 12px;">Please check the checkbox.</p>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer border-top-0 d-flex justify-content-center">
@@ -191,108 +191,105 @@ if(!empty($_SESSION['afrebay']['userId'])){
 <script type="text/javascript">
 var confirmTextDelete = 'Are you sure you want to delete this record?';
 var confirmationText = 'Are you sure you want to change this status?';
-    $(document).ready(function () {
-        $('.erroraggr').hide();
-        // alert(1);
-        tail.select('#example',{
-            startOpen: true,
-            multiple: true,
-            stayOpen: true,
-            multiPinSelected: true,
-            multiShowCount: false,
-            multiShowLimit: true,
-            multiContainer: true,
-            search: true,
-            searcgConfig: [
-                "text", "value"
-            ],
-            searchFocus: true,
-            searchMarked: true,
-            searchMinLength: 1,
-        });
-        var sessionMessage = '<?php echo $this->session->userdata('
-        message ') <> '
-        ' ? $this->session->userdata('
-        message ') : '
-        '; ?>';
-        if (sessionMessage == null || sessionMessage == "") {
-            return false;
-        }
-        $.notify(sessionMessage, {
-            position: "top right",
-            className: 'success'
-        }); //session msg
-
-        $('.dropdown-optgroup').click(function() {
-            var selected = $(".dropdown-optgroup :selected").map((_,e) => e.value).get();
-            alert(selected);
-      });
+$(document).ready(function () {
+    $('.erroraggr').hide();
+    // alert(1);
+    tail.select('#example',{
+        startOpen: true,
+        multiple: true,
+        stayOpen: true,
+        multiPinSelected: true,
+        multiShowCount: false,
+        multiShowLimit: true,
+        multiContainer: true,
+        search: true,
+        searcgConfig: [
+            "text", "value"
+        ],
+        searchFocus: true,
+        searchMarked: true,
+        searchMinLength: 1,
     });
-    setInterval(function () {
-        $('#video_modal').modal('show');
-    }, 5000);
+    var sessionMessage = '<?php echo $this->session->userdata('
+    message ') <> '
+    ' ? $this->session->userdata('
+    message ') : '
+    '; ?>';
+    if (sessionMessage == null || sessionMessage == "") {
+        return false;
+    }
+    $.notify(sessionMessage, {
+        position: "top right",
+        className: 'success'
+    }); //session msg
 
-    var targetDiv = $('.about_widget img').attr('src');
-    var targetDiv1 = $('.hidden-logo').val();
-    $(window).scroll(function () {
-        var windowpos = $(window).scrollTop();
-        if (windowpos >= 50) {
-            $(".Header_Menu_Nav img").attr("src", targetDiv);
-            $(".Header_Menu_Nav img").attr("src", targetDiv);
-        } else {
-            $(".Header_Menu_Nav img").attr("src", targetDiv1);
-            $(".Header_Menu_Nav img").attr("src", targetDiv1);
-        }
-
+    $('.dropdown-optgroup').click(function() {
+        var selected = $(".dropdown-optgroup :selected").map((_,e) => e.value).get();
+        alert(selected);
     });
+});
+setInterval(function () {
+    $('#video_modal').modal('show');
+}, 5000);
 
-    function receiveVideoCallWindow(fid) {
-        $('#video_modal').css('display', 'none');
-        var callPath = "<?php echo base_url('livevideo/video/');?>" + fid;
-        window.open(callPath, "_blank",
-            "toolbar=yes,scrollbars=yes,resizable=yes,top=250,left=20,width=600,height=450");
+var targetDiv = $('.about_widget img').attr('src');
+var targetDiv1 = $('.hidden-logo').val();
+$(window).scroll(function () {
+    var windowpos = $(window).scrollTop();
+    if (windowpos >= 50) {
+        $(".Header_Menu_Nav img").attr("src", targetDiv);
+        $(".Header_Menu_Nav img").attr("src", targetDiv);
+    } else {
+        $(".Header_Menu_Nav img").attr("src", targetDiv1);
+        $(".Header_Menu_Nav img").attr("src", targetDiv1);
     }
 
-    <?php if(@$_SESSION['afrebay']['userType'] == '1' || @$_SESSION['afrebay']['userType'] == '3') { 
-    $checkuseraggreed = $this->db->query("SELECT * FROM users WHERE userId = '".$_SESSION['afrebay']['userId']."'")->result_array();
-    //print_r($checkuseraggreed); die;
-    if(empty($checkuseraggreed[0]['isAggreed'])) { ?>
-        $(document).ready(function() {
-            //alert();
-            const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal1'));
-            aggrementmodal.show();
-        })
-    <?php } } ?>
+});
 
-    function aggrement() {
-        if($("#aggrchck").is(":checked")) { 
-            var userid = <?php echo $_SESSION['afrebay']['userId'] ?>;
-            $.ajax({
-                type:"post",
-                url:"<?php echo base_url()?>user/Dashboard/checktoaggrement",
-                data:{userid: userid},
-                success:function(returndata) {
-                    //alert(returndata);
-                    if(returndata == 1) {
-                        location.reload();
-                    } else {
-                        $.alert({
-                            title: '',
-                            content: "Something went wrong. Please try again later.",
-                        });
-                        return false;
-                    }
+function receiveVideoCallWindow(fid) {
+    $('#video_modal').css('display', 'none');
+    var callPath = "<?php echo base_url('livevideo/video/');?>" + fid;
+    window.open(callPath, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=250,left=20,width=600,height=450");
+}
+
+<?php if(@$_SESSION['afrebay']['userType'] == '1' || @$_SESSION['afrebay']['userType'] == '3') { 
+$checkuseraggreed = $this->db->query("SELECT * FROM users WHERE userId = '".$_SESSION['afrebay']['userId']."'")->result_array();
+//print_r($checkuseraggreed); die;
+if(empty($checkuseraggreed[0]['isAggreed'])) { ?>
+    $(document).ready(function() {
+        //alert();
+        const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal1'));
+        aggrementmodal.show();
+    })
+<?php } } ?>
+
+function aggrement() {
+    if($("#aggrchck").is(":checked")) { 
+        var userid = <?php echo $_SESSION['afrebay']['userId'] ?>;
+        $.ajax({
+            type:"post",
+            url:"<?php echo base_url()?>user/Dashboard/checktoaggrement",
+            data:{userid: userid},
+            success:function(returndata) {
+                //alert(returndata);
+                if(returndata == 1) {
+                    location.reload();
+                } else {
+                    $.alert({
+                        title: '',
+                        content: "Something went wrong. Please try again later.",
+                    });
+                    return false;
                 }
-            });
-        }  else {
-            $('.erroraggr').show();
-            setTimeout(() => {
-                $('.erroraggr').hide();
-            }, 5000);
-        }
-    }   
-
+            }
+        });
+    }  else {
+        $('.erroraggr').show();
+        setTimeout(() => {
+            $('.erroraggr').hide();
+        }, 5000);
+    }
+}
 </script>
 </body>
-
 </html>

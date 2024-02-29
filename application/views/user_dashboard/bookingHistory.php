@@ -245,7 +245,7 @@
         left: 0;
         width: 100px;
         border-radius: 50px;
-        background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;
+        background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;
         border: 0;
         font-size: 13px !important;
     }
@@ -263,7 +263,7 @@
         height: 35px;
         width: 100px;
         border-radius: 50px;
-        background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;
+        background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;
         opacity: 1;
         font-size: 13px !important;
     }
@@ -274,7 +274,7 @@
     }
 
     .Calender_Pick .fc-button-group button {
-        background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;
+        background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;
         border: 0;
         display: flex;
         align-items: center;
@@ -325,7 +325,7 @@
         align-items: center;
         justify-content: center;
         border-radius: 50px;
-        background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;
+        background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;
         border: 0;
         letter-spacing: 1px;
     }
@@ -341,7 +341,7 @@
         align-items: center !important;
         justify-content: center !important;
         border-radius: 50px !important;
-        background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;
+        background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;
         border: 0 !important;
         letter-spacing: 1px !important;
     }

@@ -50,19 +50,19 @@
                     <?php 
                     $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                     if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) { ?>
-                    <div class="col-md-3 col-sm-12">
+                    <div class="col-md-4 col-sm-12">
                         <a href="javascript:void(0)" onclick="completeSub()">
                             <div class="dashboard">
-                                <h4><center>Job Posts</center></h4>
+                                <h4><center>My Jobs</center></h4>
                                 <h3><center><?= count($get_job);?></center></h3>
                             </div>
                         </a>
                     </div>
                     <?php } else { ?>
-                    <div class="col-md-3 col-sm-12">
+                    <div class="col-md-4 col-sm-12">
                         <a href="<?= base_url('myjob')?>">
                             <div class="dashboard">
-                                <h4><center>Job Posts</center></h4>
+                                <h4><center>My Jobs</center></h4>
                                 <h3><center><?= count($get_job);?></center></h3>
                             </div>
                         </a>
@@ -71,46 +71,24 @@
 
                     <?php $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                     if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) { ?>
-                    <div class="col-md-3 col-sm-12">
+                    <div class="col-md-4 col-sm-12">
                         <a href="javascript:void(0)" onclick="completeSub()">
                             <div class="dashboard">
-                                <h4><center>Job Bids</center></h4>
+                                <h4><center>Applications to your jobs</center></h4>
                                 <h3><center><?= count($bid_job);?></center></h3>
                             </div>
                         </a>
                     </div>
                     <?php } else { ?>
-                    <div class="col-md-3 col-sm-12">
+                    <div class="col-md-4 col-sm-12">
                         <a href="<?= base_url('jobbid')?>">
                             <div class="dashboard">
-                                <h4><center>Job Bids</center></h4>
+                                <h4><center>Applications to your jobs</center></h4>
                                 <h3><center><?= count($bid_job);?></center></h3>
                             </div>
                         </a>
                     </div>
                     <?php } ?>
-
-                    <?php $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                    if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) { ?>
-                    <div class="col-md-3 col-sm-12">
-                        <a href="javascript:void(0)" onclick="completeSub()">
-                            <div class="dashboard">
-                                <h4><center>Products</center></h4>
-                                <h3><center><?= count($get_product);?></center></h3>
-                            </div>
-                        </a>
-                    </div>
-                    <?php } else { ?>
-                    <div class="col-md-3 col-sm-12">
-                        <a href="<?= base_url('product')?>">
-                            <div class="dashboard">
-                                <h4><center>Products</center></h4>
-                                <h3><center><?= count($get_product);?></center></h3>
-                            </div>
-                        </a>
-                    </div>
-                    <?php } ?>
-                    
                     <div id="root"></div>
                 </div>
                 <!--  end row -->
