@@ -174,6 +174,16 @@ class Login extends CI_Controller {
 							redirect('jobbid');
 						}
 					} else if ($_SESSION['afrebay']['userType'] == '2') {
+						$checkPostJobs = $this->db->query("SELECT COUNT(id) as id FROM postjob WHERE user_id = '".@$_SESSION['afrebay']['userId']."' AND is_delete = '0'")->row();
+						//print_r($checkPostJobs); die();
+						if($checkPostJobs->id == '1') {
+							$check_sub = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".$_SESSION['afrebay']['userId']."' AND status IN (1,2)");
+							if(empty($check_sub)) {
+								redirect('subscription');
+							}
+						} else {
+							redirect('profile');
+						}
 						$profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
 						if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) {
 							redirect('profile');
