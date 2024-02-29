@@ -229,7 +229,7 @@ if($data_request=='user'){
                                                                 <?php } } else { ?>
                                                                 <tr>
                                                                     <td style="width: 72%;"><input type="text" name="content_title[]" id="content_title1" class="form-control" placeholder="Content Title"></td>
-                                                                    <td><input type="file" name="portfolio_file[]" id="portfolio_file1" class="form-control" required></td>
+                                                                    <td><input type="file" name="portfolio_file[]" id="portfolio_file1" class="form-control"></td>
                                                                     <td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return remove(this)">X</a></td>
                                                                 </tr>
                                                                 <?php } ?>

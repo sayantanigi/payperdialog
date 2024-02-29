@@ -34100,7 +34100,7 @@ footer .bottom-line span {
 
 .Employer_Details .emply-btns .seemap {
 
-   background: linear-gradient(180deg, rgba(249, 80, 30, 1) 0%, rgba(252, 119, 33, 1) 100%);
+   background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;
 
    border: 0;
 
@@ -34118,7 +34118,7 @@ footer .bottom-line span {
 
 .Employer_Details .emply-btns .seemap:hover {
 
-   background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%);
+   background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;
 
    color: #fff !important;
 
@@ -36814,10 +36814,9 @@ footer .bottom-line span {
 }
 
 
-
 .Worker_Detail .worker_cand-single-user .Worker_Head_Social .Worker_Head_Social_Data .download-cv .btn {
 
-   background: linear-gradient(180deg, rgba(249, 80, 30, 1) 0%, rgba(252, 119, 33, 1) 100%);
+   background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;
 
    border: 0;
 
@@ -40614,11 +40613,10 @@ section.topak .job-search-sec .job-search form .custom-select .same-as-selected 
 .Bid-page .bid-dis li.cstm_desc ul {
    padding-left: 30px !important;
 }
-
 .jobbid_select {
    width: 40% !important;
    display: inline-block !important;
    margin-right: 10px;
 }
-
 .Employee-Details pre {white-space: pre-wrap;}
+.datepicker table tr td.active.active {background-color: #f1484f !important;}

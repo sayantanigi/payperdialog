@@ -31,6 +31,7 @@ $get_category=$this->Crud_model->GetData('category','',"status='Active'");
     <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=6163c52d38f8310012c86621&product=inline-share-buttons' async='async'></script>
     <style>
     .completeSub {display: none; text-align: center; margin-top: 20px; color: #fa5a1f; font-size: 20px;}
+    .completeSub1 {display: none; text-align: center; margin-top: 20px; color: #fa5a1f; font-size: 20px;}
     #completeSub {position: relative; display: inline-block;}
     #completeSub #completeSubtext {visibility: hidden; width: max-content;background-color: white;color: #000;text-align: center;border-radius: 6px;padding: 5px 10px;position: absolute;z-index: 1;top: 50px;font-size: 13px;right: 0;}
     #completeSub:hover #completeSubtext {visibility: visible;}
@@ -48,6 +49,12 @@ function completeSub() {
     $('.completeSub').show();
     setTimeout(function(){
         $('.completeSub').fadeOut('slow');
+    },4000);
+}
+function completeSub1() {
+    $('.completeSub1').show();
+    setTimeout(function(){
+        $('.completeSub1').fadeOut('slow');
     },4000);
 }
 $(function () {
@@ -199,7 +206,7 @@ $(function () {
                                     $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                                     if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) 
                                     { ?>
-                                        <a href="javascript:void(0)" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please activate a subscription package and complete your profile to proceed with the post job activities.</span></a>
+                                        <a href="javascript:void(0)" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please complete your profile to proceed with the post job activities.</span></a>
                                     <?php 
                                     } 
                                     else 
