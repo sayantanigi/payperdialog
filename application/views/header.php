@@ -170,54 +170,43 @@ $(function () {
                     </nav>
                     <div class="btn-extars">
                         <?php
-                        if(!empty($_SESSION['afrebay']['userId'])) 
-                        {
-                            if($_SESSION['afrebay']['userType'] == '2') 
-                            {
-                                if($get_setting->required_subscription == '1') 
-                                { 
+                        if(!empty($_SESSION['afrebay']['userId'])) {
+                            if($_SESSION['afrebay']['userType'] == '2') {
+                                if($get_setting->required_subscription == '1') { 
                                     $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".$_SESSION['afrebay']['userId']."' AND (status = '1' OR status = '2')")->result_array();
-                                    if(empty($get_sub_data)) 
-                                    { ?>
-                                    <a href="javascript:void(0)" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please activate a subscription package and complete your profile to proceed with the post job activities.</span></a>
-                                    <?php 
-                                    } 
-                                    else if(!empty($get_sub_data)) 
-                                    {
+                                    if(empty($get_sub_data)) {
+                                        echo '<a href="'.base_url('subscription').'" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please activate a subscription package and complete your profile to proceed with the post job activities.</span></a>';
+                                    } else if(!empty($get_sub_data)) {
                                         $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                        if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) 
-                                        { ?>
-                                            <a href="javascript:void(0)" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please activate a subscription package and complete your profile to proceed with the post job activities.</span></a>
-                                        <?php 
-                                        } 
-                                        else 
-                                        { ?>
-                                            <a href="<?= base_url('postjob')?>" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>
-                                        <?php 
+                                        if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) {
+                                            echo '<a href="'.base_url('subscription').'" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please activate a subscription package and complete your profile to proceed with the post job activities.</span></a>';
+                                        } else {
+                                            echo '<a href="'.base_url('postjob').'" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>';
                                         }
-                                    } 
-                                    else 
-                                    { ?>
-                                        <a href="<?= base_url('login')?>" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>
-                                    <?php 
+                                    } else {
+                                        echo '<a href="'.base_url('login').'" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>';
                                     }
-                                } else 
-                                {
+                                } else {
                                     $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                    if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) 
-                                    { ?>
-                                        <a href="javascript:void(0)" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please complete your profile to proceed with the post job activities.</span></a>
-                                    <?php 
-                                    } 
-                                    else 
-                                    { ?>
-                                        <a href="<?= base_url('postjob')?>" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>
-                                    <?php 
+                                    if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) {
+                                        echo '<a href="'.base_url('subscription').'" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please complete your profile to proceed with the post job activities.</span></a>';
+                                    } else { 
+                                        $checkPostdata = $this->db->query("SELECT COUNT(id) as count FROM postjob WHERE user_id = '".$_SESSION['afrebay']['userId']."'")->row();
+                                        if($checkPostdata->count == '0') {
+                                            echo '<a href="'.base_url('postjob').'" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>';
+                                        } else {
+                                            $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".$_SESSION['afrebay']['userId']."' AND (status = '1' OR status = '2')")->result_array();
+                                            if(empty($get_sub_data)) {
+                                                echo '<a href="'.base_url('subscription').'" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please activate a subscription package to proceed with the post job activities.</span></a>';
+                                            } else {
+                                                echo '<a href="'.base_url('postjob').'" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>';
+                                            }
+                                        }
                                     }
                                 }
                             }
                         } else { ?>
-                        <a href="<?= base_url('login')?>" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>
+                            <a href="<?= base_url('login')?>" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>
                         <?php } ?>
 
                         <ul class="account-btns">
