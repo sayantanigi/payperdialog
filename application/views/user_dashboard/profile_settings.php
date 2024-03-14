@@ -81,7 +81,7 @@ if($data_request=='user'){
                                             <?php //if(@$_SESSION['afrebay']['userType']=='2') { ?>
                                             <?php if(@$userinfo->userType=='2') { ?>
                                             <div class="col-lg-6">
-                                                <label for="first_name">
+                                                <label for="companyname">
                                                     <h4>Company Name <span style="color:red;">*</span></h4>
                                                 </label>
                                                 <input type="text" class="form-control" name="companyname" id="companyname" placeholder="Company Name" value="<?php echo $userinfo->companyname;?>" />
@@ -89,14 +89,14 @@ if($data_request=='user'){
                                             </div>
                                             <?php } else { ?>
                                             <div class="col-lg-6">
-                                                <label for="first_name">
+                                                <label for="firstname">
                                                     <h4>First Name <span style="color:red;">*</span></h4>
                                                 </label>
                                                 <input type="text" class="form-control" name="firstname" id="firstname" placeholder="First Name" value="<?php echo $userinfo->firstname;?>"  onkeypress="only_alphabets(event)" />
                                                 <div id="vld_firstname" style="color:red; margin-top: 10px;">Please enter First Name.</div>
                                             </div>
                                             <div class="col-lg-6">
-                                                <label for="first_name">
+                                                <label for="lastname">
                                                     <h4>Last Name <span style="color:red;">*</span></h4>
                                                 </label>
                                                 <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Last Name" value="<?php echo $userinfo->lastname;?>"  onkeypress="only_alphabets(event)" />
@@ -104,13 +104,13 @@ if($data_request=='user'){
                                             </div>
                                             <?php } ?>
                                             <div class="col-lg-6">
-                                                <label for="first_name">
+                                                <label for="email">
                                                     <h4>Email Address <span style="color:red;">*</span></h4>
                                                 </label>
                                                 <input type="text" class="form-control" name="email" id="email" placeholder="xyz@example.com" readonly value="<?php echo $userinfo->email;?>" />
                                             </div>
                                             <div class="col-lg-6">
-                                                <label for="first_name">
+                                                <label for="mobile">
                                                     <h4>Phone Number </h4>
                                                 </label>
                                                 <input type="text" class="form-control" name="mobile" id="mobile" placeholder="Phone Number" value="<?php echo $userinfo->mobile;?>" onkeypress="only_number(event)" maxlength="10" />
@@ -119,7 +119,7 @@ if($data_request=='user'){
                                             <?php //if(@$_SESSION['afrebay']['userType']=='1') { ?>
                                             <?php if(@$userinfo->userType=='1' || @$userinfo->userType=='3') { ?>
                                             <div class="col-lg-6 gender">
-                                                <label for="first_name">
+                                                <label for="gender">
                                                     <h4>Gender<span style="color:red;">*</span></h4>
                                                 </label>
                                                 <select name="gender" id="gender" class="form-control"  style="height: 32px;">
@@ -131,7 +131,7 @@ if($data_request=='user'){
                                             </div>
                                             <?php } ?>
                                             <div class="col-lg-6 location">
-                                                <label for="last_name">
+                                                <label for="address">
                                                     <h4>Legal Address <span style="color:red;">*</span></h4>
                                                 </label>
                                                 <input type="text" class="form-control" name="address" id="location" placeholder="Legal Address" value="<?= $userinfo->address ?>" style="height: 49px !important;" autocomplete="off" />
@@ -178,20 +178,20 @@ if($data_request=='user'){
                                             <?php //if(@$_SESSION['afrebay']['userType']=='1') { ?>
                                             <?php if(@$userinfo->userType=='1' || @$userinfo->userType=='3') { ?>
                                             <div class="col-lg-4">
-                                                <label for="last_name">
+                                                <label for="zip">
                                                     <h4>Zip Code</h4>
                                                 </label>
                                                 <input type="text" class="form-control" name="zip" id="zip" placeholder="Zip Code" value="<?php echo @$userinfo->zip;?>" onkeypress="only_number(event)" maxlength="6" />
                                             </div>
                                             <div class="col-lg-4">
-                                                <label for="last_name">
+                                                <label for="rateperhour">
                                                     <h4>Rate per Hour <span style="color:red;">*</span></h4>
                                                 </label>
                                                 <input type="text" class="form-control" name="rateperhour" id="rateperhour" placeholder="Rate per Hour" value="<?php echo @$userinfo->rateperhour;?>" required=""/>
                                             </div>
                                             <div class="col-lg-4">
                                                 <?php if(!empty($userinfo->resume)) { ?>
-                                                <label for="last_name"><h4>Update Resume</h4></label>
+                                                <label for="resume"><h4>Update Resume</h4></label>
                                                 <input type="file" class="form-control" name="resume" id="resume"/>
                                                 <a href="<?php echo base_url('uploads/users/resume/'.$userinfo->resume); ?>" >
                                                     <i class="fa fa-file-pdf-o" aria-hidden="true" style="font-size:40px; color:red;"></i>
@@ -200,7 +200,7 @@ if($data_request=='user'){
                                                 <input type="hidden" name="old_resume" value="<?= @$userinfo->resume ?>">
                                                 <br>
                                                 <?php } else { ?>
-                                                <label for="last_name"><h4>Resume upload <span style="color:red;">*</span></h4></label>
+                                                <label for="resume"><h4>Resume upload <span style="color:red;">*</span></h4></label>
                                                 <input type="file" class="form-control" name="resume" id="resume" required/>
                                                 <?php } ?>
                                             </div>
@@ -243,13 +243,13 @@ if($data_request=='user'){
                                             <?php //if(@$_SESSION['afrebay']['userType']=='2') { ?>
                                             <?php if(@$userinfo->userType=='2') { ?>
                                             <div class="col-lg-6">
-                                                <label for="first_name">
+                                                <label for="foundedyear">
                                                     <h4>Founded Year</h4>
                                                 </label>
                                                 <input type="text" class="form-control" name="foundedyear" id="foundedyear" placeholder="Founded Year" value="<?php echo $userinfo->foundedyear;?>"/>
                                             </div>
                                             <div class="col-lg-6">
-                                                <label for="first_name">
+                                                <label for="teamsize">
                                                     <h4>TAX ID <span style="color:red;">*</span></h4>
                                                 </label>
                                                 <input type="text" class="form-control" name="teamsize" id="teamsize" placeholder="TAX ID" value="<?php echo $userinfo->teamsize;?>" />
@@ -258,7 +258,7 @@ if($data_request=='user'){
                                             <?php } ?>
 
                                             <div class="col-lg-12">
-                                                <label for="last_name">
+                                                <label for="short_bio">
                                                     <h4>Short Bio <span style="color:red;">*</span></h4>
                                                 </label>
                                                 <textarea class="form-control" name="short_bio" id="short_bio" placeholder="Short Bio" maxlength="500"><?= @$userinfo->short_bio ?></textarea>

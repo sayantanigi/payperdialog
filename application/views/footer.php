@@ -122,12 +122,12 @@ if(!empty($_SESSION['afrebay']['userId'])){
 </div>
 <?php }
 } ?>
-<div class="modal fade edit-form" id="aggrementmodal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height: fit-content;">
+<div class="modal fade edit-form" id="aggrementmodal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height: fit-content;" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog" role="document" style="margin: 15% auto !important;">
         <div class="modal-content" style="width: 510px; height: 620px; overflow: auto;">
             <div class="modal-header border-bottom-0">
                 <h5 class="modal-title" id="modal-title">User's Aggrement</h5>
-                <button type="button" class="bookBtn-close btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeaggrmnt()"></button>
+                <button type="button" class="bookBtn-close btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeaggrmnt()" style="background: none; padding: 0; margin: 0;">X</button>
             </div>
             <form id="myForm">
                 <div class="modal-body" style="margin: 10px;">
@@ -258,8 +258,9 @@ $checkuseraggreed = $this->db->query("SELECT * FROM users WHERE userId = '".$_SE
 if(empty($checkuseraggreed[0]['isAggreed'])) { ?>
     $(document).ready(function() {
         //alert();
-        const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal1'));
-        aggrementmodal.show();
+        //const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal1'));
+        //aggrementmodal.show();
+        $("#aggrementmodal1").modal({backdrop:'static', keyboard: false, show: true});
     })
 <?php } } ?>
 
@@ -289,6 +290,10 @@ function aggrement() {
             $('.erroraggr').hide();
         }, 5000);
     }
+}
+
+function closeaggrmnt() {
+    $('#aggrementmodal1').modal('hide');
 }
 </script>
 </body>
