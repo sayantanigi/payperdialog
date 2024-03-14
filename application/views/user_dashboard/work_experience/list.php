@@ -27,12 +27,9 @@
     </div>
 </section>
 <?php $this->load->view('sidebar');?>
-<div class="col-md-12 col-sm-12 display-table-cell v-align">
+<div class="col-md-7 col-sm-12 display-table-cell v-align">
     <div class="user-dashboard">
         <div class="row row-sm">
-            <div class="col-xl-12 col-lg-12 col-md-12" style="text-align: right;">
-                <a href="<?php echo base_url('add-workexperience')?>" class="btn btn-primary Work_Btn" style="border-radius: 40px; letter-spacing: 0;">Add Work Experience</a>
-            </div>
             <div class="col-xl-12 col-lg-12 col-md-12">
                 <div class="cardak custom-cardak">
                     <span class="text-success-msg f-20" style="text-align: center;">
@@ -80,6 +77,9 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12" style="text-align: right;">
+                <a href="<?php echo base_url('add-workexperience')?>" class="btn btn-primary Work_Btn" style="border-radius: 40px; letter-spacing: 0;">Add Work Experience</a>
             </div>
         </div>
     </div>

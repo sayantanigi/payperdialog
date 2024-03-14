@@ -34,7 +34,7 @@ if($data_request=='user'){
     $container='container';
 }
 ?>
-<div class="col-md-12 col-sm-12 display-table-cell v-align">
+<div class="<?php if(@$userinfo->userType=='1') { echo "col-md-7";} else {echo "col-md-12"; }?> col-sm-12 display-table-cell v-align">
     <div class="user-dashboard Admin_Profile form-design <?php echo $container;  ?> ">
         <form class="form" action="<?php echo base_url('user/Dashboard/update_profile')?>" method="post" id="registrationForm" enctype="multipart/form-data">
         <input type="hidden" name="from_data_request" value="<?=$data_request;?>">

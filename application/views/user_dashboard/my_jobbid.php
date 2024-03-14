@@ -25,7 +25,7 @@
     </div>
 </section>
 <?php $this->load->view('sidebar');?>
-<div class="col-md-12 col-md-12 col-sm-12 display-table-cell v-align">
+<div class="col-md-7 col-sm-12 display-table-cell v-align">
     <div class="text-success-msg f-20" style="text-align: center;">
         <?php if($this->session->flashdata('message')) {
             echo $this->session->flashdata('message');

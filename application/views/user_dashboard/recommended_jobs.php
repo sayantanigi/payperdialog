@@ -23,7 +23,7 @@
     </div>
 </section>
 <?php $this->load->view('sidebar');?>
-<div class="col-md-12 col-md-12 col-sm-12 display-table-cell v-align">
+<div class="col-md-7 display-table-cell v-align">
     <!-- <div class="col-sm-12" style="display: inline-block">
         <div class="col-sm-6" style="display: inline-block; float: left;">
             <p style="text-align: right;align-items: center;display: grid; ">Filter By Skill</p>

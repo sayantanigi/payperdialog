@@ -29876,7 +29876,6 @@ h2.job-bid {
    color: #ffffff;
 
    background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important
-
 }
 
 
@@ -38489,7 +38488,6 @@ footer .bottom-line span {
 .Pricing_Data .plans-sec .pricetable a.btn:hover {
 
    background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important
-
 }
 
 
@@ -38571,9 +38569,8 @@ footer .social {
 
 
 .dashboard-gig .display-table .display-table-row .display-table-cell.v-align {
-
    padding-right: 0 !important;
-
+   margin-top: 10px;
 }
 
 
@@ -38643,7 +38640,6 @@ footer .social {
 .dashboard-gig .display-table .display-table-row .display-table-cell.v-align #calendar .fc-header-toolbar .fc-right .btn:hover {
 
    background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important
-
 }
 
 
@@ -39073,11 +39069,9 @@ footer .social {
 
 
 .User_Sidemenu .display-table-cell {
-
-   margin-top: 0px;
    padding: 20px 0px;
-   box-shadow: 0 5px 10px #e3e3e3;
-   border-radius: 0 0 10px 10px !important;
+   box-shadow: 0 0 10px #e3e3e3;
+   border-radius: 10px !important;
 
 }
 
@@ -39100,7 +39094,6 @@ footer .social {
 .User_Sidemenu .Dashboard_Btn:hover {
 
    background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important
-
 }
 
 
@@ -39138,7 +39131,7 @@ footer .social {
 
 .User_Sidemenu .hidden-xs.display-table-cell .navi ul li {
 
-   /* width: 200px !important; */
+   width: 100% !important;
 
    display: flex;
 
@@ -39146,14 +39139,14 @@ footer .social {
 
    align-items: center;
 
-   margin: 0 10px 0 0 !important;
+   margin: 0 10px 5px 0 !important;
 
    /*background: linear-gradient(145deg, #ffffff, #dcdcdc);
 
    box-shadow: 3px 3px 5px #bebebe, -3px -3px 5px #ffffff;*/
 
    transition: 0.5s ease-in-out;
-   border-radius: 10px 10px 0 0;
+   border-radius: 10px;
    /*   box-shadow: 0px -1px 10px 0px #dfdfdf;*/
    position: relative;
 
@@ -39186,13 +39179,13 @@ footer .social {
 
    display: flex;
 
-   justify-content: center;
+   justify-content: flex-start;
 
    align-items: center;
 
    transition: 0.5s ease-in-out;
-   box-shadow: inset 0 0 10px #e1e1e1 !important;
-   border-radius: 10px 10px 0 0 !important;
+   border-radius: 0 10px 10px 0 !important;
+   background: #ffddde !important;
 
 }
 
@@ -39217,10 +39210,18 @@ footer .social {
 }
 
 .User_Sidemenu .hidden-xs.display-table-cell .navi ul li.active a {
-   box-shadow: 0 -3px 10px #e1e1e1 !important;
-   border-radius: 10px 10px 0 0 !important;
+   box-shadow: 0 0 10px #e1e1e1 !important;
+   border-radius: 0 10px 10px 0 !important;
+   background: #ed1c24 !important;
+}
+.User_Sidemenu .hidden-xs.display-table-cell .navi ul li.active a i,
+.User_Sidemenu .hidden-xs.display-table-cell .navi ul li.active a span {
+   color: #fff !important;
 }
 
+.User_Sidemenu .hidden-xs.display-table-cell .navi ul li.active a:hover {
+   background: #ed1c24 !important;
+}
 
 .User_Sidemenu .hidden-xs.display-table-cell .navi ul li.active a {
 
@@ -39233,16 +39234,10 @@ footer .social {
 
 
 .User_Sidemenu .hidden-xs.display-table-cell .navi ul li a:hover {
-
    text-decoration: none;
-
    background-position: 100% 100%, 0% 0%;
-
    background: #ffffff !important;
-
-   /*   color: #888 !important;*/
-   /*   border-radius: 10px 10px 0 0 !important;*/
-
+   box-shadow: 0 0 10px #e1e1e1 !important;
 }
 
 
@@ -40613,10 +40608,17 @@ section.topak .job-search-sec .job-search form .custom-select .same-as-selected 
 .Bid-page .bid-dis li.cstm_desc ul {
    padding-left: 30px !important;
 }
+
 .jobbid_select {
    width: 40% !important;
    display: inline-block !important;
    margin-right: 10px;
 }
-.Employee-Details pre {white-space: pre-wrap;}
-.datepicker table tr td.active.active {background-color: #f1484f !important;}
+
+.Employee-Details pre {
+   white-space: pre-wrap;
+}
+
+.datepicker table tr td.active.active {
+   background-color: #f1484f !important;
+}

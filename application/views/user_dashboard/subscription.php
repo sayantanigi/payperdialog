@@ -22,7 +22,7 @@
 </section>
 
 <?php $this->load->view('sidebar');?>
-<div class="col-md-12 col-sm-12 display-table-cell v-align User_Sub">
+<div class="col-md-10 col-sm-12 display-table-cell v-align User_Sub">
     <div id="subscription-messages" class="text-success-msg f-20">
         <p style="color: #28a745;">Subscription Successful.</p>
     </div>

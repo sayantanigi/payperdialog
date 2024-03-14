@@ -28,7 +28,7 @@
     </div>
 </section>
 <?php $this->load->view('sidebar');?>
-<div class="col-md-12 col-sm-12 display-table-cell v-align form-design">
+<div class="col-md-7 col-sm-12 display-table-cell v-align form-design">
     <div class="user-dashboard">
         <form class="form" action="<?= $action; ?>" method="post" id="registrationForm" enctype="multipart/form-data">
             <div class="row row-sm">

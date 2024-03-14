@@ -1,12 +1,30 @@
 <style type="text/css">
-.dashboard {box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;height: 150px;}
-.dashboard h4 {padding: 10px;}
-.dashboard h3 {padding: 5px;}
-.list_profile li {list-style: none; padding: 10px; display: block; font-size: 18px; margin-left: 20px;}
+    .dashboard {
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        height: 150px;
+    }
+
+    .dashboard h4 {
+        padding: 10px;
+    }
+
+    .dashboard h3 {
+        padding: 5px;
+    }
+
+    .list_profile li {
+        list-style: none;
+        padding: 10px;
+        display: block;
+        font-size: 18px;
+        margin-left: 20px;
+    }
 </style>
 <section class="overlape">
     <div class="block no-padding">
-        <div data-velocity="-.1" style="background: url('<?= base_url('assets/images/resource/mslider1.jpg')?>') repeat scroll 50% 422.28px transparent;" class="parallax scrolly-invisible no-parallax"></div>
+        <div data-velocity="-.1"
+            style="background: url('<?= base_url('assets/images/resource/mslider1.jpg') ?>') repeat scroll 50% 422.28px transparent;"
+            class="parallax scrolly-invisible no-parallax"></div>
         <!-- PARALLAX BACKGROUND IMAGE -->
         <div class="container fluid">
             <div class="row">
@@ -33,78 +51,102 @@
     </div>
 </section>
 
-<?php $this->load->view('sidebar');?>
-<div class="col-md-12 col-md-12 col-sm-12 display-table-cell v-align">
+<?php $this->load->view('sidebar'); ?>
+<div class="<?php if(@$_SESSION['afrebay']['userType'] == '1') { echo "col-md-7";} else {echo "col-md-12"; }?> col-sm-12 display-table-cell v-align">
     <div class="user-dashboard">
         <div class="row row-sm">
             <div class="col-xl-12 col-lg-12 col-md-12">
                 <div class="text-success-msg f-20" style="text-align: center;">
-                <?php if($this->session->flashdata('message')) {
-                    echo $this->session->flashdata('message');
-                    unset($_SESSION['message']);
-                } ?>
+                    <?php if ($this->session->flashdata('message')) {
+                        echo $this->session->flashdata('message');
+                        unset($_SESSION['message']);
+                    } ?>
                 </div>
                 <!-- employer list -->
-                <?php if($_SESSION['afrebay']['userType']==2){?>
-                <div class="row justify-content-md-center">
-                    <?php 
-                    $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                    if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) { ?>
-                    <div class="col-md-4 col-sm-12">
-                        <a href="javascript:void(0)" onclick="completeSub()">
-                            <div class="dashboard">
-                                <h4><center>My Jobs</center></h4>
-                                <h3><center><?= count($get_job);?></center></h3>
+                <?php if ($_SESSION['afrebay']['userType'] == 2) { ?>
+                    <div class="row justify-content-md-center">
+                        <?php
+                        $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
+                        if (empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize']) || empty($profile_check[0]['short_bio'])) { ?>
+                            <div class="col-md-4 col-sm-12">
+                                <a href="javascript:void(0)" onclick="completeSub()">
+                                    <div class="dashboard">
+                                        <h4>
+                                            <center>My Jobs</center>
+                                        </h4>
+                                        <h3>
+                                            <center>
+                                                <?= count($get_job); ?>
+                                            </center>
+                                        </h3>
+                                    </div>
+                                </a>
                             </div>
-                        </a>
-                    </div>
-                    <?php } else { ?>
-                    <div class="col-md-4 col-sm-12">
-                        <a href="<?= base_url('myjob')?>">
-                            <div class="dashboard">
-                                <h4><center>My Jobs</center></h4>
-                                <h3><center><?= count($get_job);?></center></h3>
+                        <?php } else { ?>
+                            <div class="col-md-4 col-sm-12">
+                                <a href="<?= base_url('myjob') ?>">
+                                    <div class="dashboard">
+                                        <h4>
+                                            <center>My Jobs</center>
+                                        </h4>
+                                        <h3>
+                                            <center>
+                                                <?= count($get_job); ?>
+                                            </center>
+                                        </h3>
+                                    </div>
+                                </a>
                             </div>
-                        </a>
-                    </div>
-                    <?php } ?>
+                        <?php } ?>
 
-                    <?php $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                    if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) { ?>
-                    <div class="col-md-4 col-sm-12">
-                        <a href="javascript:void(0)" onclick="completeSub()">
-                            <div class="dashboard">
-                                <h4><center>Applications to your jobs</center></h4>
-                                <h3><center><?= count($bid_job);?></center></h3>
+                        <?php $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
+                        if (empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize']) || empty($profile_check[0]['short_bio'])) { ?>
+                            <div class="col-md-4 col-sm-12">
+                                <a href="javascript:void(0)" onclick="completeSub()">
+                                    <div class="dashboard">
+                                        <h4>
+                                            <center>Applications to your jobs</center>
+                                        </h4>
+                                        <h3>
+                                            <center>
+                                                <?= count($bid_job); ?>
+                                            </center>
+                                        </h3>
+                                    </div>
+                                </a>
                             </div>
-                        </a>
-                    </div>
-                    <?php } else { ?>
-                    <div class="col-md-4 col-sm-12">
-                        <a href="<?= base_url('jobbid')?>">
-                            <div class="dashboard">
-                                <h4><center>Applications to your jobs</center></h4>
-                                <h3><center><?= count($bid_job);?></center></h3>
+                        <?php } else { ?>
+                            <div class="col-md-4 col-sm-12">
+                                <a href="<?= base_url('jobbid') ?>">
+                                    <div class="dashboard">
+                                        <h4>
+                                            <center>Applications to your jobs</center>
+                                        </h4>
+                                        <h3>
+                                            <center>
+                                                <?= count($bid_job); ?>
+                                            </center>
+                                        </h3>
+                                    </div>
+                                </a>
                             </div>
-                        </a>
+                        <?php } ?>
+                        <div id="root"></div>
                     </div>
-                    <?php } ?>
-                    <div id="root"></div>
-                </div>
-                <!--  end row -->
-                <?php } else if($_SESSION['afrebay']['userType']==1){?>
-                <!--  end employer list -->
-                <!-- worker list -->
-                <!-- <div style="background: #f67a49; color:white; padding:10px;">Profile</div>
+                    <!--  end row -->
+                <?php } else if ($_SESSION['afrebay']['userType'] == 1) { ?>
+                        <!--  end employer list -->
+                        <!-- worker list -->
+                        <!-- <div style="background: #f67a49; color:white; padding:10px;">Profile</div>
                     <div class="row">
                         <ul class="list_profile">
-                            <li><b>Name : </b> <span style="font-size:16px;"><?php //if(!empty($get_user->firstname)){ echo $get_user->firstname.' '.$get_user->lastname;}?></span></li>
-                            <li><b>Address : </b><span style="font-size:16px;"><?php //if(!empty($get_user->address)){ echo $get_user->address;}?></span></li>
-                            <li><b>Email : </b><span style="font-size:16px;"><?php //if(!empty($get_user->email)){ echo $get_user->email;}?></span></li>
-                            <li><b>Phone : </b><span style="font-size:16px;"><?php //if(!empty($get_user->mobile)){ echo $get_user->mobile;}?></span></li>
+                            <li><b>Name : </b> <span style="font-size:16px;"><?php //if(!empty($get_user->firstname)){ echo $get_user->firstname.' '.$get_user->lastname;} ?></span></li>
+                            <li><b>Address : </b><span style="font-size:16px;"><?php //if(!empty($get_user->address)){ echo $get_user->address;} ?></span></li>
+                            <li><b>Email : </b><span style="font-size:16px;"><?php //if(!empty($get_user->email)){ echo $get_user->email;} ?></span></li>
+                            <li><b>Phone : </b><span style="font-size:16px;"><?php //if(!empty($get_user->mobile)){ echo $get_user->mobile;} ?></span></li>
                         </ul>
                     </div> -->
-                <!-- end row -->
+                        <!-- end row -->
                 <?php } ?>
             </div>
         </div>
@@ -135,39 +177,39 @@
 </div>
 </section>
 <script type="module">
-import { isSupported, setup } from "./node_modules/@loomhq/loom-sdk/";
-//import { oembed } from "../node_modules/@loomhq/loom-embed";
-const BUTTON_ID = "unique-button";
-async function init() {
-    const root = document.getElementById("root");
-    root.innerHTML = `<button id="${BUTTON_ID}" class="btn btn-primary">Record</button>`;
-    const button = root.querySelector(`#${BUTTON_ID}`);
-    if (button==null || !isSupported()) {
-        return;
-    }
-    const { configureButton } = await setup({
-        apiKey:"796fefe8-3e98-4284-9f96-1f15f9d461ff"
-    });
-    configureButton({
-        element: button,
-        hooks:{
-            onInsertClicked:(shareLink)=>{
-                console.log('clicked insert');
-                console.log(shareLink);
-            },
-            onStart:()=> console.log("start"),
-            onCancel:()=> console.log('canceled'),
-            onCompleted:()=>console.log('completed'),
+    import { isSupported, setup } from "./node_modules/@loomhq/loom-sdk/";
+    //import { oembed } from "../node_modules/@loomhq/loom-embed";
+    const BUTTON_ID = "unique-button";
+    async function init() {
+        const root = document.getElementById("root");
+        root.innerHTML = `<button id="${BUTTON_ID}" class="btn btn-primary">Record</button>`;
+        const button = root.querySelector(`#${BUTTON_ID}`);
+        if (button == null || !isSupported()) {
+            return;
         }
-    });
-}
-init();
+        const { configureButton } = await setup({
+            apiKey: "796fefe8-3e98-4284-9f96-1f15f9d461ff"
+        });
+        configureButton({
+            element: button,
+            hooks: {
+                onInsertClicked: (shareLink) => {
+                    console.log('clicked insert');
+                    console.log(shareLink);
+                },
+                onStart: () => console.log("start"),
+                onCancel: () => console.log('canceled'),
+                onCompleted: () => console.log('completed'),
+            }
+        });
+    }
+    init();
 </script>
 <script>
-function completeSub() {
-    $('.completeSub').show();
-    setTimeout(function(){
-        $('.completeSub').fadeOut('slow');
-    },4000);
-}
+    function completeSub() {
+        $('.completeSub').show();
+        setTimeout(function () {
+            $('.completeSub').fadeOut('slow');
+        }, 4000);
+    }
 </script>
