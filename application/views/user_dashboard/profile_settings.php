@@ -286,28 +286,41 @@ if($data_request=='user'){
         </form>
     </div>
 </div>
-<div class="col-md-3 col-6 display-table-cell v-align" style="display: inline-block; float: left;">
-    <div class="job-overview" style="height: 382px; overflow: auto; margin-top: 0px;">
-        <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">Start Date</p>
-        <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">From Time</p>
-        <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">To Time</p>
-        <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">End Date</p>
-        <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">Action</p>
-        <div style="width:80%; background: #c7c7c7; margin: 5px 0 0 0 !important; padding: 0; border-radius: 10px; box-shadow: 0 0 10px #dddddd; cursor: pointer;" class="job-overview job_overview_main">
-            <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">14-03-2024</p>
-            <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">09:12 AM</p>
-            <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">12:00 PM</p>
-            <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">14-03-2024</p>
+<div class="col-md-3 col-6 v-align" style="display: inline-block; float: left; margin-top: 10px;">
+    <p style='padding: 10px 0px 10px 0; text-align: center; font-size: 15px; font-weight: 700; color: #000; width: 100%; display: inline-block; text-align: center; border-radius: 10px; box-shadow: 0 0 10px #dddddd;'>Upcoming Booking</p>
+    <div style='width: 100%; display: inline-block; text-align: center; border-radius: 10px; box-shadow: 0 0 10px #dddddd; height: 400px; overflow-y: scroll; overflow-x: hidden;'>
+        <?php 
+        $selectDate = date('Y-m-d');
+		$employeeId = $_SESSION['afrebay']['userId'];
+        $availableData = $this->db->query("SELECT user_availability.*, user_booking.* FROM user_availability JOIN user_booking ON user_availability.id = user_booking.available_id WHERE start_date > '".$selectDate."' AND user_id ='".@$employeeId."'")->result_array();
+        foreach ($availableData as $value) { ?>
+        <p style='font-size: 18px; font-weight: 600; color: #212529; padding: 20px 0 0 0;'><?= $value['start_date']?></p>
+        <div style='width: 100%; display: inline-block; padding: 0 10px; margin-bottom: 20px;'>
+            <div style='width: 100%; display: inline-block; border-radius: 10px; box-shadow: 0 0 10px #dddddd; padding: 10px 0 10px 0;'>
+            <?php $getBookSlot = explode(',', $value['bookingTime']);
+            for($i = 0; $i < count($getBookSlot); $i++) { ?>
+                <?php 
+                $booking_id = $value[$i]['id'];
+                $employee_id = $value[$i]['employee_id'];
+                $employer_id = $value[$i]['employer_id'];
+                $available_id = $value[$i]['available_id'];
+                $bookingTime = $value[$i]['bookingTime'];
+                ?>
+                <div style='width: 100%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'>
+                    <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'><?= date('h:i A', strtotime($getBookSlot[$i]))?> to <?= date('h:i A', strtotime($getBookSlot[$i]) + 60*60)?></p>
+                    <input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck(<?= $booking_id; ?>)'>
+                </div>
+            <?php } 
+            $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$value['employer_id']."'")->row();
+            ?>
+                <div>
+                    <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Booked By: <?= @$getEmployer->companyname?></p>
+                </div>
+            </div>
         </div>
-        <div>
-            <p style="width: 10%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;cursor: pointer;" onclick="editAvailability('1')"><i class="fa fa-edit"></i></p>
-            <p style="width: 10%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;cursor: pointer;" onclick="deleteAvailability('1')"><i class="fa fa-trash"></i></p>
-        </div>
+        <?php } ?>
     </div>
 </div>
-</div>
-</div>
-</section>
 <style>
 .Admin_Profile .cardak .gender select {margin-bottom: 0px !important;}
 .form-design form .cardak .profile-dsd input  {margin-bottom: 0px !important;}
