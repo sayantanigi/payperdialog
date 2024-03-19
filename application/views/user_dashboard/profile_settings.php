@@ -286,6 +286,25 @@ if($data_request=='user'){
         </form>
     </div>
 </div>
+<div class="col-md-3 col-6 display-table-cell v-align" style="display: inline-block; float: left;">
+    <div class="job-overview" style="height: 382px; overflow: auto; margin-top: 0px;">
+        <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">Start Date</p>
+        <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">From Time</p>
+        <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">To Time</p>
+        <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">End Date</p>
+        <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">Action</p>
+        <div style="width:80%; background: #c7c7c7; margin: 5px 0 0 0 !important; padding: 0; border-radius: 10px; box-shadow: 0 0 10px #dddddd; cursor: pointer;" class="job-overview job_overview_main">
+            <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">14-03-2024</p>
+            <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">09:12 AM</p>
+            <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">12:00 PM</p>
+            <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">14-03-2024</p>
+        </div>
+        <div>
+            <p style="width: 10%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;cursor: pointer;" onclick="editAvailability('1')"><i class="fa fa-edit"></i></p>
+            <p style="width: 10%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;cursor: pointer;" onclick="deleteAvailability('1')"><i class="fa fa-trash"></i></p>
+        </div>
+    </div>
+</div>
 </div>
 </div>
 </section>

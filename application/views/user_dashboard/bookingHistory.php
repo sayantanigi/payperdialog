@@ -446,7 +446,7 @@
                 url: "<?php echo base_url() ?>user/Dashboard/getBookingDetailsforEmployee",
                 data: { selectDate: selectDate, employeeId: employeeId },
                 success: function (returndata) {
-                    console.log(returndata);
+                    //console.log(returndata);
                     $('.getBookingDetails').html(returndata);
                 }
             });
@@ -454,7 +454,7 @@
         calendar.render();
         //var date = calendar.getDate();
         //alert(date.toISOString());
-    });
+    });gi
     $(document).ready(function () {
         <?php $i = 1;
         foreach ($availability as $value) { ?>
