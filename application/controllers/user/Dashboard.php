@@ -429,7 +429,7 @@ class Dashboard extends CI_Controller {
 	function chat() {
 		$data['get_user'] = $this->Crud_model->get_single('users', "userId ='".$_SESSION['afrebay']['userId']."'");
 		//$cond = "job_bid.bidding_status='Accept'";
-		$cond = "job_bid.bidding_status IN ('Short Listed','Selected')";
+		$cond = "job_bid.bidding_status = 'Screened In'";
 		$data['get_jobbid'] = $this->Users_model->get_jobbidding($cond);
 		$this->load->view('header');
 		$this->load->view('user_dashboard/chat', $data);
@@ -1333,7 +1333,7 @@ class Dashboard extends CI_Controller {
         $getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".@$avail_id."' AND employee_id ='".@$employeeId."'")->result_array();
         if(!empty($getBookSlot)) {
         	for($i = 0; $i < count($getBookSlot); $i++) {
-        		$html .= "<div style='width: 100%; display: inline-block; padding: 0 40px; margin-bottom: 20px;'><div style='width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;'>";
+        		$html .= "<div style='width: 100%; display: inline-block; padding: 0 10px; margin-bottom: 20px;'><div style='width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;'>";
         		$booking_id = $getBookSlot[$i]['id'];
                 $employee_id = $getBookSlot[$i]['employee_id'];
                 $employer_id = $getBookSlot[$i]['employer_id'];
@@ -1364,7 +1364,7 @@ class Dashboard extends CI_Controller {
 				$getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".@$value['avail_id']."' AND employer_id ='".@$employeeId."'")->result_array();
 				if(!empty($getBookSlot)) {
 					for($i = 0; $i < count($getBookSlot); $i++) {
-						$html .= "<div style='width: 100%; display: inline-block; padding: 0 40px; margin-bottom: 20px;'><div style='width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;'>";
+						$html .= "<div style='width: 100%; display: inline-block; padding: 0 10px; margin-bottom: 20px;'><div style='width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;'>";
 						$booking_id = $getBookSlot[$i]['id'];
 						$employee_id = $getBookSlot[$i]['employee_id'];
 						$employer_id = $getBookSlot[$i]['employer_id'];

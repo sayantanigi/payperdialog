@@ -13,7 +13,8 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
     margin: 10px;
     font-size: 20px;
 }
-.cstm_viewbid_btn {background: linear-gradient(180deg, rgba(249, 80, 30, 1) 0%, rgba(252, 119, 33, 1) 100%) !important;
+.cstm_viewbid_btn {
+    background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 75%) 100%) !important;
     border: 0;
     border-radius: 35px;
     letter-spacing: 0;

@@ -68,14 +68,8 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                    <!-- <div class="chatList">
-                                                        <?php if (!empty($get_user->firstname)) { ?>
-                                                        <a href="javascript:void(0)" id="showBidList">My Bid List</a>
-                                                        <?php } ?>
-                                                    </div> -->
                                                 </div>
                                                 <div id="search">
-                                                   <!--  <span class="char-sea"><i class="fa fa-search" aria-hidden="true"></i></span> -->
                                                    <input type="text" placeholder="Search by Contacts and Job ID" />
                                                 </div>
                                                 <div id="contacts">
@@ -83,7 +77,8 @@
                                                     <?php if (!empty($get_jobbid)) {
                                                     foreach ($get_jobbid as $user) {
                                                         //if ($user->postjob_id == $user->post_id && $user->user_id == $_SESSION['afrebay']['userId'] && $user->bidding_status == 'Accept') {
-                                                        if ($user->postjob_id == $user->post_id && $user->user_id == $_SESSION['afrebay']['userId'] && ($user->bidding_status == 'Selected' || $user->bidding_status == 'Short Listed')) {
+                                                        //if ($user->postjob_id == $user->post_id && $user->user_id == $_SESSION['afrebay']['userId'] && ($user->bidding_status == 'Selected' || $user->bidding_status == 'Short Listed')) {
+                                                        if ($user->postjob_id == $user->post_id && $user->user_id == $_SESSION['afrebay']['userId'] && $user->bidding_status == 'Screened In') {
                                                             $get_user = $this->Crud_model->get_single('users', "userId='" . $user->userid . "'");
                                                             $get_msg = $this->Crud_model->GetData('chat', '', "userto_id='".$user->userid."' and userfrom_id='".$user->user_id."' and postjob_id = '".$user->post_id."'", '', 'id desc', '', '1');
                                                         ?>
@@ -102,21 +97,14 @@
                                                                     } else {
                                                                         echo ucfirst($get_user->companyname);
                                                                     } ?>
-                                                                    <?php
-                                                                    //$countMessage = $this->db->query("Select COUNT(id) as msgcount FROM chat WHERE userto_id ='".$_SESSION['afrebay']['userId']."' AND status = '0' AND postjob_id = '".$user->post_id."'")->result();
-                                                                    //if($countMessage[0]->msgcount != 0) { ?>
-                                                                    <!-- <span class="notification EachChatv"><?php echo $countMessage[0]->msgcount;?></span> -->
-                                                                    <?php //} ?>
-                                                                    <!-- <span class="notification EachvChat"></span> -->
                                                                     </p>
-
                                                                     <p class="preview" title="<?= $user->post_title; ?>">Job ID : <?= "Job_".sprintf("%03d",$user->post_id); ?></p>
-                                                                    <!-- <p class="preview"><?= !empty($get_msg->message) ? $get_msg->message : ''; ?></p> -->
                                                                     <input type="hidden" name="postjob_id" id="postjob_id" value="<?= $user->post_id; ?>">
                                                                 </div>
                                                             </div>
                                                         </li>
-                                                        <?php } else if ($user->postjob_id == $user->post_id && $user->userid == $_SESSION['afrebay']['userId'] && ($user->bidding_status == 'Selected' || $user->bidding_status == 'Short Listed')) {
+                                                        <?php } //else if ($user->postjob_id == $user->post_id && $user->userid == $_SESSION['afrebay']['userId'] && ($user->bidding_status == 'Selected' || $user->bidding_status == 'Short Listed')) {
+                                                            else if ($user->postjob_id == $user->post_id && $user->userid == $_SESSION['afrebay']['userId'] && $user->bidding_status == 'Screened In') {
                                                             $get_user = $this->Crud_model->get_single('users', "userId='" . $user->user_id . "'");
                                                             $get_msg1 = $this->Crud_model->GetData('chat', '', "userfrom_id='".$user->user_id."' and userto_id='".$user->userid."' and postjob_id = '".$user->post_id."'", '', 'id desc', '', '1');
                                                         ?>
@@ -135,16 +123,9 @@
                                                                     } else {
                                                                         echo ucfirst($get_user->companyname);
                                                                     } ?>
-                                                                    <?php
-                                                                    //$countMessage = $this->db->query("Select COUNT(id) as msgcount FROM chat WHERE userto_id ='".$_SESSION['afrebay']['userId']."' AND status = '0' AND postjob_id = '".$user->post_id."'")->result();
-                                                                    //if($countMessage[0]->msgcount != 0) { ?>
-                                                                    <!-- <span class="notification EachChatf"><?php echo $countMessage[0]->msgcount;?></span> -->
-                                                                    <?php //} ?>
-                                                                    <!-- <span class="notification EachfChat"></span> -->
                                                                     </p>
 
                                                                     <p class="preview" title="<?= $user->post_title; ?>">Job ID : <?= "Job_".sprintf("%03d",$user->post_id); ?></p>
-                                                                    <!-- <p class="preview"><?= !empty($get_msg1->message) ? $get_msg1->message : ''; ?></p> -->
                                                                     <input type="hidden" name="postjob_id" id="postjob_id" value="<?= $user->post_id; ?>">
                                                                 </div>
                                                             </div>
@@ -152,10 +133,6 @@
                                                     <?php } } } ?>
                                                     </ul>
                                                 </div>
-                                                <!-- <div id="bottom-bar">
-                                                    <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
-                                                    <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
-                                                </div> -->
                                             </div>
                                             <div class="content">
                                                 <img class="chat-start-img" src="assets/images/chat-start-img.png">

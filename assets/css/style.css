@@ -38571,6 +38571,39 @@ footer .social {
 .dashboard-gig .display-table .display-table-row .display-table-cell.v-align {
    padding-right: 0 !important;
    margin-top: 10px;
+   margin-bottom: 10px;
+}
+
+.CustomDesign .CustomPara {
+   padding: 10px 0px 10px 0;
+   text-align: center;
+   font-size: 15px;
+   font-weight: 700;
+   color: #fff;
+   width: 100%;
+   display: inline-block;
+   text-align: center;
+   border-radius: 10px;
+   box-shadow: 0 0 10px #dddddd;
+   background: #ed1c24;
+}
+
+.CustomDesign .CustomBlock {
+   min-height: 100vh;
+   width: 100%;
+   display: inline-block;
+   text-align: center;
+   border-radius: 10px;
+   box-shadow: 0 0 10px #dddddd;
+   overflow-y: scroll;
+   overflow-x: hidden;
+}
+
+.CustomDesign .ParaHeading {
+   font-size: 18px;
+   font-weight: 600;
+   color: #212529;
+   padding: 10px 0 0 0;
 }
 
 
@@ -39214,6 +39247,7 @@ footer .social {
    border-radius: 0 10px 10px 0 !important;
    background: #ed1c24 !important;
 }
+
 .User_Sidemenu .hidden-xs.display-table-cell .navi ul li.active a i,
 .User_Sidemenu .hidden-xs.display-table-cell .navi ul li.active a span {
    color: #fff !important;
