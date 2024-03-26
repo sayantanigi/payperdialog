@@ -609,10 +609,7 @@ class Home extends MY_Controller {
 		curl_setopt($ch,CURLOPT_URL, $url);   //set the url, number of POST vars, POST data
 		curl_setopt($ch,CURLOPT_POST, true);
 		curl_setopt($ch,CURLOPT_POSTFIELDS, $fields_string);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-			"Authorization: Bearer ",
-			"Cache-Control: no-cache",
-		));
+		
 		curl_setopt($ch,CURLOPT_RETURNTRANSFER, true);    //So that curl_exec returns the contents of the cURL; rather than echoing it
 		$result = curl_exec($ch);    //execute post
 		//echo $result;
