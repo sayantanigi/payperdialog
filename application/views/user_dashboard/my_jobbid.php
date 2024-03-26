@@ -327,9 +327,12 @@ $(document).ready(function () {
                                 url: '<?= base_url('user/dashboard/changebiddingstatus') ?>',
                                 data: { bidstatus: bidstatus, jodBidid: jodBidid, postJobid: postJobid, jobbiduserid: jobbiduserid, jobpostuserid: jobpostuserid },
                                 success: function (returndata) {
-                                    //console.log(returndata);
-                                    const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal'));
-                                    aggrementmodal.show();
+                                    if(bidstatus == 'Ready for Interview') {
+                                        const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal'));
+                                        aggrementmodal.show();
+                                    } else {
+                                        location.reload();
+                                    }
                                     // if (returndata == 1) {
                                     //     location.reload();
                                     // }

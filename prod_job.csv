@@ -1,0 +1,21 @@
+id,user_id,post_title,description,required_key_skills,duration,charges,currency,category_id,subcategory_id,appli_deadeline,country,state,city,location,latitude,longitude,complete_address,remote,job_type,experience_level,education,status,created_date,update_date,is_delete
+1,2,"Alteryx workflow to change report - For Alteryx proficient only","<p>Demo Details</p>
+","Full Stack Development","1 Month",199,"USD ($)",1,1,2024-12-27,India,"West Bengal",Kolkata,"Kolkata, West Bengal, India",22.572672,88.363881,,1,1,1,1,Active,"2023-12-27 13:21:02","2023-12-27 13:21:02",0
+2,15,"Gen AI Manager","<p>Needs Gen AI skills.</p>
+
+<p> </p>
+
+<ul>
+ <li><strong>ji</strong>, an AI-driven app, is changing the face of education by enhancing vocabulary acquisition with captivating content and advanced algorithms for long-term retention.</li>
+</ul>
+
+<p>???? AI in education is projected to increase by 47.5% from 2021 to 2027, reshaping learning experiences and making education more adaptive and personalized.</p>
+
+<h3>Tourism and Hospitality: Enhancing Travel Planning</h3>
+
+<p> </p>
+
+<ul>
+ <li><a href="http://tripnotes.ai/" target="_self"><strong>Tripnotes.ai</strong></a> is transforming travel planning by using generative AI to simplify the process, turning text messages and social media snippets into comprehensive itineraries.</li>
+</ul>
+","Generative AI,MS Word,MS Excel",Permanent,0,"USD ($)",1,1,2024-01-20,India,Bihar,Nasriganj,"610 Green Bay Road, Kenilworth, Illinois 60043, United States",42.090045,-87.720775,,1,1,4,2,Active,"2024-01-07 04:47:00","2024-01-07 04:47:00",0
