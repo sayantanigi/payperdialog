@@ -377,7 +377,84 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script>
-    ==
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+        const myModal = new bootstrap.Modal(document.getElementById('form'));
+        const dangerAlert = document.getElementById('danger-alert');
+        const close = document.querySelector('.btn-close');
+        const myEvents = JSON.parse(localStorage.getItem('events')) || [
+            <?php
+            $availability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '" . $_SESSION['afrebay']['userId'] . "'")->result_array();
+            if (!empty($availability)) {
+                foreach ($availability as $value) {
+                    $checkBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='" . $value['id'] . "'")->result_array();
+                    if (!empty($checkBookSlot)) { ?>
+                    {
+                            title: 'Booked',
+                            start: '<?= date('Y-m-d', strtotime($value['start_date'])) ?>',
+                            end: '<?= date('Y-m-d', strtotime($value['end_date'])) ?>',
+                            backgroundColor: 'red'
+                        },
+                    <?php } else { ?>
+                    {
+                            title: 'Available',
+                            start: '<?= date('Y-m-d', strtotime($value['start_date'])) ?>',
+                            end: '<?= date('Y-m-d', strtotime($value['end_date'])) ?>',
+                            backgroundColor: 'green'
+                        },
+                    <?php }
+                }
+            } ?>
+        ];
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            timeZone: 'local',
+            customButtons: {
+                customButton: {
+                    text: 'Availability',
+                    click: function () {
+                        <?php if (!empty($_SESSION['afrebay']['userId'])) { ?>
+                            myModal.show();
+                        <?php } else { ?>
+                            window.location.href = "<?php echo base_url('login') ?>";
+                        <?php } ?>
+                        const modalTitle = document.getElementById('modal-title');
+                        const submitButton = document.getElementById('submit-button');
+                        modalTitle.innerHTML = 'Availability'
+                        submitButton.innerHTML = 'Availability'
+                        submitButton.classList.remove('btn-primary');
+                        submitButton.classList.add('btn-success');
+                        close.addEventListener('click', () => {
+                            myModal.hide()
+                        })
+                    }
+                }
+            },
+            header: {
+                center: 'customButton',
+                right: 'today, prev,next '
+            },
+            plugins: ['dayGrid', 'interaction'],
+            selectable: true,
+            events: myEvents,
+        });
+
+        calendar.on('select', function (info) {
+            var selectDate = info.startStr;
+            var employeeId = $('#employee_id').val();
+            $.ajax({
+                type: "post",
+                url: "<?php echo base_url() ?>user/Dashboard/getBookingDetailsforEmployee",
+                data: { selectDate: selectDate, employeeId: employeeId },
+                success: function (returndata) {
+                    //console.log(returndata);
+                    $('.getBookingDetails').html(returndata);
+                }
+            });
+        });
+        calendar.render();
+        //var date = calendar.getDate();
+        //alert(date.toISOString());
+    });gi
     $(document).ready(function () {
         <?php $i = 1;
         foreach ($availability as $value) { ?>

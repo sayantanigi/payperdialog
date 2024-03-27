@@ -23,6 +23,40 @@ class User_dashboard extends CI_Controller {
     	}
 	}
 
+	public function subscription_details() {
+		try {
+			$formdata = json_decode(file_get_contents('php://input'), true);
+			$user_id = $formdata['user_id'];
+			$userType = $formdata['user_type'];
+			$vis_ip = $this->getVisIPAddr(); // Store the IP address
+			$ipdat = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $vis_ip));
+			$countryName = $ipdat->geoplugin_countryName;
+			if($countryName == 'Nigeria') {
+				$cond = " WHERE subscription_country = 'Nigeria'";
+			} else {
+				$cond = " WHERE subscription_country = 'Global'";
+			}
+
+			if($userType == '1') {
+				$uType = 'Freelancer';
+			} else {
+				$uType = 'Business';
+			}
+
+			$subscription_check = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".@$user_id."' AND (status = '1' OR status = '2')")->result_array();
+			if(!empty($subscription_check)) {
+				$data['current_plan'] = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".@$user_id."' AND status IN (1,2)");
+				$data['expired_plan'] = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".@$user_id."' AND status = '3'");
+			} else {
+				$data['get_subscription'] = $this->db->query("SELECT * FROM subscription ".$cond." AND subscription_user_type = '".$uType."'")->result();
+			}
+			$response = array('status'=> 'success','result'=> $data);
+		} catch (\Exception $e) {
+			$response = array('status'=> 'error','result'=> $e->getMessage());
+		}
+		echo json_encode($response);
+	}
+
 	public function userSubscription() {
 		try {
 			$formdata = json_decode(file_get_contents('php://input'), true);
@@ -54,42 +88,6 @@ class User_dashboard extends CI_Controller {
 			} else {
 				$response = array('status'=> 'error','result'=> 'Oops, something went wrong. Please try again later.');
 			}
-		} catch (\Exception $e) {
-			$response = array('status'=> 'error','result'=> $e->getMessage());
-		}
-		echo json_encode($response);
-	}
-
-	public function subscription_details() {
-		try {
-			$formdata = json_decode(file_get_contents('php://input'), true);
-			$user_id = $formdata['user_id'];
-			$userType = $formdata['user_type'];
-			$vis_ip = $this->getVisIPAddr(); // Store the IP address
-			$ipdat = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $vis_ip));
-			$countryName = $ipdat->geoplugin_countryName;
-			if($countryName == 'Nigeria') {
-				$cond = " WHERE subscription_country = 'Nigeria'";
-			} else {
-				$cond = " WHERE subscription_country = 'Global'";
-			}
-
-			if($userType == '1') {
-				$uType = 'Employee';
-			} else if($userType == '2') {
-				$uType = 'Employer';
-			} else {
-				$uType = 'Expert';
-			}
-
-			$subscription_check = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".@$user_id."' AND (status = '1' OR status = '2')")->result_array();
-			if(!empty($subscription_check)) {
-				$data['current_plan'] = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".@$user_id."' AND status IN (1,2)");
-				$data['expired_plan'] = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".@$user_id."' AND status = '3'");
-			} else {
-				$data['get_subscription'] = $this->db->query("SELECT * FROM subscription ".$cond." AND subscription_user_type = '".$uType."'")->result();
-			}
-			$response = array('status'=> 'success','result'=> $data);
 		} catch (\Exception $e) {
 			$response = array('status'=> 'error','result'=> $e->getMessage());
 		}
@@ -764,7 +762,7 @@ class User_dashboard extends CI_Controller {
 					'prod_description' => $this->input->post('prod_description'),
 					'id' =>  $this->input->post('id')
 				);
-				$updateQuery = $this->Crud_model->SaveData('user_product', $data, "id='".$this->input->post('id')."'");
+				$updateQuery = $this->Crud_model->SaveData('user_product', $data, "id='".$id."'");
 				if (!empty($_FILES['prod_image']['name'][0])) {
 					$cpt = count($_FILES['prod_image']['name']);
 					for($i=0; $i<$cpt; $i++) {

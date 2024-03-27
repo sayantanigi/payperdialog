@@ -26,7 +26,6 @@
 									<option value="">Choose an option</option>
 									<option value="Employee" <?php if($subscription_user_type == 'Employee') { echo "selected"; } ?>>Employee</option>
 									<option value="Employer" <?php if($subscription_user_type == 'Employer') { echo "selected"; } ?>>Employer</option>
-									<option value="Expert" <?php if($subscription_user_type == 'Expert') { echo "selected"; } ?>>Expert</option>
 								</select>
 							</div>
 							<div class="form-group subscription_type">
@@ -60,6 +59,7 @@
 							</div>
 							<div class="form-group">
 								<label>Subscription Description</label>
+								<!-- <input class="form-control" type="text" name="subscription_description" value="<?= $subscription_description;?>"> -->
 								<textarea class="form-control" name="subscription_description" id="subscription_description"><?= @$subscription_description ?></textarea>
 							</div>
 							<input type="hidden" name="id" value="<?php echo $id; ?>">
@@ -87,6 +87,26 @@
 	CKEDITOR.replace('subscription_description');
 </script>
 <script >
+/*function add_row() {
+	var y=document.getElementById('clonetable_feedback1');
+	var new_row = y.rows[0].cloneNode(true);
+	var len = y.rows.length;
+	new_number=Math.round(Math.exp(Math.random()*Math.log(10000000-0+1)))+0;
+	var inp3 = new_row.cells[0].getElementsByTagName('input')[0];
+	inp3.value = '';
+	inp3.id = 'service'+(len+1);
+	var submit_btn =$('#submit').val();
+	y.appendChild(new_row);
+}
+
+function remove(row) {
+	var y=document.getElementById('purchaseTableclone1');
+	var len = y.rows.length;
+	if(len>2) {
+		var i= (len-1);
+		document.getElementById('purchaseTableclone1').deleteRow(i);
+	}
+}*/
 $(document).ready(function(){
 	var selectedOption = $('#subscription_type').val();
 	var selectedcountry = $('#subscription_country').val();
