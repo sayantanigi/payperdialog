@@ -79,10 +79,16 @@
                                                                 <input type="hidden" name="jobbiduserid" id="jobbiduserid_<?php echo @$key->id ?>" value="<?php echo @$key->userid ?>" />
                                                                 <input type="hidden" name="jobpostuserid" id="jobpostuserid_<?php echo @$key->id ?>" value="<?php echo @$key->user_id ?>" />
                                                             <?php } else {
-                                                                echo @$key->bidding_status;
+                                                                echo "<p> $key->bidding_status</p>";
+                                                                if($key->bidding_status == 'Ready for Interview' && !empty(@$key->meeting_link)) {
+                                                                    echo  "<a href='". @$key->meeting_link."'>Meeting Link</a>";
+                                                                }
                                                             }
                                                         } else {
-                                                            echo @$key->bidding_status;
+                                                            echo "<p>$key->bidding_status</p>";
+                                                            if($key->bidding_status == 'Ready for Interview' && !empty(@$key->meeting_link)) {
+                                                                echo  "<a href='". @$key->meeting_link."'>Meeting Link</a>";
+                                                            }
                                                         } ?>
                                                         <a href="javascript:void(0)" id="view_<?php echo $key->id ?>" data-toggle="tooltip" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                         <div class="modal fade" id="exampleModal_<?php echo $key->id ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -265,6 +271,11 @@
                 </div>
                 <div class="modal-footer border-top-0 d-flex justify-content-center">
                     <input type="button" class="btn btn-success" id="submit-button" value="Next" onclick="bookNow()">
+                    <input type="text" name="bidstatus" id="bidstatus" value="">
+                    <input type="text" name="jodBidid" id="jodBidid"  value="">
+                    <input type="text" name="postJobid" id="postJobid"  value="">
+                    <input type="text" name="jobbiduserid" id="jobbiduserid"  value="">
+                    <input type="text" name="jobpostuserid" id="jobpostuserid"  value="">
                 </div>
             </form>
         </div>
@@ -330,6 +341,11 @@ $(document).ready(function () {
                                     //console.log(returndata);
                                     const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal'));
                                     aggrementmodal.show();
+                                    $('#bidstatus').val(bidstatus);
+                                    $('#jodBidid').val(jodBidid);
+                                    $('#postJobid').val(postJobid);
+                                    $('#jobbiduserid').val(jobbiduserid);
+                                    $('#jobpostuserid').val(jobpostuserid);
                                     // if (returndata == 1) {
                                     //     location.reload();
                                     // }
@@ -352,13 +368,17 @@ function closeaggrmnt() {
 
 function bookNow() {
     if($("#aggrchck").is(":checked")) {
-        var userid = <?php echo $_SESSION['afrebay']['userId'] ?>;
+        var bidstatus = $('#bidstatus').val();
+        var jodBidid = $('#jodBidid').val();
+        var postJobid = $('#postJobid').val();
+        var jobbiduserid = $('#jobbiduserid').val();
+        var jobpostuserid = $('#jobpostuserid').val();
         $.ajax({
             type:"post",
             url:"<?php echo base_url()?>user/Dashboard/checktoaggrement",
-            data:{userid: userid},
+            data:{bidstatus: bidstatus, jodBidid: jodBidid, postJobid: postJobid, jobbiduserid: jobbiduserid, jobpostuserid: jobpostuserid},
             success:function(returndata) {
-                //alert(returndata);
+                console.log(returndata);
                 if(returndata == 1) {
                     location.reload();
                 } else {

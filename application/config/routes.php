@@ -112,6 +112,7 @@ $route['view_profile'] = "user/dashboard/view_profile";
 $route['update-postjob/(:any)'] = "welcome/update_post_job/$1";
 $route['checkSubscriptionForUser'] = "user/dashboard/checkSubscriptionForUser";
 $route['paystackCheckout/(:any)/(:any)/(:any)'] = "Home/paystackCheckout/$1/$2/$3";
+$route['meetinglink'] = "user/Dashboard/meetinglink";
 
 //ADMIN URL
 $route['admin'] = 'admin/login/index';
@@ -162,8 +163,6 @@ $route['api/privacy'] = 'api/Home/privacy';
 $route['api/term_and_conditions'] = 'api/Home/term_and_conditions';
 $route['api/careertips_details'] = 'api/Home/careertips_details';
 $route['api/search_job'] = 'api/Home/search_job';
-
-
 
 $route['api/education_list'] = "api/User_dashboard/education_list";
 $route['api/save_education'] = "api/User_dashboard/save_education";
