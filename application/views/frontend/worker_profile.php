@@ -118,7 +118,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                 </div>
                             </div>
                             <div class="col-lg-4 column">
-                                <div class="job-overview">
+                                <div class="job-overview" id="job-overview">
                                     <h3>Candidate Overview</h3>
                                     <ul>
                                         <li>
@@ -131,11 +131,14 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                 </div>
                                 <!-- Calender -->
                                 <div class="Calender_Pick" id="calendar"></div>
-                                <?php 
+                                <?php
+                                $actual_link = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+                                $link_array = explode('/',$actual_link);
+                                $uid = base64_decode(end($link_array));
                                 if (!empty(@$_SESSION['afrebay']['userId'])) { 
-                                    $checkBookSlot = $this->db->query("SELECT user_availability.id as avail_id, user_availability.user_id, user_availability.start_date, user_availability.from_time, user_availability.end_date, user_availability.to_time, user_booking.id as boooking_id, user_booking.employee_id, user_booking.employer_id, user_booking.available_id, user_booking.bookingTime FROM user_booking JOIN user_availability ON user_availability.id = user_booking.available_id WHERE user_booking.employer_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                    $checkBookSlot = $this->db->query("SELECT user_availability.id as avail_id, user_availability.user_id, user_availability.start_date, user_availability.from_time, user_availability.end_date, user_availability.to_time, user_booking.id as boooking_id, user_booking.employee_id, user_booking.employer_id, user_booking.available_id, user_booking.bookingTime FROM user_booking JOIN user_availability ON user_availability.id = user_booking.available_id WHERE user_booking.employer_id = '".@$_SESSION['afrebay']['userId']."' AND user_availability.user_id = '".$uid."'")->result_array();
                                     if(!empty($checkBookSlot)) {
-                                        $availability = $this->db->query("SELECT user_availability.id as avail_id, user_availability.user_id, user_availability.start_date, user_availability.from_time, user_availability.end_date, user_availability.to_time, user_booking.id as boooking_id, user_booking.employee_id, user_booking.employer_id, user_booking.available_id, user_booking.bookingTime FROM user_booking JOIN user_availability ON user_availability.id = user_booking.available_id WHERE user_booking.employer_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                        $availability = $this->db->query("SELECT user_availability.id as avail_id, user_availability.user_id, user_availability.start_date, user_availability.from_time, user_availability.end_date, user_availability.to_time, user_booking.id as boooking_id, user_booking.employee_id, user_booking.employer_id, user_booking.available_id, user_booking.bookingTime FROM user_booking JOIN user_availability ON user_availability.id = user_booking.available_id WHERE user_booking.employer_id = '".@$_SESSION['afrebay']['userId']."' AND user_availability.user_id = '".$uid."'")->result_array();
                                         if(!empty($availability)) { ?>
                                         <div class="job-overview" style="height: 382px; overflow: auto; margin-top: 0px;">
                                             <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">Start Date</p>
@@ -299,7 +302,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
     <div class="modal-dialog modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title" id="modal-title">Book Slot1</h5>
+                <h5 class="modal-title" id="modal-title">Book Slot</h5>
                 <button type="button" class="bookBtn-close btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeBook()"></button>
             </div>
             <form id="myForm" class="avail_time">

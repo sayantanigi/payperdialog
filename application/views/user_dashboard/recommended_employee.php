@@ -67,17 +67,18 @@
                                 <?php
                                 if(!empty($jobListByemployer)){
                                     foreach ($jobListByemployer as $key) { 
-                                        if($key['userType'] == 1){
-                                            $name = $key['firstname'].' '.$key['lastname'];
-                                        } else {
-                                            $name = $key['companyname'];
-                                        }
-                                        if(!empty($key['profilePic']) && file_exists('uploads/users/'.$key['profilePic'])){
-                                            $profile_pic= '<img src="'.base_url('uploads/users/'.$key['profilePic']).'" alt="" />';
+                                        $getUserDetails = $this->db->query("SELECT * FROM users WHERE userId = '".$key['user_id']."'")->row();
+                                        // if($key['userType'] == 1){
+                                        //     $name = $key['firstname'].' '.$key['lastname'];
+                                        // } else {
+                                        //     $name = $key['companyname'];
+                                        // }
+                                        if(!empty($getUserDetails->profilePic) && file_exists('uploads/users/'.$getUserDetails->profilePic)){
+                                            $profile_pic= '<img src="'.base_url('uploads/users/'.$getUserDetails->profilePic).'" alt="" />';
                                         } else {
                                             $profile_pic= '<img src="'.base_url('uploads/users/user.png').'" alt="" />';
                                         }
-                                        $string = strip_tags($key['short_bio']);
+                                        $string = strip_tags($getUserDetails->short_bio);
                                         if (strlen($string) > 200) {
                                             $stringCut = substr($string, 0, 200);
                                             $endPoint = strrpos($stringCut, ' ');
@@ -88,13 +89,14 @@
                                     <div class="emply-resume-list">
                                         <div class="emply-resume-thumb"><?= $profile_pic ?></div>
                                         <div class="emply-resume-info">
-                                            <h3><a href="<?= base_url('worker-detail/'.base64_encode($key['userId']))?>" title=""><?= $name?></a></h3>
-                                            <p><i class="la la-map-marker"></i><?= $key["address"]?></p>
+                                            <h3><a href="<?= base_url('worker-detail/'.base64_encode($getUserDetails->userId))?>" title=""><?= $getUserDetails->firstname.' '.$getUserDetails->lastname?></a></h3>
+                                            <p><i class="la la-map-marker"></i><?=$getUserDetails->address?></p>
                                             <div class="Employee-Details">
-                                                <div class="MoreDetailsTxt_<?= $key['id']?>"><?= $string?></div>
+                                                <div class="MoreDetailsTxt_<?= $getUserDetails->id?>"><?= $string?></div>
                                             </div>
                                         </div>
-                                    </div> 
+                                        <div class="view-more-less view-more-less-js"><a href="<?= base_url('worker-detail/'.base64_encode($getUserDetails->userId).'#job-overview')?>" target="_blank">Schedule Interview</a></button>
+                                    </div>
                                 <?php } } else { ?>
                                 <div>
                                     <center>No Data Found</center>
@@ -137,6 +139,16 @@
 #err-messages{display: none; text-align: center;}
 .emply-resume-thumb {display: inline-block !important;}
 .emply-resume-list {padding: 30px !important; margin: 10px 0 0 0 !important;}
+.view-more-less {
+    position: absolute;
+    right: 28px;
+    background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;
+    color: #fff;
+    padding: 10px 16px 10px 16px;
+    border-radius: 23px;
+    font-size: 15px;
+}
+
 </style>
 <script>
 function jobDelete(id) {

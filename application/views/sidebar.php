@@ -6,13 +6,13 @@ $seg1 = $this->uri->segment(1);
 $get_setting = $this->Crud_model->get_single('setting');
 ?>
 <section class="dashboard-gig User_Sidemenu max_height EmployersTheme ExpertsTheme EmployeesTheme">
-    <div class="<?php if($_SESSION['afrebay']['userId'] == '1') {echo "container-fluid";} else {echo "container";}?> display-table" style="display: block;">
+    <div class="<?php if($_SESSION['afrebay']['userType'] == '1') {echo "container-fluid";} else {echo "container";}?> display-table" style="display: block;">
         <div class="completeSub">Please activate a subscription package and complete your profile to proceed with
             further activities within your dashboard</div>
         <div class="completeSub1">Please complete your profile to proceed with further activities within your dashboard
         </div>
         <div class="row display-table-row">
-            <div class="<?php if($_SESSION['afrebay']['userId'] == '1') {echo "col-md-2";} else {echo "col-md-12 col-md-12";}?> col-sm-12 hidden-xs for-mobile-sidemenu display-table-cell v-align box"
+            <div class="<?php if($_SESSION['afrebay']['userType'] == '1') {echo "col-md-2";} else {echo "col-md-12 col-md-12";}?> col-sm-12 hidden-xs for-mobile-sidemenu display-table-cell v-align box"
                 id="navigation">
                 <div class="navi">
                     <ul>

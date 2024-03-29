@@ -271,11 +271,11 @@
                 </div>
                 <div class="modal-footer border-top-0 d-flex justify-content-center">
                     <input type="button" class="btn btn-success" id="submit-button" value="Next" onclick="bookNow()">
-                    <input type="text" name="bidstatus" id="bidstatus" value="">
-                    <input type="text" name="jodBidid" id="jodBidid"  value="">
-                    <input type="text" name="postJobid" id="postJobid"  value="">
-                    <input type="text" name="jobbiduserid" id="jobbiduserid"  value="">
-                    <input type="text" name="jobpostuserid" id="jobpostuserid"  value="">
+                    <input type="hidden" name="bidstatus" id="bidstatus" value="">
+                    <input type="hidden" name="jodBidid" id="jodBidid"  value="">
+                    <input type="hidden" name="postJobid" id="postJobid"  value="">
+                    <input type="hidden" name="jobbiduserid" id="jobbiduserid"  value="">
+                    <input type="hidden" name="jobpostuserid" id="jobpostuserid"  value="">
                 </div>
             </form>
         </div>
