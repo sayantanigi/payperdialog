@@ -1,8 +1,6 @@
 <section class="overlape">
     <div class="block no-padding">
-        <div data-velocity="-.1"
-            style="background: url('<?= base_url('assets/images/resource/mslider1.jpg') ?>') repeat scroll 50% 422.28px transparent;"
-            class="parallax scrolly-invisible no-parallax"></div>
+        <div data-velocity="-.1" style="background: url('<?= base_url('assets/images/resource/mslider1.jpg') ?>') repeat scroll 50% 422.28px transparent;" class="parallax scrolly-invisible no-parallax"></div>
         <div class="container fluid">
             <div class="row">
                 <div class="col-lg-12">
@@ -37,10 +35,8 @@
                                         <div class="col-md-6 col-6" style="display: inline-block; float: left;">
                                             <div class="Calender_Pick" id="calendar"></div>
                                         </div>
-                                        <input type="hidden" id="employee_id" name="employee_id"
-                                            value="<?= @$_SESSION['afrebay']['userId'] ?>">
-                                        <div class="col-md-6 col-6 getBookingDetails"
-                                            style="display: inline-block; float: left;">
+                                        <input type="hidden" id="employee_id" name="employee_id" value="<?= @$_SESSION['afrebay']['userId'] ?>">
+                                        <div class="col-md-6 col-6 getBookingDetails" style="display: inline-block; float: left;">
                                             <?php
                                             $timezone = date_default_timezone_get();
                                             date_default_timezone_set($timezone);
@@ -49,20 +45,14 @@
                                             //echo "<pre>"; print_r($availableData);
                                             $avail_id = $availableData[0]['id'];
                                             ?>
-                                            <div
-                                                style="width: 100%;display: inline-block;text-align: center;border-radius: 10px;box-shadow: 0 0 10px #dddddd;height: 400px;overflow-y: scroll;overflow-x: hidden;">
-                                                <p
-                                                    style="padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;">
-                                                    <?= $date; ?>
-                                                </p>
+                                            <div style="width: 100%;display: inline-block;text-align: center;border-radius: 10px;box-shadow: 0 0 10px #dddddd;height: 400px;overflow-y: scroll;overflow-x: hidden;">
+                                                <p style="padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;"><?= $date; ?></p>
                                                 <?php
                                                 $getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='" . @$avail_id . "' AND employee_id ='" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
                                                 if (!empty ($getBookSlot)) {
                                                     for ($i = 0; $i < count($getBookSlot); $i++) { ?>
-                                                        <div
-                                                            style="width: 100%; display: inline-block; padding: 0 10px; margin-bottom: 20px;">
-                                                            <div
-                                                                style="width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;">
+                                                        <div style="width: 100%; display: inline-block; padding: 0 10px; margin-bottom: 20px;">
+                                                            <div style="width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;">
                                                                 <?php
                                                                 $booking_id = $getBookSlot[$i]['id'];
                                                                 $employee_id = $getBookSlot[$i]['employee_id'];
@@ -70,33 +60,20 @@
                                                                 $available_id = $getBookSlot[$i]['available_id'];
                                                                 $bookingTime = $getBookSlot[$i]['bookingTime'];
                                                                 $bookingTime = explode(',', $bookingTime);
+                                                                $meetingLink = explode(',', $getBookSlot[0]['meeting_link']);
                                                                 for ($j = 0; $j < count($bookingTime); $j++) {
                                                                     $getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
                                                                     $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '" . @$employer_id . "'")->result_array();
                                                                     ?>
-                                                                    <div
-                                                                        style="width: 33.33%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;">
-                                                                        <p
-                                                                            style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;">
-                                                                            <?= date('h:i A', strtotime($bookingTime[$j])) ?> to
-                                                                            <?= date('h:i A', strtotime($bookingTime[$j]) + 60 * 60) ?>
-                                                                        </p>
-                                                                        <input type="checkbox"
-                                                                            style="position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;"
-                                                                            id="completecheck" name="completecheck" value="1">
+                                                                    <div style="width: 33.33%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;">
+                                                                        <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;"><?= date('h:i A', strtotime($bookingTime[$j])) ?> to <?= date('h:i A', strtotime($bookingTime[$j]) + 60 * 60) ?></p>
+                                                                        <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;"><a href="<?= $meetingLink[$j] ?>">Meeting Link</a></p>
+                                                                        <!-- <input type="checkbox" style="position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;" id="completecheck" name="completecheck" value="1"> -->
                                                                     </div>
                                                                 <?php } ?>
                                                                 <div>
-                                                                    <p
-                                                                        style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;">
-                                                                        Total Rate:
-                                                                        <?= count($bookingTime) * @$getEmployee[0]['rateperhour'] ?>
-                                                                    </p>
-                                                                    <p
-                                                                        style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;">
-                                                                        Booked By:
-                                                                        <?= @$getEmployer[0]['companyname'] ?>
-                                                                    </p>
+                                                                    <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;">Total Rate:<?= count($bookingTime) * @$getEmployee[0]['rateperhour'] ?></p>
+                                                                    <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;">Booked By: <?= @$getEmployer[0]['companyname'] ?></p>
                                                                 </div>
                                                             </div>
                                                         </div>

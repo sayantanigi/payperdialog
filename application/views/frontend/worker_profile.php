@@ -163,13 +163,15 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                             //echo "<pre>"; print_r($getBookSlot);
                                             $bookingTime = $getBookSlot[0]['bookingTime'];
                                             $bookingTime = explode(',', $bookingTime);
+                                            $meetingLink = explode(',', $getBookSlot[0]['meeting_link']);
                                             if(!empty($getBookSlot)) { ?>
                                                 <div style="width: 100%; display: inline-block;">
                                                     <div>Booked Slot</div>
                                                     <?php for($i = 0; $i < count($bookingTime); $i++) { 
                                                     $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".$getBookSlot[0]['employer_id']."'")->result_array();?>
-                                                    <div>
+                                                    <div style="display: inline-block;width: 100%;">
                                                         <p style="width: 50%;display: inline-block;float: left;margin: 0px;font-size: 14px;"><?= date('h:i A', strtotime($bookingTime[$i]))?> to <?= date('h:i A', strtotime($bookingTime[$i]) + 60*60)?></p>
+                                                        <p style="width: 50%;display: inline-block;float: left;margin: 0px;font-size: 14px;"><a href="<?= $meetingLink[$i]?>">Meeting Link</a></p>
                                                     </div>
                                                     <?php } ?>
                                                     <div>

@@ -1300,8 +1300,8 @@ class Dashboard extends CI_Controller {
 					CURLOPT_POSTFIELDS => json_encode($postData),
 					CURLOPT_HTTPHEADER => array(
 						'Content-Type: application/json',
-						'Authorization: Bearer eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImU2N2VkY2I1LWJlOWYtNGQzMy05NzQzLThjYzU4YThkNmMyMSJ9.eyJ2ZXIiOjksImF1aWQiOiJiNmRiYWVmNzBkYTk4MmJkZmNmYTQzMmVlZDY0YTM1MyIsImNvZGUiOiJrVzh4d1ROdjJtZlFYVS11bFFxUk5PVFVlUkJraEJoQWciLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjo4LCJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiI4MEMyaWhlMlRXLWxtam9NT2dCbkZRIiwibmJmIjoxNzExNzIwNTQyLCJleHAiOjE3MTE3MjQxNDIsImlhdCI6MTcxMTcyMDU0MiwiYWlkIjoiNzNILUxsOURTc2VEV0Y2ZGdVZVQ5QSJ9.J9xYaVPryIDQnAY9e1spvSsoYo0CiMYt_WFzone_YgwamX9gi4TK1A0CPOTChRUwPHJoupDsIfsiP3TCkEwWlA',
-						'Cookie: __cf_bm=zBEUIYIVWSyH6QmQEgnZiXZh__s5fLSjhv9c9aUPnYI-1711720542-1.0.1.1-_ONxFmwKPI.lRL4ibvLEmLy0Gf3TAb51v65sNEXeU.H9hzmjWVMCgShYMuVA9hsOn_ZKHBcmMTRbY1kkjWhXiQ; _zm_chtaid=970; _zm_ctaid=fqgfS_6PQiuATLMAw1p3fw.1711720542721.b41463a6993a7f10a93b579f3891dfc8; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_4Cukq0wiQ366TKAloIuNng; _zm_ssid=us04_c_CCpcu3HKSF60-tSDFfiq7g'
+						'Authorization: Bearer eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6IjAxNTNiNmM4LTlkZGMtNDVmOS1hZmU3LTQ3ZjUxZmUzMzNjNCJ9.eyJ2ZXIiOjksImF1aWQiOiJiNmRiYWVmNzBkYTk4MmJkZmNmYTQzMmVlZDY0YTM1MyIsImNvZGUiOiJrVzh4d1ROdjJtZlFYVS11bFFxUk5PVFVlUkJraEJoQWciLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjoxMCwiYXVkIjoiaHR0cHM6Ly9vYXV0aC56b29tLnVzIiwidWlkIjoiODBDMmloZTJUVy1sbWpvTU9nQm5GUSIsIm5iZiI6MTcxMTgwMDAwMCwiZXhwIjoxNzExODAzNjAwLCJpYXQiOjE3MTE4MDAwMDAsImFpZCI6IjczSC1MbDlEU3NlRFdGNmRnVWVUOUEifQ.laVtbHsno6SCpG2dUSHlkorCXRcy6ZC9duemWjPH60Rr9HfeY6Msoh5HDLcnEV69GHkHBae-lKxGNTp7WxJhYw',
+						'Cookie: __cf_bm=OxghD.cidrgkJoMT79jWcnvFWX7casz9U5G8qoOjw4E-1711800000-1.0.1.1-Cdq7RMECTPzX2JE9FqOfKzD_xT4uIc6.Rswe3DA7U3hsUtxtrC45B2l3R0kDtkfSd7kNLZmpYTF1DdlGSGqEOA; _zm_chtaid=436; _zm_ctaid=BAHQc2ZYRkufDu5GQRICqw.1711800000763.8daf3d297042a93e3355468249383509; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_2_cHkgmDQ1i_SOlNQ2ZXRA; _zm_ssid=us04_c_jHOOC6CpTI6TkcEDvTg_TA'
 					)
 				)
 			);
@@ -1347,12 +1347,12 @@ class Dashboard extends CI_Controller {
 					$mail->Body = $htmlContent;
 					//Send email via SMTP
 					$mail->IsSMTP();
-					$mail->SMTPAuth   = true;
+					$mail->SMTPAuth = true;
 					$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-					$mail->Host       = "smtp.hostinger.com";
-					$mail->Port       = 587; //587 465
-					$mail->Username   = "info@payperdialog.com";
-					$mail->Password   = "PayperLLC@2024";
+					$mail->Host = "smtp.hostinger.com";
+					$mail->Port = 587; //587 465
+					$mail->Username = "info@payperdialog.com";
+					$mail->Password = "PayperLLC@2024";
 					$mail->send();
 				} catch (Exception $e) {
 				}
@@ -1362,7 +1362,6 @@ class Dashboard extends CI_Controller {
 		$this->db->query("UPDATE user_booking SET meeting_link = '".$meetingLink."' WHERE id = '".$getBookinID[0]['id']."'");
 		echo "1";
 	}
-
 
 	public function edit_availability() {
 		$avail_id = $_POST['avail_id'];
@@ -1448,10 +1447,12 @@ class Dashboard extends CI_Controller {
                 $available_id = $getBookSlot[$i]['available_id'];
                 $bookingTime = $getBookSlot[$i]['bookingTime'];
                 $bookingTime = explode(',', $bookingTime);
+				$meetingLink = explode(',', $getBookSlot[0]['meeting_link']);
                 for($j = 0; $j < count($bookingTime); $j++) { 
                     $getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                     $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$employer_id."'")->result_array();
-                    $html .= "<div style='width: 33.33%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'>".date('h:i A', strtotime($bookingTime[$j]))." to ".date('h:i A', strtotime($bookingTime[$j]) + 60*60)."</p><input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck($booking_id)'></div>";
+                    // $html .= "<div style='width: 33.33%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'>".date('h:i A', strtotime($bookingTime[$j]))." to ".date('h:i A', strtotime($bookingTime[$j]) + 60*60)."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'><a href=".$meetingLink[$j].">Meeting Link</a></p><input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck($booking_id)'></div>";
+					$html .= "<div style='width: 100%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'>".date('h:i A', strtotime($bookingTime[$j]))." to ".date('h:i A', strtotime($bookingTime[$j]) + 60*60)."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'><a href=".$meetingLink[$j].">Meeting Link</a></p></div>";
                 }
                 $html .= "<div><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Total Rate: ".count($bookingTime)*@$getEmployee[0]['rateperhour']."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Booked By: ".@$getEmployer[0]['companyname']."</p></div></div></div>";
             }
@@ -1479,10 +1480,12 @@ class Dashboard extends CI_Controller {
 						$available_id = $getBookSlot[$i]['available_id'];
 						$bookingTime = $getBookSlot[$i]['bookingTime'];
 						$bookingTime = explode(',', $bookingTime);
+						$meetingLink = explode(',', $getBookSlot[0]['meeting_link']);
 						for($j = 0; $j < count($bookingTime); $j++) { 
 							$getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$employee_id."'")->result_array();
 							$getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$employer_id."'")->result_array();
-							$html .= "<div style='width: 33.33%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'>".date('h:i A', strtotime($bookingTime[$j]))." to ".date('h:i A', strtotime($bookingTime[$j]) + 60*60)."</p><input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck($booking_id)'></div>";
+							// $html .= "<div style='width: 100%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'>".date('h:i A', strtotime($bookingTime[$j]))." to ".date('h:i A', strtotime($bookingTime[$j]) + 60*60)."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'><a href=".$meetingLink[$j].">Meeting Link</a></p><input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck($booking_id)'></div>";
+							$html .= "<div style='width: 100%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'>".date('h:i A', strtotime($bookingTime[$j]))." to ".date('h:i A', strtotime($bookingTime[$j]) + 60*60)."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'><a href=".$meetingLink[$j].">Meeting Link</a></p></div>";
 						}
 						$html .= "<div><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Total Rate: ".count($bookingTime)*@$getEmployee[0]['rateperhour']."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Booked By: ".@$getEmployer[0]['companyname']."</p></div></div></div>";
 					}
