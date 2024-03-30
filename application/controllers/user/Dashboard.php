@@ -1300,8 +1300,8 @@ class Dashboard extends CI_Controller {
 					CURLOPT_POSTFIELDS => json_encode($postData),
 					CURLOPT_HTTPHEADER => array(
 						'Content-Type: application/json',
-						'Authorization: Bearer eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6IjAxNTNiNmM4LTlkZGMtNDVmOS1hZmU3LTQ3ZjUxZmUzMzNjNCJ9.eyJ2ZXIiOjksImF1aWQiOiJiNmRiYWVmNzBkYTk4MmJkZmNmYTQzMmVlZDY0YTM1MyIsImNvZGUiOiJrVzh4d1ROdjJtZlFYVS11bFFxUk5PVFVlUkJraEJoQWciLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjoxMCwiYXVkIjoiaHR0cHM6Ly9vYXV0aC56b29tLnVzIiwidWlkIjoiODBDMmloZTJUVy1sbWpvTU9nQm5GUSIsIm5iZiI6MTcxMTgwMDAwMCwiZXhwIjoxNzExODAzNjAwLCJpYXQiOjE3MTE4MDAwMDAsImFpZCI6IjczSC1MbDlEU3NlRFdGNmRnVWVUOUEifQ.laVtbHsno6SCpG2dUSHlkorCXRcy6ZC9duemWjPH60Rr9HfeY6Msoh5HDLcnEV69GHkHBae-lKxGNTp7WxJhYw',
-						'Cookie: __cf_bm=OxghD.cidrgkJoMT79jWcnvFWX7casz9U5G8qoOjw4E-1711800000-1.0.1.1-Cdq7RMECTPzX2JE9FqOfKzD_xT4uIc6.Rswe3DA7U3hsUtxtrC45B2l3R0kDtkfSd7kNLZmpYTF1DdlGSGqEOA; _zm_chtaid=436; _zm_ctaid=BAHQc2ZYRkufDu5GQRICqw.1711800000763.8daf3d297042a93e3355468249383509; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_2_cHkgmDQ1i_SOlNQ2ZXRA; _zm_ssid=us04_c_jHOOC6CpTI6TkcEDvTg_TA'
+						'Authorization: Bearer eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImVhMzVmZjRmLWQ2ZjgtNGJiZC1iYmM4LWFhMzg0M2NmNjliOCJ9.eyJ2ZXIiOjksImF1aWQiOiJiNmRiYWVmNzBkYTk4MmJkZmNmYTQzMmVlZDY0YTM1MyIsImNvZGUiOiJrVzh4d1ROdjJtZlFYVS11bFFxUk5PVFVlUkJraEJoQWciLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjoxMywiYXVkIjoiaHR0cHM6Ly9vYXV0aC56b29tLnVzIiwidWlkIjoiODBDMmloZTJUVy1sbWpvTU9nQm5GUSIsIm5iZiI6MTcxMTgwOTA0MCwiZXhwIjoxNzExODEyNjQwLCJpYXQiOjE3MTE4MDkwNDAsImFpZCI6IjczSC1MbDlEU3NlRFdGNmRnVWVUOUEifQ.1UfGIkek3k3xxEH4bIYqyeg41wZEJKLdW1oaIQGTC6bvOFUDLxlp4SNDqQBB-GM2u7E2PJPCrNJo-4c_qX9dTA',
+						'Cookie: __cf_bm=ggQBDWDWXBV90wURySFJsT_w_3VEJqHGS800n6yzQ08-1711809040-1.0.1.1-wFbEr.hrwi1x8sTunAvQyw_Z0YqdmyRf3V4It4_7W5wVe_IhHBlsoyjRrwOS.zPDy5NKmJ98Sa5IAzta_O7dfQ; _zm_chtaid=49; _zm_ctaid=E9GFZ51sQ4Co75XBJ0cNvw.1711809040849.845413912fd1df1268ba44c04c520081; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_2_cHkgmDQ1i_SOlNQ2ZXRA; _zm_ssid=us04_c_jHOOC6CpTI6TkcEDvTg_TA'
 					)
 				)
 			);
@@ -1466,7 +1466,7 @@ class Dashboard extends CI_Controller {
 	public function getBookingDetailsforEmployee() {
 		$selectDate = $_POST['selectDate'];
 		$employeeId = $_POST['employeeId'];
-		$availableData = $this->db->query("SELECT user_availability.id as avail_id, user_availability.start_date, user_availability.from_time, user_availability.end_date, user_availability.to_time, user_booking.employee_id, user_booking.employer_id, user_booking.bookingTime FROM payperdialog.user_availability JOIN user_booking ON user_booking.available_id = user_availability.id WHERE user_availability.start_date ='".$selectDate."' AND user_availability.end_date ='".$selectDate."' AND user_booking.employer_id ='".@$employeeId."'")->result_array();
+		$availableData = $this->db->query("SELECT user_availability.id as avail_id, user_availability.start_date, user_availability.from_time, user_availability.end_date, user_availability.to_time, user_booking.employee_id, user_booking.employer_id, user_booking.bookingTime FROM user_availability JOIN user_booking ON user_booking.available_id = user_availability.id WHERE user_availability.start_date ='".$selectDate."' AND user_availability.end_date ='".$selectDate."' AND user_booking.employer_id ='".@$employeeId."'")->result_array();
 		$html .= "<div style='width: 100%;display: inline-block;text-align: center;border-radius: 10px;box-shadow: 0 0 10px #dddddd;height: 400px;overflow-y: scroll;overflow-x: hidden;'><p style='padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;'>".$selectDate."</p>";
         if (!empty($availableData)) {
 			foreach ($availableData as $value) {
