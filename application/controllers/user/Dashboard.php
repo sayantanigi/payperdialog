@@ -1267,6 +1267,7 @@ class Dashboard extends CI_Controller {
 		$bt = explode(",", $bookingTime);
 		
 		$meetingLink = array();
+		$meetingPass = array();
 		for ($i=0; $i<count($bt); $i++){
 			$postData = [
 				"topic" => 'Meeting Link1',
@@ -1299,20 +1300,21 @@ class Dashboard extends CI_Controller {
 					CURLOPT_CUSTOMREQUEST => 'POST',
 					CURLOPT_POSTFIELDS => json_encode($postData),
 					CURLOPT_HTTPHEADER => array(
-						'Content-Type: application/json',
-						'Authorization: Bearer eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6IjI2MjZiNTlkLTU5OTgtNGE3Mi04NGYyLWMwMTZhZDQ3YjI2OCJ9.eyJ2ZXIiOjksImF1aWQiOiI1ZDM5MzViODBjNzEwY2ZlZmQ4ZDhjZWExZDgzNWY0ZiIsImNvZGUiOiI4V3c1eThHcnR3R2dFQ0tLdThyUmNHZWI5WDN4VTZsSkEiLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjo1LCJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiI4MEMyaWhlMlRXLWxtam9NT2dCbkZRIiwibmJmIjoxNzExOTY0NDU3LCJleHAiOjE3MTE5NjgwNTcsImlhdCI6MTcxMTk2NDQ1NywiYWlkIjoiNzNILUxsOURTc2VEV0Y2ZGdVZVQ5QSJ9.OSmiu4d3AlGqpZFKj4gq6m9gcuVXniHpi2upQpQuP7jtnvi3fwbEAn8Tf1eoz6KFKmUCS62Y2_6im7iJB6uuLg',
-						'Cookie: __cf_bm=pBojWVTsqpzaAANiiIZqJ0.X8Wp6p8TMir7rLwGr6Tk-1711964403-1.0.1.1-bd70M6Tz3siKmCiBK6oywa9au0t00k2oSWkQ7HVIiu_43k0Z3M9pQdKtKLkll2Dg6cLzd4COr4ihHLySPlhe0A; _zm_chtaid=126; _zm_csp_script_nonce=vrbCfdrqR6-vT8b0b2YGhQ; _zm_ctaid=nS9_VVCPR7iEc5XbAb8H9Q.1711964403642.379e9f7cd2109ca0576c149d023010a3; _zm_currency=INR; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_bC-QjrCrT-iPe1jfzaMTGg; _zm_ssid=us04_c_nKV2LhI_RgaI3aETJzEMRQ; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b; cred=0EA9B455E38579F6CB74A2679D4D1389'
-					)
+					    'Content-Type: application/json',
+					    'Authorization: Bearer eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImE3Y2Y2ODhjLTM5ZDgtNDFjYy1hZDVlLTEwNDFkM2FmMTcxZCJ9.eyJ2ZXIiOjksImF1aWQiOiI1ZDM5MzViODBjNzEwY2ZlZmQ4ZDhjZWExZDgzNWY0ZiIsImNvZGUiOiI4V3c1eThHcnR3R2dFQ0tLdThyUmNHZWI5WDN4VTZsSkEiLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjo3LCJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiI4MEMyaWhlMlRXLWxtam9NT2dCbkZRIiwibmJmIjoxNzExOTY4MjAwLCJleHAiOjE3MTE5NzE4MDAsImlhdCI6MTcxMTk2ODIwMCwiYWlkIjoiNzNILUxsOURTc2VEV0Y2ZGdVZVQ5QSJ9.amNll7ZOeTUNU-YWpAnlwwEpGM8pWFJbTg1YRFesaKpXoMuJdf6nPr_DYicyQInY4inaeG_uWtw9_TJ1TPvYFg',
+					    'Cookie: __cf_bm=egL60nFGvQOpW1d3DO1R_2Xay4W3FAASAvzDWKEsUjo-1711968034-1.0.1.1-Nq97IOuYl7WTjdyxkqQHnLVBgtkZ6zOLn_NXnYt9iDjMuEHSmlIen4.P6As45TggxaRVUFFdcRu6wOuvVtdp3Q; _zm_chtaid=126; _zm_csp_script_nonce=vrbCfdrqR6-vT8b0b2YGhQ; _zm_ctaid=nS9_VVCPR7iEc5XbAb8H9Q.1711964403642.379e9f7cd2109ca0576c149d023010a3; _zm_currency=INR; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_bC-QjrCrT-iPe1jfzaMTGg; _zm_ssid=us04_c_nKV2LhI_RgaI3aETJzEMRQ; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b; cred=0EA9B455E38579F6CB74A2679D4D1389'
+				  	)
 				)
 			);
 			$response = curl_exec($curl);
 			curl_close($curl);
 			$decodedData = json_decode($response, true);
-			//print_r($decodedData); die();
+			//$meetingLink[$i]= $decodedData['join_url'];
 			$joinUrl = "https://us04web.zoom.us/j/".$decodedData['id'];
 			$meetingLink[$i]= $joinUrl;
+			$meetingpass[$i]= $decodedData['password'];
 			if(!empty($decodedData['join_url'])) {
-				$this->db->query("UPDATE user_booking SET meeting_link = '".$joinUrl."' WHERE id = '".$getBookinID[0]['id']."'");
+				$this->db->query("UPDATE user_booking SET meeting_link = '".$joinUrl."', meeting_pass = '".$meetingpass."' WHERE id = '".$getBookinID[0]['id']."'");
 				$get_setting=$this->Crud_model->get_single('setting');
 				$htmlContent = "
 				<div style='width:600px; margin: 0 auto;background: #fff;border: 1px solid #e6e6e6;'>
@@ -1323,7 +1325,7 @@ class Dashboard extends CI_Controller {
 					<p style='font-size:24px;'>Please find the below meeting info for $getpostname->post_title</p>
 					<p style='font-size:24px;'>Just press the button below and follow the instructions.</p>
 					<p style='text-align: center;'><a href='".$joinUrl."' style='height: 50px; width: 300px; background: rgb(253,179,2); background: linear-gradient(0deg, rgba(253,179,2,1) 0%, rgba(244,77,9,1) 100%); text-align: center; font-size: 18px; color: #fff; border-radius: 12px; display: inline-block; line-height: 50px; text-decoration: none; text-transform: uppercase; font-weight: 600;'>Meeting Link</a></p>
-					<p style='font-size:24px;'>Meeting Passcode: '".$decodedData['password']."'</p>
+					<p style='font-size:24px;'>Meeting Passcode: ".$decodedData['password']."</p>
 					<p style='font-size:20px;'>Thank you!</p>
 					<p style='font-size:20px;list-style: none;'>Sincerly</p>
 					<p style='list-style: none;'><b>PayPer LLC</b></p>
@@ -1362,7 +1364,8 @@ class Dashboard extends CI_Controller {
 			}
 		}
 		$meetingLink = implode(',', $meetingLink);
-		$this->db->query("UPDATE user_booking SET meeting_link = '".$meetingLink."' WHERE id = '".$getBookinID[0]['id']."'");
+		$meetingpass = implode(',', $meetingpass);
+		$this->db->query("UPDATE user_booking SET meeting_link = '".$meetingLink."', meeting_pass = '".$meetingpass."' WHERE id = '".$getBookinID[0]['id']."'");
 		echo "1";
 	}
 

@@ -61,13 +61,14 @@
                                                                 $bookingTime = $getBookSlot[$i]['bookingTime'];
                                                                 $bookingTime = explode(',', $bookingTime);
                                                                 $meetingLink = explode(',', $getBookSlot[0]['meeting_link']);
+                                                                $meetingPass = explode(',', $getBookSlot[0]['meeting_pass']);
                                                                 for ($j = 0; $j < count($bookingTime); $j++) {
                                                                     $getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
                                                                     $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '" . @$employer_id . "'")->result_array();
                                                                     ?>
                                                                     <div style="width: 33.33%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;">
                                                                         <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;"><?= date('h:i A', strtotime($bookingTime[$j])) ?> to <?= date('h:i A', strtotime($bookingTime[$j]) + 60 * 60) ?></p>
-                                                                        <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;"><a href="<?= $meetingLink[$j] ?>">Meeting Link</a></p>
+                                                                        <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;"><a href="<?= $meetingLink[$j] ?>">Meeting Link</a> pass: <?= $meetingPass[$j] ?></p>
                                                                         <!-- <input type="checkbox" style="position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;" id="completecheck" name="completecheck" value="1"> -->
                                                                     </div>
                                                                 <?php } ?>
