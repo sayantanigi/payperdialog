@@ -1300,17 +1300,19 @@ class Dashboard extends CI_Controller {
 					CURLOPT_POSTFIELDS => json_encode($postData),
 					CURLOPT_HTTPHEADER => array(
 						'Content-Type: application/json',
-						'Authorization: Bearer eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImVhMzVmZjRmLWQ2ZjgtNGJiZC1iYmM4LWFhMzg0M2NmNjliOCJ9.eyJ2ZXIiOjksImF1aWQiOiJiNmRiYWVmNzBkYTk4MmJkZmNmYTQzMmVlZDY0YTM1MyIsImNvZGUiOiJrVzh4d1ROdjJtZlFYVS11bFFxUk5PVFVlUkJraEJoQWciLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjoxMywiYXVkIjoiaHR0cHM6Ly9vYXV0aC56b29tLnVzIiwidWlkIjoiODBDMmloZTJUVy1sbWpvTU9nQm5GUSIsIm5iZiI6MTcxMTgwOTA0MCwiZXhwIjoxNzExODEyNjQwLCJpYXQiOjE3MTE4MDkwNDAsImFpZCI6IjczSC1MbDlEU3NlRFdGNmRnVWVUOUEifQ.1UfGIkek3k3xxEH4bIYqyeg41wZEJKLdW1oaIQGTC6bvOFUDLxlp4SNDqQBB-GM2u7E2PJPCrNJo-4c_qX9dTA',
-						'Cookie: __cf_bm=ggQBDWDWXBV90wURySFJsT_w_3VEJqHGS800n6yzQ08-1711809040-1.0.1.1-wFbEr.hrwi1x8sTunAvQyw_Z0YqdmyRf3V4It4_7W5wVe_IhHBlsoyjRrwOS.zPDy5NKmJ98Sa5IAzta_O7dfQ; _zm_chtaid=49; _zm_ctaid=E9GFZ51sQ4Co75XBJ0cNvw.1711809040849.845413912fd1df1268ba44c04c520081; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_2_cHkgmDQ1i_SOlNQ2ZXRA; _zm_ssid=us04_c_jHOOC6CpTI6TkcEDvTg_TA'
+						'Authorization: Bearer eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6IjI2MjZiNTlkLTU5OTgtNGE3Mi04NGYyLWMwMTZhZDQ3YjI2OCJ9.eyJ2ZXIiOjksImF1aWQiOiI1ZDM5MzViODBjNzEwY2ZlZmQ4ZDhjZWExZDgzNWY0ZiIsImNvZGUiOiI4V3c1eThHcnR3R2dFQ0tLdThyUmNHZWI5WDN4VTZsSkEiLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjo1LCJhdWQiOiJodHRwczovL29hdXRoLnpvb20udXMiLCJ1aWQiOiI4MEMyaWhlMlRXLWxtam9NT2dCbkZRIiwibmJmIjoxNzExOTY0NDU3LCJleHAiOjE3MTE5NjgwNTcsImlhdCI6MTcxMTk2NDQ1NywiYWlkIjoiNzNILUxsOURTc2VEV0Y2ZGdVZVQ5QSJ9.OSmiu4d3AlGqpZFKj4gq6m9gcuVXniHpi2upQpQuP7jtnvi3fwbEAn8Tf1eoz6KFKmUCS62Y2_6im7iJB6uuLg',
+						'Cookie: __cf_bm=pBojWVTsqpzaAANiiIZqJ0.X8Wp6p8TMir7rLwGr6Tk-1711964403-1.0.1.1-bd70M6Tz3siKmCiBK6oywa9au0t00k2oSWkQ7HVIiu_43k0Z3M9pQdKtKLkll2Dg6cLzd4COr4ihHLySPlhe0A; _zm_chtaid=126; _zm_csp_script_nonce=vrbCfdrqR6-vT8b0b2YGhQ; _zm_ctaid=nS9_VVCPR7iEc5XbAb8H9Q.1711964403642.379e9f7cd2109ca0576c149d023010a3; _zm_currency=INR; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_bC-QjrCrT-iPe1jfzaMTGg; _zm_ssid=us04_c_nKV2LhI_RgaI3aETJzEMRQ; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b; cred=0EA9B455E38579F6CB74A2679D4D1389'
 					)
 				)
 			);
 			$response = curl_exec($curl);
 			curl_close($curl);
 			$decodedData = json_decode($response, true);
-			$meetingLink[$i]= $decodedData['join_url'];
+			//print_r($decodedData); die();
+			$joinUrl = "https://us04web.zoom.us/j/".$decodedData['id'];
+			$meetingLink[$i]= $joinUrl;
 			if(!empty($decodedData['join_url'])) {
-				$this->db->query("UPDATE user_booking SET meeting_link = '".$decodedData['join_url']."' WHERE id = '".$getBookinID[0]['id']."'");
+				$this->db->query("UPDATE user_booking SET meeting_link = '".$joinUrl."' WHERE id = '".$getBookinID[0]['id']."'");
 				$get_setting=$this->Crud_model->get_single('setting');
 				$htmlContent = "
 				<div style='width:600px; margin: 0 auto;background: #fff;border: 1px solid #e6e6e6;'>
@@ -1320,7 +1322,8 @@ class Dashboard extends CI_Controller {
 					<p style='font-size:24px;'>Hello User,</p>
 					<p style='font-size:24px;'>Please find the below meeting info for $getpostname->post_title</p>
 					<p style='font-size:24px;'>Just press the button below and follow the instructions.</p>
-					<p style='text-align: center;'><a href='".$decodedData["join_url"]."' style='height: 50px; width: 300px; background: rgb(253,179,2); background: linear-gradient(0deg, rgba(253,179,2,1) 0%, rgba(244,77,9,1) 100%); text-align: center; font-size: 18px; color: #fff; border-radius: 12px; display: inline-block; line-height: 50px; text-decoration: none; text-transform: uppercase; font-weight: 600;'>Meeting Link</a></p>
+					<p style='text-align: center;'><a href='".$joinUrl."' style='height: 50px; width: 300px; background: rgb(253,179,2); background: linear-gradient(0deg, rgba(253,179,2,1) 0%, rgba(244,77,9,1) 100%); text-align: center; font-size: 18px; color: #fff; border-radius: 12px; display: inline-block; line-height: 50px; text-decoration: none; text-transform: uppercase; font-weight: 600;'>Meeting Link</a></p>
+					<p style='font-size:24px;'>Meeting Passcode: '".$decodedData['password']."'</p>
 					<p style='font-size:20px;'>Thank you!</p>
 					<p style='font-size:20px;list-style: none;'>Sincerly</p>
 					<p style='list-style: none;'><b>PayPer LLC</b></p>
