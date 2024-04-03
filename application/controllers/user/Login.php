@@ -57,7 +57,7 @@ class Login extends CI_Controller {
 				try {
 					//Server settings
 					$mail->CharSet = 'UTF-8';
-					$mail->SetFrom('no-reply@goigi.com', 'Pay Per Dialog');
+					$mail->SetFrom('info@payperdialog.com', 'Pay Per Dialog');
 					$mail->AddAddress($_POST['email']);
 					$mail->IsHTML(true);
 					$mail->Subject = 'Verify Your Email Address From Pay Per Dialog';
@@ -67,10 +67,10 @@ class Login extends CI_Controller {
 					$mail->IsSMTP();
 					$mail->SMTPAuth   = true;
 					$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-					$mail->Host       = "smtp.gmail.com";
+					$mail->Host       = "smtp.hostinger.com";
 					$mail->Port       = 587; //587 465
-					$mail->Username   = "no-reply@goigi.com";
-					$mail->Password   = "wj8jeml3eu0z";
+					$mail->Username   = "info@payperdialog.com";
+					$mail->Password   = "PayperLLC@2024";
 					$mail->send();
 				} catch (Exception $e) {
 					echo $e->getMessage(); //Boring error messages from anything else!
@@ -234,7 +234,7 @@ class Login extends CI_Controller {
 				try {
 					//Server settings
 					$mail->CharSet = 'UTF-8';
-					$mail->SetFrom('no-reply@goigi.com', 'Pay Per Dialog');
+					$mail->SetFrom('info@payperdialog.com', 'Pay Per Dialog');
 					$mail->AddAddress($_POST['email']);
 					$mail->IsHTML(true);
 					$mail->Subject = "Forgot Password Confirmation message from Pay Per Dialog";
@@ -244,10 +244,10 @@ class Login extends CI_Controller {
 					$mail->IsSMTP();
 					$mail->SMTPAuth   = true;
 					$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-					$mail->Host       = "smtp.gmail.com";
+					$mail->Host       = "smtp.hostinger.com";
 					$mail->Port       = 587; //587 465
-					$mail->Username   = "no-reply@goigi.com";
-					$mail->Password   = "wj8jeml3eu0z";
+					$mail->Username   = "info@payperdialog.com";
+					$mail->Password   = "PayperLLC@2024";
 					$mail->send();
 					//echo $msg = '1';
 					$this->session->set_flashdata('message', 'Please check your inbox. We have sent you an email to reset your password.');

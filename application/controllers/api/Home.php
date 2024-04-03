@@ -343,17 +343,17 @@ class Home extends MY_Controller {
 				$mail = new PHPMailer(true);
 				$mail->CharSet = 'UTF-8';
 				$mail->SetFrom($formdata['email']);
-				$mail->AddAddress('admin@afrebay.com', 'Afrebay');
+				$mail->AddAddress('info@payperdialog.com', 'Pay Per Dialog');
 				$mail->IsHTML(true);
 				$mail->Subject = $subject;
 				$mail->Body = $message;
 				$mail->IsSMTP();
 				$mail->SMTPAuth   = true;
 				$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-				$mail->Host       = "smtp.gmail.com";
+				$mail->Host       = "smtp.hostinger.com";
 				$mail->Port       = 587; //587 465
-				$mail->Username   = "no-reply@goigi.com";
-				$mail->Password   = "wj8jeml3eu0z";
+				$mail->Username   = "info@payperdialog.com";
+				$mail->Password   = "PayperLLC@2024";
 				$mail->send();
 				if(!$mail->send()) {
 					$response = array('status'=> 'error', 'result'=>'Your message could not be sent. Please, try again later.');

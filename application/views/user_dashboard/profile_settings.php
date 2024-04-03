@@ -286,6 +286,7 @@ if($data_request=='user'){
         </form>
     </div>
 </div>
+<?php if(@$userinfo->userType=='1') { ?>
 <div class="col-md-3 col-6 v-align CustomDesign" style="display: inline-block; float: left; margin-top: 10px;">
     <p class="CustomPara">Upcoming Booking</p>
     <div class="CustomBlock">
@@ -323,6 +324,9 @@ if($data_request=='user'){
         <?php } ?>
     </div>
 </div>
+<?php } ?>
+</div>
+</section>
 <style>
 .Admin_Profile .cardak .gender select {margin-bottom: 0px !important;}
 .form-design form .cardak .profile-dsd input  {margin-bottom: 0px !important;}

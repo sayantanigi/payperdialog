@@ -76,7 +76,7 @@
 </section>
 
 <div class="modal fade edit-form" id="booking" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog" role="document" style="max-width: 800px !important; top: 145px;">
+    <div class="modal-dialog modal-dialog" role="document" style="max-width: 800px !important;">
         <div class="modal-content">
             <div class="modal-header border-bottom-0">
                 <h5 class="modal-title" id="modal-title">Add Availability</h5>
@@ -150,7 +150,7 @@
 </div>
 
 <div class="modal fade edit-form" id="editbooking" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog" role="document" style="max-width: 800px !important; top: 145px;">
+    <div class="modal-dialog modal-dialog" role="document" style="max-width: 800px !important;">
         <div class="modal-content">
             <div class="modal-header border-bottom-0">
                 <h5 class="modal-title" id="modal-title">Edit Availability</h5>

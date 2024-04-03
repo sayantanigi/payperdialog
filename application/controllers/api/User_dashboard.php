@@ -23,40 +23,6 @@ class User_dashboard extends CI_Controller {
     	}
 	}
 
-	public function subscription_details() {
-		try {
-			$formdata = json_decode(file_get_contents('php://input'), true);
-			$user_id = $formdata['user_id'];
-			$userType = $formdata['user_type'];
-			$vis_ip = $this->getVisIPAddr(); // Store the IP address
-			$ipdat = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $vis_ip));
-			$countryName = $ipdat->geoplugin_countryName;
-			if($countryName == 'Nigeria') {
-				$cond = " WHERE subscription_country = 'Nigeria'";
-			} else {
-				$cond = " WHERE subscription_country = 'Global'";
-			}
-
-			if($userType == '1') {
-				$uType = 'Freelancer';
-			} else {
-				$uType = 'Business';
-			}
-
-			$subscription_check = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".@$user_id."' AND (status = '1' OR status = '2')")->result_array();
-			if(!empty($subscription_check)) {
-				$data['current_plan'] = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".@$user_id."' AND status IN (1,2)");
-				$data['expired_plan'] = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".@$user_id."' AND status = '3'");
-			} else {
-				$data['get_subscription'] = $this->db->query("SELECT * FROM subscription ".$cond." AND subscription_user_type = '".$uType."'")->result();
-			}
-			$response = array('status'=> 'success','result'=> $data);
-		} catch (\Exception $e) {
-			$response = array('status'=> 'error','result'=> $e->getMessage());
-		}
-		echo json_encode($response);
-	}
-
 	public function userSubscription() {
 		try {
 			$formdata = json_decode(file_get_contents('php://input'), true);
@@ -88,6 +54,42 @@ class User_dashboard extends CI_Controller {
 			} else {
 				$response = array('status'=> 'error','result'=> 'Oops, something went wrong. Please try again later.');
 			}
+		} catch (\Exception $e) {
+			$response = array('status'=> 'error','result'=> $e->getMessage());
+		}
+		echo json_encode($response);
+	}
+
+	public function subscription_details() {
+		try {
+			$formdata = json_decode(file_get_contents('php://input'), true);
+			$user_id = $formdata['user_id'];
+			$userType = $formdata['user_type'];
+			$vis_ip = $this->getVisIPAddr(); // Store the IP address
+			$ipdat = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $vis_ip));
+			$countryName = $ipdat->geoplugin_countryName;
+			if($countryName == 'Nigeria') {
+				$cond = " WHERE subscription_country = 'Nigeria'";
+			} else {
+				$cond = " WHERE subscription_country = 'Global'";
+			}
+
+			if($userType == '1') {
+				$uType = 'Employee';
+			} else if($userType == '2') {
+				$uType = 'Employer';
+			} else {
+				$uType = 'Expert';
+			}
+
+			$subscription_check = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".@$user_id."' AND (status = '1' OR status = '2')")->result_array();
+			if(!empty($subscription_check)) {
+				$data['current_plan'] = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".@$user_id."' AND status IN (1,2)");
+				$data['expired_plan'] = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".@$user_id."' AND status = '3'");
+			} else {
+				$data['get_subscription'] = $this->db->query("SELECT * FROM subscription ".$cond." AND subscription_user_type = '".$uType."'")->result();
+			}
+			$response = array('status'=> 'success','result'=> $data);
 		} catch (\Exception $e) {
 			$response = array('status'=> 'error','result'=> $e->getMessage());
 		}
@@ -134,11 +136,11 @@ class User_dashboard extends CI_Controller {
 					$subject = "Subscription Payment Invoice";
 					$get_setting=$this->Crud_model->get_single('setting');
 					$imagePath = base_url().'uploads/logo/'.$get_setting->flogo;
-					$message = "<table border='0' align='center' cellpadding='0' cellspacing='0' width='100%'> <tbody> <tr> <td align='center'> <table class='col-600' width='600' border='0' align='center' cellpadding='0' cellspacing='0' style='margin-left:20px; margin-right:20px; border-left: 1px solid #dbd9d9; border-right: 1px solid #dbd9d9; border-top:2px solid #232323'> <tbody> <tr> <td height='35'></td> </tr> <tr> <td align='left' style='padding:5px 10px;font-family: Raleway, sans-serif; font-size:16px; font-weight: bold; color:#2a3a4b;'> <img src='".$imagePath."' style='width:100%'/> </td> </tr> <tr> <td height='35'></td> </tr> <tr> <td align='left' style='padding:5px 10px;font-family: Raleway, sans-serif; font-size:16px; font-weight: bold; color:#2a3a4b;'>Dear ".ucwords($fullName).",</td> </tr> <tr> <td height='10'></td> </tr> <tr> <td align='left' style='padding:5px 10px;font-family: Lato, sans-serif; font-size:16px; color:#444; line-height:24px; font-weight: 400;'>Congratulations! Your purchase on <strong style='font-weight:bold;'>Afrebay</strong> was successful. </td> </tr> <tr> <td height='10'></td> </tr> <tr> <td align='left' style='padding:5px 10px;font-family: Lato, sans-serif; font-size:16px; color:#444; line-height:24px; font-weight: 400;'>Please click on the below link to view purchase invoice.</td> </tr> <tr> <td height='10'></td> </tr> <tr> <td align='left' style='text-align:center;padding:5px 10px;font-family: Lato, sans-serif; font-size:16px; color:#444; line-height:24px; font-weight: bold;'> <a href=".$invoice['hosted_invoice_url']." target='_blank' style='background:#232323;color:#fff;padding:10px;text-decoration:none;line-height:24px;'>Click Here</a> </td> </tr> <tr> <td height='30'></td> </tr> <tr> <td align='left' style='padding:0 10px;font-family: Lato, sans-serif; font-size:16px; color:#232323; line-height:24px; font-weight: 700;'>Thank you!</td> </tr> <tr> <td align='left' style='padding:0 10px;font-family: Lato, sans-serif; font-size:14px; color:#232323; line-height:24px; font-weight: 700;'>Sincerely</td> </tr> <tr> <td align='left' style='padding:0 10px;font-family: Lato, sans-serif; font-size:14px; color:#232323; line-height:24px; font-weight: 700;'>Afrebay</td> </tr> </tbody> </table> </td> </tr> </tbody> </table>";
+					$message = "<table border='0' align='center' cellpadding='0' cellspacing='0' width='100%'> <tbody> <tr> <td align='center'> <table class='col-600' width='600' border='0' align='center' cellpadding='0' cellspacing='0' style='margin-left:20px; margin-right:20px; border-left: 1px solid #dbd9d9; border-right: 1px solid #dbd9d9; border-top:2px solid #232323'> <tbody> <tr> <td height='35'></td> </tr> <tr> <td align='left' style='padding:5px 10px;font-family: Raleway, sans-serif; font-size:16px; font-weight: bold; color:#2a3a4b;'> <img src='".$imagePath."' style='width:100%'/> </td> </tr> <tr> <td height='35'></td> </tr> <tr> <td align='left' style='padding:5px 10px;font-family: Raleway, sans-serif; font-size:16px; font-weight: bold; color:#2a3a4b;'>Dear ".ucwords($fullName).",</td> </tr> <tr> <td height='10'></td> </tr> <tr> <td align='left' style='padding:5px 10px;font-family: Lato, sans-serif; font-size:16px; color:#444; line-height:24px; font-weight: 400;'>Congratulations! Your purchase on <strong style='font-weight:bold;'>Pay Per Dialog</strong> was successful. </td> </tr> <tr> <td height='10'></td> </tr> <tr> <td align='left' style='padding:5px 10px;font-family: Lato, sans-serif; font-size:16px; color:#444; line-height:24px; font-weight: 400;'>Please click on the below link to view purchase invoice.</td> </tr> <tr> <td height='10'></td> </tr> <tr> <td align='left' style='text-align:center;padding:5px 10px;font-family: Lato, sans-serif; font-size:16px; color:#444; line-height:24px; font-weight: bold;'> <a href=".$invoice['hosted_invoice_url']." target='_blank' style='background:#232323;color:#fff;padding:10px;text-decoration:none;line-height:24px;'>Click Here</a> </td> </tr> <tr> <td height='30'></td> </tr> <tr> <td align='left' style='padding:0 10px;font-family: Lato, sans-serif; font-size:16px; color:#232323; line-height:24px; font-weight: 700;'>Thank you!</td> </tr> <tr> <td align='left' style='padding:0 10px;font-family: Lato, sans-serif; font-size:14px; color:#232323; line-height:24px; font-weight: 700;'>Sincerely</td> </tr> <tr> <td align='left' style='padding:0 10px;font-family: Lato, sans-serif; font-size:14px; color:#232323; line-height:24px; font-weight: 700;'>Pay Per Dialog</td> </tr> </tbody> </table> </td> </tr> </tbody> </table>";
 					$mail = new PHPMailer(true);
 					//Server settings
 					$mail->CharSet = 'UTF-8';
-					$mail->SetFrom('admin@afrebay.com', 'Afrebay');
+					$mail->SetFrom('info@payperdialog.com', 'Pay Per Dialog');
 					$mail->AddAddress($userEmail);
 					$mail->IsHTML(true);
 					$mail->Subject = $subject;
@@ -147,10 +149,10 @@ class User_dashboard extends CI_Controller {
 					$mail->IsSMTP();
 					$mail->SMTPAuth   = true;
 					$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-					$mail->Host       = "smtp.gmail.com";
+					$mail->Host       = "smtp.hostinger.com";
 					$mail->Port       = 587; //587 465
-					$mail->Username   = "no-reply@goigi.com";
-					$mail->Password   = "wj8jeml3eu0z";
+					$mail->Username   = "info@payperdialog.com";
+					$mail->Password   = "PayperLLC@2024";
 					$mail->send();
 					if(!$mail->send()) {
 						$response = array('status'=> 'error', 'result'=>'Your message could not be sent. Please, try again later.');
@@ -762,7 +764,7 @@ class User_dashboard extends CI_Controller {
 					'prod_description' => $this->input->post('prod_description'),
 					'id' =>  $this->input->post('id')
 				);
-				$updateQuery = $this->Crud_model->SaveData('user_product', $data, "id='".$id."'");
+				$updateQuery = $this->Crud_model->SaveData('user_product', $data, "id='".$this->input->post('id')."'");
 				if (!empty($_FILES['prod_image']['name'][0])) {
 					$cpt = count($_FILES['prod_image']['name']);
 					for($i=0; $i<$cpt; $i++) {
