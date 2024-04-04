@@ -5,7 +5,6 @@ error_reporting(0);
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-
 class Dashboard extends CI_Controller {
 
 	public function __construct() {
@@ -1264,9 +1263,9 @@ class Dashboard extends CI_Controller {
 		$getpostemail = $getpostuser->email;
 		$getpostname = $getpostuser->companyname;
 
-		$bookingTime = $getBookinID[0]['bookingTime'];
+		$bookingTime = $getBookinID[0]['bookingTime']; 
 		$bt = explode(",", $bookingTime);
-
+		
 		$meetingLink = array();
 		$meetingPass = array();
 		for ($i=0; $i<count($bt); $i++){
@@ -1277,19 +1276,19 @@ class Dashboard extends CI_Controller {
 				"duration" => 30,
 				"settings" => [
 					"waiting_room" => false,
-					"host_video" => true,
-					"participant_video" => true,
-					"join_before_host" => true,
-					"mute_upon_entry" => true,
-					"watermark" => true,
-					"audio" => "voip",
+					"host_video" => true, 
+					"participant_video" => true, 
+					"join_before_host" => true, 
+					"mute_upon_entry" => true, 
+					"watermark" => true, 
+					"audio" => "voip", 
 					"auto_recording" => "cloud",
 					"allow_multiple_devices" => true,
 					"registration_type" => 2,
 				]
-			];
+			]; 
 			$curl = curl_init();
-			curl_setopt_array($curl,
+			curl_setopt_array($curl, 
 				array(
 					CURLOPT_URL => 'https://api.zoom.us/v2/users/me/meetings',
 					CURLOPT_RETURNTRANSFER => true,
@@ -1300,11 +1299,11 @@ class Dashboard extends CI_Controller {
 					CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 					CURLOPT_CUSTOMREQUEST => 'POST',
 					CURLOPT_POSTFIELDS => json_encode($postData),
-				    CURLOPT_HTTPHEADER => array(
-					    'Content-Type: application/json',
-					    'Authorization: Bearer eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6Ijg1YjA2MTFhLThiYWUtNGU3ZS1hYjliLTk1YjQ1ZTllYzc1ZiJ9.eyJ2ZXIiOjksImF1aWQiOiI1ZDM5MzViODBjNzEwY2ZlZmQ4ZDhjZWExZDgzNWY0ZiIsImNvZGUiOiI4V3c1eThHcnR3R2dFQ0tLdThyUmNHZWI5WDN4VTZsSkEiLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjoxNywiYXVkIjoiaHR0cHM6Ly9vYXV0aC56b29tLnVzIiwidWlkIjoiODBDMmloZTJUVy1sbWpvTU9nQm5GUSIsIm5iZiI6MTcxMjA2NDU1NiwiZXhwIjoxNzEyMDY4MTU2LCJpYXQiOjE3MTIwNjQ1NTYsImFpZCI6IjczSC1MbDlEU3NlRFdGNmRnVWVUOUEifQ.Z0vdAj3WFho9CAs5UhIHPgsGTGrVOXFUnkpB0XRLNT8dHlgk0h39MxoYUwfPzDobG-jBGVSgyI5xwLN2-4al6Q',
-					    'Cookie: __cf_bm=dogY7BT95jHsoHT2r3.AlHOXDR7MDnd8w5WCiYoherQ-1712064556-1.0.1.1-xcx0BiDwSDGTfYjY8n3lTmp1tBguTSDXQpJTG5E17nbmd__EtzwusNhO4bq3QpR5Y1kv2EaV0C6iXAQ_xSqBXw; _zm_chtaid=664; _zm_ctaid=boFLjf8VQGeGsNtECKRBrA.1712064556426.598e820caa06968b6f841139d2e9b782; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_yWiphD5kR5e4JIRJo0dSCw; _zm_ssid=us04_c_DS96iBNNTzK788Q-9Ct5HQ; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b'
-				  	)
+					CURLOPT_HTTPHEADER => array(
+    'Content-Type: application/json',
+    'Authorization: Bearer eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6IjA1ODQ4NDY3LTI3ZWQtNDRhMS05OTM3LWIwNGUwMmYzZjFhNCJ9.eyJ2ZXIiOjksImF1aWQiOiI1ZDM5MzViODBjNzEwY2ZlZmQ4ZDhjZWExZDgzNWY0ZiIsImNvZGUiOiI4V3c1eThHcnR3R2dFQ0tLdThyUmNHZWI5WDN4VTZsSkEiLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjoyNywiYXVkIjoiaHR0cHM6Ly9vYXV0aC56b29tLnVzIiwidWlkIjoiODBDMmloZTJUVy1sbWpvTU9nQm5GUSIsIm5iZiI6MTcxMjI0MTM0MCwiZXhwIjoxNzEyMjQ0OTQwLCJpYXQiOjE3MTIyNDEzNDAsImFpZCI6IjczSC1MbDlEU3NlRFdGNmRnVWVUOUEifQ.8NbzwIs55na1W7UVSNiWVAC0KvqiCrCxBpZlFW-gsK7RyFsypfelCfEK3G4tyqXC90XZyMgk7nOeeJiLRUL-Hw',
+    'Cookie: __cf_bm=YkRxLdFTeXLoIjUt66.359RXbgzpBWnL.pV7ABqvnRg-1712241341-1.0.1.1-Ac4VCXDQLBSDFJwa8Lfl9dquz6MBV4uM4J2HBC2dewbOQPjviNtzrcFQwNoxe15qbEKQ3PgzlN8UGvGCuGpTsg; _zm_chtaid=415; _zm_ctaid=nkZLSBVjQseGRkKH_Lxg2Q.1712241340893.dd0b81cc4bd2fb0648ab0c7065aafec1; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_SuKZ0igeRRChlY609Vo1Iw; _zm_ssid=us04_c_yfJY_5CCRx-nDAEayrjxxw; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b'
+  )
 				)
 			);
 			$response = curl_exec($curl);
@@ -1426,7 +1425,7 @@ class Dashboard extends CI_Controller {
 		$bookingTime = explode(',', $bookingTime);
         if(!empty($getBookSlot)) {
         	$html .="<div style='width: 100%; display: inline-block; padding: 0 40px'><div style='width: 100%; border: 1px solid #eee;height: auto;display: inline-block;box-shadow: 0 0 10px #dddddd;'>";
-        	for($i = 0; $i < count($bookingTime); $i++) {
+        	for($i = 0; $i < count($bookingTime); $i++) { 
         		$getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
         		$getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$getBookSlot[0]['employer_id']."'")->result_array();
         		$html .="<div style='width: 33.33%;float: left;display: inline-block;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px;'>".date('h:i A', strtotime($bookingTime[$i]))." to ".date('h:i A', strtotime($bookingTime[$i]) + 60*60)."</p></div>";
@@ -1456,7 +1455,7 @@ class Dashboard extends CI_Controller {
                 $bookingTime = explode(',', $bookingTime);
 				$meetingLink = explode(',', $getBookSlot[0]['meeting_link']);
 				$meetingPass = explode(',', $getBookSlot[0]['meeting_pass']);
-                for($j = 0; $j < count($bookingTime); $j++) {
+                for($j = 0; $j < count($bookingTime); $j++) { 
                     $getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                     $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$employer_id."'")->result_array();
                     // $html .= "<div style='width: 33.33%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'>".date('h:i A', strtotime($bookingTime[$j]))." to ".date('h:i A', strtotime($bookingTime[$j]) + 60*60)."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'><a href=".$meetingLink[$j].">Meeting Link</a></p><input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck($booking_id)'></div>";
@@ -1490,7 +1489,7 @@ class Dashboard extends CI_Controller {
 						$bookingTime = explode(',', $bookingTime);
 						$meetingLink = explode(',', $getBookSlot[0]['meeting_link']);
 						$meetingPass = explode(',', $getBookSlot[0]['meeting_pass']);
-						for($j = 0; $j < count($bookingTime); $j++) {
+						for($j = 0; $j < count($bookingTime); $j++) { 
 							$getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$employee_id."'")->result_array();
 							$getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$employer_id."'")->result_array();
 							// $html .= "<div style='width: 100%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'>".date('h:i A', strtotime($bookingTime[$j]))." to ".date('h:i A', strtotime($bookingTime[$j]) + 60*60)."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'><a href=".$meetingLink[$j].">Meeting Link</a></p><input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck($booking_id)'></div>";
@@ -1524,7 +1523,7 @@ class Dashboard extends CI_Controller {
 		}
 		$output .= '<div>';
 		if(!empty($recomendedJobList)) {
-			foreach ($recomendedJobList as $key) {
+			foreach ($recomendedJobList as $key) { 
 				if($key['userType'] == 1){
 					$name = $key['firstname'].' '.$key['lastname'];
 				} else {
@@ -1559,7 +1558,7 @@ class Dashboard extends CI_Controller {
 					</div>
 				</div>';
 			}
-			$output .='</div>';
+			$output .='</div>'; 
 		} else {
             $output .= '<div class="emply-resume-list"><div class="emply-resume-thumb" style="width: 100%;"><h2>No Data Found</h2></div></div>';
         }

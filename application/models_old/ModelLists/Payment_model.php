@@ -18,9 +18,9 @@ class Payment_model extends My_Model {
         $this->db->where($cond);
 
         $i = 0;
-
-        if($_POST['search']['value']) {
-            $explode_string = explode(' ', $_POST['search']['value']);
+        $new_str = preg_replace("/[^a-zA-Z0-9]/", "", $_POST['search']['value']);
+        if($new_str) {
+            $explode_string = explode(' ', $new_str);
             foreach ($explode_string as $show_string) {
                 $cond  = " ";
                 $cond.=" ( emp.name_of_card LIKE '%".trim($show_string)."%' ";

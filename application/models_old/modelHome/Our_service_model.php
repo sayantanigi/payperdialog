@@ -22,10 +22,10 @@ class Our_service_model extends CI_Model
         $this->db->join('category',"category.id=our_service.category_id",'left');
 
 		$i = 0;
-
-        if($_POST['search']['value']) // if datatable send POST for search
+        $new_str = preg_replace("/[^a-zA-Z0-9]/", "", $_POST['search']['value']);
+        if($new_str) // if datatable send POST for search
             {
-                $explode_string = explode(' ', $_POST['search']['value']);
+                $explode_string = explode(' ', $new_str);
                 foreach ($explode_string as $show_string)
                 {
                     $cond  = " ";

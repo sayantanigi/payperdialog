@@ -1,6 +1,6 @@
 <?php
 if (!defined('BASEPATH')) exit('No direct script access allowed');
-
+error_reporting(0);
 class Post_job_model extends My_Model {
     var $column_order = array(null,'postjob.post_title','category.category_name','postjob.duration','postjob.charges',null); //set column field database for datatable orderable
     var $order = array('postjob.id' => 'DESC');
@@ -16,9 +16,9 @@ class Post_job_model extends My_Model {
         $this->db->join('sub_category','sub_category.id=postjob.subcategory_id');
         // $this->db->where($cond);
 		$i = 0;
-
-        if($_POST['search']['value']) {
-            $explode_string = explode(' ', $_POST['search']['value']);
+        $new_str = preg_replace("/[^a-zA-Z0-9]/", "", $_POST['search']['value']);
+        if($new_str) {
+            $explode_string = explode(' ', $new_str);
             foreach ($explode_string as $show_string) {
                 $cond  = " ";
                 $cond.=" (  postjob.post_title LIKE '%".trim($show_string)."%' ";
@@ -150,20 +150,18 @@ class Post_job_model extends My_Model {
     }
 
     // pagination subcategory start
-    function make_query($title, $location,$days,$category_id,$subcategory_id,$search_title,$search_location,$country,$state,$city) {
-        if(isset($title) || isset($location) || isset($days) || isset($category_id)|| isset($subcategory_id) || isset($search_title) || isset($search_location) || isset($country) || isset($state) || isset($city)) {
+    function make_query($title, $location,$days,$category_id,$subcategory_id,$search_title,$search_location,$country,$state,$city,$date_posted,$remote_job,$from_price,$to_price,$job_type,$posted_by,$experience_level,$education) {
+        if(isset($title) || isset($location) || isset($days) || isset($category_id)|| isset($subcategory_id) || isset($search_title) || isset($search_location) || isset($country) || isset($state) || isset($city) || isset($date_posted) || isset($remote_job) || isset($from_price) || isset($to_price) || isset($job_type) || isset($posted_by) || isset($experience_level) || isset($education)) {
             $query = "SELECT * FROM postjob WHERE is_delete = '0'";
             if(isset($title) && !empty($title)) {
                 $query .= " AND post_title like '%".$title."%'";
 
             }
             if(isset($location) && !empty($location)) {
-                $query .= "
-                AND location like '%".$location."%'";
+                $query .= "AND location like '%".$location."%'";
             }
             if(isset($category_id) && !empty($category_id)) {
-                $query .= "
-                AND category_id='".$category_id."'";
+                $query .= "AND category_id='".$category_id."'";
             }
 
             if(isset($subcategory_id) && !empty($subcategory_id)) {
@@ -188,43 +186,71 @@ class Post_job_model extends My_Model {
                 } else {
                     $current_date=date('Y-m-d');
                     $dates=date('Y-m-d', strtotime($current_date.'-'.$days.'days'));
-                    $query .="AND created_date>='".$dates."'";
+                    $query .=" AND created_date>='".$dates."'";
                 }
             }
 
             if(isset($search_title)&& !empty($search_title)) {
-                $query .= "AND post_title like '%".$search_title."%'";
+                $query .= " AND post_title like '%".$search_title."%'";
             }
 
             if(isset($search_location) && !empty($search_location)) {
-                $query .= "AND location like '%".$search_location."%'";
+                $query .= " AND location like '%".$search_location."%'";
             }
 
             if(isset($country) && !empty($country)) {
-                $query .= "AND country ='".$country."'";
+                $query .= " AND country ='".$country."'";
             }
 
             if(isset($state) && !empty($state)) {
-                $query .= "AND state ='".$state."'";
+                $query .= " AND state ='".$state."'";
             }
 
             if(isset($city) && !empty($city)) {
-                $query .= "AND city ='".$city."'";
+                $query .= " AND city ='".$city."'";
+            }
+
+            if(isset($date_posted) && !empty($date_posted)) {
+                $query .= " AND created_date LIKE '%".date('Y-m-d',strtotime($date_posted))."%'";
+            }
+
+            if(isset($remote_job) && !empty($remote_job)) {
+                $query .= " AND remote ='".$remote_job."'";
+            }
+
+            if(isset($from_price) && !empty($from_price)) {
+                $query .= " AND charges BETWEEN '".$from_price."' AND '".$to_price."'";
+            }
+
+            if(isset($job_type) && !empty($job_type)) {
+                $query .= " AND job_type ='".$job_type."'";
+            }
+
+            if(isset($posted_by) && !empty($posted_by)) {
+                $query .= " AND user_id ='".$posted_by."'";
+            }
+
+            if(isset($experience_level) && !empty($experience_level)) {
+                $query .= " AND experience_level ='".$experience_level."'";
+            }
+
+            if(isset($education) && !empty($education)) {
+                $query .= " AND education ='".$education."'";
             }
             return $query;
         }
         //print_r($this->db->last_query()); exit;
     }
 
-    function subcategory_getcount($title, $location,$days,$category_id,$subcategory_id,$search_title,$search_location,$country,$state,$city) {
-        $query = $this->make_query($title, $location,$days,$category_id,$subcategory_id,$search_title,$search_location,$country,$state,$city);
+    function subcategory_getcount($title, $location,$days,$category_id,$subcategory_id,$search_title,$search_location,$country,$state,$city,$date_posted,$remote_job,$from_price,$to_price,$job_type,$posted_by,$experience_level,$education) {
+        $query = $this->make_query($title, $location,$days,$category_id,$subcategory_id,$search_title,$search_location,$country,$state,$city,$date_posted,$remote_job,$from_price,$to_price,$job_type,$posted_by,$experience_level,$education);
         $data = $this->db->query($query);
         return $data->num_rows();
     }
 
-    function subcategory_fetchdata($limit, $start, $title, $location,$days,$category_id,$subcategory_id,$post_id,$search_title,$search_location,$country,$state,$city) {
-        if(isset($title) || isset($location) || isset($days) || isset($category_id)|| isset($subcategory_id)|| isset($search_title)|| isset($search_location)|| isset($country)|| isset($state)|| isset($city)){
-            $query = $this->make_query($title, $location,$days,$category_id,$subcategory_id,$search_title,$search_location,$country,$state,$city);
+    function subcategory_fetchdata($limit, $start, $title, $location,$days,$category_id,$subcategory_id,$post_id,$search_title,$search_location,$country,$state,$city,$date_posted,$remote_job,$from_price,$to_price,$job_type,$posted_by,$experience_level,$education) {
+        if(isset($title) || isset($location) || isset($days) || isset($category_id)|| isset($subcategory_id)|| isset($search_title)|| isset($search_location)|| isset($country)|| isset($state)|| isset($city) || isset($date_posted) || isset($remote_job) || isset($from_price) || isset($to_price) || isset($job_type) || isset($posted_by) || isset($experience_level) || isset($education)){
+            $query = $this->make_query($title, $location,$days,$category_id,$subcategory_id,$search_title,$search_location,$country,$state,$city,$date_posted,$remote_job,$from_price,$to_price,$job_type,$posted_by,$experience_level,$education);
             $query .= ' ORDER BY id DESC';
             $query .= ' LIMIT '.$start.', ' . $limit;
             $data = $this->db->query($query);
@@ -238,6 +264,7 @@ class Post_job_model extends My_Model {
         if($data->num_rows() > 0) {
             foreach($data->result_array() as $row) {
                 $get_users=$this->Crud_model->get_single('users',"userId='".$row['user_id']."'");
+                //print_r($get_users);
                 if($get_users->userType == 1){
                     $name = $get_users->firstname.' '.$get_users->lastname;
                 } else {

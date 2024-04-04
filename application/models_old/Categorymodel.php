@@ -17,10 +17,10 @@ var $column_order = array('category.id','category.category_name','category.creat
         $this->db->from('category');
        $this->db->where($cond);
 		$i = 0;
-
-        if($_POST['search']['value']) // if datatable send POST for search
+        $new_str = preg_replace("/[^a-zA-Z0-9]/", "", $_POST['search']['value']);
+        if($new_str) // if datatable send POST for search
             {
-                $explode_string = explode(' ', $_POST['search']['value']);
+                $explode_string = explode(' ', $new_str);
                 foreach ($explode_string as $show_string)
                 {
                     // echo $show_string;
