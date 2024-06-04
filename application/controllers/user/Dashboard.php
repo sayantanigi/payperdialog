@@ -1118,7 +1118,6 @@ class Dashboard extends CI_Controller {
 		} else {
 			echo '2';
 		}
-
 	}
 
 	function delete_product_image() {
@@ -1300,10 +1299,10 @@ class Dashboard extends CI_Controller {
 					CURLOPT_CUSTOMREQUEST => 'POST',
 					CURLOPT_POSTFIELDS => json_encode($postData),
 					CURLOPT_HTTPHEADER => array(
-    'Content-Type: application/json',
-    'Authorization: Bearer eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6IjA1ODQ4NDY3LTI3ZWQtNDRhMS05OTM3LWIwNGUwMmYzZjFhNCJ9.eyJ2ZXIiOjksImF1aWQiOiI1ZDM5MzViODBjNzEwY2ZlZmQ4ZDhjZWExZDgzNWY0ZiIsImNvZGUiOiI4V3c1eThHcnR3R2dFQ0tLdThyUmNHZWI5WDN4VTZsSkEiLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjoyNywiYXVkIjoiaHR0cHM6Ly9vYXV0aC56b29tLnVzIiwidWlkIjoiODBDMmloZTJUVy1sbWpvTU9nQm5GUSIsIm5iZiI6MTcxMjI0MTM0MCwiZXhwIjoxNzEyMjQ0OTQwLCJpYXQiOjE3MTIyNDEzNDAsImFpZCI6IjczSC1MbDlEU3NlRFdGNmRnVWVUOUEifQ.8NbzwIs55na1W7UVSNiWVAC0KvqiCrCxBpZlFW-gsK7RyFsypfelCfEK3G4tyqXC90XZyMgk7nOeeJiLRUL-Hw',
-    'Cookie: __cf_bm=YkRxLdFTeXLoIjUt66.359RXbgzpBWnL.pV7ABqvnRg-1712241341-1.0.1.1-Ac4VCXDQLBSDFJwa8Lfl9dquz6MBV4uM4J2HBC2dewbOQPjviNtzrcFQwNoxe15qbEKQ3PgzlN8UGvGCuGpTsg; _zm_chtaid=415; _zm_ctaid=nkZLSBVjQseGRkKH_Lxg2Q.1712241340893.dd0b81cc4bd2fb0648ab0c7065aafec1; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_SuKZ0igeRRChlY609Vo1Iw; _zm_ssid=us04_c_yfJY_5CCRx-nDAEayrjxxw; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b'
-  )
+					    'Content-Type: application/json',
+					    'Authorization: Bearer eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6IjMyOGZjNTcwLTNlYzctNDViZi1hMGNiLWE1ZTIzNTdmOGJhMyJ9.eyJ2ZXIiOjksImF1aWQiOiI1ZDM5MzViODBjNzEwY2ZlZmQ4ZDhjZWExZDgzNWY0ZiIsImNvZGUiOiI4V3c1eThHcnR3R2dFQ0tLdThyUmNHZWI5WDN4VTZsSkEiLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjozNCwiYXVkIjoiaHR0cHM6Ly9vYXV0aC56b29tLnVzIiwidWlkIjoiODBDMmloZTJUVy1sbWpvTU9nQm5GUSIsIm5iZiI6MTcxMjY2OTUxNCwiZXhwIjoxNzEyNjczMTE0LCJpYXQiOjE3MTI2Njk1MTQsImFpZCI6IjczSC1MbDlEU3NlRFdGNmRnVWVUOUEifQ.5awHX0D1ahcYiACabVNKryPgY1Yhln-B9FL74p0V2HXGdSYe9FnXStmJFVvO0z_yV93MPfbiOneOZqlMXLDChw',
+					    'Cookie: __cf_bm=GN3ywe1uhIkt8A3lL9gHzHKkp.4qZTLivRpTlPVFJqY-1712669514-1.0.1.1-DJPYX.VcbuLNC1eShWwsac4xiyrEI1D0FAUk6BbEsCgSrHuLUnZNcmSdTgJKAV4dEOMEev5a_8f.MErEwIl5ag; _zm_chtaid=194; _zm_ctaid=bWbmHkt-Rp25q21_dFN0wQ.1712669514172.bc9ee5647144d7a2e253b3c6f2d5b040; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_4Sx_TLg1RXKKrIYAholtOg; _zm_ssid=us04_c_Ro2izO6ERUGvcEXUNIr5dw; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b'
+				  	)
 				)
 			);
 			$response = curl_exec($curl);
