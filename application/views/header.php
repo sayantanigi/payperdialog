@@ -158,7 +158,7 @@ $(function () {
                                 <a href="<?= base_url('employer-list')?>" title="">Employers</a>
                             </li>
                             <li class="">
-                                <a href="<?= base_url('workers-list')?>" title="">Employees</a>
+                                <a href="<?= base_url('workers-list')?>" title="">Job Seekers</a>
                             </li>
                             <li class="">
                                 <a href="<?= base_url('expert-list')?>" title="">Experts</a>
@@ -172,7 +172,7 @@ $(function () {
                         <?php
                         if(!empty($_SESSION['afrebay']['userId'])) {
                             if($_SESSION['afrebay']['userType'] == '2') {
-                                if($get_setting->required_subscription == '1') { 
+                                if($get_setting->required_subscription == '1') {
                                     $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".$_SESSION['afrebay']['userId']."' AND (status = '1' OR status = '2')")->result_array();
                                     if(empty($get_sub_data)) {
                                         echo '<a href="'.base_url('subscription').'" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please activate a subscription package and complete your profile to proceed with the post job activities.</span></a>';
@@ -190,7 +190,7 @@ $(function () {
                                     $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                                     if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) {
                                         echo '<a href="'.base_url('subscription').'" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please complete your profile to proceed with the post job activities.</span></a>';
-                                    } else { 
+                                    } else {
                                         $checkPostdata = $this->db->query("SELECT COUNT(id) as count FROM postjob WHERE user_id = '".$_SESSION['afrebay']['userId']."'")->row();
                                         if($checkPostdata->count == '0') {
                                             echo '<a href="'.base_url('postjob').'" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>';
@@ -222,51 +222,51 @@ $(function () {
                                     </a>
                                     <ul>
                                         <li>
-                                            <?php 
-                                            if($get_setting->required_subscription != '1') 
+                                            <?php
+                                            if($get_setting->required_subscription != '1')
                                             {
                                                 $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                                if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) 
+                                                if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio']))
                                                 { ?>
                                                     <a href="<?=base_url(); ?>profile" title="">Profile</a>
-                                                <?php 
-                                                } 
-                                                else 
-                                                { 
+                                                <?php
+                                                }
+                                                else
+                                                {
                                                 ?>
                                                 <a href="<?=base_url(); ?>dashboard" title="">Dashboard</a>
-                                                <?php 
+                                                <?php
                                                 }
                                             } else {
                                                 $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".$_SESSION['afrebay']['userId']."' AND (status = '1' OR status = '2')")->result_array();
-                                                if(empty($get_sub_data)) 
+                                                if(empty($get_sub_data))
                                                 {
-                                                    if(@$_SESSION['afrebay']['userType']=='1') 
+                                                    if(@$_SESSION['afrebay']['userType']=='1')
                                                     { ?>
                                                         <a href="<?=base_url(); ?>subscription" title="">Subscribe</a>
-                                                    <?php 
-                                                    } 
-                                                    else 
-                                                    { ?>
-                                                        <a href="<?=base_url(); ?>subscription" title="">Subscribe</a>
-                                                    <?php 
+                                                    <?php
                                                     }
-                                                } 
-                                                else 
+                                                    else
+                                                    { ?>
+                                                        <a href="<?=base_url(); ?>subscription" title="">Subscribe</a>
+                                                    <?php
+                                                    }
+                                                }
+                                                else
                                                 {
                                                     $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                                    if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) 
+                                                    if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio']))
                                                     { ?>
                                                         <a href="<?=base_url(); ?>profile" title="">Profile</a>
-                                                    <?php 
-                                                    } 
-                                                    else 
-                                                    { 
+                                                    <?php
+                                                    }
+                                                    else
+                                                    {
                                                     ?>
                                                     <a href="<?=base_url(); ?>dashboard" title="">Dashboard</a>
-                                                    <?php 
-                                                    } 
-                                                } 
+                                                    <?php
+                                                    }
+                                                }
                                             }
                                             ?>
                                         </li>

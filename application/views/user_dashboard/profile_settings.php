@@ -170,7 +170,7 @@ if($data_request=='user'){
                                                         <option value="2" <?php if(@$userinfo->experience == 2) {echo "selected";}?>>03 to 05 Years</option>
                                                         <option value="3" <?php if(@$userinfo->experience == 3) {echo "selected";}?>>06 to 08 Years</option>
                                                         <option value="4" <?php if(@$userinfo->experience == 4) {echo "selected";}?>>08 to 10 Years</option>
-                                                        <option value="5" <?php if(@$userinfo->experience == 5) {echo "selected";}?>>< 10 Years</option>
+                                                        <option value="5" <?php if(@$userinfo->experience == 5) {echo "selected";}?>>> 10 Years</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -222,7 +222,7 @@ if($data_request=='user'){
                                                                     <td><input type="file" name="portfolio_file[]" id="portfolio_file<?= $rows; ?>" class="form-control" value="<?= $key->portfolio_file; ?>"></td>
                                                                     <td>
                                                                         <a href="<?php echo base_url('uploads/users/portfolio_file/'.$key->portfolio_file); ?>" target="_blank">
-                                                                        <input type="text" name="old_portfolio_file" value="<?= $key->portfolio_file;?>">    
+                                                                        <input type="text" name="old_portfolio_file" value="<?= $key->portfolio_file;?>">
                                                                     </td>
                                                                     <td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return remove(this)">X</a></td>
                                                                 </tr>
@@ -259,14 +259,14 @@ if($data_request=='user'){
 
                                             <div class="col-lg-12">
                                                 <label for="short_bio">
-                                                    <h4>Short Bio <span style="color:red;">*</span></h4>
+                                                    <h4>Please let us know what differentiates you as a candidate <span style="color:red;">*</span></h4>
                                                 </label>
-                                                <textarea class="form-control" name="short_bio" id="short_bio" placeholder="Short Bio" maxlength="500"><?= @$userinfo->short_bio ?></textarea>
+                                                <textarea class="form-control" name="short_bio" id="short_bio" placeholder="Please let us know what differentiates you as a candidate" maxlength="500"><?= @$userinfo->short_bio ?></textarea>
                                                 <div id="the-count">
                                                     <span id="current">0</span>
                                                     <span id="maximum">/ 500</span>
                                                 </div>
-                                                <div id="vld_shrtBio" style="color:red; margin-top: 10px;">Please enter short bio.</div>
+                                                <div id="vld_shrtBio" style="color:red; margin-top: 10px;">This field is mandatory.</div>
                                             </div>
                                         </div>
                                     </div>
@@ -290,7 +290,7 @@ if($data_request=='user'){
 <div class="col-md-3 col-6 v-align CustomDesign" style="display: inline-block; float: left; margin-top: 10px;">
     <p class="CustomPara">Upcoming Booking</p>
     <div class="CustomBlock">
-        <?php 
+        <?php
         $selectDate = date('Y-m-d');
 		$employeeId = $_SESSION['afrebay']['userId'];
         $availableData = $this->db->query("SELECT user_availability.*, user_booking.* FROM user_availability JOIN user_booking ON user_availability.id = user_booking.available_id WHERE start_date > '".$selectDate."' AND user_id ='".@$employeeId."'")->result_array();
@@ -301,7 +301,7 @@ if($data_request=='user'){
             <?php $getBookSlot = explode(',', $value['bookingTime']);
             $meetingLink = explode(',', $value['meeting_link']);
             for($i = 0; $i < count($getBookSlot); $i++) { ?>
-                <?php 
+                <?php
                 $booking_id = $value[$i]['id'];
                 $employee_id = $value[$i]['employee_id'];
                 $employer_id = $value[$i]['employer_id'];
@@ -313,7 +313,7 @@ if($data_request=='user'){
                     <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;"><a href="<?= $meetingLink[$i] ?>">Meeting Link</a></p>
                     <!-- <input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck(<?= $booking_id; ?>)'> -->
                 </div>
-            <?php } 
+            <?php }
             $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$value['employer_id']."'")->row();
             ?>
                 <div>

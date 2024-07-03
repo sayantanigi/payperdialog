@@ -170,7 +170,7 @@ if($data_request=='user'){
                                                         <option value="2" <?php if(@$userinfo->experience == 2) {echo "selected";}?>>03 to 05 Years</option>
                                                         <option value="3" <?php if(@$userinfo->experience == 3) {echo "selected";}?>>06 to 08 Years</option>
                                                         <option value="4" <?php if(@$userinfo->experience == 4) {echo "selected";}?>>08 to 10 Years</option>
-                                                        <option value="5" <?php if(@$userinfo->experience == 5) {echo "selected";}?>>< 10 Years</option>
+                                                        <option value="5" <?php if(@$userinfo->experience == 5) {echo "selected";}?>>> 10 Years</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -222,7 +222,7 @@ if($data_request=='user'){
                                                                     <td><input type="file" name="portfolio_file[]" id="portfolio_file<?= $rows; ?>" class="form-control" value="<?= $key->portfolio_file; ?>"></td>
                                                                     <td>
                                                                         <a href="<?php echo base_url('uploads/users/portfolio_file/'.$key->portfolio_file); ?>" target="_blank">
-                                                                        <input type="text" name="old_portfolio_file" value="<?= $key->portfolio_file;?>">    
+                                                                        <input type="text" name="old_portfolio_file" value="<?= $key->portfolio_file;?>">
                                                                     </td>
                                                                     <td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return remove(this)">X</a></td>
                                                                 </tr>
@@ -259,14 +259,14 @@ if($data_request=='user'){
 
                                             <div class="col-lg-12">
                                                 <label for="last_name">
-                                                    <h4>Short Bio <span style="color:red;">*</span></h4>
+                                                    <h4>Please let us know what differentiates you as a candidate <span style="color:red;">*</span></h4>
                                                 </label>
-                                                <textarea class="form-control" name="short_bio" id="short_bio" placeholder="Short Bio" maxlength="500"><?= @$userinfo->short_bio ?></textarea>
+                                                <textarea class="form-control" name="short_bio" id="short_bio" placeholder="Please let us know what differentiates you as a candidate" maxlength="500"><?= @$userinfo->short_bio ?></textarea>
                                                 <div id="the-count">
                                                     <span id="current">0</span>
                                                     <span id="maximum">/ 500</span>
                                                 </div>
-                                                <div id="vld_shrtBio" style="color:red; margin-top: 10px;">Please enter short bio.</div>
+                                                <div id="vld_shrtBio" style="color:red; margin-top: 10px;">This field is mandatory.</div>
                                             </div>
                                         </div>
                                     </div>

@@ -84,7 +84,6 @@
         </div>
     </div>
 </section>
-
 <section>
     <div class="block Opp_Block">
         <div class="container">
@@ -151,7 +150,6 @@
         </div>
     </div>
 </section>
-
 <section>
     <div class="block Worker-Block">
         <!-- <div data-velocity="-.1" style="background: url('<?=base_url(); ?>assets/images/resource/parallax3.jpg') 50% -62.7px repeat scroll transparent;" class="parallax scrolly-invisible no-parallax"></div> -->
@@ -161,8 +159,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="heading">
-                        <h2>Available Pay Per Dialog Employees</h2>
-                        <span>Find the most eligible employees within the portal.</span>
+                        <h2>Available Pay Per Dialog Job Seekers</h2>
+                        <span>Find the most eligible job seekers within the portal.</span>
                     </div>
                     <div class="blog-sec">
                         <div class="row">
@@ -209,11 +207,11 @@
                                             <!-- <p><?= ucfirst(strip_tags($shortbio))?></p> -->
                                             <!-- <p>In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate.</p> -->
                                         </div>
-                                        <?php 
+                                        <?php
                                         $user_rating = $this->db->query("SELECT AVG(rt.rating) as rate FROM employer_rating rt WHERE rt.worker_id = '".@$user->userId."'")->result();
                                         ?>
                                         <div class="staak">
-                                            <?php 
+                                            <?php
                                             if($user_rating[0]->rate > 0) {
                                                 for ($i = 0; $i < $user_rating[0]->rate; $i++) {
                                             ?>
@@ -246,110 +244,56 @@
         </div>
     </div>
 </section>
-
-
-
 <section id="scroll-here">
-
     <div class="block">
-
         <div class="container">
-
             <div class="row">
-
                 <div class="col-lg-12">
-
                     <div class="heading">
-
                         <h2>Our Services</h2>
-
-                        <span>The marketplace for the most eligible employers and employee. <br> Find the latest jobs in the industry globally.</span>
-
+                        <span>The marketplace for the most eligible employers and job seekers. <br> Find the latest jobs in the industry globally.</span>
                     </div>
-
                     <!-- Heading -->
-
                     <div class="cat-sec">
-
                         <div class="row no-gape">
-
                             <?php if(!empty($get_ourservice)){
-
                                 foreach($get_ourservice as $item){
-
                                     $get_category=$this->Crud_model->get_single('category',"id='".$item->category_id."'");
-
                                     if(strlen($item->description)>100) {
-
                                         $description=substr($item->description,0,100).'...';
-
                                     } else {
-
                                         $description=$item->description;
-
                                     }
-
                                 ?>
-
                             <div class="col-lg-3 col-md-6 col-sm-12">
-
                                 <div class="p-category">
-
                                     <a href="javascript:void(0)" title="">
-
                                         <!-- <i class="<?= $item->icon?>"></i> -->
                                         <img src="<?php echo base_url()?>/uploads/services/<?php echo $item->icon?>" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px;">
-
                                         <?php if(!empty($get_category->category_name)) { ?>
-
                                         <span><?= ucfirst($get_category->category_name)?></span>
-
                                         <?php } else { ?>
-
                                         <span></span>
-
                                         <?php } ?>
-
                                         <?php if(!empty($description)) { ?>
-
                                         <p><?= ucfirst(strip_tags($description));?></p>
-
                                         <?php } else { ?>
-
                                         <p></p>
-
                                         <?php } ?>
-
                                     </a>
-
                                 </div>
-
                             </div>
-
                             <?php } } ?>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </section>
-
-
-
 <section>
-
     <div class="block double-gap-top double-gap-bottom">
-
         <!-- <div data-velocity="-.1" style="background: url(<?=base_url(); ?>assets/images/resource/parallax1.jpg) repeat scroll 50% 422.28px transparent;" class="parallax scrolly-invisible layer color"></div> -->
-
         <?php if(!empty($get_banner_middle->image) && file_exists('uploads/banner/'.$get_banner_middle->image)){?>
         <!-- <img src="<?=base_url('uploads/banner/'.$get_banner_middle->image); ?>" alt="" /> -->
         <div data-velocity="-.1" style="background: url(<?=base_url('uploads/banner/'.$get_banner_middle->image); ?>) repeat scroll 50% 422.28px transparent;" class="parallax scrolly-invisible layer color"></div>
@@ -357,213 +301,107 @@
         <!-- <img src="<?=base_url(); ?>assets/images/resource/mslider1.jpg" alt="" /> -->
         <div data-velocity="-.1" style="background: url(<?=base_url(); ?>assets/images/resource/parallax1.jpg) repeat scroll 50% 422.28px transparent;" class="parallax scrolly-invisible layer color"></div>
         <?php } ?>
-
         <!-- PARALLAX BACKGROUND IMAGE -->
-
         <div class="container">
-
             <div class="row">
-
                 <div class="col-lg-12">
-
                     <div class="simple-text-block">
-
                         <h3>Make a Difference with Your Online Resume!</h3>
-
                         <span>Get access to the latest jobs and projects globally!!</span>
-
                         <?php if(empty($_SESSION['afrebay']['userId'])){?>
-
                         <a href="<?= base_url('register')?>" title="">Create an Account</a>
-
                         <?php } ?>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </section>
-
-
-
 <section>
-
     <div class="block">
-
         <div class="container">
-
             <div class="row">
-
                 <div class="col-lg-12">
-
                     <div class="heading">
-
                         <h2>Companies We've Helped</h2>
-
                         <span>Some of the companies we've helped recruit excellent applicants over the years.</span>
-
                     </div>
-
                     <!-- Heading -->
-
                     <div class="comp-sec">
-
                         <?php if(!empty($get_company)) {
-
                         foreach($get_company as $item) { ?>
-
                         <div class="company-img">
-
                             <a href="javascript:void(0)" title="">
-
                                 <?php if(!empty($item->logo)&& file_exists('uploads/company_logo/'.$item->logo)){?>
-
                                 <img src="<?=base_url('uploads/company_logo/'.$item->logo); ?>" alt="" />
-
                                 <?php } else { ?>
-
                                 <img src="<?=base_url(); ?>assets/images/resource/b1.jpg" alt="" />
-
                                 <?php } ?>
-
                             </a>
-
                         </div>
-
                         <?php } }?>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </section>
-
-
-
 <section>
-
     <div class="block Career">
-
         <!-- <div data-velocity="-.1"
-
             style="background: url(<?=base_url(); ?>assets/images/resource/parallax3.jpg) repeat scroll 50% 422.28px transparent;"
-
             class="parallax scrolly-invisible no-parallax"></div> -->
-
         <div data-velocity="-.1" style="background: #F9FAFC" class="parallax scrolly-invisible no-parallax"></div>
-
         <!-- PARALLAX BACKGROUND IMAGE -->
-
         <div class="container">
-
             <div class="row">
-
                 <div class="col-lg-12">
-
                     <div class="heading">
-
                         <h2>Quick Career Tips</h2>
-
                         <span>Review the latest updates and informations in the industry.</span>
-
                     </div>
-
                     <!-- Heading -->
-
                     <div class="blog-sec">
-
                         <div class="row">
-
                             <?php if(!empty($get_career)){ foreach($get_career as $career){
-
                             if(strlen($career->description)>100) {
-
                                 $desc=substr($career->description,0,100).'...';
-
                             } else {
-
                                 $desc=$career->description;
-
                             }
-
                             ?>
-
                             <div class="col-lg-4 col-md-6 col-sm-12">
-
                                 <div class="my-blog">
-
                                     <div class="blog-thumb">
-
                                         <a href="<?= base_url('career-tip/'.base64_encode($career->id))?>" title="">
-
                                             <?php if(!empty($career->image)&& file_exists('uploads/career/'.$career->image)){?>
-
                                             <img src="<?=base_url('uploads/career/'.$career->image); ?>" alt="" />
-
                                             <?php } else{?>
-
                                             <img src="<?=base_url(); ?>assets/images/resource/b1.jpg" alt="" />
-
                                             <?php } ?>
-
                                         </a>
-
                                         <div class="blog-metas">
-
                                             <a href="javascript:void(0)"
-
                                                 title=""><?= date('M d,Y',strtotime($career->update_date))?></a>
-
                                             <a href="javascript:void(0)" title="">0 Comments</a>
-
                                         </div>
-
                                     </div>
-
                                     <div class="blog-details">
-
                                         <h3><a href="<?= base_url('career-tip/'.base64_encode($career->id))?>"
-
                                                 title=""><?= ucfirst($career->title)?></a></h3>
-
                                         <div><?= ucfirst($desc)?></div>
-
                                         <a href="<?= base_url('career-tip/'.base64_encode($career->id))?>"
-
                                             title=""><span>Read More</span></a>
-
                                     </div>
-
                                 </div>
-
                             </div>
-
                             <?php } }?>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
-
 </section>
 <style>
 .chosen_country {color: #888888; height: 60px; border-radius: 50px; padding: 17px !important;}
@@ -578,13 +416,11 @@ $(window).load(function () {
         $('#location').html('Geolocation is not supported by this browser.');
     }
 });
-
 // function showLocation(position) {
 //     var latitude = position.coords.latitude;
 //     var longitude = position.coords.longitude;
 //     displayLocation(latitude, longitude);
 // }
-
 // function displayLocation(latitude, longitude) {
 //     var geocoder;
 //     geocoder = new google.maps.Geocoder();
@@ -605,7 +441,6 @@ $(window).load(function () {
 //         }
 //     );
 // }
-
 </script>
 <script>
     function getState(val) {
@@ -628,7 +463,6 @@ $(window).load(function () {
             }
         });
     }
-
     function getCity(val) {
         var base_url = $("#base_url").val();
         var id = val;

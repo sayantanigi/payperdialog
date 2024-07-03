@@ -30,13 +30,13 @@ if(!empty($_SESSION['afrebay']['userId'])) {
                             <div class="row">
                                 <div class="col-lg-6">
                                     <a href="<?= base_url('employer-list')?>" title="Businesses">Employer</a>
-                                    <a href="<?= base_url('workers-list')?>" title="Freelancers">Employee</a>
+                                    <a href="<?= base_url('workers-list')?>" title="Freelancers">Job Seeker</a>
                                     <?php if($get_setting->required_subscription == '1') { ?>
                                     <a href="<?= base_url('vendor_pricing')?>" title="">Employer Pricing</a>
-                                    <a href="<?= base_url('freelancer_pricing')?>" title="">Employee Pricing</a>
+                                    <a href="<?= base_url('freelancer_pricing')?>" title="">Job Seeker Pricing</a>
                                     <?php } else { ?>
                                     <a href="<?= base_url('register')?>" title="">Employer Sign up</a>
-                                    <a href="<?= base_url('register')?>" title="">Employee Sign up</a>
+                                    <a href="<?= base_url('register')?>" title="">Job Seeker Sign up</a>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -124,16 +124,16 @@ if(!empty($_SESSION['afrebay']['userId'])){
 <?php }
 } ?>
 <div class="modal fade edit-form" id="aggrementmodal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height: fit-content;" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog" role="document" style="margin: 15% auto !important;">
-        <div class="modal-content" style="width: 510px; height: 620px; overflow: auto;">
+    <div class="modal-dialog modal-dialog" role="document" style="position: relative;top: 180px;right: 355px;">
+        <div class="modal-content" style="width: 1200px;max-height: 650px;overflow: auto;">
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title" id="modal-title">User's Aggrement</h5>
+                <h5 class="modal-title" id="modal-title">Agreement</h5>
                 <button type="button" class="bookBtn-close btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeaggrmnt()" style="background: none; padding: 0; margin: 0;">X</button>
             </div>
             <form id="myForm">
                 <div class="modal-body" style="margin: 10px;">
                 <div class='form-group date'>
-                        <?php 
+                        <?php
                         $privacy = $this->db->query("SELECT `title`, `description` FROM manage_cms WHERE id = '3'")->result_array();
                         $terms = $this->db->query("SELECT `title`, `description` FROM manage_cms WHERE id = '1'")->result_array();
                         ?>
@@ -253,7 +253,7 @@ function receiveVideoCallWindow(fid) {
     window.open(callPath, "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=250,left=20,width=600,height=450");
 }
 
-<?php if(@$_SESSION['afrebay']['userType'] == '1' || @$_SESSION['afrebay']['userType'] == '3') { 
+<?php if(@$_SESSION['afrebay']['userType'] == '1' || @$_SESSION['afrebay']['userType'] == '3') {
 $checkuseraggreed = $this->db->query("SELECT * FROM users WHERE userId = '".$_SESSION['afrebay']['userId']."'")->result_array();
 //print_r($checkuseraggreed); die;
 if(empty($checkuseraggreed[0]['isAggreed'])) { ?>
@@ -266,7 +266,7 @@ if(empty($checkuseraggreed[0]['isAggreed'])) { ?>
 <?php } } ?>
 
 function aggrement() {
-    if($("#aggrchck").is(":checked")) { 
+    if($("#aggrchck").is(":checked")) {
         var userid = <?php echo $_SESSION['afrebay']['userId'] ?>;
         $.ajax({
             type:"post",

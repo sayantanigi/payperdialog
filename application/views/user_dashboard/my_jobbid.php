@@ -122,7 +122,7 @@
                                                 <tr>
                                                     <td colspan="2" class="bid_contact-profile">
                                                         <?php
-                                                        //if(empty($key->profilePic)) 
+                                                        //if(empty($key->profilePic))
                                                         if (@$key->profilePic && file_exists('uploads/users/' . @$key->profilePic)) { ?>
                                                             <img src="<?php echo base_url() ?>uploads/users/<?php echo $key->profilePic ?>" alt="" style="width: 60px; height: 60px; object-fit: cover;">
                                                         <?php } else { ?>
@@ -243,16 +243,16 @@
 </div>
 </section>
 <div class="modal fade edit-form" id="aggrementmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog" role="document">
-        <div class="modal-content" style="width: 700px; height: 620px; overflow: auto;">
+    <div class="modal-dialog modal-dialog" role="document" style="position: relative;top: 180px;right: 355px;">
+        <div class="modal-content" style="width: 1200px;max-height: 650px;overflow: auto;">
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title" id="modal-title">User's Aggrement worker</h5>
+                <h5 class="modal-title" id="modal-title">Agreement</h5>
                 <button type="button" class="bookBtn-close btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeaggrmnt()" style="background: none;color: #000;padding: 0;margin: 0;">x</button>
             </div>
             <form id="myForm">
                 <div class="modal-body">
                     <div class='form-group date'>
-                        <?php 
+                        <?php
                         $privacy = $this->db->query("SELECT `title`, `description` FROM manage_cms WHERE id = '3'")->result_array();
                         $terms = $this->db->query("SELECT `title`, `description` FROM manage_cms WHERE id = '1'")->result_array();
                         ?>

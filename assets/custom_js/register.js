@@ -10,6 +10,7 @@ function btn_register() {
 	var conf_password=$('#conf_password').val();
 	var email=$('#email').val();
     var pattern_email = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    var regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@$!%*?&#]).{8,}$/;
 	var location=$('#location').val();
 	var latitude=$('#search_lat').val();
 	var longitude=$('#search_lon').val();
@@ -90,6 +91,13 @@ function btn_register() {
 		$("#password").focus();
 		return false;
 	}
+
+    if (!regex.test(password)) {
+        $('#err_password').fadeIn().html('Password must contain alphanumeric and special characters.').css('color','red');
+		setTimeout(function(){$("#err_password").html("&nbsp;");},3000);
+		$("#password").focus();
+		return false;
+    }
 
 	if(conf_password=='') {
 		$('#err_confpassword').fadeIn().html('Please enter confirm password').css('color','red');

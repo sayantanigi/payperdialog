@@ -1262,9 +1262,9 @@ class Dashboard extends CI_Controller {
 		$getpostemail = $getpostuser->email;
 		$getpostname = $getpostuser->companyname;
 
-		$bookingTime = $getBookinID[0]['bookingTime']; 
+		$bookingTime = $getBookinID[0]['bookingTime'];
 		$bt = explode(",", $bookingTime);
-		
+
 		$meetingLink = array();
 		$meetingPass = array();
 		for ($i=0; $i<count($bt); $i++){
@@ -1275,19 +1275,19 @@ class Dashboard extends CI_Controller {
 				"duration" => 30,
 				"settings" => [
 					"waiting_room" => false,
-					"host_video" => true, 
-					"participant_video" => true, 
-					"join_before_host" => true, 
-					"mute_upon_entry" => true, 
-					"watermark" => true, 
-					"audio" => "voip", 
+					"host_video" => true,
+					"participant_video" => true,
+					"join_before_host" => true,
+					"mute_upon_entry" => true,
+					"watermark" => true,
+					"audio" => "voip",
 					"auto_recording" => "cloud",
 					"allow_multiple_devices" => true,
 					"registration_type" => 2,
 				]
-			]; 
+			];
 			$curl = curl_init();
-			curl_setopt_array($curl, 
+			curl_setopt_array($curl,
 				array(
 					CURLOPT_URL => 'https://api.zoom.us/v2/users/me/meetings',
 					CURLOPT_RETURNTRANSFER => true,
@@ -1424,7 +1424,7 @@ class Dashboard extends CI_Controller {
 		$bookingTime = explode(',', $bookingTime);
         if(!empty($getBookSlot)) {
         	$html .="<div style='width: 100%; display: inline-block; padding: 0 40px'><div style='width: 100%; border: 1px solid #eee;height: auto;display: inline-block;box-shadow: 0 0 10px #dddddd;'>";
-        	for($i = 0; $i < count($bookingTime); $i++) { 
+        	for($i = 0; $i < count($bookingTime); $i++) {
         		$getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
         		$getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$getBookSlot[0]['employer_id']."'")->result_array();
         		$html .="<div style='width: 33.33%;float: left;display: inline-block;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px;'>".date('h:i A', strtotime($bookingTime[$i]))." to ".date('h:i A', strtotime($bookingTime[$i]) + 60*60)."</p></div>";
@@ -1454,7 +1454,7 @@ class Dashboard extends CI_Controller {
                 $bookingTime = explode(',', $bookingTime);
 				$meetingLink = explode(',', $getBookSlot[0]['meeting_link']);
 				$meetingPass = explode(',', $getBookSlot[0]['meeting_pass']);
-                for($j = 0; $j < count($bookingTime); $j++) { 
+                for($j = 0; $j < count($bookingTime); $j++) {
                     $getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                     $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$employer_id."'")->result_array();
                     // $html .= "<div style='width: 33.33%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'>".date('h:i A', strtotime($bookingTime[$j]))." to ".date('h:i A', strtotime($bookingTime[$j]) + 60*60)."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'><a href=".$meetingLink[$j].">Meeting Link</a></p><input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck($booking_id)'></div>";
@@ -1488,7 +1488,7 @@ class Dashboard extends CI_Controller {
 						$bookingTime = explode(',', $bookingTime);
 						$meetingLink = explode(',', $getBookSlot[0]['meeting_link']);
 						$meetingPass = explode(',', $getBookSlot[0]['meeting_pass']);
-						for($j = 0; $j < count($bookingTime); $j++) { 
+						for($j = 0; $j < count($bookingTime); $j++) {
 							$getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$employee_id."'")->result_array();
 							$getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$employer_id."'")->result_array();
 							// $html .= "<div style='width: 100%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'>".date('h:i A', strtotime($bookingTime[$j]))." to ".date('h:i A', strtotime($bookingTime[$j]) + 60*60)."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'><a href=".$meetingLink[$j].">Meeting Link</a></p><input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck($booking_id)'></div>";
@@ -1522,7 +1522,7 @@ class Dashboard extends CI_Controller {
 		}
 		$output .= '<div>';
 		if(!empty($recomendedJobList)) {
-			foreach ($recomendedJobList as $key) { 
+			foreach ($recomendedJobList as $key) {
 				if($key['userType'] == 1){
 					$name = $key['firstname'].' '.$key['lastname'];
 				} else {
@@ -1557,7 +1557,7 @@ class Dashboard extends CI_Controller {
 					</div>
 				</div>';
 			}
-			$output .='</div>'; 
+			$output .='</div>';
 		} else {
             $output .= '<div class="emply-resume-list"><div class="emply-resume-thumb" style="width: 100%;"><h2>No Data Found</h2></div></div>';
         }
@@ -1618,7 +1618,7 @@ class Dashboard extends CI_Controller {
 	}
 
 	public function checktoaggrement() {
-		$jobpostuserid = $_POST['jobpostuserid'];
+		$jobpostuserid = $_POST['userid'];
 		$data = array(
 			"isAggreed" => 1
 		);

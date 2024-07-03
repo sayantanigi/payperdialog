@@ -131,8 +131,8 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                 </div>
                                 <!-- Calender -->
                                 <div class="Calender_Pick" id="calendar"></div>
-                                <?php 
-                                if (!empty(@$_SESSION['afrebay']['userId'])) { 
+                                <?php
+                                if (!empty(@$_SESSION['afrebay']['userId'])) {
                                     $checkBookSlot = $this->db->query("SELECT user_availability.id as avail_id, user_availability.user_id, user_availability.start_date, user_availability.from_time, user_availability.end_date, user_availability.to_time, user_booking.id as boooking_id, user_booking.employee_id, user_booking.employer_id, user_booking.available_id, user_booking.bookingTime FROM user_booking JOIN user_availability ON user_availability.id = user_booking.available_id WHERE user_booking.employer_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                                     if(!empty($checkBookSlot)) {
                                         $availability = $this->db->query("SELECT user_availability.id as avail_id, user_availability.user_id, user_availability.start_date, user_availability.from_time, user_availability.end_date, user_availability.to_time, user_booking.id as boooking_id, user_booking.employee_id, user_booking.employer_id, user_booking.available_id, user_booking.bookingTime FROM user_booking JOIN user_availability ON user_availability.id = user_booking.available_id WHERE user_booking.employer_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
@@ -142,7 +142,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                             <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">From Time</p>
                                             <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">To Time</p>
                                             <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">End Date</p>
-                                            <?php $i=1; 
+                                            <?php $i=1;
                                             foreach ($availability as $value) { ?>
                                             <!-- <div> -->
                                                 <div class="job-overview" style="width: 80%; background: #c7c7c7; margin: 0 0 5px 0 !important; padding: 0px; cursor: pointer;">
@@ -163,7 +163,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                             if(!empty($getBookSlot)) { ?>
                                                 <div style="width: 100%; display: inline-block;">
                                                     <div>Booked Slot</div>
-                                                    <?php for($i = 0; $i < count($bookingTime); $i++) { 
+                                                    <?php for($i = 0; $i < count($bookingTime); $i++) {
                                                     $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".$getBookSlot[0]['employer_id']."'")->result_array();?>
                                                     <div>
                                                         <p style="width: 50%;display: inline-block;float: left;margin: 0px;font-size: 14px;"><?= date('h:i A', strtotime($bookingTime[$i]))?> to <?= date('h:i A', strtotime($bookingTime[$i]) + 60*60)?></p>
@@ -184,7 +184,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                         <div class="job-overview" style="text-align: center;">No data added for availability</div>
                                         <?php } } else { ?>
                                         <div class="job-overview" style="height: auto; overflow: auto; margin-top: 0px; text-align: center;">No slot booked</div>
-                                    <?php } } ?> 
+                                    <?php } } ?>
 
                                 <?php if (!empty($_SESSION['afrebay']['userId']) && $_SESSION['afrebay']['userType'] == 2) { ?>
                                 <div class="quick-form-job">
@@ -334,16 +334,16 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
 </div>
 
 <div class="modal fade edit-form" id="aggrementmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog" role="document">
-        <div class="modal-content" style="width: 510px; height: 620px; overflow: auto;">
+    <div class="modal-dialog modal-dialog" role="document" style="position: relative;top: 180px;right: 355px;">
+        <div class="modal-content" style="width: 1200px;max-height: 650px;overflow: auto;">
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title" id="modal-title">User's Aggrement</h5>
+                <h5 class="modal-title" id="modal-title">Agreement</h5>
                 <button type="button" class="bookBtn-close btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeaggrmnt()"></button>
             </div>
             <form id="myForm">
                 <div class="modal-body">
                     <div class='form-group date'>
-                        <?php 
+                        <?php
                         $privacy = $this->db->query("SELECT `title`, `description` FROM manage_cms WHERE id = '3'")->result_array();
                         $terms = $this->db->query("SELECT `title`, `description` FROM manage_cms WHERE id = '1'")->result_array();
                         ?>
@@ -429,7 +429,7 @@ function aggrement1() {
 }
 
 function bookNow() {
-    if($("#aggrchck").is(":checked")) { 
+    if($("#aggrchck").is(":checked")) {
         var avail_id = $('#avail_id').val();
         var startDate = $('#start_date').val();
         var employeeID = $('#userID').val();
@@ -567,7 +567,7 @@ function bookSlot(id) {
             }
         }
     });
-} 
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
@@ -577,12 +577,12 @@ document.addEventListener('DOMContentLoaded', function() {
     //const bookclose = document.querySelector('.bookBtn-close');
     const bookingModal = new bootstrap.Modal(document.getElementById('bookingmodal'));
     const myEvents =[
-        <?php 
+        <?php
         if(!empty($_SESSION['afrebay']['userId'])) {
         $availability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".$user_detail->userId."'")->result_array();
-        if(!empty($availability)) { 
-        foreach ($availability as $value) { 
-        $checkBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".$value['id']."'")->result_array(); 
+        if(!empty($availability)) {
+        foreach ($availability as $value) {
+        $checkBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".$value['id']."'")->result_array();
         if(!empty($checkBookSlot)) { ?>
         {
             title:'Booked',
@@ -700,13 +700,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 $(document).ready(function() {
     $('.erroraggr').hide();
-    <?php $i=1; 
+    <?php $i=1;
     foreach ($availability as $value) { ?>
     $('#job_overview_sub_<?= $i?>').hide();
     $('#job_overview_main_<?= $i?>').on('click', function() {
         $('#job_overview_sub_<?= $i?>').toggle();
     })
-    <?php $i++; } ?> 
+    <?php $i++; } ?>
 })
 
 function removeSlot(id) {
