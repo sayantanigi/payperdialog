@@ -124,7 +124,7 @@ if(!empty($_SESSION['afrebay']['userId'])){
 <?php }
 } ?>
 <div class="modal fade edit-form" id="aggrementmodal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height: fit-content;" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog" role="document" style="position: relative;top: 180px;right: 355px;">
+    <div class="modal-dialog modal-dialog" role="document" style="position: relative;max-width: 1200px !important;right: 0;">
         <div class="modal-content" style="width: 1200px;max-height: 650px;overflow: auto;">
             <div class="modal-header border-bottom-0">
                 <h5 class="modal-title" id="modal-title">Agreement</h5>
@@ -146,7 +146,7 @@ if(!empty($_SESSION['afrebay']['userId'])){
                             <div><?= ucwords($privacy[0]['description']); ?></div>
                         </div>
                         <div class="form-group date">
-                            <input type="checkbox" id="aggrchck" name="vehicle2" value="1" style="opacity: 1; z-index: 50; margin-top: 9px;">
+                            <input type="checkbox" id="aggrchckkkkk" style="opacity: 1; z-index: 50; margin-top: 0;">
                             <p style="display: inline-block; margin-left: 25px; margin-top: 0px; margin-bottom: 0px;" class="user_aggrmnt">I have read and agree to PayperLLC aggrement and Policy.</p>
                             <p class="erroraggr" style="margin: 0;width: 100%;text-align: center;color: red;font-size: 12px;">Please check the checkbox.</p>
                         </div>
@@ -255,18 +255,14 @@ function receiveVideoCallWindow(fid) {
 
 <?php if(@$_SESSION['afrebay']['userType'] == '1' || @$_SESSION['afrebay']['userType'] == '3') {
 $checkuseraggreed = $this->db->query("SELECT * FROM users WHERE userId = '".$_SESSION['afrebay']['userId']."'")->result_array();
-//print_r($checkuseraggreed); die;
 if(empty($checkuseraggreed[0]['isAggreed'])) { ?>
     $(document).ready(function() {
-        //alert();
-        //const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal1'));
-        //aggrementmodal.show();
         $("#aggrementmodal1").modal({backdrop:'static', keyboard: false, show: true});
     })
 <?php } } ?>
 
 function aggrement() {
-    if($("#aggrchck").is(":checked")) {
+    if($("#aggrchckkkkk").is(":checked") == true) {
         var userid = <?php echo $_SESSION['afrebay']['userId'] ?>;
         $.ajax({
             type:"post",
