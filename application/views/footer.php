@@ -146,7 +146,7 @@ if(!empty($_SESSION['afrebay']['userId'])){
                             <div><?= ucwords($privacy[0]['description']); ?></div>
                         </div>
                         <div class="form-group date">
-                            <input type="checkbox" id="aggrchckkkkk" style="opacity: 1; z-index: 50; margin-top: 0;">
+                            <input type="checkbox" id="aggrchckkkkk" style="opacity: 1; z-index: 50; margin-top: 8px;">
                             <p style="display: inline-block; margin-left: 25px; margin-top: 0px; margin-bottom: 0px;" class="user_aggrmnt">I have read and agree to PayperLLC aggrement and Policy.</p>
                             <p class="erroraggr" style="margin: 0;width: 100%;text-align: center;color: red;font-size: 12px;">Please check the checkbox.</p>
                         </div>

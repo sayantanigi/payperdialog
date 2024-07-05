@@ -46,13 +46,14 @@
                             <div class="Employees_Search_Panel_Data">
                                 <form method="post" id="filter_form">
                                     <div class="widget">
-                                        <h3 class="sb-title opened">Skill Sets</h3>
+                                        <h3 class="sb-title opened">Filter By Job Post</h3>
                                         <div class="specialism_widget">
                                             <div class="dropdown-field">
                                                 <select class="form-control" name="remote" id="FilterByJobTitle">
-                                                    <option value="">All Recommended Employee</option>
-                                                    <?php foreach ($jobTitleByemployer as $value) { ?>
-                                                    <option value="<?= $value['required_key_skills']?>"><?= $value['post_title']?></option>
+                                                    <option value="">Select Job</option>
+                                                    <?php foreach ($jobListByemployer as $value) {
+                                                    ?>
+                                                    <option value="<?= $value['id']?>"><?= $value['post_title']?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
@@ -66,8 +67,8 @@
                                 <div class="table table-modific" id="jobListByemployer">
                                 <?php
                                 if(!empty($jobListByemployer)){
-                                    foreach ($jobListByemployer as $key) { 
-                                        $getUserDetails = $this->db->query("SELECT * FROM users WHERE userId = '".$key['user_id']."'")->row();
+                                    foreach ($jobListByemployer as $key) {
+                                        $getUserDetails = $this->db->query("SELECT * FROM users WHERE userId = '".$key['bidUser']."'")->row();
                                         // if($key['userType'] == 1){
                                         //     $name = $key['firstname'].' '.$key['lastname'];
                                         // } else {
@@ -95,7 +96,7 @@
                                                 <div class="MoreDetailsTxt_<?= $getUserDetails->id?>"><?= $string?></div>
                                             </div>
                                         </div>
-                                        <div class="view-more-less view-more-less-js"><a href="<?= base_url('worker-detail/'.base64_encode($getUserDetails->userId).'#job-overview')?>" target="_blank">Schedule Interview</a></button>
+                                        <div class="view-more-less view-more-less-js"><a href="<?= base_url('worker-detail/'.base64_encode($getUserDetails->userId).'#job-overview')?>" target="_blank">Schedule Interview</a></button></div>
                                     </div>
                                 <?php } } else { ?>
                                 <div>
@@ -139,16 +140,7 @@
 #err-messages{display: none; text-align: center;}
 .emply-resume-thumb {display: inline-block !important;}
 .emply-resume-list {padding: 30px !important; margin: 10px 0 0 0 !important;}
-.view-more-less {
-    position: absolute;
-    right: 28px;
-    background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;
-    color: #fff;
-    padding: 10px 16px 10px 16px;
-    border-radius: 23px;
-    font-size: 15px;
-}
-
+.view-more-less {position: absolute; right: 28px; background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; color: #fff; padding: 10px 16px 10px 16px; border-radius: 23px; font-size: 15px;}
 </style>
 <script>
 function jobDelete(id) {
@@ -213,7 +205,8 @@ $(document).ready(function(){
         $.ajax({
             url: "<?= base_url()?>user/dashboard/filterEmployeeByJobtitle",
             method:"POST",
-            data:{skill: s_id},
+            //data:{skill: s_id},
+            data:{p_id: s_id},
             beforeSend : function(){
                 $("#loader").show();
             },

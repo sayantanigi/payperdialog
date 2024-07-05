@@ -7,13 +7,11 @@ $get_setting = $this->Crud_model->get_single('setting');
 ?>
 <section class="dashboard-gig User_Sidemenu max_height EmployersTheme ExpertsTheme EmployeesTheme">
     <div class="<?php if($_SESSION['afrebay']['userType'] == '1') {echo "container-fluid";} else {echo "container";}?> display-table" style="display: block;">
-        <div class="completeSub">Please activate a subscription package and complete your profile to proceed with
-            further activities within your dashboard</div>
+        <div class="completeSub">Please activate a subscription package and complete your profile to proceed with further activities within your dashboard</div>
         <div class="completeSub1">Please complete your profile to proceed with further activities within your dashboard
         </div>
         <div class="row display-table-row">
-            <div class="<?php if($_SESSION['afrebay']['userType'] == '1') {echo "col-md-2";} else {echo "col-md-12 col-md-12";}?> col-sm-12 hidden-xs for-mobile-sidemenu display-table-cell v-align box"
-                id="navigation">
+            <div class="<?php if($_SESSION['afrebay']['userType'] == '1') {echo "col-md-2";} else {echo "col-md-12 col-md-12";}?> col-sm-12 hidden-xs for-mobile-sidemenu display-table-cell v-align box" id="navigation">
                 <div class="navi">
                     <ul>
                         <?php if ($get_setting->required_subscription == '1') { ?>
@@ -25,24 +23,24 @@ $get_setting = $this->Crud_model->get_single('setting');
                         <?php } ?>
 
                         <li <?php if ($seg1 == 'profile') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
-                            <?php
-                            if ($get_setting->required_subscription == '1') {
-                                $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='" . $_SESSION['afrebay']['userId'] . "' AND (status = '1' OR status = '2')")->result_array();
-                                if (!empty($get_sub_data)) { ?>
-                                    <a href="<?= base_url('profile') ?>"><i class="fa fa-user-circle" aria-hidden="true"></i>
-                                        <span class="hidden-xs hidden-sm">Profile</span>
-                                    </a>
-                                <?php } else { ?>
-                                    <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-user-circle"
-                                            aria-hidden="true"></i>
-                                        <span class="hidden-xs hidden-sm">Profile</span>
-                                    </a>
-                                <?php }
-                            } else { ?>
+                        <?php
+                        if ($get_setting->required_subscription == '1') {
+                            $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='" . $_SESSION['afrebay']['userId'] . "' AND (status = '1' OR status = '2')")->result_array();
+                            if (!empty($get_sub_data)) { ?>
                                 <a href="<?= base_url('profile') ?>"><i class="fa fa-user-circle" aria-hidden="true"></i>
                                     <span class="hidden-xs hidden-sm">Profile</span>
                                 </a>
-                            <?php } ?>
+                            <?php } else { ?>
+                                <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-user-circle"
+                                        aria-hidden="true"></i>
+                                    <span class="hidden-xs hidden-sm">Profile</span>
+                                </a>
+                            <?php }
+                        } else { ?>
+                            <a href="<?= base_url('profile') ?>"><i class="fa fa-user-circle" aria-hidden="true"></i>
+                                <span class="hidden-xs hidden-sm">Profile</span>
+                            </a>
+                        <?php } ?>
                         </li>
 
                         <?php
@@ -53,7 +51,6 @@ $get_setting = $this->Crud_model->get_single('setting');
                                     $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
                                     if (empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio'])) { ?>
                                         <li <?php if ($seg1 == 'education-list') { ?>class="active" <?php } ?>>
-
                                             <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-graduation-cap"
                                                     aria-hidden="true"></i>
                                                 <span class="hidden-xs hidden-sm">Education</span>

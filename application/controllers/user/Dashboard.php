@@ -1567,7 +1567,8 @@ class Dashboard extends CI_Controller {
 	public function recommended_employee() {
 		$data['jobTitleByemployer'] = $this->db->query("SELECT id, post_title, required_key_skills FROM postjob WHERE user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
 		//$data['jobListByemployer'] = $this->db->query("SELECT * FROM users WHERE userType = '1'")->result_array();
-		$data['jobListByemployer'] = $this->db->query("SELECT * FROM job_bid WHERE bidding_status = 'Ready for Interview'")->result_array();
+		//$data['jobListByemployer'] = $this->db->query("SELECT * FROM job_bid WHERE bidding_status = 'Ready for Interview'")->result_array();
+        $data['jobListByemployer'] = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
 		$this->load->view('header');
 		$this->load->view('user_dashboard/recommended_employee', $data);
 		$this->load->view('footer');
@@ -1575,7 +1576,7 @@ class Dashboard extends CI_Controller {
 
 	public function filterEmployeeByJobtitle() {
 		//echo "<pre>"; print_r($_POST); die;
-		$skills = explode(',', $_POST['skill']);
+		/*$skills = explode(',', $_POST['skill']);
 		$count = count($skills);
 		$output = '<div>';
 		for ($s=0; $s < $count; $s++) {
@@ -1613,7 +1614,46 @@ class Dashboard extends CI_Controller {
 			} else {
 				$output .= '<div class="emply-resume-list"><div class="emply-resume-thumb" style="width: 100%;"><h2>No Data Found</h2></div></div>';
 			}
-		}
+		}*/
+        $postjob_id = $_POST['p_id'];
+        if(!empty($postjob_id)) {
+            $getUser = $this->db->query("SELECT users.userId, users.firstname, users.lastname, users.address, users.short_bio, users.profilePic FROM users JOIN job_bid ON job_bid.user_id = users.userId WHERE job_bid.id = '".@$postjob_id."'")->result_array();
+        } else {
+            $getUser = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+        }
+        $output = '<div>';
+        if(!empty($getUser)) {
+            foreach ($getUser as $key) {
+                if(!empty($key['profilePic']) && file_exists('uploads/users/'.$key['profilePic'])){
+                    $profile_pic= '<img src="'.base_url('uploads/users/'.$key['profilePic']).'" alt="" />';
+                } else {
+                    $profile_pic= '<img src="'.base_url('uploads/users/user.png').'" alt="" />';
+                }
+                $string = strip_tags($key['short_bio']);
+                if (strlen($string) > 200) {
+                    $stringCut = substr($string, 0, 200);
+                    $endPoint = strrpos($stringCut, ' ');
+                    $string = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
+                    $string .= '...';
+                }
+                $output .= '
+                <div class="emply-resume-list">
+                    <div class="emply-resume-thumb">'.$profile_pic.'</div>
+                    <div class="emply-resume-info">
+                        <h3><a href="'.base_url('worker-detail/'.base64_encode($key["userId"])).'" title="">'.$key['firstname'].' '.$key['lastname'].'</a></h3>
+                        <p><i class="la la-map-marker"></i>'.$key["address"].'</p>
+                        <div class="Employee-Details">
+                            <div class="MoreDetailsTxt_'.$key['id'].'">'.$string.'</div>
+                        </div>
+                    </div>
+                    <div class="view-more-less view-more-less-js"><a href="'.base_url('worker-detail/'.base64_encode($key["userId"])).'#job-overview") target="_blank">Schedule Interview</a></button>
+                </div>
+                </div>';
+            }
+            $output .= '';
+        } else {
+            $output .= '<div class="emply-resume-list"><div class="emply-resume-thumb" style="width: 100%;"><h2>No Data Found</h2></div></div>';
+        }
 		echo $output;
 	}
 

@@ -81,7 +81,7 @@ $(function () {
             </div>
             <div class="responsive-opensec">
                 <div class="btn-extars">
-                <?php if(!empty($_SESSION['afrebay']['userId'])){?>
+                <?php if(!empty($_SESSION['afrebay']['userId'])){ ?>
                     <a href="<?= base_url('postjob')?>" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>
                 <?php } else{?>
                     <a href="<?= base_url('login')?>" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>
@@ -197,7 +197,7 @@ $(function () {
                                         } else {
                                             $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".$_SESSION['afrebay']['userId']."' AND (status = '1' OR status = '2')")->result_array();
                                             if(empty($get_sub_data)) {
-                                                echo '<a href="'.base_url('subscription').'" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please activate a subscription package to proceed with the post job activities.</span></a>';
+                                                echo '<a href="'.base_url('subscription').'" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Your post job limit exceeded.Please activate a subscription package to proceed with the post job activities.</span></a>';
                                             } else {
                                                 echo '<a href="'.base_url('postjob').'" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>';
                                             }
