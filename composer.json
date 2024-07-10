@@ -13,7 +13,8 @@
 	"require": {
 		"php": ">=5.3.7",
 		"phpmailer/phpmailer": "^6.2",
-		"opentok/opentok": "^4.7"
+		"opentok/opentok": "^4.7",
+        "guzzlehttp/guzzle": "^7.5"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
