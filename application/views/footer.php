@@ -123,9 +123,9 @@ if(!empty($_SESSION['afrebay']['userId'])){
 </div>
 <?php }
 } ?>
-<div class="modal fade edit-form" id="aggrementmodal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height: fit-content;" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog" role="document" style="position: relative;max-width: 1200px !important;right: 0;">
-        <div class="modal-content" style="width: 1200px;max-height: 650px;overflow: auto;">
+<div class="modal fade edit-form" id="aggrementmodal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog" role="document" style="display: contents;">
+        <div class="modal-content" style="max-height: 600px;overflow: auto;width: 1200px;left: 100px;top: 100px;">
             <div class="modal-header border-bottom-0">
                 <h5 class="modal-title" id="modal-title">Agreement</h5>
                 <button type="button" class="bookBtn-close btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeaggrmnt()" style="background: none; padding: 0; margin: 0;">X</button>
@@ -160,6 +160,42 @@ if(!empty($_SESSION['afrebay']['userId'])){
         </div>
     </div>
 </div>
+<div class="modal fade edit-form" id="aggrementmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height: fit-content;" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog" role="document" style="left: 6px;max-width: 1200px;">
+        <div class="modal-content" style="width: 1200px;max-height: 650px;overflow: auto;">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title" id="modal-title">Agreement</h5>
+                <button type="button" class="bookBtn-close btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeaggrmnt()"></button>
+            </div>
+            <form id="myForm">
+                <div class="modal-body">
+                    <div class='form-group date'>
+                        <?php
+                        $privacy = $this->db->query("SELECT `title`, `description` FROM manage_cms WHERE id = '3'")->result_array();
+                        $terms = $this->db->query("SELECT `title`, `description` FROM manage_cms WHERE id = '1'")->result_array();
+                        ?>
+                        <div>
+                            <p><?= ucwords($privacy[0]['title']); ?></p>
+                            <div><?= ucwords($privacy[0]['description']); ?></div>
+                        </div>
+                        <div>
+                            <p><?= ucwords($terms[0]['title']); ?></p>
+                            <div><?= ucwords($privacy[0]['description']); ?></div>
+                        </div>
+                    </div>
+                    <div class="form-group date">
+                        <input type="checkbox" id="aggrchck" name="vehicle2" value="1" style="opacity: 1; z-index: 50; margin-top: 9px;">
+                        <p style="display: inline-block; margin-left: 25px; margin-top: 0px; margin-bottom: 0px;" class="user_aggrmnt">I have read and agree to PayperLLC aggrement and Policy.</p>
+                        <p class="erroraggr" style="margin: 0;width: 100%;text-align: center;color: red;font-size: 12px;">Please check the checkbox.</p>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 d-flex justify-content-center">
+                    <input type="button" class="btn btn-success" id="submit-button" value="Next" onclick="bookNow()">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script src="<?= base_url('assets/js/jquery.min.js')?>" type="text/javascript"></script>
 <script src="<?= base_url('assets/js/modernizr.js')?>" type="text/javascript"></script>
 <script src="<?= base_url('assets/js/script.js')?>" type="text/javascript"></script>
@@ -189,6 +225,13 @@ if(!empty($_SESSION['afrebay']['userId'])){
 <script src="<?php echo base_url()?>assets/multi_select/langs/tail.select-tr.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<style>
+.modal-backdrop.show {
+    opacity: 0.5;
+}
+#aggrementmodal p {font-size: 10px; line-height: 15px; margin: 2px 0 0 0;}
+#aggrementmodal .myForm {margin: 10px}
+</style>
 <script type="text/javascript">
 var confirmTextDelete = 'Are you sure you want to delete this record?';
 var confirmationText = 'Are you sure you want to change this status?';

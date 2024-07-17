@@ -5,6 +5,9 @@ error_reporting(0);
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+
 class Dashboard extends CI_Controller {
 
 	public function __construct() {
@@ -1233,197 +1236,172 @@ class Dashboard extends CI_Controller {
 		echo "1";
 	}
 
+    public function get_access_token() {
+        $settingsData = $this->db->query("SELECT * FROM setting ")->row();
+        return $settingsData->zoom_token;
+    }
+
+    public function get_refersh_token() {
+        $result = $this->get_access_token();
+        return $result;
+    }
+
+    public function update_access_token($token) {
+        $this->db->query("UPDATE setting SET zoom_token = '$token' WHERE id = '1'");
+    }
+
 	public function paymentforslotbook() {
-		$avail_id = $this->input->post('avail_id');
-		$employeeID = $this->input->post('employeeID');
-		$employerID = $this->input->post('employerID');
-		$rate = $this->input->post('rate');
-		$getBookinID = $this->db->query("SELECT * FROM user_booking WHERE available_id = '".$avail_id."' AND employee_id = '".$employeeID."' AND employer_id = '".$employerID."'")->result_array();
-		$length = 24;
-		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	    $charactersLength = strlen($characters);
-	    $randomString = '';
-	    for ($i = 0; $i < $length; $i++) {
-	        $randomString .= $characters[random_int(0, $charactersLength - 1)];
-	    }
-	    $txn = "txn_".$randomString;
-		$data = array(
-			'booking_id'=> $getBookinID[0]['id'],
-			'rate'=> $rate,
-			'txn_id'=> $txn,
-		);
-		$this->Crud_model->SaveData('user_booking_txn', $data);
-		// create miting link
-		$getavailDate = $this->db->query("SELECT * FROM user_availability WHERE id = '" . $avail_id . "'")->row();
-		$getbiduser = $this->db->query("SELECT * FROM users WHERE userId = '" . $employeeID . "'")->row();
-		$getbidemail = $getbiduser->email;
-		$getbidname = $getbiduser->firstname. ' '.$getbiduser->lastname;
-		$getpostuser = $this->db->query("SELECT * FROM users WHERE userId = '" . $employerID . "'")->row();
-		$getpostemail = $getpostuser->email;
-		$getpostname = $getpostuser->companyname;
+        $client_id = '3PsBY5dSQoOVZtyb_9WI8w';
+        $client_secret = 'eDU0Ej1HG2GFtt65CdW7vnOunoGLab5Z';
+        $avail_id = $this->input->post('avail_id');
+        $employeeID = $this->input->post('employeeID');
+        $employerID = $this->input->post('employerID');
+        $rate = $this->input->post('rate');
+        $getBookinID = $this->db->query("SELECT * FROM user_booking WHERE available_id = '".$avail_id."' AND employee_id = '".$employeeID."' AND employer_id = '".$employerID."'")->result_array();
+        $length = 24;
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
+        }
+        $txn = "txn_".$randomString;
+        $data = array(
+            'booking_id'=> $getBookinID[0]['id'],
+            'rate'=> $rate,
+            'txn_id'=> $txn,
+        );
+        $this->Crud_model->SaveData('user_booking_txn', $data);
+        // create miting link
+        $getavailDate = $this->db->query("SELECT * FROM user_availability WHERE id = '" . $avail_id . "'")->row();
+        $getbiduser = $this->db->query("SELECT * FROM users WHERE userId = '" . $employeeID . "'")->row();
+        $getbidemail = $getbiduser->email;
+        $getbidname = $getbiduser->firstname. ' '.$getbiduser->lastname;
+        $getpostuser = $this->db->query("SELECT * FROM users WHERE userId = '" . $employerID . "'")->row();
+        $getpostemail = $getpostuser->email;
+        $getpostname = $getpostuser->companyname;
+        $bookingTime = $getBookinID[0]['bookingTime'];
+        $bt = explode(",", $bookingTime);
 
-		$bookingTime = $getBookinID[0]['bookingTime'];
-		$bt = explode(",", $bookingTime);
-
-		$meetingLink = array();
-		$meetingPass = array();
-        require_once 'vendor/autoload.php';
-		for ($i=0; $i<count($bt); $i++){
-			$postData = [
-				"topic" => 'Meeting Link1',
-				"type" => 2,
-				"start_time" => $getavailDate->start_date.'T'.$bt[$i].':00Z',
-				"duration" => 30,
-				"settings" => [
-					"waiting_room" => false,
-					"host_video" => true,
-					"participant_video" => true,
-					"join_before_host" => true,
-					"mute_upon_entry" => true,
-					"watermark" => true,
-					"audio" => "voip",
-					"auto_recording" => "cloud",
-					"allow_multiple_devices" => true,
-					"registration_type" => 2,
-				]
-			];
-			$curl = curl_init();
-			curl_setopt_array($curl,
-				array(
-					CURLOPT_URL => 'https://api.zoom.us/v2/users/me/meetings',
-					CURLOPT_RETURNTRANSFER => true,
-					CURLOPT_ENCODING => '',
-					CURLOPT_MAXREDIRS => 10,
-					CURLOPT_TIMEOUT => 0,
-					CURLOPT_FOLLOWLOCATION => true,
-					CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-					CURLOPT_CUSTOMREQUEST => 'POST',
-					CURLOPT_POSTFIELDS => json_encode($postData),
-					CURLOPT_HTTPHEADER => array(
-					    'Content-Type: application/json',
-					    'Authorization: Bearer eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImZlNzc4NDhlLTJhNTUtNDcyMi05ZGI2LTY0ZWZjMzA2YmMwZCJ9.eyJ2ZXIiOjksImF1aWQiOiI1ZDM5MzViODBjNzEwY2ZlZmQ4ZDhjZWExZDgzNWY0ZiIsImNvZGUiOiI4V3c1eThHcnR3R2dFQ0tLdThyUmNHZWI5WDN4VTZsSkEiLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjo0MiwiYXVkIjoiaHR0cHM6Ly9vYXV0aC56b29tLnVzIiwidWlkIjoiODBDMmloZTJUVy1sbWpvTU9nQm5GUSIsIm5iZiI6MTcyMDQ0NTE4MSwiZXhwIjoxNzIwNDQ4NzgxLCJpYXQiOjE3MjA0NDUxODEsImFpZCI6IjczSC1MbDlEU3NlRFdGNmRnVWVUOUEifQ.fcp1BaVDu2KIZJEmb-g-S05bskNScpOeF7VZpuO-adeO8z_D5avwRWeuMV0S-e54pEynu1JKMeCoTQ96PnqU_w',
-					    'Cookie: __cf_bm=GN3ywe1uhIkt8A3lL9gHzHKkp.4qZTLivRpTlPVFJqY-1712669514-1.0.1.1-DJPYX.VcbuLNC1eShWwsac4xiyrEI1D0FAUk6BbEsCgSrHuLUnZNcmSdTgJKAV4dEOMEev5a_8f.MErEwIl5ag; _zm_chtaid=194; _zm_ctaid=bWbmHkt-Rp25q21_dFN0wQ.1712669514172.bc9ee5647144d7a2e253b3c6f2d5b040; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_4Sx_TLg1RXKKrIYAholtOg; _zm_ssid=us04_c_Ro2izO6ERUGvcEXUNIr5dw; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b'
-				  	)
-				)
-			);
-			$response = curl_exec($curl);
-			curl_close($curl);
-			$decodedData = json_decode($response, true);
-            //print_r($decodedData);
-            if($decodedData['code'] == '124') {
-                echo "expired";
-                $client   = new GuzzleHttp\Client(['base_uri' => 'https://zoom.us']);
+        $meetingLink = array();
+        $meetingPass = array();
+        for ($i=0; $i<count($bt); $i++){
+            $postData = [
+                "topic" => 'Meeting Link1',
+                "type" => 2,
+                "start_time" => $getavailDate->start_date.'T'.$bt[$i].':00Z',
+                "duration" => 30,
+                "settings" => [
+                    "waiting_room" => false,
+                    "host_video" => true,
+                    "participant_video" => true,
+                    "join_before_host" => true,
+                    "mute_upon_entry" => true,
+                    "watermark" => true,
+                    "audio" => "voip",
+                    "auto_recording" => "cloud",
+                    "allow_multiple_devices" => true,
+                    "registration_type" => 2,
+                ]
+            ];
+            $curl = curl_init();
+            curl_setopt_array($curl,
+                array(
+                    CURLOPT_URL => 'https://api.zoom.us/v2/users/me/meetings',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => '',
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 0,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => 'POST',
+                    CURLOPT_POSTFIELDS => json_encode($postData),
+                    CURLOPT_HTTPHEADER => array(
+                        'Content-Type: application/json',
+                        'Authorization: Bearer '.$this->get_access_token(),
+                        'Cookie: __cf_bm=GN3ywe1uhIkt8A3lL9gHzHKkp.4qZTLivRpTlPVFJqY-1712669514-1.0.1.1-DJPYX.VcbuLNC1eShWwsac4xiyrEI1D0FAUk6BbEsCgSrHuLUnZNcmSdTgJKAV4dEOMEev5a_8f.MErEwIl5ag; _zm_chtaid=194; _zm_ctaid=bWbmHkt-Rp25q21_dFN0wQ.1712669514172.bc9ee5647144d7a2e253b3c6f2d5b040; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_4Sx_TLg1RXKKrIYAholtOg; _zm_ssid=us04_c_Ro2izO6ERUGvcEXUNIr5dw; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b'
+                      )
+                )
+            );
+            $response = curl_exec($curl);
+            curl_close($curl);
+            $decodedData = json_decode($response, true);
+            if($decodedData['code'] == "124") {
+                $refresh_token = $this->get_refersh_token();
+                require 'vendor/autoload.php';
+                $client = new Client(['base_uri' => 'https://zoom.us']);
                 $response = $client->request('POST', '/oauth/token', [
-                    "headers"     => [
-                        "Authorization" => "Basic " . base64_encode('3PsBY5dSQoOVZtyb_9WI8w' . ':' . 'eDU0Ej1HG2GFtt65CdW7vnOunoGLab5Z'),
+                    "headers" => [
+                        "Authorization" => "Basic ". base64_encode($client_id.':'.$client_secret),
+                        "Content-Type" => "application/x-www-form-urlencoded",
                     ],
                     'form_params' => [
-                        "grant_type"    => "refresh_token",
-                        "refresh_token" => "eyJzdiI6IjAwMDAwMSIsImFsZyI6IkhTNTEyIiwidiI6IjIuMCIsImtpZCI6ImZlNzc4NDhlLTJhNTUtNDcyMi05ZGI2LTY0ZWZjMzA2YmMwZCJ9.eyJ2ZXIiOjksImF1aWQiOiI1ZDM5MzViODBjNzEwY2ZlZmQ4ZDhjZWExZDgzNWY0ZiIsImNvZGUiOiI4V3c1eThHcnR3R2dFQ0tLdThyUmNHZWI5WDN4VTZsSkEiLCJpc3MiOiJ6bTpjaWQ6M1BzQlk1ZFNRb09WWnR5Yl85V0k4dyIsImdubyI6MCwidHlwZSI6MCwidGlkIjo0MiwiYXVkIjoiaHR0cHM6Ly9vYXV0aC56b29tLnVzIiwidWlkIjoiODBDMmloZTJUVy1sbWpvTU9nQm5GUSIsIm5iZiI6MTcyMDQ0NTE4MSwiZXhwIjoxNzIwNDQ4NzgxLCJpYXQiOjE3MjA0NDUxODEsImFpZCI6IjczSC1MbDlEU3NlRFdGNmRnVWVUOUEifQ.fcp1BaVDu2KIZJEmb-g-S05bskNScpOeF7VZpuO-adeO8z_D5avwRWeuMV0S-e54pEynu1JKMeCoTQ96PnqU_w",
+                        "grant_type" => "refresh_token",
+                        "refresh_token" => $refresh_token
                     ],
                 ]);
-                $token = $response->getBody();
-                $postData = [
-                    "topic" => 'Meeting Link1',
-                    "type" => 2,
-                    "start_time" => $getavailDate->start_date.'T'.$bt[$i].':00Z',
-                    "duration" => 30,
-                    "settings" => [
-                        "waiting_room" => false,
-                        "host_video" => true,
-                        "participant_video" => true,
-                        "join_before_host" => true,
-                        "mute_upon_entry" => true,
-                        "watermark" => true,
-                        "audio" => "voip",
-                        "auto_recording" => "cloud",
-                        "allow_multiple_devices" => true,
-                        "registration_type" => 2,
-                    ]
-                ];
-                $curl = curl_init();
-                curl_setopt_array($curl,
-                    array(
-                        CURLOPT_URL => 'https://api.zoom.us/v2/users/me/meetings',
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => '',
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => 'POST',
-                        CURLOPT_POSTFIELDS => json_encode($postData),
-                        CURLOPT_HTTPHEADER => array(
-                            'Content-Type: application/json',
-                            'Authorization: Bearer '.$token,
-                            'Cookie: __cf_bm=GN3ywe1uhIkt8A3lL9gHzHKkp.4qZTLivRpTlPVFJqY-1712669514-1.0.1.1-DJPYX.VcbuLNC1eShWwsac4xiyrEI1D0FAUk6BbEsCgSrHuLUnZNcmSdTgJKAV4dEOMEev5a_8f.MErEwIl5ag; _zm_chtaid=194; _zm_ctaid=bWbmHkt-Rp25q21_dFN0wQ.1712669514172.bc9ee5647144d7a2e253b3c6f2d5b040; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_4Sx_TLg1RXKKrIYAholtOg; _zm_ssid=us04_c_Ro2izO6ERUGvcEXUNIr5dw; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b'
-                          )
-                    )
-                );
-                $response = curl_exec($curl);
-                curl_close($curl);
-                $decodedData = json_decode($response, true);
-                //print_r($decodedData);
+                print_r($response);
+                //$this->update_access_token($response->getBody());
             }
-			//$meetingLink[$i]= $decodedData['join_url'];
-			$joinUrl = "https://us04web.zoom.us/j/".$decodedData['id'];
-			$meetingLink[$i]= $joinUrl;
-			$meetingpass[$i]= $decodedData['password'];
-			if(!empty($decodedData['join_url'])) {
-				$this->db->query("UPDATE user_booking SET meeting_link = '".$joinUrl."', meeting_pass = '".$meetingpass."' WHERE id = '".$getBookinID[0]['id']."'");
-				$get_setting=$this->Crud_model->get_single('setting');
-				$htmlContent = "
-				<div style='width:600px; margin: 0 auto;background: #fff;border: 1px solid #e6e6e6;'>
-					<div style='padding: 30px 30px 15px 30px;box-sizing: border-box;'>
-					<img src='cid:Logo' style='width:100px;float: right;margin-top: 0 auto;'>
-					<h3 style='padding-top:40px; line-height: 30px;'>Greetings from<span style='font-weight: 900;font-size: 35px;color: #F44C0D; display: block;'>PayPer LLC</span></h3>
-					<p style='font-size:24px;'>Hello User,</p>
-					<p style='font-size:24px;'>Please find the below meeting info for $getpostname->post_title</p>
-					<p style='font-size:24px;'>Just press the button below and follow the instructions.</p>
-					<p style='text-align: center;'><a href='".$joinUrl."' style='height: 50px; width: 300px; background: rgb(253,179,2); background: linear-gradient(0deg, rgba(253,179,2,1) 0%, rgba(244,77,9,1) 100%); text-align: center; font-size: 18px; color: #fff; border-radius: 12px; display: inline-block; line-height: 50px; text-decoration: none; text-transform: uppercase; font-weight: 600;'>Meeting Link</a></p>
-					<p style='font-size:24px;'>Meeting Passcode: ".$decodedData['password']."</p>
-					<p style='font-size:20px;'>Thank you!</p>
-					<p style='font-size:20px;list-style: none;'>Sincerly</p>
-					<p style='list-style: none;'><b>PayPer LLC</b></p>
-					<p style='list-style:none;'><b>Visit us:</b> <span>$get_setting->address</span></p>
-					<p style='list-style:none'><b>Email us:</b> <span>$get_setting->email</span></p>
-					</div>
-					<table style='width: 100%;'>
-						<tr>
-							<td style='height:30px;width:100%; background: red;padding: 10px 0px; font-size:13px; color: #fff; text-align: center;'>Copyright &copy; <?=date('Y')?> Pay Per Dialog. All rights reserved.</td>
-						</tr>
-					</table>
-				</div>";
-				require 'vendor/autoload.php';
-				$mail = new PHPMailer(true);
-				try {
-					//Server settings
-					$mail->CharSet = 'UTF-8';
-					$mail->SetFrom('info@payperdialog.com', 'Pay Per Dialog');
-					$mail->AddAddress($getbidemail, $getbidname);
-					$mail->AddAddress($getpostemail, $getpostemail);
-					$mail->IsHTML(true);
-					$mail->Subject = "Meeting Link from Pay Per Dialog";
-					$mail->AddEmbeddedImage('uploads/logo/'.$get_setting->flogo, 'Logo');
-					$mail->Body = $htmlContent;
-					//Send email via SMTP
-					$mail->IsSMTP();
-					$mail->SMTPAuth = true;
-					$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-					$mail->Host = "smtp.hostinger.com";
-					$mail->Port = 587; //587 465
-					$mail->Username = "info@payperdialog.com";
-					$mail->Password = "PayperLLC@2024";
-					$mail->send();
-				} catch (Exception $e) {
-				}
-			}
-		}
-		$meetingLink = implode(',', $meetingLink);
-		$meetingpass = implode(',', $meetingpass);
-		$this->db->query("UPDATE user_booking SET meeting_link = '".$meetingLink."', meeting_pass = '".$meetingpass."' WHERE id = '".$getBookinID[0]['id']."'");
-		echo "1";
-	}
+            //$meetingLink[$i]= $decodedData['join_url'];
+            $joinUrl = "https://us04web.zoom.us/j/".$decodedData['id'];
+            $meetingLink[$i]= $joinUrl;
+            $meetingpass[$i]= $decodedData['password'];
+            if(!empty($decodedData['join_url'])) {
+                $this->db->query("UPDATE user_booking SET meeting_link = '".$joinUrl."', meeting_pass = '".$meetingpass."' WHERE id = '".$getBookinID[0]['id']."'");
+                $get_setting=$this->Crud_model->get_single('setting');
+                $htmlContent = "
+                <div style='width:600px; margin: 0 auto;background: #fff;border: 1px solid #e6e6e6;'>
+                    <div style='padding: 30px 30px 15px 30px;box-sizing: border-box;'>
+                    <img src='cid:Logo' style='width:100px;float: right;margin-top: 0 auto;'>
+                    <h3 style='padding-top:40px; line-height: 30px;'>Greetings from<span style='font-weight: 900;font-size: 35px;color: #F44C0D; display: block;'>PayPer LLC</span></h3>
+                    <p style='font-size:24px;'>Hello User,</p>
+                    <p style='font-size:24px;'>Please find the below meeting info for $getpostname->post_title</p>
+                    <p style='font-size:24px;'>Just press the button below and follow the instructions.</p>
+                    <p style='text-align: center;'><a href='".$joinUrl."' style='height: 50px; width: 300px; background: rgb(253,179,2); background: linear-gradient(0deg, rgba(253,179,2,1) 0%, rgba(244,77,9,1) 100%); text-align: center; font-size: 18px; color: #fff; border-radius: 12px; display: inline-block; line-height: 50px; text-decoration: none; text-transform: uppercase; font-weight: 600;'>Meeting Link</a></p>
+                    <p style='font-size:24px;'>Meeting Passcode: ".$decodedData['password']."</p>
+                    <p style='font-size:20px;'>Thank you!</p>
+                    <p style='font-size:20px;list-style: none;'>Sincerly</p>
+                    <p style='list-style: none;'><b>PayPer LLC</b></p>
+                    <p style='list-style:none;'><b>Visit us:</b> <span>$get_setting->address</span></p>
+                    <p style='list-style:none'><b>Email us:</b> <span>$get_setting->email</span></p>
+                    </div>
+                    <table style='width: 100%;'>
+                        <tr>
+                            <td style='height:30px;width:100%; background: red;padding: 10px 0px; font-size:13px; color: #fff; text-align: center;'>Copyright &copy; <?=date('Y')?> Pay Per Dialog. All rights reserved.</td>
+                        </tr>
+                    </table>
+                </div>";
+                require 'vendor/autoload.php';
+                $mail = new PHPMailer(true);
+                try {
+                    //Server settings
+                    $mail->CharSet = 'UTF-8';
+                    $mail->SetFrom('info@payperdialog.com', 'Pay Per Dialog');
+                    $mail->AddAddress($getbidemail, $getbidname);
+                    $mail->AddAddress($getpostemail, $getpostemail);
+                    $mail->IsHTML(true);
+                    $mail->Subject = "Meeting Link from Pay Per Dialog";
+                    $mail->AddEmbeddedImage('uploads/logo/'.$get_setting->flogo, 'Logo');
+                    $mail->Body = $htmlContent;
+                    //Send email via SMTP
+                    $mail->IsSMTP();
+                    $mail->SMTPAuth = true;
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Host = "smtp.hostinger.com";
+                    $mail->Port = 587; //587 465
+                    $mail->Username = "info@payperdialog.com";
+                    $mail->Password = "PayperLLC@2024";
+                    $mail->send();
+                } catch (Exception $e) {
+                }
+            }
+        }
+        $meetingLink = implode(',', $meetingLink);
+        $meetingpass = implode(',', $meetingpass);
+        $this->db->query("UPDATE user_booking SET meeting_link = '".$meetingLink."', meeting_pass = '".$meetingpass."' WHERE id = '".$getBookinID[0]['id']."'");
+        echo "1";
+    }
 
 	public function edit_availability() {
 		$avail_id = $_POST['avail_id'];
