@@ -154,6 +154,23 @@ $(function () {
                     </div>
                     <nav>
                         <ul>
+                            <?php
+                            if(!empty($_SESSION['afrebay']['userId'])) {
+                            if($_SESSION['afrebay']['userType'] == '1' || $_SESSION['afrebay']['userType'] == '3') { ?>
+                            <li class="">
+                                <a href="<?= base_url('employer-list')?>" title="">Employers</a>
+                            </li>
+                            <li class="">
+                                <a href="<?= base_url('ourjobs')?>" title="">Jobs</a>
+                            </li>
+                            <?php } else { ?>
+                            <li class="">
+                                <a href="<?= base_url('workers-list')?>" title="">Job Seekers</a>
+                            </li>
+                            <li class="">
+                                <a href="<?= base_url('expert-list')?>" title="">Experts</a>
+                            </li>
+                            <?php } } else { ?>
                             <li class="">
                                 <a href="<?= base_url('employer-list')?>" title="">Employers</a>
                             </li>
@@ -166,6 +183,7 @@ $(function () {
                             <li class="">
                                 <a href="<?= base_url('ourjobs')?>" title="">Jobs</a>
                             </li>
+                            <?php } ?>
                         </ul>
                     </nav>
                     <div class="btn-extars">

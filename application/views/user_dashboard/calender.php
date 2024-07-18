@@ -15,7 +15,7 @@
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title">Availability</h2>
+                <h2 class="breadcrumb-title">Show Availability</h2>
             </div>
         </div>
     </div>
@@ -36,7 +36,7 @@
                                             <div class="Calender_Pick" id="calendar"></div>
                                         </div>
                                         <div class="col-md-6 col-6" style="display: inline-block; float: left;">
-                                            <?php 
+                                            <?php
                                             $availability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".$_SESSION['afrebay']['userId']."'")->result_array();
                                             if(!empty($availability)) { ?>
                                             <div class="job-overview" style="height: 382px; overflow: auto; margin-top: 0px;">
@@ -45,7 +45,7 @@
                                                 <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">To Time</p>
                                                 <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">End Date</p>
                                                 <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">Action</p>
-                                                <?php $i=1; 
+                                                <?php $i=1;
                                                 foreach ($availability as $value) { ?>
                                                 <div style="width:80%; background: #c7c7c7; margin: 5px 0 0 0 !important; padding: 0; border-radius: 10px; box-shadow: 0 0 10px #dddddd; cursor: pointer;" class="job-overview job_overview_main">
                                                     <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 15px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['start_date']));?></p>
@@ -289,11 +289,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const dangerAlert = document.getElementById('danger-alert');
     const close = document.querySelector('.btn-close');
     const myEvents = JSON.parse(localStorage.getItem('events')) || [
-        <?php 
+        <?php
         $availability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".$_SESSION['afrebay']['userId']."'")->result_array();
-        if(!empty($availability)) { 
-        foreach ($availability as $value) { 
-        $checkBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".$value['id']."'")->result_array(); 
+        if(!empty($availability)) {
+        foreach ($availability as $value) {
+        $checkBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".$value['id']."'")->result_array();
         if(!empty($checkBookSlot)) { ?>
         {
             title:'Booked',

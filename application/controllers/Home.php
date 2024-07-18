@@ -232,8 +232,8 @@ class Home extends MY_Controller {
 		$page = $this->uri->segment(3);
 		$start = ($page - 1) * $config['per_page'];
 		$output = array(
-			'pagination_link'  => $this->pagination->create_links(),
-			'product_list'   => $this->post_job_model->fetchdata($config["per_page"], $start)
+			'pagination_link' => $this->pagination->create_links(),
+			'product_list' => $this->post_job_model->fetchdata($config["per_page"], $start)
 		);
 		echo json_encode($output);
 	}

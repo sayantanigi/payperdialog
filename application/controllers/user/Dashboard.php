@@ -1326,23 +1326,23 @@ class Dashboard extends CI_Controller {
             $response = curl_exec($curl);
             curl_close($curl);
             $decodedData = json_decode($response, true);
-            if($decodedData['code'] == "124") {
-                $refresh_token = $this->get_refersh_token();
-                require 'vendor/autoload.php';
-                $client = new Client(['base_uri' => 'https://zoom.us']);
-                $response = $client->request('POST', '/oauth/token', [
-                    "headers" => [
-                        "Authorization" => "Basic ". base64_encode($client_id.':'.$client_secret),
-                        "Content-Type" => "application/x-www-form-urlencoded",
-                    ],
-                    'form_params' => [
-                        "grant_type" => "refresh_token",
-                        "refresh_token" => $refresh_token
-                    ],
-                ]);
-                print_r($response);
-                //$this->update_access_token($response->getBody());
-            }
+            // if($decodedData['code'] == "124") {
+            //     $refresh_token = $this->get_refersh_token();
+            //     require 'vendor/autoload.php';
+            //     $client = new Client(['base_uri' => 'https://zoom.us']);
+            //     $response = $client->request('POST', '/oauth/token', [
+            //         "headers" => [
+            //             "Authorization" => "Basic ". base64_encode($client_id.':'.$client_secret),
+            //             "Content-Type" => "application/x-www-form-urlencoded",
+            //         ],
+            //         'form_params' => [
+            //             "grant_type" => "refresh_token",
+            //             "refresh_token" => $refresh_token
+            //         ],
+            //     ]);
+            //     print_r($response);
+            //     //$this->update_access_token($response->getBody());
+            // }
             //$meetingLink[$i]= $decodedData['join_url'];
             $joinUrl = "https://us04web.zoom.us/j/".$decodedData['id'];
             $meetingLink[$i]= $joinUrl;
