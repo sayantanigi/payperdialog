@@ -34,7 +34,7 @@ if($data_request=='user'){
     $container='container';
 }
 ?>
-<div class="<?php if(@$userinfo->userType=='1') { echo "col-md-7";} else {echo "col-md-12"; }?> col-sm-12 display-table-cell v-align">
+<div class="<?php if(@$userinfo->userType=='1' || @$userinfo->userType=='3') { echo "col-md-7";} else {echo "col-md-12"; }?> col-sm-12 display-table-cell v-align">
     <div class="user-dashboard Admin_Profile form-design <?php echo $container;  ?> ">
         <form class="form" action="<?php echo base_url('user/Dashboard/update_profile')?>" method="post" id="registrationForm" enctype="multipart/form-data">
         <input type="hidden" name="from_data_request" value="<?=$data_request;?>">
@@ -286,7 +286,7 @@ if($data_request=='user'){
         </form>
     </div>
 </div>
-<?php if(@$userinfo->userType=='1') { ?>
+<?php if(@$_SESSION['afrebay']['userType']=='1' || @$_SESSION['afrebay']['userType']=='3') { ?>
 <div class="col-md-3 col-6 v-align CustomDesign" style="display: inline-block; float: left; margin-top: 10px;">
     <p class="CustomPara">Upcoming Booking</p>
     <div class="CustomBlock">

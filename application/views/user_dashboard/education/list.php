@@ -83,10 +83,11 @@
    		</div>
 	</div>
 </div>
+<?php if(@$_SESSION['afrebay']['userType']=='1' || @$_SESSION['afrebay']['userType']=='3') { ?>
 <div class="col-md-3 col-6 v-align CustomDesign" style="display: inline-block; float: left; margin-top: 10px;">
-	<p class="CustomPara">Upcoming Booking</p>
+    <p class="CustomPara">Upcoming Booking</p>
     <div class="CustomBlock">
-        <?php 
+        <?php
         $selectDate = date('Y-m-d');
 		$employeeId = $_SESSION['afrebay']['userId'];
         $availableData = $this->db->query("SELECT user_availability.*, user_booking.* FROM user_availability JOIN user_booking ON user_availability.id = user_booking.available_id WHERE start_date > '".$selectDate."' AND user_id ='".@$employeeId."'")->result_array();
@@ -95,9 +96,9 @@
         <div style='width: 100%; display: inline-block; padding: 0 10px; margin-bottom: 20px;'>
             <div style='width: 100%; display: inline-block; border-radius: 10px; box-shadow: 0 0 10px #dddddd; padding: 10px 0 10px 0;'>
             <?php $getBookSlot = explode(',', $value['bookingTime']);
-			$meetingLink = explode(',', $value['meeting_link']);
+            $meetingLink = explode(',', $value['meeting_link']);
             for($i = 0; $i < count($getBookSlot); $i++) { ?>
-                <?php 
+                <?php
                 $booking_id = $value[$i]['id'];
                 $employee_id = $value[$i]['employee_id'];
                 $employer_id = $value[$i]['employer_id'];
@@ -107,9 +108,9 @@
                 <div style='width: 100%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'>
                     <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'><?= date('h:i A', strtotime($getBookSlot[$i]))?> to <?= date('h:i A', strtotime($getBookSlot[$i]) + 60*60)?></p>
                     <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;"><a href="<?= $meetingLink[$i] ?>">Meeting Link</a></p>
-					<!-- <input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck(<?= $booking_id; ?>)'> -->
+                    <!-- <input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck(<?= $booking_id; ?>)'> -->
                 </div>
-            <?php } 
+            <?php }
             $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$value['employer_id']."'")->row();
             ?>
                 <div>
@@ -120,6 +121,7 @@
         <?php } ?>
     </div>
 </div>
+<?php } ?>
 </div>
 </div>
 </section>

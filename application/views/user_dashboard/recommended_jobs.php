@@ -145,7 +145,7 @@
         </div>
     </div>
 </div>
-
+<?php if($_SESSION['afrebay']['userType'] == '1' ||@$_SESSION['afrebay']['userType'] == '3') { ?>
 <div class="col-md-3 col-6 v-align CustomDesign" style="display: inline-block; float: left; margin-top: 10px;">
     <p class="CustomPara">Upcoming Booking</p>
     <div class="CustomBlock">
@@ -193,6 +193,7 @@
         <?php } ?>
     </div>
 </div>
+<?php } ?>
 </div>
 </div>
 <input type="hidden" id="experience" name="experience" value="<?= $usersSkillsData[0]['experience'] ?>">

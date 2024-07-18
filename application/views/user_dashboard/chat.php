@@ -25,7 +25,7 @@
     <div class="container-fluid display-table">
         <div class="row display-table-row">
             <?php $this->load->view('sidebar'); ?>
-            <div class="<?php if($_SESSION['afrebay']['userType']=='1') { echo "col-md-10";} else {echo "col-md-12"; }?> col-sm-12 display-table-cell v-align">
+            <div class="<?php if($_SESSION['afrebay']['userType']=='1' || @$_SESSION['afrebay']['userType'] == '3') { echo "col-md-10";} else {echo "col-md-12"; }?> col-sm-12 display-table-cell v-align">
                 <div class="user-dashboard">
                     <div class="row row-sm">
                         <div class="col-xl-12 col-lg-12 col-md-12 chat-box">

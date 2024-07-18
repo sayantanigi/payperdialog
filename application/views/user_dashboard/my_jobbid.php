@@ -24,7 +24,7 @@
     </div>
 </section>
 <?php $this->load->view('sidebar'); ?>
-<div class="<?php if ($_SESSION['afrebay']['userType'] == '1') { echo "col-md-7"; } else { echo "col-md-12";} ?> col-sm-12 display-table-cell v-align">
+<div class="<?php if ($_SESSION['afrebay']['userType'] == '1' || @$_SESSION['afrebay']['userType'] == '3') { echo "col-md-7"; } else { echo "col-md-12";} ?> col-sm-12 display-table-cell v-align">
     <div class="text-success-msg f-20" style="text-align: center;">
         <?php if ($this->session->flashdata('message')) {
             echo $this->session->flashdata('message');
@@ -196,7 +196,7 @@
     </div>
 </div>
 
-<?php if($_SESSION['afrebay']['userType'] == '1') { ?>
+<?php if($_SESSION['afrebay']['userType'] == '1' ||@$_SESSION['afrebay']['userType'] == '3') { ?>
 <div class="col-md-3 col-6 v-align CustomDesign" style="display: inline-block; float: left; margin-top: 10px;">
     <p class="CustomPara">Upcoming Booking</p>
     <div class="CustomBlock">
