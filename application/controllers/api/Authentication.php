@@ -24,7 +24,7 @@ class Authentication extends CI_Controller {
 					'userType' => $formdata['user_type'],
 					'firstname' => $formdata['first_name'],
 					'lastname' => $formdata['last_name'],
-					'companyname' => $formdata['company_name'],
+					//'companyname' => $formdata['company_name'],
 					'email' => $formdata['email'],
 					'address' => $formdata['location'],
 					'latitude' => $formdata['latitude'],
@@ -38,7 +38,8 @@ class Authentication extends CI_Controller {
 				if($formdata['first_name']) {
 					$fullname = $formdata['first_name']." ".$formdata['last_name'];
 				} else {
-					$fullname = $formdata['company_name'];
+					//$fullname = $formdata['company_name'];
+                    $fullname = "";
 				}
 
 				$insert_id = $this->db->insert_id();
@@ -80,99 +81,104 @@ class Authentication extends CI_Controller {
 	    }
 		echo json_encode($response);
 	}
-
     public function login() {
         try {
             $formdata = json_decode(file_get_contents('php://input'), true);
             $email = $formdata["email"];
     		$password = $formdata["password"];
-			$check_user = $this->db->query("SELECT * FROM users WHERE email = '".$email."' AND password = '".base64_encode($password)."' AND status = '1'")->result_array();
-			if(!empty($check_user)) {
-                $msg = 'Logged in successfully';
-                $get_setting=$this->Crud_model->get_single('setting');
-				if($get_setting->required_subscription == '1') {
-	            	if($check_user['0']['userType'] == '1') {
-	    				$check_sub = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".$check_user['0']['userId']."' AND status IN (1,2)");
-	    				if(empty($check_sub)) {
-							$response = array('status'=> 'success','result'=> $check_user);
-							$response = array_merge($response, array("subscription"=> "0"));
-	    				} else {
-	    					$profile_check = $this->db->query("SELECT `firstname`, `lastname`, `email`, `gender`, `address`, `zip`, `short_bio` FROM `users` WHERE userId = '".@$check_user['0']['userId']."'")->result_array();
-	    					if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['zip']) || empty($profile_check[0]['short_bio'])) {
-	                            $response = array('status'=> 'success','result'=> $check_user);
-	                            $response = array_merge($response, array("profile"=> "0"));
-	    					} else {
-	                            $response = array('status'=> 'success','result'=> $check_user);
-	                            $response = array_merge($response, array("profile"=> "1"));
-	                        }
-	    				}
-	    			} else if ($check_user['0']['userType'] == '2') {
-	    				$check_sub = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".$check_user['0']['userId']."' AND status IN (1,2)");
-	    				if(empty($check_sub)) {
-	                        $response = array('status'=> 'success','result'=> $check_user);
-	                        $response = array_merge($response, array("subscription"=> "0"));
-	                    } else {
-	                    	$profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$check_user['0']['userId']."'")->result_array();
-	                        if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) {
-	                        	$response = array('status'=> 'success','result'=> $check_user);
-	                        	$response = array_merge($response, array("profile"=> "0"));
-	                    	} else {
-	                            $response = array('status'=> 'success','result'=> $check_user);
-	                            $response = array_merge($response, array("profile"=> "1"));
-	                    	}
-	                    }
-	    			} else if ($_SESSION['afrebay']['userType'] == '3') {
-						$check_sub = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".$_SESSION['afrebay']['userId']."' AND status IN (1,2)");
-						if(empty($check_sub)) {
-							redirect('subscription');
-						} else {
-							$profile_check = $this->db->query("SELECT `firstname`, `lastname`, `email`, `gender`, `address`, `zip`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-							if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['zip']) || empty($profile_check[0]['short_bio'])) {
-								redirect('profile');
-							} else {
-								redirect('jobbid');
-							}
-						}
-					} else {
-	                    $response = array('status'=> 'success','result'=> $check_user);
-	                    $response = array_merge($response, array("profile"=> "1"));
-	    			}
-	    		} else {
-	    			if($check_user['0']['userType'] == '1') {
-	    				$profile_check = $this->db->query("SELECT `firstname`, `lastname`, `email`, `gender`, `address`, `zip`, `short_bio` FROM `users` WHERE userId = '".@$check_user['0']['userId']."'")->result_array();
-    					if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['zip']) || empty($profile_check[0]['short_bio'])) {
+			$check_user = $this->db->query("SELECT * FROM users WHERE email = '".$email."' AND password = '".base64_encode($password)."'")->result_array();
+            //print_r($check_user); die();
+            if(!empty($check_user)) {
+                if($check_user[0]['status'] == '1' && $check_user[0]['email_verified'] == '1') {
+                    $msg = 'Logged in successfully';
+                    $get_setting=$this->Crud_model->get_single('setting');
+                    if($get_setting->required_subscription == '1') {
+                        if($check_user['0']['userType'] == '1') {
+                            $check_sub = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".$check_user['0']['userId']."' AND status IN (1,2)");
+                            if(empty($check_sub)) {
+                                $response = array('status'=> 'success','result'=> $check_user);
+                                $response = array_merge($response, array("subscription"=> "0"));
+                            } else {
+                                $profile_check = $this->db->query("SELECT `firstname`, `lastname`, `email`, `gender`, `address`, `zip`, `short_bio` FROM `users` WHERE userId = '".@$check_user['0']['userId']."'")->result_array();
+                                if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['zip']) || empty($profile_check[0]['short_bio'])) {
+                                    $response = array('status'=> 'success','result'=> $check_user);
+                                    $response = array_merge($response, array("profile"=> "0"));
+                                } else {
+                                    $response = array('status'=> 'success','result'=> $check_user);
+                                    $response = array_merge($response, array("profile"=> "1"));
+                                }
+                            }
+                        } else if ($check_user['0']['userType'] == '2') {
+                            $check_sub = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".$check_user['0']['userId']."' AND status IN (1,2)");
+                            if(empty($check_sub)) {
+                                $response = array('status'=> 'success','result'=> $check_user);
+                                $response = array_merge($response, array("subscription"=> "0"));
+                            } else {
+                                $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$check_user['0']['userId']."'")->result_array();
+                                if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) {
+                                    $response = array('status'=> 'success','result'=> $check_user);
+                                    $response = array_merge($response, array("profile"=> "0"));
+                                } else {
+                                    $response = array('status'=> 'success','result'=> $check_user);
+                                    $response = array_merge($response, array("profile"=> "1"));
+                                }
+                            }
+                        } else if ($_SESSION['afrebay']['userType'] == '3') {
+                            $check_sub = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".$_SESSION['afrebay']['userId']."' AND status IN (1,2)");
+                            if(empty($check_sub)) {
+                                redirect('subscription');
+                            } else {
+                                $profile_check = $this->db->query("SELECT `firstname`, `lastname`, `email`, `gender`, `address`, `zip`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['zip']) || empty($profile_check[0]['short_bio'])) {
+                                    redirect('profile');
+                                } else {
+                                    redirect('jobbid');
+                                }
+                            }
+                        } else {
                             $response = array('status'=> 'success','result'=> $check_user);
-                            $response = array_merge($response, array("profile"=> "0", "required_subscription"=> "0"));
-    					} else {
-                            $response = array('status'=> 'success','result'=> $check_user);
-                            $response = array_merge($response, array("profile"=> "1", "required_subscription"=> "1"));
+                            $response = array_merge($response, array("profile"=> "1"));
                         }
-	    			} else if ($check_user['0']['userType'] == '2') {
-	    				$profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$check_user['0']['userId']."'")->result_array();
-                        if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) {
-                        	$response = array('status'=> 'success','result'=> $check_user);
-                        	$response = array_merge($response, array("profile"=> "0", "required_subscription"=> "0"));
-                    	} else {
+                    } else {
+                        if($check_user['0']['userType'] == '1') {
+                            $profile_check = $this->db->query("SELECT `firstname`, `lastname`, `email`, `gender`, `address`, `zip`, `short_bio` FROM `users` WHERE userId = '".@$check_user['0']['userId']."'")->result_array();
+                            if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['zip']) || empty($profile_check[0]['short_bio'])) {
+                                $response = array('status'=> 'success','result'=> $check_user);
+                                $response = array_merge($response, array("profile"=> "0", "required_subscription"=> "0"));
+                            } else {
+                                $response = array('status'=> 'success','result'=> $check_user);
+                                $response = array_merge($response, array("profile"=> "1", "required_subscription"=> "1"));
+                            }
+                        } else if ($check_user['0']['userType'] == '2') {
+                            $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$check_user['0']['userId']."'")->result_array();
+                            if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) {
+                                $response = array('status'=> 'success','result'=> $check_user);
+                                $response = array_merge($response, array("profile"=> "0", "required_subscription"=> "0"));
+                            } else {
+                                $response = array('status'=> 'success','result'=> $check_user);
+                                $response = array_merge($response, array("profile"=> "1", "required_subscription"=> "1"));
+                            }
+                        } else if ($_SESSION['afrebay']['userType'] == '3') {
+                            $check_sub = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".$_SESSION['afrebay']['userId']."' AND status IN (1,2)");
+                            if(empty($check_sub)) {
+                                redirect('subscription');
+                            } else {
+                                $profile_check = $this->db->query("SELECT `firstname`, `lastname`, `email`, `gender`, `address`, `zip`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['zip']) || empty($profile_check[0]['short_bio'])) {
+                                    redirect('profile');
+                                } else {
+                                    redirect('jobbid');
+                                }
+                            }
+                        } else {
                             $response = array('status'=> 'success','result'=> $check_user);
-                            $response = array_merge($response, array("profile"=> "1", "required_subscription"=> "1"));
-                    	}
-	                } else if ($_SESSION['afrebay']['userType'] == '3') {
-						$check_sub = $this->Crud_model->GetData('employer_subscription', '', "employer_id='".$_SESSION['afrebay']['userId']."' AND status IN (1,2)");
-						if(empty($check_sub)) {
-							redirect('subscription');
-						} else {
-							$profile_check = $this->db->query("SELECT `firstname`, `lastname`, `email`, `gender`, `address`, `zip`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-							if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['zip']) || empty($profile_check[0]['short_bio'])) {
-								redirect('profile');
-							} else {
-								redirect('jobbid');
-							}
-						}
-					} else {
-	                    $response = array('status'=> 'success','result'=> $check_user);
-	                    $response = array_merge($response, array("profile"=> "1", "required_subscription"=> "0"));
-	    			}
-	    		}
+                            $response = array_merge($response, array("profile"=> "1", "required_subscription"=> "0"));
+                        }
+                    }
+                } else {
+                    $msg = 'Please click on the activation link provided to your registered email address to successful login';
+                    $response = array('status'=> 'error','result'=> $msg);
+                }
             } else {
                 $msg = 'Invalid Email Address or Password';
                 $response = array('status'=> 'error','result'=> $msg);
@@ -182,7 +188,57 @@ class Authentication extends CI_Controller {
         }
         echo json_encode($response);
     }
-
+    public function send_forget_password() {
+        try {
+            $formdata = json_decode(file_get_contents('php://input'), true);
+        	$get_email = $this->Crud_model->get_single('users',"email = '".$formdata['email']."'");
+            //print_r($get_email); die();
+            if(!empty($get_email)) {
+                if($get_email->status == '1' && $get_email->email_verified == '1') {
+                    $numbers = rand(000000,999999);
+                    $data1 = array(
+                        'forgot_otp' => $numbers
+                    );
+                    $this->Crud_model->SaveData('users',$data1,"email = '".$get_email->email."'");
+                    $get_setting = $this->Crud_model->get_single('setting');
+                    $htmlContent = "<div style='width:600px;margin: 0 auto;background: #fff; border: 1px solid #e6e6e6;'><div style='padding: 30px 30px 15px 30px;box-sizing: border-box;'><img src='cid:Logo' style='width:100px;float: right;margin-top: 0 auto;'><h3 style='padding-top:40px; line-height: 30px;'>Greetings from<span style='font-weight: 900;font-size: 25px;color: #505050; display: block;'>Pay Per Dialog</span></h3><p style='font-size: 24px; margin: 0;'>Verification code</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Please use the verification code below to sign in.</p><p style='font-size: 22px; margin: 5px 0 0 0;'><b>$numbers</b></p><p style='font-size: 17px; margin: 5px 0 0 0;'>If you didn’t request this, you can ignore this email.</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Thank you!</p><p style='font-size: 17px; margin: 5px 0 0 0; list-style: none;'>Sincerly</p><p style='list-style: none;margin: 5px 0 0 0;font-size: 15px;'><b>Pay Per Dialog</b></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Visit us:</b><span>$get_setting->address</span></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Email us:</b><span>$get_setting->email</span></p></div><table style='width: 100%;'><tr><td style='height:30px; width:100%; background: #7e0e14; padding: 10px 0px; font-size:13px; color: #fff; text-align: center;'>Copyright &copy; <?=date('Y')?> Pay Per Dialog. All rights reserved.</td></tr></table></div>";
+                    require 'vendor/autoload.php';
+                    $mail = new PHPMailer(true);
+                    try {
+                        $mail->CharSet = 'UTF-8';
+                        $mail->SetFrom('info@payperdialog.com', 'Pay Per Dialog');
+                        $mail->AddAddress($formdata['email']);
+                        $mail->IsHTML(true);
+                        $mail->Subject = "Forgot Password Confirmation message from Pay Per Dialog";
+                        $mail->AddEmbeddedImage('uploads/logo/'.$get_setting->flogo, 'Logo');
+                        $mail->Body = $htmlContent;
+                        $mail->IsSMTP();
+                        $mail->SMTPAuth = true;
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                        $mail->Host       = "smtp.hostinger.com";
+                        $mail->Port       = 587; //587 465
+                        $mail->Username   = "info@payperdialog.com";
+                        $mail->Password   = "PayperLLC@2024";
+                        $mail->send();
+                        $msg = 'Please check your inbox. We have sent you an email to reset your password.';
+                        $response = array('status'=> 'success','result'=> $msg);
+                    } catch (Exception $e) {
+                        $msg = 'Something went wrong. Please try again later!';
+                        $response = array('status'=> 'error','result'=> $msg);
+                    }
+                } else {
+                    $msg = 'Your account is not active. Please contact to admin';
+                    $response = array('status'=> 'error','result'=> $msg);
+                }
+            } else {
+                $msg = 'Provided email address is not registered with us';
+                $response = array('status'=> 'error','result'=> $msg);
+            }
+    	} catch (\Exception $e) {
+            $response = array('status'=> 'error','result'=> $e->getMessage());
+        }
+        echo json_encode($response);
+	}
 	public function user_agreement() {
 		try {
 			$formdata = json_decode(file_get_contents('php://input'), true);
@@ -197,58 +253,6 @@ class Authentication extends CI_Controller {
 		}
 		echo json_encode($response);
 	}
-
-    public function send_forget_password() {
-        try {
-            $formdata = json_decode(file_get_contents('php://input'), true);
-        	if(!empty($formdata['email'])) {
-         		$get_email = $this->Crud_model->get_single('users',"email = '".$formdata['email']."'");
-             	if(!empty($get_email)) {
-                 	$numbers = rand(000000,999999);
-    				$data1 = array(
-    					'forgot_otp' => $numbers
-    				);
-    				$this->Crud_model->SaveData('users',$data1,"email = '".$get_email->email."'");
-					$get_setting = $this->Crud_model->get_single('setting');
-                 	$htmlContent = "<div style='width:600px;margin: 0 auto;background: #fff; border: 1px solid #e6e6e6;'><div style='padding: 30px 30px 15px 30px;box-sizing: border-box;'><img src='cid:Logo' style='width:100px;float: right;margin-top: 0 auto;'><h3 style='padding-top:40px; line-height: 30px;'>Greetings from<span style='font-weight: 900;font-size: 25px;color: #505050; display: block;'>Pay Per Dialog</span></h3><p style='font-size: 24px; margin: 0;'>Verification code</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Please use the verification code below to sign in.</p><p style='font-size: 22px; margin: 5px 0 0 0;'><b>$numbers</b></p><p style='font-size: 17px; margin: 5px 0 0 0;'>If you didn’t request this, you can ignore this email.</p><p style='font-size: 17px; margin: 5px 0 0 0;'>Thank you!</p><p style='font-size: 17px; margin: 5px 0 0 0; list-style: none;'>Sincerly</p><p style='list-style: none;margin: 5px 0 0 0;font-size: 15px;'><b>Pay Per Dialog</b></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Visit us:</b><span>$get_setting->address</span></p><p style='list-style: none;margin: 5px 0 0 0;font-size: 10px;'><b>Email us:</b><span>$get_setting->email</span></p></div><table style='width: 100%;'><tr><td style='height:30px; width:100%; background: #7e0e14; padding: 10px 0px; font-size:13px; color: #fff; text-align: center;'>Copyright &copy; <?=date('Y')?> Pay Per Dialog. All rights reserved.</td></tr></table></div>";
-    				require 'vendor/autoload.php';
-    				$mail = new PHPMailer(true);
-    				try {
-    					$mail->CharSet = 'UTF-8';
-    					$mail->SetFrom('info@payperdialog.com', 'Pay Per Dialog');
-    					$mail->AddAddress($formdata['email']);
-    					$mail->IsHTML(true);
-    					$mail->Subject = "Forgot Password Confirmation message from Pay Per Dialog";
-    					$mail->AddEmbeddedImage('uploads/logo/'.$get_setting->flogo, 'Logo');
-    					$mail->Body = $htmlContent;
-    					$mail->IsSMTP();
-    					$mail->SMTPAuth = true;
-    					$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    					$mail->Host       = "smtp.hostinger.com";
-						$mail->Port       = 587; //587 465
-						$mail->Username   = "info@payperdialog.com";
-						$mail->Password   = "PayperLLC@2024";
-    					$mail->send();
-    					$msg = 'Please check your inbox. We have sent you an email to reset your password.';
-    					$response = array('status'=> 'success','result'=> $msg);
-    				} catch (Exception $e) {
-    					$msg = 'Something went wrong. Please try again later!';
-    					$response = array('status'=> 'error','result'=> $msg);
-    				}
-             	} else {
-       				$msg = 'Invalid Email Id!';
-       				$response = array('status'=> 'error','result'=> $msg);
-       			}
-    		} else {
-				$msg = 'Please enter a valid email address';
-				$response = array('status'=> 'error','result'=> $msg);
-			}
-        } catch (\Exception $e) {
-            $response = array('status'=> 'error','result'=> $e->getMessage());
-        }
-        echo json_encode($response);
-	}
-
 	public function set_new_password() {
 		try {
 			$formdata = json_decode(file_get_contents('php://input'), true);
