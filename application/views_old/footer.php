@@ -123,16 +123,16 @@ if(!empty($_SESSION['afrebay']['userId'])){
 <?php }
 } ?>
 <div class="modal fade edit-form" id="aggrementmodal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height: fit-content;">
-    <div class="modal-dialog modal-dialog" role="document" style="position: relative;top: 180px;right: 355px;">
-        <div class="modal-content" style="width: 1200px;max-height: 650px;overflow: auto;">
+    <div class="modal-dialog modal-dialog" role="document" style="margin: 20% auto !important;">
+        <div class="modal-content" style="width: 510px; height: 620px; overflow: auto;">
             <div class="modal-header border-bottom-0">
-                <h5 class="modal-title" id="modal-title">Agreement</h5>
+                <h5 class="modal-title" id="modal-title">User's Aggrement</h5>
                 <button type="button" class="bookBtn-close btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeaggrmnt()"></button>
             </div>
             <form id="myForm">
                 <div class="modal-body" style="margin: 10px;">
                 <div class='form-group date'>
-                        <?php
+                        <?php 
                         $privacy = $this->db->query("SELECT `title`, `description` FROM manage_cms WHERE id = '3'")->result_array();
                         $terms = $this->db->query("SELECT `title`, `description` FROM manage_cms WHERE id = '1'")->result_array();
                         ?>
@@ -253,7 +253,7 @@ var confirmationText = 'Are you sure you want to change this status?';
             "toolbar=yes,scrollbars=yes,resizable=yes,top=250,left=20,width=600,height=450");
     }
 
-    <?php if(@$_SESSION['afrebay']['userType'] == '1' || @$_SESSION['afrebay']['userType'] == '3') {
+    <?php if(@$_SESSION['afrebay']['userType'] == '1' || @$_SESSION['afrebay']['userType'] == '3') { 
     $checkuseraggreed = $this->db->query("SELECT * FROM users WHERE userId = '".$_SESSION['afrebay']['userId']."'")->result_array();
     //print_r($checkuseraggreed); die;
     if(empty($checkuseraggreed[0]['isAggreed'])) { ?>
@@ -265,7 +265,7 @@ var confirmationText = 'Are you sure you want to change this status?';
     <?php } } ?>
 
     function aggrement() {
-        if($("#aggrchck").is(":checked")) {
+        if($("#aggrchck").is(":checked")) { 
             var userid = <?php echo $_SESSION['afrebay']['userId'] ?>;
             $.ajax({
                 type:"post",
@@ -290,7 +290,7 @@ var confirmationText = 'Are you sure you want to change this status?';
                 $('.erroraggr').hide();
             }, 5000);
         }
-    }
+    }   
 
 </script>
 </body>

@@ -1251,8 +1251,8 @@ class Dashboard extends CI_Controller {
     }
 
 	public function paymentforslotbook() {
-        $client_id = 'bTyOpcvJSwCvjt87Gt8c_Q';
-        $client_secret = '8rJOexCMDsEWZS9F54BCcN78X3GPktT1';
+        $client_id = '3PsBY5dSQoOVZtyb_9WI8w';
+        $client_secret = 'eDU0Ej1HG2GFtt65CdW7vnOunoGLab5Z';
         $avail_id = $this->input->post('avail_id');
         $employeeID = $this->input->post('employeeID');
         $employerID = $this->input->post('employerID');
@@ -1326,35 +1326,24 @@ class Dashboard extends CI_Controller {
             $response = curl_exec($curl);
             curl_close($curl);
             $decodedData = json_decode($response, true);
-            if($decodedData['code'] == "124") {
-                $body = [
-                    "grant_type" => 'client_credentials',
-                    "account_id" => '73H-Ll9DSseDWF6dgUeT9A',
-                ];
-                $curl = curl_init();
-                curl_setopt_array($curl,
-                    array(
-                        CURLOPT_URL => 'https://zoom.us/oauth/token',
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_ENCODING => '',
-                        CURLOPT_MAXREDIRS => 10,
-                        CURLOPT_TIMEOUT => 0,
-                        CURLOPT_FOLLOWLOCATION => true,
-                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                        CURLOPT_CUSTOMREQUEST => 'POST',
-                        CURLOPT_POSTFIELDS => json_encode($body),
-                        CURLOPT_HTTPHEADER => array(
-                            'Content-Type: application/json',
-                            'Authorization: Basic '.base64_encode($client_id.":".$client_secret),
-                        )
-                    )
-                );
-                $response = curl_exec($curl);
-                curl_close($curl);
-                print_r($response); die();
-                //$this->update_access_token($response->getBody());
-            }
-            $meetingLink[$i]= $decodedData['join_url'];
+            // if($decodedData['code'] == "124") {
+            //     $refresh_token = $this->get_refersh_token();
+            //     require 'vendor/autoload.php';
+            //     $client = new Client(['base_uri' => 'https://zoom.us']);
+            //     $response = $client->request('POST', '/oauth/token', [
+            //         "headers" => [
+            //             "Authorization" => "Basic ". base64_encode($client_id.':'.$client_secret),
+            //             "Content-Type" => "application/x-www-form-urlencoded",
+            //         ],
+            //         'form_params' => [
+            //             "grant_type" => "refresh_token",
+            //             "refresh_token" => $refresh_token
+            //         ],
+            //     ]);
+            //     print_r($response);
+            //     //$this->update_access_token($response->getBody());
+            // }
+            //$meetingLink[$i]= $decodedData['join_url'];
             $joinUrl = "https://us04web.zoom.us/j/".$decodedData['id'];
             $meetingLink[$i]= $joinUrl;
             $meetingpass[$i]= $decodedData['password'];
