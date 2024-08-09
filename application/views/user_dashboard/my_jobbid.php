@@ -243,7 +243,7 @@
 </div>
 </section>
 <div class="modal fade edit-form" id="aggrementmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog" role="document" style="position: relative;top: 180px;right: 355px;">
+    <div class="modal-dialog modal-dialog" role="document" style="position: relative;top: 0;right: 255px;">
         <div class="modal-content" style="width: 1200px;max-height: 650px;overflow: auto;">
             <div class="modal-header border-bottom-0">
                 <h5 class="modal-title" id="modal-title">Agreement</h5>

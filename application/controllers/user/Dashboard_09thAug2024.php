@@ -1237,34 +1237,22 @@ class Dashboard extends CI_Controller {
 	}
 
     public function get_access_token() {
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://zoom.us/oauth/token',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => 'grant_type=account_credentials&account_id=73H-Ll9DSseDWF6dgUeT9A',
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/x-www-form-urlencoded',
-                'Authorization: Basic V1pteDVESzVSNHloOXhkQTRiN190QTp1OXBabnFJcUJHNDdOaE5yS3k4M2h3V1I3QnkybjRvMg==',
-                'Cookie: __cf_bm=j8d61x5QOrLIXdL1IovzLtyXIDmhn9CSZhJLPEzBUc4-1723196550-1.0.1.1-tBe3gQgo8c.JvYn2UVqs6hszZkGUlR6MX5M_MKK..B02y8K7Tu6MDzl.vu4mM.zJXL_22X.zMNvPfHvvoFVsgw; _zm_chtaid=592; _zm_ctaid=vlK3KdZqThenJprgxfHMRQ.1723189809081.03d77d1c9e5e5b7e047f8eb33209f5d7; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=aw1_c_DISK24aaTaWD80m2aQmW0Q; _zm_ssid=us04_c_zAGVzePSRJG3ZCkTQyKfiA; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b; cred=C1A7EA88374F5E3DEE6F4098789ACC4C'
-            ),
-        ));
-        $response = curl_exec($curl);
-        curl_close($curl);
-        $data = json_decode($response);
-        $this->db->query("UPDATE setting SET zoom_token = '$data->access_token' WHERE id = '1'");
-        //return $data->access_token;
-        $this->paymentforslotbook();
+        $settingsData = $this->db->query("SELECT * FROM setting ")->row();
+        return $settingsData->zoom_token;
+    }
+
+    public function get_refersh_token() {
+        $result = $this->get_access_token();
+        return $result;
+    }
+
+    public function update_access_token($token) {
+        $this->db->query("UPDATE setting SET zoom_token = '$token' WHERE id = '1'");
     }
 
 	public function paymentforslotbook() {
-        $accessToken = $this->db->query("SELECT zoom_token FROM setting WHERE id = '1'")->row();
-        //echo "<pre>"; print_r($accessToken->zoom_token); die();
+        $client_id = '3PsBY5dSQoOVZtyb_9WI8w';
+        $client_secret = 'eDU0Ej1HG2GFtt65CdW7vnOunoGLab5Z';
         $avail_id = $this->input->post('avail_id');
         $employeeID = $this->input->post('employeeID');
         $employerID = $this->input->post('employerID');
@@ -1302,7 +1290,7 @@ class Dashboard extends CI_Controller {
                 "topic" => 'Meeting Link1',
                 "type" => 2,
                 "start_time" => $getavailDate->start_date.'T'.$bt[$i].':00Z',
-                "duration" => 40,
+                "duration" => 30,
                 "settings" => [
                     "waiting_room" => false,
                     "host_video" => true,
@@ -1330,7 +1318,7 @@ class Dashboard extends CI_Controller {
                     CURLOPT_POSTFIELDS => json_encode($postData),
                     CURLOPT_HTTPHEADER => array(
                         'Content-Type: application/json',
-                        'Authorization: Bearer '.$accessToken->zoom_token,
+                        'Authorization: Bearer '.$this->get_access_token(),
                         'Cookie: __cf_bm=GN3ywe1uhIkt8A3lL9gHzHKkp.4qZTLivRpTlPVFJqY-1712669514-1.0.1.1-DJPYX.VcbuLNC1eShWwsac4xiyrEI1D0FAUk6BbEsCgSrHuLUnZNcmSdTgJKAV4dEOMEev5a_8f.MErEwIl5ag; _zm_chtaid=194; _zm_ctaid=bWbmHkt-Rp25q21_dFN0wQ.1712669514172.bc9ee5647144d7a2e253b3c6f2d5b040; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_4Sx_TLg1RXKKrIYAholtOg; _zm_ssid=us04_c_Ro2izO6ERUGvcEXUNIr5dw; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b'
                       )
                 )
@@ -1338,32 +1326,24 @@ class Dashboard extends CI_Controller {
             $response = curl_exec($curl);
             curl_close($curl);
             $decodedData = json_decode($response, true);
-            if($decodedData['code'] == "124") {
-                $curl = curl_init();
-                curl_setopt_array($curl, array(
-                    CURLOPT_URL => 'https://zoom.us/oauth/token',
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING => '',
-                    CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_TIMEOUT => 0,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_POSTFIELDS => 'grant_type=account_credentials&account_id=73H-Ll9DSseDWF6dgUeT9A',
-                    CURLOPT_HTTPHEADER => array(
-                        'Content-Type: application/x-www-form-urlencoded',
-                        'Authorization: Basic V1pteDVESzVSNHloOXhkQTRiN190QTp1OXBabnFJcUJHNDdOaE5yS3k4M2h3V1I3QnkybjRvMg==',
-                        'Cookie: __cf_bm=j8d61x5QOrLIXdL1IovzLtyXIDmhn9CSZhJLPEzBUc4-1723196550-1.0.1.1-tBe3gQgo8c.JvYn2UVqs6hszZkGUlR6MX5M_MKK..B02y8K7Tu6MDzl.vu4mM.zJXL_22X.zMNvPfHvvoFVsgw; _zm_chtaid=592; _zm_ctaid=vlK3KdZqThenJprgxfHMRQ.1723189809081.03d77d1c9e5e5b7e047f8eb33209f5d7; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=aw1_c_DISK24aaTaWD80m2aQmW0Q; _zm_ssid=us04_c_zAGVzePSRJG3ZCkTQyKfiA; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b; cred=C1A7EA88374F5E3DEE6F4098789ACC4C'
-                    ),
-                ));
-                $response = curl_exec($curl);
-                curl_close($curl);
-                $data = json_decode($response);
-                $this->db->query("UPDATE setting SET zoom_token = '$data->access_token' WHERE id = '1'");
-                $this->paymentforslotbook();
-            }
-            //print_r($decodedData); die();
-            $meetingLink[$i]= $decodedData['join_url'];
+            // if($decodedData['code'] == "124") {
+            //     $refresh_token = $this->get_refersh_token();
+            //     require 'vendor/autoload.php';
+            //     $client = new Client(['base_uri' => 'https://zoom.us']);
+            //     $response = $client->request('POST', '/oauth/token', [
+            //         "headers" => [
+            //             "Authorization" => "Basic ". base64_encode($client_id.':'.$client_secret),
+            //             "Content-Type" => "application/x-www-form-urlencoded",
+            //         ],
+            //         'form_params' => [
+            //             "grant_type" => "refresh_token",
+            //             "refresh_token" => $refresh_token
+            //         ],
+            //     ]);
+            //     print_r($response);
+            //     //$this->update_access_token($response->getBody());
+            // }
+            //$meetingLink[$i]= $decodedData['join_url'];
             $joinUrl = "https://us04web.zoom.us/j/".$decodedData['id'];
             $meetingLink[$i]= $joinUrl;
             $meetingpass[$i]= $decodedData['password'];
