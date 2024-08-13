@@ -429,7 +429,7 @@ $get_setting = $this->Crud_model->get_single('setting');
 
                                             <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-calendar"
                                                     aria-hidden="true"></i>
-                                                <span class="hidden-xs hidden-sm">Show Availability</span>
+                                                <span class="hidden-xs hidden-sm">Availability</span>
                                             </a>
                                         </li>
                                         <li <?php if ($seg1 == 'booking_history') { ?>class="active" <?php } ?>>
@@ -459,7 +459,7 @@ $get_setting = $this->Crud_model->get_single('setting');
                                         <li <?php if ($seg1 == 'availability') { ?>class="active" <?php } ?>>
 
                                             <a href="<?= base_url('availability') ?>"><i class="fa fa-calender" aria-hidden="true"></i>
-                                                <span class="hidden-xs hidden-sm">Show Availability</span>
+                                                <span class="hidden-xs hidden-sm">Availability</span>
                                             </a>
                                         </li>
                                         <li <?php if ($seg1 == 'booking_history') { ?>class="active" <?php } ?>>
@@ -491,7 +491,7 @@ $get_setting = $this->Crud_model->get_single('setting');
 
                                         <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-calender"
                                                 aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">Show Availability</span>
+                                            <span class="hidden-xs hidden-sm">Availability</span>
                                         </a>
                                     </li>
                                     <li <?php if ($seg1 == 'booking_history') { ?>class="active" <?php } ?>>
@@ -566,7 +566,7 @@ $get_setting = $this->Crud_model->get_single('setting');
 
                                         <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-calendar"
                                                 aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">Show Availability</span>
+                                            <span class="hidden-xs hidden-sm">Availability</span>
                                         </a>
                                     </li>
                                     <li <?php if ($seg1 == 'booking_history') { ?>class="active" <?php } ?>>
@@ -596,7 +596,7 @@ $get_setting = $this->Crud_model->get_single('setting');
                                     <li <?php if ($seg1 == 'availability') { ?>class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
 
                                         <a href="<?= base_url('availability') ?>"><i class="fa fa-calendar" aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">Show Availability</span>
+                                            <span class="hidden-xs hidden-sm">Availability</span>
                                         </a>
                                     </li>
                                     <li <?php if ($seg1 == 'booking_history') { ?>class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
