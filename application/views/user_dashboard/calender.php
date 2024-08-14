@@ -33,10 +33,16 @@
                                 <div class="row">
                                     <div class="col-xs-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                         <div class="col-md-8 col-8" style="display: inline-block; float: left; background: #ffddde; padding: 30px; border-radius: 10px;">
+                                            <p style="color:red;" class="" id="validateerrschedule"></p>
+                                            <p style="color:red;" class="" id="validateerrschedulefromtime"></p>
+                                            <p style="color:red;" class="" id="validateerrscheduletotime"></p>
+                                            <p style="color:red;" class="" id="errstartingdate"></p>
                                             <form id="myForm">
                                                 <div class="form-group">
                                                     <h5 class="control-label" style="margin-bottom: 35px;">Weekly Schedule</h5>
                                                     <?php
+                                                    $getavailability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".@$_SESSION['afrebay']['userId']."'")->row();
+                                                    //echo "<pre>"; print_r($getavailability);
                                                     $calenderday = $this->db->query("SELECT calender FROM setting WHERE id = '1'")->row();
                                                     $data = explode(',', $calenderday->calender);
                                                     //echo count($day); die();
@@ -44,16 +50,16 @@
                                                         $value = explode('.', $data[$i]); ?>
                                                     <div for="<?= $value[1]?>" class="col-12" style="width: 100%; display:inline-block;">
                                                         <div class="icheck-primary col-3" style="display: inline-block; float: left">
-                                                            <input type="checkbox" id="checkboxPrimary<?= $value[0]?>" name="day_schedule" value='<?= $value[1]?>'>
-                                                            <label for="checkboxPrimary<?= $value[0]?>"> <?= $value[1]?> </label>
+                                                            <input type="checkbox" id="checkboxPrimary<?= $value[0]?>" class="chooseday" name="weekDay<?= $value[0]?>" value='<?= $value[1]?>' <?php if ($getavailability->weekDay1 == $value[1] || $getavailability->weekDay2 == $value[1] || $getavailability->weekDay3 == $value[1] || $getavailability->weekDay4 == $value[1] || $getavailability->weekDay5 == $value[1] || $getavailability->weekDay6 == $value[1] || $getavailability->weekDay7 == $value[1]) { echo "checked"; } else { echo ""; }?>>
+                                                            <label for="checkboxPrimary<?= $value[0]?>"> <?= $value[1]?></label>
                                                         </div>
-                                                        <div class="form-group date col-9" id="calenderDays<?= $value[0]?>" style="display: inline-block;background: #fcddde; border: 1px solid;border-radius: 12px;">
+                                                        <div class="form-group date col-9" id="calenderDays<?= $value[0]?>" <?php if ($getavailability->weekDay1 == $value[1] || $getavailability->weekDay2 == $value[1] || $getavailability->weekDay3 == $value[1] || $getavailability->weekDay4 == $value[1] || $getavailability->weekDay5 == $value[1] || $getavailability->weekDay6 == $value[1] || $getavailability->weekDay7 == $value[1]) { echo 'style="display: inline-block;background: #fcddde; border: 1px solid;border-radius: 12px;"'; } else { echo 'style="display: none; background: #fcddde; border: 1px solid;border-radius: 12px;"'; }?>>
                                                             <button type="button" class="btn btn-info addMoreBtn1" id="add_row_<?= $value[0]?>"><i class="fa fa-plus"></i></button>
                                                             <table class="table jobsites" id="purchaseTableclone<?= $value[0]?>">
                                                                 <tbody id="clonetable_feedback<?= $value[0]?>">
                                                                     <tr>
-                                                                        <td><input type="time" class="form-control" name="fromtime" id="time1" required></td>
-                                                                        <td><input type="time" class="form-control" name="totime" id="time1" required></td>
+                                                                        <td><input type="time" class="form-control getfromtime" name="fromtime<?= $value[0]?>[]" id="fromtime" required></td>
+                                                                        <td><input type="time" class="form-control gettotime" name="totime<?= $value[0]?>[]" id="totime" required></td>
                                                                         <td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return remove(<?= $value[0]?>)">X</a></td>
                                                                     </tr>
                                                                 </tbody>
@@ -62,9 +68,24 @@
                                                     </div>
                                                     <?php } ?>
                                                 </div>
-                                                <div class="modal-footer border-top-0 d-flex justify-content-center">
-                                                    <input type="button" class="btn btn-success" id="submit-button" value="Submit">
-                                                    <td><input type="hidden" name="user_id" id="user_id" value="<?php echo @$_SESSION['afrebay']['userId']?>"></td>
+                                                <div class="form-group" style="display: flex;">
+                                                    <div class="col-12" style=" display: flex; align-items: center; justify-content: space-evenly; ">
+                                                        <div class="col-6">
+                                                            <h5 class="control-label">Start Date</h5>
+                                                            <input type="text" id="starting_date" class="form-control" name="starting_date" style="background: #fff; padding: 15px; border-radius: 15px;" value="<?= date('m/d/Y', strtotime($getavailability->start_date))?>"/>
+                                                        </div>
+                                                        <div class="icheck-primary col-6" style="text-align: end;">
+                                                            <input type="checkbox" id="repeat_month" name="repeat_month" <?php if($getavailability->repeat_month == '1') {echo "checked value='1'"; } else {echo "value='0'"; }?>>
+                                                            <label for="repeat_month">Repeat Every Month </label>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="modal-footer border-top-0 d-flex justify-content-center">
+                                                        <input type="button" class="btn btn-success" id="submit-button" value="Submit">
+                                                        <input type="hidden" name="user_id" id="user_id" value="<?php echo @$_SESSION['afrebay']['userId']?>">
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
@@ -143,67 +164,88 @@
 <script src='https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js'></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 <script>
+$(document).ready(function() {
+    $(function() {
+        $("#starting_date").datepicker({
+            autoclose: true,
+            format: "yyyy-mm-dd",
+            immediateUpdates: true,
+            todayHighlight: true,
+            startDate:'+0d'
+        }).datepicker("setDate", "0");
+    });
+});
+$("#repeat_month").click(function(){
+    if($("#repeat_month").is(':checked')) {
+        $("#repeat_month").val("1");
+    } else {
+        $("#repeat_month").val("0");
+    }
+})
+
 $('#submit-button').on('click', function() {
-    var user_id = $('#user_id').val();
+    var schedule = $(".chooseday:checked").val();
+    var from_time = $('.getfromtime').val().length;
+    var to_time = $('.gettotime').val().length;
+    var starting_date = $('#starting_date').val().length;
 
-    var sdateArray = new Array();
-    $("input[name=day_schedule]").each(function() {
-        sdateArray.push($(this).val());
-    });
-
-    var ftimeArray = new Array();
-    $("input[name=fromtime]").each(function() {
-        ftimeArray.push($(this).val());
-    });
-
-    console.log()
-
-    // var totimeArray = new Array();
-    // $("input[name=totime]").each(function() {
-    //     totimeArray.push($(this).val());
-    // });
-
-    // var form_data = new FormData();
-    // form_data.append('user_id',user_id);
-    // form_data.append('start_date',sdateArray);
-    // form_data.append('from_time',ftimeArray);
-    // form_data.append('to_time',totimeArray);
-
-    // $.ajax({
-    //     type:"post",
-    //     url:"<?php echo base_url()?>user/Dashboard/create_availability",
-    //     cache: false,
-    //     contentType: false,
-    //     processData: false,
-    //     async: false,
-    //     data:form_data,
-    //     success:function(returndata) {
-    //         if(returndata == 1) {
-    //             $.confirm({
-    //                 title: '',
-    //                 content: "Data added successfuly",
-    //                 buttons: {
-    //                     somethingElse: {
-    //                         text: 'Ok',
-    //                         btnClass: 'btn-secondary',
-    //                         keys: ['enter', 'shift'],
-    //                         action: function(){
-    //                             location.reload();
-    //                         }
-    //                     }
-    //                 }
-    //             });
-    //         } else {
-    //             $.alert({
-    //                 title: '',
-    //                 content: "Something went wrong. Please try again later.",
-    //             });
-    //             return false;
-    //         }
-    //     }
-    // });
-    //return false;
+    if (schedule === undefined || schedule.trim() === '') {
+        $('#validateerrschedule').text('Please enter schedule');
+        setInterval(function () {
+            $('#validateerrschedule').empty();
+        }, 5000);
+    } else if(from_time === 0){
+        $('#validateerrschedule').text('Please enter from time');
+        setInterval(function () {
+            $('#validateerrschedule').empty();
+        }, 5000);
+    } else if(to_time === 0){
+        $('#validateerrschedule').text('Please enter to time');
+        setInterval(function () {
+            $('#validateerrschedule').empty();
+        }, 5000);
+    } else if(starting_date === 0){
+        $('#validateerrschedule').text('Please enter starting date');
+        setInterval(function () {
+            $('#validateerrschedule').empty();
+        }, 5000);
+    } else {
+        var form_data = $('#myForm').serialize();
+        $.ajax({
+            type:"post",
+            url:"<?php echo base_url()?>user/Dashboard/create_availability",
+            data: form_data,
+            success:function(returndata) {
+                if(returndata == 1) {
+                    $.confirm({
+                        title: '',
+                        content: "Data added successfuly",
+                        buttons: {
+                            somethingElse: {
+                                text: 'Ok',
+                                btnClass: 'btn-secondary',
+                                keys: ['enter', 'shift'],
+                                action: function(){
+                                    location.reload();
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    $.alert({
+                        title: '',
+                        content: "Something went wrong. Please try again later.",
+                    });
+                    return false;
+                }
+            }
+        });
+        return false;
+    }
 })
 
 function closeAvail() {
@@ -213,13 +255,13 @@ function closeAvail() {
 <?php
 for($i = 0; $i < count($data); $i++) {
     $value = explode('.', $data[$i]); ?>
-    $("#calenderDays<?= $value[0]?>").hide();
+    $("#calenderDays<?= $value[0]?>").css("display", "none");
     $("#checkboxPrimary<?= $value[0]?>").click(function(){
         //alert($("#checkboxPrimary<?= $value[0]?>").val());
         if($("#checkboxPrimary<?= $value[0]?>").is(':checked')) {
             $("#calenderDays<?= $value[0]?>").css("display", "inline-block");
         } else {
-            $("#calenderDays<?= $value[0]?>").hide();
+            $("#calenderDays<?= $value[0]?>").css("display", "none");
         }
     })
 

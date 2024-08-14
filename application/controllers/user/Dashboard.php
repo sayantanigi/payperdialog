@@ -1130,8 +1130,7 @@ class Dashboard extends CI_Controller {
 	///////////////// End User Product //////////////////////////
 
 	public function create_availability() {
-		$user_id = $_POST['user_id'];
-		$start_date = explode(",", $_POST['start_date']);
+        /*$start_date = explode(",", $_POST['start_date']);
 		$from_time = explode(",", $_POST['from_time']);
 		$end_date = explode(",", $_POST['end_date']);
 		$to_time = explode(",", $_POST['to_time']);
@@ -1145,7 +1144,49 @@ class Dashboard extends CI_Controller {
 				'to_time' => $to_time[$i],
 			);
 			$this->Crud_model->SaveData('user_availability', $data);
-		}
+		}*/
+		$user_id = $_POST['user_id'];
+        $days = [
+            'weekDay1' => ['day'=> $_POST['weekDay1'], 'fromtime' => $_POST['fromtime1'], 'totime' => $_POST['totime1']],
+            'weekDay2' => ['day'=> $_POST['weekDay2'], 'fromtime' => $_POST['fromtime2'], 'totime' => $_POST['totime2']],
+            'weekDay3' => ['day'=> $_POST['weekDay3'], 'fromtime' => $_POST['fromtime3'], 'totime' => $_POST['totime3']],
+            'weekDay4' => ['day'=> $_POST['weekDay4'], 'fromtime' => $_POST['fromtime4'], 'totime' => $_POST['totime4']],
+            'weekDay5' => ['day'=> $_POST['weekDay5'], 'fromtime' => $_POST['fromtime5'], 'totime' => $_POST['totime5']],
+            'weekDay6' => ['day'=> $_POST['weekDay6'], 'fromtime' => $_POST['fromtime6'], 'totime' => $_POST['totime6']],
+            'weekDay7' => ['day'=> $_POST['weekDay7'], 'fromtime' => $_POST['fromtime7'], 'totime' => $_POST['totime7']],
+        ];
+
+        $data = [
+            'start_date' => date('Y-m-d', strtotime($_POST['starting_date'])),
+            'repeat_month' => $_POST['repeat_month'],
+            'schedule_status' => '1',
+            'user_id' => $user_id,
+        ];
+
+        foreach ($days as $key => $times) {
+            if(!empty($times['day'])) {
+                $data[$key] = $times['day'];
+            } else {
+                $data[$key] = "";
+            }
+
+            if (isset($times['fromtime']) && is_array($times['fromtime'])) {
+                $data["{$key}_fromtime"] = implode(',', $times['fromtime']);
+            } else {
+                $data["{$key}_fromtime"] = '';
+            }
+            if (isset($times['totime']) && is_array($times['totime'])) {
+                $data["{$key}_totime"] = implode(',', $times['totime']);
+            } else {
+                $data["{$key}_totime"] = '';
+            }
+        }
+        $getData = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".$user_id."'")->row();
+        if(!empty($getData)) {
+            $this->Crud_model->SaveData('user_availability', $data, "user_id='".$user_id."'");
+        } else {
+            $this->Crud_model->SaveData('user_availability', $data);
+        }
 		echo "1";
 	}
 
