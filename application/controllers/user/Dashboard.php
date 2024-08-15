@@ -1181,14 +1181,57 @@ class Dashboard extends CI_Controller {
                 $data["{$key}_totime"] = '';
             }
         }
-        $getData = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".$user_id."'")->row();
+        $getData = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".$user_id."' AND repeat_month IN (0,1)")->row();
         if(!empty($getData)) {
-            $this->Crud_model->SaveData('user_availability', $data, "user_id='".$user_id."'");
+            $this->Crud_model->SaveData('user_availability', $data, "user_id='".$user_id."' AND repeat_month IN (0,1)");
         } else {
             $this->Crud_model->SaveData('user_availability', $data);
         }
 		echo "1";
-	}
+    }
+    public function createdatewiseavailability() {
+        $user_id = $_POST['user_id'];
+
+        $specificdate = explode(',', $_POST['specific_date'][0]);
+        $days = [];
+        foreach ($specificdate as $key => $value) {
+            $days[$key] = [
+                'weekDay1' => ['date'=> $value, 'day'=> 'Sunday', 'fromtime' => $_POST['fromtimedate'], 'totime' => $_POST['totimedate']],
+                'weekDay2' => ['date'=> $value, 'day'=> 'Monday', 'fromtime' => $_POST['fromtimedate'], 'totime' => $_POST['totimedate']],
+                'weekDay3' => ['date'=> $value, 'day'=> 'Tuesday', 'fromtime' => $_POST['fromtimedate'], 'totime' => $_POST['totimedate']],
+                'weekDay4' => ['date'=> $value, 'day'=> 'Wednesday', 'fromtime' => $_POST['fromtimedate'], 'totime' => $_POST['totimedate']],
+                'weekDay5' => ['date'=> $value, 'day'=> 'Thursday', 'fromtime' => $_POST['fromtimedate'], 'totime' => $_POST['totimedate']],
+                'weekDay6' => ['date'=> $value, 'day'=> 'Friday', 'fromtime' => $_POST['fromtimedate'], 'totime' => $_POST['totimedate']],
+                'weekDay7' => ['date'=> $value, 'day'=> 'Saturday', 'fromtime' => $_POST['fromtimedate'], 'totime' => $_POST['totimedate']],
+            ];
+            $data = [
+                'start_date' => $value,
+                'repeat_month' => '2' ,
+                'schedule_status' => '1',
+                'user_id' => $user_id,
+            ];
+
+            foreach ($days[$key] as $key1 => $times) {
+                if(!empty($times['day'])) {
+                    $data[$key1] = $times['day'];
+                } else {
+                    $data[$key1] = "";
+                }
+                if (isset($times['fromtime']) && is_array($times['fromtime'])) {
+                    $data["{$key1}_fromtime"] = implode(',', $times['fromtime']);
+                } else {
+                    $data["{$key1}_fromtime"] = '';
+                }
+                if (isset($times['totime']) && is_array($times['totime'])) {
+                    $data["{$key1}_totime"] = implode(',', $times['totime']);
+                } else {
+                    $data["{$key1}_totime"] = '';
+                }
+            }
+            $this->Crud_model->SaveData('user_availability', $data);
+        }
+        echo "1";
+    }
 
 	public function bookSlotforuser() {
 		//print_r($this->input->post()); die();
