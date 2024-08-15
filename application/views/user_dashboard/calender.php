@@ -15,7 +15,7 @@
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title">Show Availability</h2>
+                <h2 class="breadcrumb-title">Availability</h2>
             </div>
         </div>
     </div>
@@ -145,7 +145,7 @@
                                             <div class="form-group" style="margin-top: 45px;">
                                             <?php foreach ($getdatespecificdata as $value) { ?>
                                                 <div class="getdatespecificdata">
-                                                    <div class="getdatespecificdate" style="width: 100%;"><?= date('F j, Y' , strtotime($value['start_date'])) ?></div>
+                                                    <div class="getdatespecificdate" style="width: 100%; margin-bottom: 5px; font-size: 16px; font-weight: 700;"><?= date('F j, Y' , strtotime($value['start_date'])) ?></div>
                                                     <?php
                                                     $weekDay1_fromtime = $value['weekDay1_fromtime'];
                                                     $weekDay1Fromtime = explode(',' , $weekDay1_fromtime);
@@ -274,6 +274,7 @@
     font-size: 12px;
     color: #fff;
     font-weight: 600;
+    margin-bottom: 5px;
 }
 .getdatespecificdata {
     display: inline-block;
