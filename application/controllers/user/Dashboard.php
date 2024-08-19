@@ -1318,58 +1318,47 @@ class Dashboard extends CI_Controller {
 
 	public function getUserAvailability() {
 		//print_r($this->input->post()); die();
-		$start_date = $this->input->post('start_date');
-		$end_date = $this->input->post('end_date');
-		$user_id = $this->input->post('userID');
-		//echo "SELECT user_availability.start_date, user_availability.from_time, user_availability.end_date, user_availability.to_time, user_booking.employee_id, user_booking.employer_id, user_booking.available_id, user_booking.bookingTime FROM user_booking RIGHT JOIN user_availability ON user_availability.id = user_booking.available_id where user_availability.user_id = '".$user_id."' AND user_availability.start_date = '".$start_date."' AND user_availability.end_date = '".$end_date."'"; die();
-		$getTime = $this->db->query("SELECT user_availability.id, user_availability.start_date, user_availability.from_time, user_availability.end_date, user_availability.to_time, user_booking.employee_id, user_booking.employer_id, user_booking.available_id, user_booking.bookingTime FROM user_booking RIGHT JOIN user_availability ON user_availability.id = user_booking.available_id where user_availability.user_id = '".$user_id."' AND user_availability.start_date = '".$start_date."' AND user_availability.end_date = '".$end_date."'")->result_array();
-		echo json_encode($getTime);
+		$choosendate = $this->input->post('choosendate');
+		$workers_id = $this->input->post('workers_id');
+		$getavailabletime = $this->db->query("SELECT * FROM user_availability_new WHERE start_date = '".$choosendate."' AND user_id = '".$workers_id."' AND is_booked = '0'")->result_array();
+        //echo "<pre>"; print_r($getavailabletime);
+        $output = "";
+        if(!empty($getavailabletime)) {
+            foreach ($getavailabletime as $key => $avail) {
+                $timeslot = explode(' to ', $avail['weekdayslot']);
+            $output .= '<div class="getdatespecificdatetime" id="getdatespecificdatetime_'.$avail['id'].'" onclick="booktheslot('.$avail['id'].')">'.date('h:i A', strtotime($timeslot[0])).' to '.date('h:i A', strtotime($timeslot[1])).'</div>';
+        }
+        } else {
+            $output .= '<div class="getdatespecificdatetime">No Time Available</div>';
+        }
+		echo $output;
 	}
-
-	/*public function addBookingTimeData() {
-		$start_date = $this->input->post('startDate');
-		$employeeID = $this->input->post('employeeID');
-		$employerID = $this->input->post('employerID');
-		$bookTime = implode(',', $this->input->post('bookTime'));
-		$book_time = explode(',', $bookTime);
-		$getUserAvailabilityid = $this->db->query("SELECT * FROM user_availability WHERE start_date = '".$start_date."' AND user_id = '".$employeeID."'")->result_array();
-		$getuser_booking = $this->db->query("SELECT * FROM user_booking WHERE available_id = '".$getUserAvailabilityid[0]['id']."'")->result_array();
-		$booktime = count($book_time);
-		if(!empty($getuser_booking)) {
-			$this->Crud_model->DeleteData('user_booking', "available_id='".$getUserAvailabilityid[0]['id']."'");
-			for($i=0; $i<$booktime; $i++) {
-				$data = array(
-					'employee_id' => $employeeID,
-					'employer_id' => $employerID,
-					'available_id' => $getUserAvailabilityid[0]['id'],
-					'bookingTime' => $book_time[$i],
-				);
-				$this->Crud_model->SaveData('user_booking', $data);
-			}
-		} else {
-			for($i=0; $i<$booktime; $i++) {
-				$data = array(
-					'employee_id' => $employeeID,
-					'employer_id' => $employerID,
-					'available_id' => $getUserAvailabilityid[0]['id'],
-					'bookingTime' => $book_time[$i],
-				);
-				$this->Crud_model->SaveData('user_booking', $data);
-			}
-		}
-		echo "1";
-	}*/
-
-	public function addBookingTimeData() {
+    public function getUsersAvailableslot() {
+        $slotid = $_POST['slotid'];
+        $getavailableslot = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$slotid."'")->row();
+        $timeSlot = explode(' to ', $getavailableslot->weekdayslot);
+        $time_slot = date('h:i A', strtotime($timeSlot[0])).' to '.date('h:i A', strtotime($timeSlot[1]));
+        $datetime = date('D dS M Y ', strtotime($getavailableslot->start_date));
+        $getuserdetail = $this->db->query("SELECT * FROM users WHERE userId = '".$getavailableslot->user_id."'")->row();
+        $output = "";
+        if(!empty($getavailableslot)) {
+            $output .= '<div class="availslotdataheader"><div class="col-12 availslotdataheaderdata"><div class="col-6 availslotdataheaderdataleft">Book Slot</div><div class="col-6 availslotdataheaderdataright"> $'.$getuserdetail->rateperhour.' fee</div></div></div><div class="getdatespecificslotdata"><p class="getdatespecificslotdataname"><i class="fa fa-user"></i>'.$getuserdetail->firstname.' '.$getuserdetail->lastname.'</p><p class="getdatespecificslotdatacal"><i class="fa fa-calendar"></i>'.$datetime.', '.$time_slot.'</p></div><button type="button" id="bookthisslot" onclick="bookthisslot('.$getavailableslot->id.')">Book now</button>';
+        } else {
+            $output .= '<div class="getdatespecificdatetime">Something went wrong! Please try again later.</div>';
+        }
+		echo $output;
+    }
+    public function addBookingTimeData() {
 		//echo "<pre>"; print_r($_POST); die();
-		$avail_id = $this->input->post('avail_id');
-		$start_date = $this->input->post('startDate');
-		$employeeID = $this->input->post('employeeID');
-		$employerID = $this->input->post('employerID');
-		$book_time = $this->input->post('bookTime');
-		$getuser_booking = $this->db->query("SELECT * FROM user_booking WHERE available_id = '".$avail_id."' AND employee_id = '".$employeeID."' AND employer_id = '".$employerID."'")->result_array();
-		if(!empty($getuser_booking)) {
-			//$this->Crud_model->DeleteData('user_booking', "available_id='".$avail_id."'");
+		$avail_id = $this->input->post('slotid');
+		//$start_date = $this->input->post('startDate');
+		$employeeID = $this->input->post('user_id');
+		$employerID = $this->input->post('workers_id');
+		//$book_time = $this->input->post('bookTime');
+		//$getuser_booking = $this->db->query("SELECT * FROM user_booking WHERE available_id = '".$avail_id."' AND employee_id = '".$employeeID."' AND employer_id = '".$employerID."'")->result_array();
+        $getbookingTime = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$avail_id."'")->row();
+        $weekdayslot = $getbookingTime->weekdayslot;
+		/*if(!empty($getuser_booking)) {
 			$data = array(
 				'employee_id' => $employeeID,
 				'employer_id' => $employerID,
@@ -1385,10 +1374,16 @@ class Dashboard extends CI_Controller {
 				'bookingTime' => $book_time,
 			);
 			$this->Crud_model->SaveData('user_booking', $data);
-		}
-		echo "1";
+		}*/
+        $data = array(
+            'employee_id' => $employeeID,
+            'employer_id' => $employerID,
+            'available_id' => $avail_id,
+            'bookingTime' => $weekdayslot,
+        );
+        $this->Crud_model->SaveData('user_booking', $data);
+		$this->paymentforslotbook($avail_id, $employeeID, $employerID, $weekdayslot);
 	}
-
     public function get_access_token() {
         $curl = curl_init();
         curl_setopt_array($curl, array(
@@ -1414,14 +1409,15 @@ class Dashboard extends CI_Controller {
         //return $data->access_token;
         $this->paymentforslotbook();
     }
-
-	public function paymentforslotbook() {
+	public function paymentforslotbook($avail_id, $employeeID, $employerID, $weekdayslot) {
         $accessToken = $this->db->query("SELECT zoom_token FROM setting WHERE id = '1'")->row();
         //echo "<pre>"; print_r($accessToken->zoom_token); die();
-        $avail_id = $this->input->post('avail_id');
+        /*$avail_id = $this->input->post('avail_id');
         $employeeID = $this->input->post('employeeID');
-        $employerID = $this->input->post('employerID');
-        $rate = $this->input->post('rate');
+        $employerID = $this->input->post('employerID');*/
+        $get_rate = $this->db->query("SELECT * FROM users WHERE userId = '".$employerID."'")->row();
+        //print_r($get_rate); die();
+        $rate = $get_rate->rateperhour;
         $getBookinID = $this->db->query("SELECT * FROM user_booking WHERE available_id = '".$avail_id."' AND employee_id = '".$employeeID."' AND employer_id = '".$employerID."'")->result_array();
         $length = 24;
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -1438,7 +1434,7 @@ class Dashboard extends CI_Controller {
         );
         $this->Crud_model->SaveData('user_booking_txn', $data);
         // create miting link
-        $getavailDate = $this->db->query("SELECT * FROM user_availability WHERE id = '" . $avail_id . "'")->row();
+        $getavailDate = $this->db->query("SELECT * FROM user_availability_new WHERE id = '" . $avail_id . "'")->row();
         $getbiduser = $this->db->query("SELECT * FROM users WHERE userId = '" . $employeeID . "'")->row();
         $getbidemail = $getbiduser->email;
         $getbidname = $getbiduser->firstname. ' '.$getbiduser->lastname;
@@ -1446,15 +1442,15 @@ class Dashboard extends CI_Controller {
         $getpostemail = $getpostuser->email;
         $getpostname = $getpostuser->companyname;
         $bookingTime = $getBookinID[0]['bookingTime'];
-        $bt = explode(",", $bookingTime);
+        $bt = explode(" to ", $bookingTime);
 
         $meetingLink = array();
         $meetingPass = array();
-        for ($i=0; $i<count($bt); $i++){
+        //for ($i=0; $i<count($bt); $i++){
             $postData = [
                 "topic" => 'Meeting Link1',
                 "type" => 2,
-                "start_time" => $getavailDate->start_date.'T'.$bt[$i].':00Z',
+                "start_time" => $getavailDate->start_date.'T'.$bt[0].':00Z',
                 "duration" => 40,
                 "settings" => [
                     "waiting_room" => false,
@@ -1569,10 +1565,11 @@ class Dashboard extends CI_Controller {
                 } catch (Exception $e) {
                 }
             }
-        }
+        //}
         $meetingLink = implode(',', $meetingLink);
         $meetingpass = implode(',', $meetingpass);
         $this->db->query("UPDATE user_booking SET meeting_link = '".$meetingLink."', meeting_pass = '".$meetingpass."' WHERE id = '".$getBookinID[0]['id']."'");
+        $this->db->query("UPDATE user_availability_new SET is_booked = '1' WHERE id = '".$avail_id."'");
         echo "1";
     }
 

@@ -131,12 +131,65 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                 </div>
                                 <!-- Calender -->
                                 <div class="Calender_Pick" id="calendar"></div>
-
-                                <div class="quick-form-job availtimedata" style="">
-                                    <h3>Selected Date: <p class="choosendate"></p></h3>
-                                    <div class="getdatespecificdata"></div>
-                                </div>
-                                <div class="availslotdata"></div>
+                                <?php
+                                $actual_link = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+                                $link_array = explode('/',$actual_link);
+                                $uid = base64_decode(end($link_array));
+                                if (!empty(@$_SESSION['afrebay']['userId'])) {
+                                    $checkBookSlot = $this->db->query("SELECT user_availability.id as avail_id, user_availability.user_id, user_availability.start_date, user_availability.from_time, user_availability.end_date, user_availability.to_time, user_booking.id as boooking_id, user_booking.employee_id, user_booking.employer_id, user_booking.available_id, user_booking.bookingTime FROM user_booking JOIN user_availability ON user_availability.id = user_booking.available_id WHERE user_booking.employer_id = '".@$_SESSION['afrebay']['userId']."' AND user_availability.user_id = '".$uid."'")->result_array();
+                                    if(!empty($checkBookSlot)) {
+                                        $availability = $this->db->query("SELECT user_availability.id as avail_id, user_availability.user_id, user_availability.start_date, user_availability.from_time, user_availability.end_date, user_availability.to_time, user_booking.id as boooking_id, user_booking.employee_id, user_booking.employer_id, user_booking.available_id, user_booking.bookingTime FROM user_booking JOIN user_availability ON user_availability.id = user_booking.available_id WHERE user_booking.employer_id = '".@$_SESSION['afrebay']['userId']."' AND user_availability.user_id = '".$uid."'")->result_array();
+                                        if(!empty($availability)) { ?>
+                                        <div class="job-overview" style="height: 382px; overflow: auto; margin-top: 0px;">
+                                            <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">Start Date</p>
+                                            <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">From Time</p>
+                                            <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">To Time</p>
+                                            <p style="width: 20%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">End Date</p>
+                                            <?php $i=1;
+                                            foreach ($availability as $value) { ?>
+                                            <!-- <div> -->
+                                                <div class="job-overview" style="width: 80%; background: #c7c7c7; margin: 0 0 5px 0 !important; padding: 0px; cursor: pointer;">
+                                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['start_date']));?></p>
+                                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['from_time']))?></p>
+                                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('h:i A', strtotime($value['to_time']));?></p>
+                                                    <p style="width: 25%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;"><?= date('d-m-Y', strtotime($value['end_date']))?></p>
+                                                </div>
+                                                <div class="job-overview job_overview_main" id="job_overview_main_<?= $i?>" style="width: 15%; background: #c7c7c7; margin: 0 0 5px 10px !important; padding: 0px; cursor: pointer;">
+                                                    <p style="width: 100%; display: inline-block; float: left; text-align: center; color: #000; font-size: 13px; font-weight: 600; font-family: Open Sans; margin: 0px !important;">View</p>
+                                                </div>
+                                            <!-- </div> -->
+                                            <div style="width: 100%;display: inline-block;background: #e1dfdf;margin: 0 0 5px 0;border-radius: 10px;padding: 10px;text-align: center;" id="job_overview_sub_<?= $i?>" class="job_overview_sub">
+                                            <?php $getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE employer_id ='".@$_SESSION['afrebay']['userId']."' and available_id = '".$value['avail_id']."'")->result_array();
+                                            //echo "<pre>"; print_r($getBookSlot);
+                                            $bookingTime = $getBookSlot[0]['bookingTime'];
+                                            $bookingTime = explode(',', $bookingTime);
+                                            $meetingLink = explode(',', $getBookSlot[0]['meeting_link']);
+                                            if(!empty($getBookSlot)) { ?>
+                                                <div style="width: 100%; display: inline-block;">
+                                                    <div>Booked Slot</div>
+                                                    <?php for($i = 0; $i < count($bookingTime); $i++) {
+                                                    $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".$getBookSlot[0]['employer_id']."'")->result_array();?>
+                                                    <div style="display: inline-block;width: 100%;">
+                                                        <p style="width: 50%;display: inline-block;float: left;margin: 0px;font-size: 14px;"><?= date('h:i A', strtotime($bookingTime[$i]))?> to <?= date('h:i A', strtotime($bookingTime[$i]) + 60*60)?></p>
+                                                        <p style="width: 50%;display: inline-block;float: left;margin: 0px;font-size: 14px;"><a href="<?= $meetingLink[$i]?>">Meeting Link</a></p>
+                                                    </div>
+                                                    <?php } ?>
+                                                    <div>
+                                                        <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;">Total Rate: <?= count($bookingTime)*@$user_detail->rateperhour?></p>
+                                                    </div>
+                                                </div>
+                                            <?php } else { ?>
+                                                <p style="margin: 0px;">No slot booked for this date</p>
+                                            <?php } ?>
+                                            </div>
+                                            <?php $i++; } ?>
+                                        </div>
+                                        <input type="hidden" name="bookTime" id="bookTime" value="">
+                                        <?php } else { ?>
+                                        <div class="job-overview" style="text-align: center;">No data added for availability</div>
+                                        <?php } } else { ?>
+                                        <div class="job-overview" style="height: auto; overflow: auto; margin-top: 0px; text-align: center;">No slot booked</div>
+                                    <?php } } ?>
 
                                 <?php if (!empty($_SESSION['afrebay']['userId']) && $_SESSION['afrebay']['userType'] == 2) { ?>
                                 <div class="quick-form-job">
@@ -174,12 +227,117 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
         </div>
     </div>
 </section>
-<?php $actual_link = "https://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-$link_array = explode('/',$actual_link);
-$workers = base64_decode(end($link_array));
-?>
-<input type="hidden" name="workers_id" id="workers_id" value="<?php echo @$user_detail->userId?>">
-<input type="hidden" name="user_id" id="user_id" value="<?php echo @$_SESSION['afrebay']['userId']?>">
+<input type="hidden" name="user_id" id="user_id" value="<?php echo $_SESSION['afrebay']['userId']?>">
+<?php //if($_SESSION['afrebay']['userId'] == 1) { ?>
+<!-- Calender Add modal -->
+<div class="modal fade edit-form" id="form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title" id="modal-title">Add Availability</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="myForm">
+                <div class="modal-body">
+                    <div class="alert alert-danger " role="alert" id="danger-alert" style="display: none;">
+                        End date should be greater than start date.
+                    </div>
+                    <div class="form-group">
+                        <label for="start-date">Start date <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" name="start-date" id="start-date" placeholder="start-date" required>
+                    </div>
+                    <div class='form-group date'>
+                        <table class="table jobsites" id="purchaseTableclone1">
+                            <tr class="color">
+                                <th>Time <span style="color:red;">*</span></th>
+                                <th><button type="button" class="btn btn-info addMoreBtn" onclick="add_row()">Add</button></th>
+                            </tr>
+                            <tbody id="clonetable_feedback1">
+                                <tr>
+                                    <td><input type="time" name="time" id="time1" class="form-control" required></td>
+                                    <td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return remove(this)">X</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <label for="end-date">End date</label>
+                        <input type="date" class="form-control" name="end-date" id="end-date" placeholder="end-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="event-color">Color</label>
+                        <input type="color" class="form-control" id="event-color" value="#3788d8">
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 d-flex justify-content-center">
+                    <!-- <button type="submit" class="btn btn-success" id="submit-button1">Schedule</button> -->
+                    <input type="button" class="btn btn-success" id="submit-button" value="Schedule">
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        function add_row() {
+            var y=document.getElementById('clonetable_feedback1');
+            var new_row = y.rows[0].cloneNode(true);
+            var len = y.rows.length;
+            new_number=Math.round(Math.exp(Math.random()*Math.log(10000000-0+1)))+0;
+            var inp3 = new_row.cells[0].getElementsByTagName('input')[0];
+            inp3.value = '';
+            inp3.id = 'service'+(len+1);
+            var submit_btn =$('#submit').val();
+            y.appendChild(new_row);
+        }
+
+        function remove(row) {
+            var y=document.getElementById('purchaseTableclone1');
+            var len = y.rows.length;
+            if(len>2) {
+                var i= (len-1);
+                document.getElementById('purchaseTableclone1').deleteRow(i);
+            }
+        }
+    </script>
+</div>
+
+<div class="modal fade edit-form" id="bookingmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <h5 class="modal-title" id="modal-title">Book Slot</h5>
+                <button type="button" class="bookBtn-close btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="closeBook()"></button>
+            </div>
+            <form id="myForm" class="avail_time">
+                <div class="modal-body">
+                    <div class="alert alert-danger " role="alert" id="danger-alert" style="display: none;">
+                        End date should be greater than start date.
+                    </div>
+                    <div class='form-group date'>
+                        <table class="table jobsites" id="purchaseTableclone1">
+                            <tr class="color" style="text-align: center;">
+                                <th>Available Time<span style="color:red;">*</span></th>
+                            </tr>
+                            <tbody id="clonetable_feedback1" class="bookingcontent">
+                                <input type="hidden" name="avail_id" id="avail_id" value="">
+                                <input type="hidden" name="start_date" id="start_date" value="">
+                                <input type="hidden" name="from_time" id="from_time" value="">
+                                <input type="hidden" name="end_date" id="end_date" value="">
+                                <input type="hidden" name="to_time" id="to_time" value="">
+                                <input type="hidden" name="userID" id="userID" value="<?= @$user_detail->userId?>">
+                                <input type="hidden" name="employerID" id="employerID" value="<?= @$_SESSION['afrebay']['userId']?>">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0 d-flex justify-content-center">
+                    <!-- <button type="submit" class="btn btn-success" id="submit-button1">Schedule</button> -->
+                    <input type="button" class="btn btn-success" id="submit-button" value="Book Now" onclick="aggrement1()">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php //} ?>
 <style>
     .dashboard-gig a:focus, a:hover, a {text-decoration: none !important;}#calendar {width: 100%;margin: 0;box-shadow: 0 0 10px #dddddd;display: inline-block;padding: 20px;border-radius: 10px;margin-bottom: 20px;}.fc-event {border: 1px solid #eee !important;}.fc-content {padding: 3px !important;}.fc-content .fc-title {display: block !important;overflow: hidden;text-align: center;font-size: 12px;font-weight: 500;text-align: center;}.fc-customButton-button {font-size: 13px !important;position: absolute;top: 60px;left: 50%;transform: translateY(-50%);}.form-group {margin-bottom: 1rem;}.form-group>label {margin-bottom: 10px;}#delete-modal .modal-footer>.btn {border-radius: 3px !important;padding: 0px 8px !important;font-size: 15px;}.fc-scroller {overflow-y: hidden !important;}.context-menu {position: absolute;z-index: 1000;background-color: #fff;border: 1px solid #ccc;border-radius: 4px;box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);padding: 5px;}.context-menu ul {list-style-type: none;margin: 0;padding: 0;}.context-menu ul>li {display: block;padding: 5px 15px;list-style-type: none;color: #333;display: block;cursor: pointer;margin: 0 auto;transition: 0.10s;font-size: 13px;}.context-menu ul>li:hover {color: #fff;background-color: #007bff;border-radius: 2px;}.fa, .fas {font-size: 13px;margin-right: 4px;}button:focus {box-shadow: none !important;}.Calender_Pick .fc-header-toolbar {display: flex;flex-direction: column;}.Calender_Pick .fc-header-toolbar {display: flex;flex-direction: column;margin-bottom: 0px !important;}.Calender_Pick .fc-left {width: 100%;height: 35px;display: flex;justify-content: flex-start;align-items: flex-start;}.Calender_Pick .fc-left h2 {font-weight: 600;font-size: 18px;}.Calender_Pick .fc-center {position: relative;height: 45px;width: 100%; display: none;}.Calender_Pick .fc-center button {transform: translateY(0);position: absolute;top: 0;height: 35px;left: 0;width: 100px;border-radius: 50px;background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;border: 0;font-size: 13px !important;}.Calender_Pick .fc-right {width: 100%;height: 45px;display: flex;align-items: flex-start;justify-content: space-between;}.Calender_Pick .fc-right button {border: 0;height: 35px;width: 100px;border-radius: 50px;background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; opacity: 1;font-size: 13px !important;}.Calender_Pick .fc-button-group {height: 35px;border-radius: 50px;}.Calender_Pick .fc-button-group button {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; border: 0;display: flex;align-items: center;justify-content: center;width: 60px !important;}.Calender_Pick .fc-button-group button span {font-size: 13px;}.Calender_Pick .fc-day-grid-container {height: auto !important;border-bottom: 1px solid #ddd;}.Calender_Pick .fc-view-container .fc-head-container {color: #ED1C24 !important;}div.modal.edit-form.Modal_Show {display: flex !important;align-items: center;justify-content: center;}.edit-form .modal-content {width: 500px;}.edit-form .modal-content .modal-body {border-radius: 0;}.edit-form .modal-content #myForm .form-group label {padding: 0;font-size: 16px;}.edit-form .modal-content #myForm .form-group #event-title {padding: 10px !important;font-size: 15px;}.edit-form .modal-content .modal-footer button {height: 35px;display: flex;align-items: center;justify-content: center;border-radius: 50px;background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;border: 0;letter-spacing: 1px;}
     #err-messages{display: none; text-align: center;}
@@ -196,22 +354,6 @@ $workers = base64_decode(end($link_array));
     .prompt_login {margin-right: 156px !important;}
     .book_warning {margin-right: 160px !important;}
     .paydone_btn {margin-right: 160px !important;}
-    .getdatespecificdatetime {border-radius: 10px; width: 150px; padding: 10px; display: inline-block; text-align: center; font-size: 12px; font-weight: 600; margin-bottom: 5px; border: 1px solid #000; margin-right: 12px; }
-    .getdatespecificdata {display: inline-block; margin-bottom: 10px; padding: 10px; border-radius: 15px;}
-    .availtimedata{display: none; margin-top: 0px; text-align: center; margin-bottom: 20px;}
-    .availtimedata .selected {background: green; color: #fff;}
-    .choosendate {display: inline; font-size: 18px;}
-    .availslotdata {text-align: center; border-radius: 10px; box-shadow: 0 0 10px #dddddd; margin-top: 0px; display: none; width: 100%; flex-wrap: wrap; justify-content: center;}
-    .availslotdataheader {background: #eee; width: 100%; display: inline-block; height: 50px;}
-    .availslotdataheaderdata {display: flex; margin-top: 10px;}
-    .availslotdataheaderdataleft{display: inline; font-size: 18px; text-align: justify;}
-    .availslotdataheaderdataright{display: inline; font-size: 18px; text-align: end;}
-    .getdatespecificslotdata{width: 100%;text-align: justify;display: flex;flex-direction: column; padding: 10px 30px;}
-    #bookthisslot {margin-bottom: 20px; }
-    .getdatespecificslotdataname{display: flex; align-items: center; font-size: 16px; margin-bottom: 10px;}
-    .getdatespecificslotdataname .fa-user {font-size: 18px; margin-right: 15px;}
-    .getdatespecificslotdatacal{display: flex; align-items: center; font-size: 16px; margin-bottom: 10px;}
-    .getdatespecificslotdatacal .fa-calendar {font-size: 18px; margin-right: 15px;}
 </style>
 <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css'>
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'>
@@ -227,6 +369,68 @@ $workers = base64_decode(end($link_array));
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
 <script>
+// function availTime(start_date, from_time, end_date, to_time, bookingTime) {
+//     from_time = from_time.replace(':00', '').trim();
+//     to_time =  to_time.replace(':00', '').trim();
+//     var arr = [];
+//     for( var i=from_time; i<=to_time; i++ ) {
+//         arr.push(i+":00");
+//     }
+//     var str = arr.toString();
+//     var output= str.split(',');
+//     var bookingTime = bookingTime.toString();
+//     var bookingTime = bookingTime.split(',');
+
+//     $.each(output,function(i) {
+//         if(bookingTime.indexOf(output[i]) != -1) {
+//             $('.bookingcontent').append('<tr><td class="pastHours"><input type="checkbox" class="pasthours" id="pastHours_'+output[i].replace(':00', '').trim()+'" name="pastHours[]" value="'+output[i]+'" required checked onclick="removeSlot('+output[i].replace(':00', '').trim()+')">'+output[i]+'</td></tr>');
+//         } else {
+//             $('.bookingcontent').append('<tr><td class="pastHours"><input type="checkbox" class="pasthours" id="pastHours_'+output[i].replace(':00', '').trim()+'" name="pastHours[]" value="'+output[i]+'" required onclick="removeSlot('+output[i].replace(':00', '').trim()+')">'+output[i]+'</td></tr>');
+//         }
+//     });
+// }
+
+function availTime(start_date, from_time, end_date, to_time, bookingTime) {
+    var timesArray = [];
+    var startTime = new Date();
+    if(to_time == '00:00'){
+        to_time = '23:59';
+    } else {
+        to_time = to_time;
+    }
+    filterstrtTime = from_time;
+    //console.log(filterstrtTime);
+    var stime = String(filterstrtTime).split(":");
+    startTime.setHours(parseFloat(stime[0]), stime[1]);
+    var endTime = new Date();
+    if(to_time == '00:00'){
+        to_time = '23:59';
+    } else {
+        to_time = to_time;
+    }
+    filterendTime = to_time;
+    //console.log(filterendTime);
+    var etime = String(filterendTime).split(":");
+    endTime.setHours(parseFloat(etime[0]), etime[1]);
+    var currentTime = new Date(startTime);
+
+    while (currentTime <= endTime) {
+        var hours = currentTime.getHours();
+        var minutes = currentTime.getMinutes();
+        var timeString = (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes;
+        timesArray.push(timeString);
+        currentTime.setMinutes(currentTime.getMinutes() + 60); // Increment by 60 minutes
+    }
+    //console.log(timesArray);
+    $.each(timesArray,function(i) {
+        if(bookingTime.indexOf(timesArray[i]) != -1) {
+            $('.bookingcontent').append('<tr><td class="pastHours"><input type="checkbox" class="pasthours" id="pastHours_'+parseFloat(timesArray[i].slice(0,-3).trim())+'" name="pastHours[]" value="'+timesArray[i]+'" required checked onclick="removeSlot('+parseFloat(timesArray[i].slice(0,-3).trim())+')">'+timesArray[i]+'</td></tr>');
+        } else {
+            $('.bookingcontent').append('<tr><td class="pastHours"><input type="checkbox" class="pasthours" id="pastHours_'+parseFloat(timesArray[i].slice(0,-3).trim())+'" name="pastHours[]" value="'+timesArray[i]+'" required onclick="removeSlot('+parseFloat(timesArray[i].slice(0,-3).trim())+')">'+timesArray[i]+'</td></tr>');
+        }
+    });
+}
+
 function aggrement1() {
     const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal'));
     aggrementmodal. show();
@@ -380,37 +584,39 @@ document.addEventListener('DOMContentLoaded', function() {
     const close = document.querySelector('.btn-close');
     //const bookclose = document.querySelector('.bookBtn-close');
     const bookingModal = new bootstrap.Modal(document.getElementById('bookingmodal'));
-    const myEvents = [
+    const myEvents =[
         <?php
         if(!empty($_SESSION['afrebay']['userId'])) {
-            $availability = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".$user_detail->userId."' ")->result_array();
-            if(!empty($availability)) {
-                foreach ($availability as $value) {
-                    //$checkBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".$value['id']."'")->result_array();
-                    if(!empty($value['is_booked'] == '1')) { ?>
-                        {
-                            title:'Booked',
-                            start: '<?= date('Y-m-d', strtotime($value['start_date']))?>',
-                            end: '<?= date('Y-m-d', strtotime($value['end_date']))?>',
-                            backgroundColor: 'red'
-                        },
-                    <?php } else { ?>
-                        {
-                            title:'Available',
-                            start: '<?= date('Y-m-d', strtotime($value['start_date']))?>',
-                            end: '<?= date('Y-m-d', strtotime($value['end_date']))?>',
-                            backgroundColor: 'green'
-                        },
-                    <?php }
-                }
-            }
-        } ?>
+        $availability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".$user_detail->userId."'")->result_array();
+        if(!empty($availability)) {
+        foreach ($availability as $value) {
+        $checkBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".$value['id']."'")->result_array();
+        if(!empty($checkBookSlot)) { ?>
+        {
+            title:'Booked',
+            start: '<?= date('Y-m-d', strtotime($value['start_date']))?>',
+            end: '<?= date('Y-m-d', strtotime($value['end_date']))?>',
+            backgroundColor: 'red'
+        },
+        <?php } else { ?>
+        {
+            title:'Available',
+            start: '<?= date('Y-m-d', strtotime($value['start_date']))?>',
+            end: '<?= date('Y-m-d', strtotime($value['end_date']))?>',
+            backgroundColor: 'green'
+        },
+        <?php } } } } ?>
     ];
     const calendar = new FullCalendar.Calendar(calendarEl, {
         customButtons: {
             customButton: {
                 text: 'Availability',
                 click: function() {
+                    <?php if(!empty($_SESSION['afrebay']['userId'])) { ?>
+                        myModal.show();
+                    <?php } else { ?>
+                        window.location.href = "<?php echo base_url('login')?>";
+                    <?php } ?>
                     const modalTitle = document.getElementById('modal-title');
                     const submitButton = document.getElementById('submit-button');
                     modalTitle.innerHTML = 'Availability'
@@ -419,6 +625,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     submitButton.classList.add('btn-success');
                     close.addEventListener('click', () => {
                         myModal.hide();
+                        //bookingModal.hide();
                     })
                 }
             }
@@ -432,53 +639,68 @@ document.addEventListener('DOMContentLoaded', function() {
         events: myEvents,
     });
     calendar.on('select', function(info) {
-        // console.log(info);
-        $('.choosendate').text(new Date(info.startStr).toDateString());
-        <?php if(@$_SESSION['afrebay']['userType'] == '2') { ?>
-        var choosendate = info.startStr;
-        var workers_id = $("#workers_id").val();
-        var loggeduser_id = $("#user_id").val();
+    <?php if(@$_SESSION['afrebay']['userType'] == '2') { ?>
+        bookingModal.show();
+        const startDateInput = document.getElementById('start-date');
+        startDateInput.value = info.startStr;
+        userID = $('#userID').val();
         $.ajax({
             type:"post",
             url:"<?php echo base_url()?>user/Dashboard/getUserAvailability",
-            data:{choosendate: choosendate, workers_id: workers_id},
+            data:{start_date: startDateInput.value, end_date: startDateInput.value, userID: userID},
             success:function(returndata) {
-                //console.log(returndata);
-                $('.getdatespecificdata').html(returndata);
-                $('.availtimedata').show();
-                $('.availslotdata').hide();
-            }
-        });
-        <?php } else if(@$_SESSION['afrebay']['userType'] == '1') { ?>
-        $.confirm({
-            title: '',
-            content: "Booking feature is not available for employee",
-            buttons: {
-                somethingElse: {
-                    text: 'Ok',
-                    btnClass: 'btn-secondary book_warning',
-                    keys: ['enter', 'shift'],
-                    action: function(){
-                        location.reload();
+                var json = $.parseJSON(returndata);
+                //console.log(json.length);
+                if(json.length > 0) {
+                    //console.log("result===>", json);
+                    $('#avail_id').val(json[0].id);
+                    $('#start_date').val(json[0].start_date);
+                    $('#from_time').val(json[0].from_time);
+                    $('#end_date').val(json[0].end_date);
+                    $('#to_time').val(json[0].to_time);
+                    var booking_Time = [];
+                    for(let b = 0; b < json.length; b++) {
+                        booking_Time.push(json[b].bookingTime);
                     }
+                    availTime(json[0].start_date, json[0].from_time, json[0].end_date, json[0].to_time, booking_Time);
+                } else {
+                    /*setTimeout(function() {
+                        $('#myForm').append('<div>No slot available for this date</div>');
+                    }, 3000)*/
+                    $('.avail_time').html('<div style="text-align: center; padding: 0 0 50px 0;">No slot available for this date</div>');
                 }
             }
         });
-        <?php } else { ?>
-        $.confirm({
-            title: '',
-            content: "Please login to book your slots",
-            buttons: {
-                somethingElse: {
-                    text: 'Ok',
-                    btnClass: 'btn-secondary prompt_login',
-                    keys: ['enter', 'shift'],
-                    action: function(){
-                        location.reload();
-                    }
+    <?php } else if(@$_SESSION['afrebay']['userType'] == '1') { ?>
+    $.confirm({
+        title: '',
+        content: "Booking feature is not available for employee",
+        buttons: {
+            somethingElse: {
+                text: 'Ok',
+                btnClass: 'btn-secondary book_warning',
+                keys: ['enter', 'shift'],
+                action: function(){
+                    location.reload();
                 }
             }
-        });
+        }
+    });
+    <?php } else { ?>
+    $.confirm({
+        title: '',
+        content: "Please login to book your slots",
+        buttons: {
+            somethingElse: {
+                text: 'Ok',
+                btnClass: 'btn-secondary prompt_login',
+                keys: ['enter', 'shift'],
+                action: function(){
+                    location.reload();
+                }
+            }
+        }
+    });
     <?php } ?>
     });
     calendar.render();
@@ -513,35 +735,5 @@ function removeSlot(id) {
             }
         });
     }
-}
-
-function booktheslot(slotid) {
-    $('#getdatespecificdatetime_'+slotid).addClass('selected').siblings().removeClass('selected');
-    $.ajax({
-        type:"post",
-        url:"<?php echo base_url()?>user/Dashboard/getUsersAvailableslot",
-        data:{slotid: slotid},
-        success:function(returndata) {
-            //console.log(returndata);
-            $('.availslotdata').html(returndata);
-            $('.availslotdata').css('display','flex')
-        }
-    });
-}
-
-function bookthisslot(slotid) {
-    var slotid = slotid;
-    var workers_id = $('#workers_id').val();
-    var user_id = $('#user_id').val();
-    $.ajax({
-        type:"post",
-        url:"<?php echo base_url()?>user/Dashboard/addBookingTimeData",
-        data:{slotid: slotid, workers_id: workers_id, user_id: user_id},
-        success:function(returndata) {
-            //console.log(returndata);
-            $('.availslotdata').html(returndata);
-            $('.availslotdata').css('display','flex')
-        }
-    });
 }
 </script>

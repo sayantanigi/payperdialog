@@ -41,78 +41,62 @@
                                                 <div class="form-group">
                                                     <h5 class="control-label" style="margin-bottom: 35px;">Weekly Schedule</h5>
                                                     <?php
-                                                    $getavailability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '".@$_SESSION['afrebay']['userId']."'")->row();
+                                                    date("Y-m-d", strtotime("+1 week"));
+                                                    $startDate = date('Y-m');
                                                     //echo "<pre>"; print_r($getavailability); die();
                                                     $calenderday = $this->db->query("SELECT calender FROM setting WHERE id = '1'")->row();
                                                     $data = explode(',', $calenderday->calender);
                                                     //echo count($day); die();
                                                     for($i = 0; $i < count($data); $i++) {
-                                                        $value = explode('.', $data[$i]); ?>
-                                                    <div for="<?= $value[1]?>" class="col-12" style="width: 100%; display:inline-block;">
-                                                        <div class="icheck-primary col-3" style="display: inline-block; float: left">
-                                                            <input type="checkbox" id="checkboxPrimary<?= $value[0]?>" class="chooseday" name="weekDay<?= $value[0]?>" value='<?= $value[1]?>' <?php if ($getavailability->weekDay1 == $value[1] || $getavailability->weekDay2 == $value[1] || $getavailability->weekDay3 == $value[1] || $getavailability->weekDay4 == $value[1] || $getavailability->weekDay5 == $value[1] || $getavailability->weekDay6 == $value[1] || $getavailability->weekDay7 == $value[1]) { echo "checked"; } else { echo ""; }?>>
-                                                            <label for="checkboxPrimary<?= $value[0]?>"> <?= $value[1]?></label>
-                                                        </div>
-                                                        <?php if(!empty($getavailability)) { ?>
-                                                        <div class="form-group date col-9" id="calenderDays<?= $value[0]?>" <?php if ($getavailability->weekDay1 == $value[1] || $getavailability->weekDay2 == $value[1] || $getavailability->weekDay3 == $value[1] || $getavailability->weekDay4 == $value[1] || $getavailability->weekDay5 == $value[1] || $getavailability->weekDay6 == $value[1] || $getavailability->weekDay7 == $value[1]) { echo 'style="display: inline-block;background: #fcddde; border: 1px solid;border-radius: 12px;"'; } else { echo 'style="display: none; background: #fcddde; border: 1px solid;border-radius: 12px;"'; }?>>
-                                                            <button type="button" class="btn btn-info addMoreBtn1" id="add_row_<?= $value[0]?>"><i class="fa fa-plus"></i></button>
-                                                            <table class="table jobsites" id="purchaseTableclone<?= $value[0]?>">
-                                                                <tbody id="clonetable_feedback<?= $value[0]?>">
+                                                    $value = explode('.', $data[$i]);
+                                                    $getavailability = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' AND weekday = '".$value[1]."' AND start_date LIKE '%".$startDate."%' GROUP BY weekday")->result_array();
+                                                    if(!empty($getavailability)) {
+                                                        foreach ($getavailability as $key => $avail) { ?>
+                                                        <div for="<?= $value[1]?>" class="col-12" style="width: 100%; display:inline-block;">
+                                                            <div class="icheck-primary col-3" style="display: inline-block; float: left">
+                                                                <input type="checkbox" id="checkboxPrimary<?= $value[0]?>" class="chooseday" name="weekDay<?= $value[0]?>" value='<?= $value[1]?>' checked>
+                                                                <label for="checkboxPrimary<?= $value[0]?>"> <?= $value[1]?></label>
+                                                            </div>
+                                                            <div class="form-group date col-9" id="calenderDays<?= $value[0]?>" <?php if ($avail['weekday'] == $value[1]) { echo 'style="display: inline-block;background: #fcddde; border: 1px solid;border-radius: 12px;"'; } else { echo 'style="display: none; background: #fcddde; border: 1px solid;border-radius: 12px;"'; }?>>
+                                                                <button type="button" class="btn btn-info addMoreBtn1" id="add_row_<?= $value[0]?>"><i class="fa fa-plus"></i></button>
+                                                                <table class="table jobsites" id="purchaseTableclone<?= $value[0]?>">
+                                                                    <tbody id="clonetable_feedback<?= $value[0]?>">
                                                                     <?php
-                                                                    if($getavailability->weekDay1 == $value[1]) {
-                                                                        $fromTime = explode(',', $getavailability->weekDay1_fromtime);
-                                                                        $toTime = explode(',', $getavailability->weekDay1_totime);
-                                                                    }
-                                                                    if($getavailability->weekDay2 == $value[1]) {
-                                                                        $fromTime = explode(',', $getavailability->weekDay2_fromtime);
-                                                                        $toTime = explode(',', $getavailability->weekDay2_totime);
-                                                                    }
-                                                                    if($getavailability->weekDay3 == $value[1]) {
-                                                                        $fromTime = explode(',', $getavailability->weekDay3_fromtime);
-                                                                        $toTime = explode(',', $getavailability->weekDay3_totime);
-                                                                    }
-                                                                    if($getavailability->weekDay4 == $value[1]) {
-                                                                        $fromTime = explode(',', $getavailability->weekDay4_fromtime);
-                                                                        $toTime = explode(',', $getavailability->weekDay4_totime);
-                                                                    }
-                                                                    if($getavailability->weekDay5 == $value[1]) {
-                                                                        $fromTime = explode(',', $getavailability->weekDay5_fromtime);
-                                                                        $toTime = explode(',', $getavailability->weekDay5_totime);
-                                                                    }
-                                                                    if($getavailability->weekDay6 == $value[1]) {
-                                                                        $fromTime = explode(',', $getavailability->weekDay6_fromtime);
-                                                                        $toTime = explode(',', $getavailability->weekDay6_totime);
-                                                                    }
-                                                                    if($getavailability->weekDay7 == $value[1]) {
-                                                                        $fromTime = explode(',', $getavailability->weekDay7_fromtime);
-                                                                        $toTime = explode(',', $getavailability->weekDay7_totime);
-                                                                    }
-                                                                    foreach ($fromTime as $key => $from_time) { ?>
+                                                                    $getTimeslot = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' AND weekday = '".$value[1]."' AND start_date LIKE '%".$startDate."%' GROUP BY weekdayslot")->result_array();
+                                                                    foreach ($getTimeslot as $key => $timeslot) { ?>
+                                                                        <?php
+                                                                        $avail_time = $timeslot['weekdayslot'];
+                                                                        $fromTime = explode(' to ', $avail_time); ?>
                                                                         <tr>
-                                                                            <td><input type="time" class="form-control getfromtime" name="fromtime<?= $value[0]?>[]" id="fromtime" required value="<?= $from_time?>"></td>
-                                                                            <td><input type="time" class="form-control gettotime" name="totime<?= $value[0]?>[]" id="totime" required value="<?= $toTime[$key]?>"></td>
+                                                                            <td><input type="time" class="form-control getfromtime" name="fromtime<?= $value[0]?>[]" id="fromtime" required value="<?= $fromTime[0]?>"></td>
+                                                                            <td><input type="time" class="form-control gettotime" name="totime<?= $value[0]?>[]" id="totime" required value="<?= $fromTime[1]?>"></td>
                                                                             <td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return remove(<?= $value[0]?>)">X</a></td>
                                                                         </tr>
                                                                     <?php } ?>
-                                                                </tbody>
-                                                            </table>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
-                                                        <?php } else { ?>
-                                                        <div class="form-group date col-9" id="calenderDays<?= $value[0]?>" style="display: none;background: #fcddde; border: 1px solid;border-radius: 12px;">
-                                                            <button type="button" class="btn btn-info addMoreBtn1" id="add_row_<?= $value[0]?>"><i class="fa fa-plus"></i></button>
-                                                            <table class="table jobsites" id="purchaseTableclone<?= $value[0]?>">
-                                                                <tbody id="clonetable_feedback<?= $value[0]?>">
-                                                                    <tr>
-                                                                        <td><input type="time" class="form-control getfromtime" name="fromtime<?= $value[0]?>[]" id="fromtime" required></td>
-                                                                        <td><input type="time" class="form-control gettotime" name="totime<?= $value[0]?>[]" id="totime" required></td>
-                                                                        <td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return remove(<?= $value[0]?>)">X</a></td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
+                                                    <?php } } else { ?>
+                                                        <div for="<?= $value[1]?>" class="col-12" style="width: 100%; display:inline-block;">
+                                                            <div class="icheck-primary col-3" style="display: inline-block; float: left">
+                                                                <input type="checkbox" id="checkboxPrimary<?= $value[0]?>" class="chooseday" name="weekDay<?= $value[0]?>" value='<?= $value[1]?>'>
+                                                                <label for="checkboxPrimary<?= $value[0]?>"> <?= $value[1]?></label>
+                                                            </div>
+                                                            <div class="form-group date col-9" id="calenderDays<?= $value[0]?>" style="display: none;background: #fcddde; border: 1px solid;border-radius: 12px;">
+                                                                <button type="button" class="btn btn-info addMoreBtn1" id="add_row_<?= $value[0]?>"><i class="fa fa-plus"></i></button>
+                                                                <table class="table jobsites" id="purchaseTableclone<?= $value[0]?>">
+                                                                    <tbody id="clonetable_feedback<?= $value[0]?>">
+                                                                        <tr>
+                                                                            <td><input type="time" class="form-control getfromtime" name="fromtime<?= $value[0]?>[]" id="fromtime" required></td>
+                                                                            <td><input type="time" class="form-control gettotime" name="totime<?= $value[0]?>[]" id="totime" required></td>
+                                                                            <td><a href="javascript:void(0)" title="Delete" class="text-danger" onclick="return remove(<?= $value[0]?>)">X</a></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
-                                                        <?php } ?>
-                                                    </div>
-                                                    <?php } ?>
+                                                    <?php } } ?>
                                                 </div>
                                                 <div class="form-group" style="display: flex;">
                                                     <div class="col-12" style=" display: flex; align-items: center; justify-content: space-evenly; ">
