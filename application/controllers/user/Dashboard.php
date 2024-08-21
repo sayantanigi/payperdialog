@@ -1253,12 +1253,62 @@ class Dashboard extends CI_Controller {
 
                         $this->Crud_model->SaveData('user_availability_new', $finalData);
                     }
+                } else {
+                    //$this->Crud_model->SaveData('user_availability_new', $data );
+                    $repeatMonth = '1';
+                    $schedule = [];
+                    $startDate = new DateTime($data['start_date']);
+                    $targetWeekday = $this->getWeekdayNumber($data['weekday']);
+                    $currentMonth = $startDate->format('m');
+                    $currentYear = $startDate->format('Y');
+                    for ($i = 0; $i < $repeatMonth; $i++) {
+                        $firstDayOfMonth = new DateTime("$currentYear-$currentMonth-01");
+                        $firstTargetWeekday = clone $firstDayOfMonth;
+                        $firstDayOfWeek = $firstTargetWeekday->format('N');
+                        $diff = $targetWeekday - $firstDayOfWeek;
+                        if ($diff < 0) {
+                            $diff += 7;
+                        }
+                        $firstTargetWeekday->modify("+$diff days");
+                        if ($firstTargetWeekday < $startDate) {
+                            $firstTargetWeekday->modify('+2 week');
+                        }
+                        while ($firstTargetWeekday->format('m') == $currentMonth) {
+                            $schedule[] = [
+                                'user_id' => $data['user_id'],
+                                'weekday' => $data['weekday'],
+                                'weekdayslot' => $data['weekdayslot'],
+                                'start_date' => $firstTargetWeekday->format('Y-m-d'),
+                                'repeat_month' => $data['repeat_month'],
+                                'schedule_status' => $data['schedule_status'],
+                            ];
+                            $firstTargetWeekday->modify('+1 week');
+                        }
+
+                        $currentMonth++;
+                        if ($currentMonth > 12) {
+                            $currentMonth = 1;
+                            $currentYear++;
+                        }
+                    }
+                    //print_r($schedule);
+                    $finalData = [];
+                    foreach ($schedule as $key => $value) {
+                        $finalData['user_id'] = $value['user_id'];
+                        $finalData['weekday'] = $value['weekday'];
+                        $finalData['weekdayslot'] = $value['weekdayslot'];
+                        $finalData['start_date'] = $value['start_date'];
+                        $finalData['repeat_month'] = $value['repeat_month'];
+                        $finalData['schedule_status'] = $value['schedule_status'];
+
+                        $this->Crud_model->SaveData('user_availability_new', $finalData);
+                    }
                 }
             }
         }
         echo '1';
     }
-    public function createdatewiseavailability() {
+    /*public function createdatewiseavailability() {
         $user_id = $_POST['user_id'];
 
         $specificdate = explode(',', $_POST['specific_date'][0]);
@@ -1300,6 +1350,48 @@ class Dashboard extends CI_Controller {
             $this->Crud_model->SaveData('user_availability', $data);
         }
         echo "1";
+    }*/
+
+    public function createdatewiseavailability() {
+        //echo "<pre>"; print_r($_POST); die();
+        $user_id = $_POST['user_id'];
+        $output = array();
+        $specific_dates = explode(',', $_POST['specific_date'][0]);
+        foreach ($specific_dates as $date) {
+            $weekday = $this->getWeekdayName($date);
+            foreach ($_POST['fromtimedate'] as $index => $start_time) {
+                $end_time = $_POST['totimedate'][$index];
+                $time_slot = $start_time . ' to ' . $end_time;
+                $slot = array(
+                    'user_id' => $_POST['user_id'],
+                    'weekday' => $weekday,
+                    'weekdayslot' => $time_slot,
+                    'start_date' => $date,
+                    'schedule_status' => 1,
+                    'is_booked' => 0
+                );
+                $output[] = $slot;
+            }
+            $this->db->query("DELETE FROM user_availability_new WHERE user_id = '".$_POST['user_id']."' AND start_date = '".$date."'");
+        }
+        $finalArray = $output;
+        //echo "<pre>"; print_r($output);
+        $storedata = [];
+        foreach ($finalArray as $key1 => $value) {
+            $storedata['user_id'] = $value['user_id'];
+            $storedata['weekday'] = $value['weekday'];
+            $storedata['weekdayslot'] = $value['weekdayslot'];
+            $storedata['start_date'] = $value['start_date'];
+            $storedata['schedule_status'] = $value['schedule_status'];
+            $storedata['is_booked'] = $value['is_booked'];
+
+            $this->Crud_model->SaveData('user_availability_new', $storedata);
+        }
+		echo "1";
+    }
+
+    function getWeekdayName($date) {
+        return date('l', strtotime($date)); // Returns the full weekday name (e.g., "Monday")
     }
 
 	public function bookSlotforuser() {

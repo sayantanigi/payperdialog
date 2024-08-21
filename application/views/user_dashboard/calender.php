@@ -47,9 +47,11 @@
                                                     $calenderday = $this->db->query("SELECT calender FROM setting WHERE id = '1'")->row();
                                                     $data = explode(',', $calenderday->calender);
                                                     //echo count($day); die();
+                                                    $getstart_date = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' ORDER BY `start_date` ASC")->result_array();
+                                                    //print_r($getstart_date); die();
                                                     for($i = 0; $i < count($data); $i++) {
                                                     $value = explode('.', $data[$i]);
-                                                    $getavailability = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' AND weekday = '".$value[1]."' AND start_date LIKE '%".$startDate."%' GROUP BY weekday")->result_array();
+                                                    $getavailability = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' AND weekday = '".$value[1]."' GROUP BY weekday")->result_array();
                                                     if(!empty($getavailability)) {
                                                         foreach ($getavailability as $key => $avail) { ?>
                                                         <div for="<?= $value[1]?>" class="col-12" style="width: 100%; display:inline-block;">
@@ -62,7 +64,7 @@
                                                                 <table class="table jobsites" id="purchaseTableclone<?= $value[0]?>">
                                                                     <tbody id="clonetable_feedback<?= $value[0]?>">
                                                                     <?php
-                                                                    $getTimeslot = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' AND weekday = '".$value[1]."' AND start_date LIKE '%".$startDate."%' GROUP BY weekdayslot")->result_array();
+                                                                    $getTimeslot = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' AND weekday = '".$value[1]."' GROUP BY weekdayslot")->result_array();
                                                                     foreach ($getTimeslot as $key => $timeslot) { ?>
                                                                         <?php
                                                                         $avail_time = $timeslot['weekdayslot'];
@@ -102,7 +104,13 @@
                                                     <div class="col-12" style=" display: flex; align-items: center; justify-content: space-evenly; ">
                                                         <div class="col-6">
                                                             <h5 class="control-label">Start Date</h5>
-                                                            <input type="text" id="starting_date" class="form-control" name="starting_date" style="background: #fff; padding: 15px; border-radius: 15px;" value="<?= date('m/d/Y', strtotime($getavailability->start_date))?>"/>
+                                                            <?php
+                                                            if(!empty(@$getstart_date[0]['start_date'])) {
+                                                                $date = date('Y-m-d', strtotime(@$getstart_date[0]['start_date']));
+                                                            } else {
+                                                                $date = "";
+                                                            } ?>
+                                                            <input type="text" id="starting_date" class="form-control" name="starting_date" style="background: #fff; padding: 15px; border-radius: 15px;" value="<?= $date?>"/>
                                                         </div>
                                                         <div class="icheck-primary col-6" style="text-align: end;">
                                                             <input type="checkbox" id="repeat_month" name="repeat_month" <?php if($getavailability->repeat_month == '1') {echo "checked value='1'"; } else {echo "value='0'"; }?>>
@@ -292,7 +300,7 @@ $(document).ready(function() {
             immediateUpdates: true,
             todayHighlight: true,
             startDate:'+0d'
-        }).datepicker("setDate", "0");
+        });
 
         $("#specific_date").datepicker({
             multidate: true,
@@ -334,42 +342,50 @@ $('#submit-button').on('click', function() {
             $('#validateerrschedule').empty();
         }, 5000);
     } else if(starting_date === 0){
-        $('#validateerrschedule').text('Please enter starting date');
+        $('#validateerrschedule').text('Please enter start date');
         setInterval(function () {
             $('#validateerrschedule').empty();
         }, 5000);
     } else {
-        var form_data = $('#myForm').serialize();
-        $.ajax({
-            type:"post",
-            url:"<?php echo base_url()?>user/Dashboard/create_availability",
-            data: form_data,
-            success:function(returndata) {
-                if(returndata == 1) {
-                    $.confirm({
-                        title: '',
-                        content: "Data added successfuly",
-                        buttons: {
-                            somethingElse: {
-                                text: 'Ok',
-                                btnClass: 'btn-secondary',
-                                keys: ['enter', 'shift'],
-                                action: function(){
-                                    location.reload();
+        var date1 = new Date('1970-01-01T'+$('.getfromtime').val()+':00');
+        var date2 = new Date('1970-01-01T'+$('.gettotime').val()+':00');
+        var differenceiInms = date2 - date1;
+        var differenceInDays = Math.floor(differenceiInms / (1000 * 60));
+        if(differenceInDays > 60) {
+            $('#validateerrschedule').text('Please select 60 minutes interval slot');
+        } else {
+            var form_data = $('#myForm').serialize();
+            $.ajax({
+                type:"post",
+                url:"<?php echo base_url()?>user/Dashboard/create_availability",
+                data: form_data,
+                success:function(returndata) {
+                    if(returndata == 1) {
+                        $.confirm({
+                            title: '',
+                            content: "Data added successfuly",
+                            buttons: {
+                                somethingElse: {
+                                    text: 'Ok',
+                                    btnClass: 'btn-secondary',
+                                    keys: ['enter', 'shift'],
+                                    action: function(){
+                                        location.reload();
+                                    }
                                 }
                             }
-                        }
-                    });
-                } else {
-                    $.alert({
-                        title: '',
-                        content: "Something went wrong. Please try again later.",
-                    });
-                    return false;
+                        });
+                    } else {
+                        $.alert({
+                            title: '',
+                            content: "Something went wrong. Please try again later.",
+                        });
+                        return false;
+                    }
                 }
-            }
-        });
-        return false;
+            });
+            return false;
+        }
     }
 })
 

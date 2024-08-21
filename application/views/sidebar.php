@@ -803,6 +803,6 @@ $get_setting = $this->Crud_model->get_single('setting');
                     $('.notificationf').hide();
                     setInterval(function () {
                         load_unseen_notification();
-                    }, 5000);
+                    }, 5000000);
                 })
             </script>
