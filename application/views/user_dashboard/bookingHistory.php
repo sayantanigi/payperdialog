@@ -17,7 +17,7 @@
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title">Booking History</h2>
+                <h2 class="breadcrumb-title">Booking History 2</h2>
             </div>
         </div>
     </div>
@@ -44,7 +44,7 @@
                                             $timezone = date_default_timezone_get();
                                             date_default_timezone_set($timezone);
                                             $date = date('Y-m-d', time());
-                                            $availableData = $this->db->query("SELECT * FROM user_availability WHERE start_date ='" . $date . "' AND end_date ='" . $date . "' AND user_id ='" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
+                                            $availableData = $this->db->query("SELECT * FROM user_availability_new WHERE start_date ='" . $date . "' AND user_id ='" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
                                             //echo "<pre>"; print_r($availableData);
                                             $avail_id = $availableData[0]['id'];
                                             ?>
@@ -127,10 +127,10 @@
         const myEvents = JSON.parse(localStorage.getItem('events')) || [
             <?php
             $bookingSlot = $this->db->query("SELECT * FROM user_booking WHERE employer_id = '".$_SESSION['afrebay']['userId']."' AND meeting_link IS NOT NULL")->result_array();
-            //$availability = $this->db->query("SELECT * FROM user_availability WHERE id = '".$bookingSlot->available_id."'")->result_array();
+            //$availability = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$bookingSlot->available_id."'")->result_array();
             if (!empty($bookingSlot)) {
                 foreach ($bookingSlot as $value) {
-                    $checkBookSlot = $this->db->query("SELECT * FROM user_availability WHERE id = '".$value['available_id']."'")->result_array();
+                    $checkBookSlot = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$value['available_id']."'")->result_array();
                     foreach ($checkBookSlot as $value1) {
                         if (!empty($checkBookSlot)) { ?>
                             {

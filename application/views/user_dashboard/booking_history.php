@@ -41,7 +41,7 @@
                                             $timezone = date_default_timezone_get();
                                             date_default_timezone_set($timezone);
                                             $date = date('Y-m-d', time());
-                                            $availableData = $this->db->query("SELECT * FROM user_availability WHERE start_date ='" . $date . "' AND end_date ='" . $date . "' AND user_id ='" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
+                                            $availableData = $this->db->query("SELECT * FROM user_availability_new WHERE start_date ='" . $date . "' AND user_id ='" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
                                             //echo "<pre>"; print_r($availableData);
                                             $avail_id = $availableData[0]['id'];
                                             ?>
@@ -379,7 +379,7 @@
         const close = document.querySelector('.btn-close');
         const myEvents = JSON.parse(localStorage.getItem('events')) || [
             <?php
-            $availability = $this->db->query("SELECT * FROM user_availability WHERE user_id = '" . $_SESSION['afrebay']['userId'] . "'")->result_array();
+            $availability = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '" . $_SESSION['afrebay']['userId'] . "'")->result_array();
             if (!empty ($availability)) {
                 foreach ($availability as $value) {
                     $checkBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='" . $value['id'] . "'")->result_array();

@@ -539,8 +539,29 @@ function bookthisslot(slotid) {
         data:{slotid: slotid, workers_id: workers_id, user_id: user_id},
         success:function(returndata) {
             //console.log(returndata);
-            $('.availslotdata').html(returndata);
-            $('.availslotdata').css('display','flex')
+            // /$('.availslotdata').html(returndata);
+            if(returndata == 1) {
+                $.confirm({
+                    title: '',
+                    content: "Slot booked",
+                    buttons: {
+                        somethingElse: {
+                            text: 'Ok',
+                            btnClass: 'btn-secondary paydone_btn',
+                            keys: ['enter', 'shift'],
+                            action: function(){
+                                location.reload();
+                            }
+                        }
+                    }
+                });
+            } else {
+                $.alert({
+                    title: '',
+                    content: "Something went wrong. Please try again later.",
+                });
+                return false;
+            }
         }
     });
 }
