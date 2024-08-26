@@ -59,7 +59,7 @@
                                                                 <table class="table jobsites" id="purchaseTableclone<?= $value[0]?>">
                                                                     <tbody id="clonetable_feedback<?= $value[0]?>">
                                                                     <?php
-                                                                    $getTimeslot = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' AND weekday = '".$value[1]."' GROUP BY weekdayslot")->result_array();
+                                                                    $getTimeslot = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' AND weekday = '".$value[1]."' AND is_datewise = '0' GROUP BY weekdayslot")->result_array();
                                                                     foreach ($getTimeslot as $key => $timeslot) { ?>
                                                                         <?php
                                                                         $avail_time = $timeslot['weekdayslot'];
