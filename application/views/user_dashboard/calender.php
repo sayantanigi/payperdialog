@@ -37,14 +37,230 @@
                                             <p style="color:red;" class="" id="errstartingdate"></p>
                                             <form id="myForm">
                                                 <div class="form-group">
-                                                    <h5 class="control-label" style="margin-bottom: 35px;">Weekly Schedule</h5>
+                                                    <h5 class="control-label" style="margin-bottom: 35px; width: 200px; display: flex; float: left; margin-right: 100px;">Weekly Schedule</h5>
                                                     <?php
                                                     date("Y-m-d", strtotime("+1 week"));
                                                     $startDate = date('Y-m');
                                                     $calenderday = $this->db->query("SELECT calender FROM setting WHERE id = '1'")->row();
                                                     $data = explode(',', $calenderday->calender);
-                                                    $getstart_date = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' AND is_datewise = '0' ORDER BY `start_date` ASC")->result_array();
-                                                    for($i = 0; $i < count($data); $i++) {
+                                                    $getstart_date = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' AND is_datewise = '0' ORDER BY `start_date` ASC")->result_array(); ?>
+                                                    <div>
+                                                        <label for = "timeZone" style="padding: 0;">Current Time Zone <span style="color:red"> * </span></label>
+                                                        <select id="timeZone" name="timeZone" class="custom-select" style="margin-bottom: 20px; display: flex; width: 300px;">
+                                                            <option value="">Select Time Zone</option>
+                                                            <option value="America/Adak" <?php if($getstart_date[0]['timeZone'] == 'America/Adak') {echo "selected";}?>>America/Adak</option>
+                                                            <option value="America/Anchorage" <?php if($getstart_date[0]['timeZone'] == 'America/Anchorage') {echo "selected";}?>>America/Anchorage</option>
+                                                            <option value="America/Anguilla" <?php if($getstart_date[0]['timeZone'] == 'America/Anguilla') {echo "selected";}?>>America/Anguilla</option>
+                                                            <option value="America/Antigua" <?php if($getstart_date[0]['timeZone'] == 'America/Antigua') {echo "selected";}?>>America/Antigua</option>
+                                                            <option value="America/Araguaina" <?php if($getstart_date[0]['timeZone'] == 'America/Araguaina') {echo "selected";}?>>America/Araguaina</option>
+                                                            <option value="America/Argentina/Buenos_Aires" <?php if($getstart_date[0]['timeZone'] == 'America/Argentina/Buenos_Aires') {echo "selected";}?>>America/Argentina/Buenos Aires</option>
+                                                            <option value="America/Argentina/Catamarca" <?php if($getstart_date[0]['timeZone'] == 'America/Argentina/Catamarca') {echo "selected";}?>>America/Argentina/Catamarca</option>
+                                                            <option value="America/Argentina/Cordoba" <?php if($getstart_date[0]['timeZone'] == 'America/Argentina/Cordoba') {echo "selected";}?>>America/Argentina/Cordoba</option>
+                                                            <option value="America/Argentina/Jujuy" <?php if($getstart_date[0]['timeZone'] == 'America/Argentina/Jujuy') {echo "selected";}?>>America/Argentina/Jujuy</option>
+                                                            <option value="America/Argentina/La_Rioja" <?php if($getstart_date[0]['timeZone'] == 'America/Argentina/La_Rioja') {echo "selected";}?>>America/Argentina/La Rioja</option>
+                                                            <option value="America/Argentina/Mendoza" <?php if($getstart_date[0]['timeZone'] == 'America/Argentina/Mendoza') {echo "selected";}?>>America/Argentina/Mendoza</option>
+                                                            <option value="America/Argentina/Rio_Gallegos" <?php if($getstart_date[0]['timeZone'] == 'America/Argentina/Rio_Gallegos') {echo "selected";}?>>America/Argentina/Rio Gallegos</option>
+                                                            <option value="America/Argentina/Salta" <?php if($getstart_date[0]['timeZone'] == 'America/Argentina/Salta') {echo "selected";}?>>America/Argentina/Salta</option>
+                                                            <option value="America/Argentina/San_Juan" <?php if($getstart_date[0]['timeZone'] == 'America/Argentina/San_Juan') {echo "selected";}?>>America/Argentina/San Juan</option>
+                                                            <option value="America/Argentina/San_Luis" <?php if($getstart_date[0]['timeZone'] == 'America/Argentina/San_Luis') {echo "selected";}?>>America/Argentina/San Luis</option>
+                                                            <option value="America/Argentina/Tucuman" <?php if($getstart_date[0]['timeZone'] == 'America/Argentina/Tucuman') {echo "selected";}?>>America/Argentina/Tucuman</option>
+                                                            <option value="America/Argentina/Ushuaia" <?php if($getstart_date[0]['timeZone'] == 'America/Argentina/Ushuaia') {echo "selected";}?>>America/Argentina/Ushuaia</option>
+                                                            <option value="America/Aruba" <?php if($getstart_date[0]['timeZone'] == 'America/Aruba') {echo "selected";}?>>America/Aruba</option>
+                                                            <option value="America/Asuncion" <?php if($getstart_date[0]['timeZone'] == 'America/Asuncion') {echo "selected";}?>>America/Asuncion</option>
+                                                            <option value="America/Atikokan" <?php if($getstart_date[0]['timeZone'] == 'America/Atikokan') {echo "selected";}?>>America/Atikokan</option>
+                                                            <option value="America/Bahia" <?php if($getstart_date[0]['timeZone'] == 'America/Bahia') {echo "selected";}?>>America/Bahia</option>
+                                                            <option value="America/Bahia_Banderas" <?php if($getstart_date[0]['timeZone'] == 'America/Bahia_Banderas') {echo "selected";}?>>America/Bahia Banderas</option>
+                                                            <option value="America/Barbados" <?php if($getstart_date[0]['timeZone'] == 'America/Barbados') {echo "selected";}?>>America/Barbados</option>
+                                                            <option value="America/Belem" <?php if($getstart_date[0]['timeZone'] == 'America/Belem') {echo "selected";}?>>America/Belem</option>
+                                                            <option value="America/Belize" <?php if($getstart_date[0]['timeZone'] == 'America/Belize') {echo "selected";}?>>America/Belize</option>
+                                                            <option value="America/Blanc-Sablon" <?php if($getstart_date[0]['timeZone'] == 'America/Blanc-Sablon') {echo "selected";}?>>America/Blanc-Sablon</option>
+                                                            <option value="America/Boa_Vista" <?php if($getstart_date[0]['timeZone'] == 'America/Boa_Vista') {echo "selected";}?>>America/Boa Vista</option>
+                                                            <option value="America/Bogota" <?php if($getstart_date[0]['timeZone'] == 'America/Bogota') {echo "selected";}?>>America/Bogota</option>
+                                                            <option value="America/Boise" <?php if($getstart_date[0]['timeZone'] == 'America/Boise') {echo "selected";}?>>America/Boise</option>
+                                                            <option value="America/Cambridge_Bay" <?php if($getstart_date[0]['timeZone'] == 'America/Cambridge_Bay') {echo "selected";}?>>America/Cambridge Bay</option>
+                                                            <option value="America/Campo_Grande" <?php if($getstart_date[0]['timeZone'] == 'America/Campo_Grande') {echo "selected";}?>>America/Campo Grande</option>
+                                                            <option value="America/Cancun" <?php if($getstart_date[0]['timeZone'] == 'America/Cancun') {echo "selected";}?>>America/Cancun</option>
+                                                            <option value="America/Caracas" <?php if($getstart_date[0]['timeZone'] == 'America/Caracas') {echo "selected";}?>>America/Caracas</option>
+                                                            <option value="America/Cayenne" <?php if($getstart_date[0]['timeZone'] == 'America/Cayenne') {echo "selected";}?>>America/Cayenne</option>
+                                                            <option value="America/Cayman" <?php if($getstart_date[0]['timeZone'] == 'America/Cayman') {echo "selected";}?>>America/Cayman</option>
+                                                            <option value="America/Chicago" <?php if($getstart_date[0]['timeZone'] == 'America/Chicago') {echo "selected";}?>>America/Chicago</option>
+                                                            <option value="America/Chihuahua" <?php if($getstart_date[0]['timeZone'] == 'America/Chihuahua') {echo "selected";}?>>America/Chihuahua</option>
+                                                            <option value="America/Ciudad_Juarez" <?php if($getstart_date[0]['timeZone'] == 'America/Ciudad_Juarez') {echo "selected";}?>>America/Ciudad Juarez</option>
+                                                            <option value="America/Costa_Rica" <?php if($getstart_date[0]['timeZone'] == 'America/Costa_Rica') {echo "selected";}?>>America/Costa Rica</option>
+                                                            <option value="America/Creston" <?php if($getstart_date[0]['timeZone'] == 'America/Creston') {echo "selected";}?>>America/Creston</option>
+                                                            <option value="America/Cuiaba" <?php if($getstart_date[0]['timeZone'] == 'America/Cuiaba') {echo "selected";}?>>America/Cuiaba</option>
+                                                            <option value="America/Curacao" <?php if($getstart_date[0]['timeZone'] == 'America/Curacao') {echo "selected";}?>>America/Curacao</option>
+                                                            <option value="America/Danmarkshavn" <?php if($getstart_date[0]['timeZone'] == 'America/Danmarkshavn') {echo "selected";}?>>America/Danmarkshavn</option>
+                                                            <option value="America/Dawson" <?php if($getstart_date[0]['timeZone'] == 'America/Dawson') {echo "selected";}?>>America/Dawson</option>
+                                                            <option value="America/Dawson_Creek" <?php if($getstart_date[0]['timeZone'] == 'America/Dawson_Creek') {echo "selected";}?>>America/Dawson Creek</option>
+                                                            <option value="America/Denver" <?php if($getstart_date[0]['timeZone'] == 'America/Denver') {echo "selected";}?>>America/Denver</option>
+                                                            <option value="America/Detroit" <?php if($getstart_date[0]['timeZone'] == 'America/Detroit') {echo "selected";}?>>America/Detroit</option>
+                                                            <option value="America/Dominica" <?php if($getstart_date[0]['timeZone'] == 'America/Dominica') {echo "selected";}?>>America/Dominica</option>
+                                                            <option value="America/Edmonton" <?php if($getstart_date[0]['timeZone'] == 'America/Edmonton') {echo "selected";}?>>America/Edmonton</option>
+                                                            <option value="America/Eirunepe" <?php if($getstart_date[0]['timeZone'] == 'America/Eirunepe') {echo "selected";}?>>America/Eirunepe</option>
+                                                            <option value="America/El_Salvador" <?php if($getstart_date[0]['timeZone'] == 'America/El_Salvador') {echo "selected";}?>>America/El Salvador</option>
+                                                            <option value="America/Fort_Nelson" <?php if($getstart_date[0]['timeZone'] == 'America/Fort_Nelson') {echo "selected";}?>>America/Fort Nelson</option>
+                                                            <option value="America/Fortaleza" <?php if($getstart_date[0]['timeZone'] == 'America/Fortaleza') {echo "selected";}?>>America/Fortaleza</option>
+                                                            <option value="America/Glace_Bay" <?php if($getstart_date[0]['timeZone'] == 'America/Glace_Bay') {echo "selected";}?>>America/Glace Bay</option>
+                                                            <option value="America/Goose_Bay" <?php if($getstart_date[0]['timeZone'] == 'America/Goose_Bay') {echo "selected";}?>>America/Goose Bay</option>
+                                                            <option value="America/Grand_Turk" <?php if($getstart_date[0]['timeZone'] == 'America/Grand_Turk') {echo "selected";}?>>America/Grand Turk</option>
+                                                            <option value="America/Grenada" <?php if($getstart_date[0]['timeZone'] == 'America/Grenada') {echo "selected";}?>>America/Grenada</option>
+                                                            <option value="America/Guadeloupe" <?php if($getstart_date[0]['timeZone'] == 'America/Guadeloupe') {echo "selected";}?>>America/Guadeloupe</option>
+                                                            <option value="America/Guatemala" <?php if($getstart_date[0]['timeZone'] == 'America/Guatemala') {echo "selected";}?>>America/Guatemala</option>
+                                                            <option value="America/Guayaquil" <?php if($getstart_date[0]['timeZone'] == 'America/Guayaquil') {echo "selected";}?>>America/Guayaquil</option>
+                                                            <option value="America/Guyana" <?php if($getstart_date[0]['timeZone'] == 'America/Guyana') {echo "selected";}?>>America/Guyana</option>
+                                                            <option value="America/Halifax" <?php if($getstart_date[0]['timeZone'] == 'America/Halifax') {echo "selected";}?>>America/Halifax</option>
+                                                            <option value="America/Havana" <?php if($getstart_date[0]['timeZone'] == 'America/Havana') {echo "selected";}?>>America/Havana</option>
+                                                            <option value="America/Hermosillo" <?php if($getstart_date[0]['timeZone'] == 'America/Hermosillo') {echo "selected";}?>>America/Hermosillo</option>
+                                                            <option value="America/Indiana/Indianapolis" <?php if($getstart_date[0]['timeZone'] == 'America/Indiana/Indianapolis') {echo "selected";}?>>America/Indiana/Indianapolis</option>
+                                                            <option value="America/Indiana/Knox" <?php if($getstart_date[0]['timeZone'] == 'America/Indiana/Knox') {echo "selected";}?>>America/Indiana/Knox</option>
+                                                            <option value="America/Indiana/Marengo" <?php if($getstart_date[0]['timeZone'] == 'America/Indiana/Marengo') {echo "selected";}?>>America/Indiana/Marengo</option>
+                                                            <option value="America/Indiana/Petersburg" <?php if($getstart_date[0]['timeZone'] == 'America/Indiana/Petersburg') {echo "selected";}?>>America/Indiana/Petersburg</option>
+                                                            <option value="America/Indiana/Tell_City" <?php if($getstart_date[0]['timeZone'] == 'America/Indiana/Tell_City') {echo "selected";}?>>America/Indiana/Tell City</option>
+                                                            <option value="America/Indiana/Vevay" <?php if($getstart_date[0]['timeZone'] == 'America/Indiana/Vevay') {echo "selected";}?>>America/Indiana/Vevay</option>
+                                                            <option value="America/Indiana/Vincennes" <?php if($getstart_date[0]['timeZone'] == 'America/Indiana/Vincennes') {echo "selected";}?>>America/Indiana/Vincennes</option>
+                                                            <option value="America/Indiana/Winamac" <?php if($getstart_date[0]['timeZone'] == 'America/Indiana/Winamac') {echo "selected";}?>>America/Indiana/Winamac</option>
+                                                            <option value="America/Inuvik" <?php if($getstart_date[0]['timeZone'] == 'America/Inuvik') {echo "selected";}?>>America/Inuvik</option>
+                                                            <option value="America/Iqaluit" <?php if($getstart_date[0]['timeZone'] == 'America/Iqaluit') {echo "selected";}?>>America/Iqaluit</option>
+                                                            <option value="America/Jamaica" <?php if($getstart_date[0]['timeZone'] == 'America/Jamaica') {echo "selected";}?>>America/Jamaica</option>
+                                                            <option value="America/Juneau" <?php if($getstart_date[0]['timeZone'] == 'America/Juneau') {echo "selected";}?>>America/Juneau</option>
+                                                            <option value="America/Kentucky/Louisville" <?php if($getstart_date[0]['timeZone'] == 'America/Kentucky/Louisville') {echo "selected";}?>>America/Kentucky/Louisville</option>
+                                                            <option value="America/Kentucky/Monticello" <?php if($getstart_date[0]['timeZone'] == 'America/Kentucky/Monticello') {echo "selected";}?>>America/Kentucky/Monticello</option>
+                                                            <option value="America/Kralendijk" <?php if($getstart_date[0]['timeZone'] == 'America/Kralendijk') {echo "selected";}?>>America/Kralendijk</option>
+                                                            <option value="America/La_Paz" <?php if($getstart_date[0]['timeZone'] == 'America/La_Paz') {echo "selected";}?>>America/La Paz</option>
+                                                            <option value="America/Lima" <?php if($getstart_date[0]['timeZone'] == 'America/Lima') {echo "selected";}?>>America/Lima</option>
+                                                            <option value="America/Los_Angeles" <?php if($getstart_date[0]['timeZone'] == 'America/Los_Angeles') {echo "selected";}?>>America/Los Angeles</option>
+                                                            <option value="America/Lower_Princes" <?php if($getstart_date[0]['timeZone'] == 'America/Lower_Princes') {echo "selected";}?>>America/Lower Princes</option>
+                                                            <option value="America/Maceio" <?php if($getstart_date[0]['timeZone'] == 'America/Maceio') {echo "selected";}?>>America/Maceio</option>
+                                                            <option value="America/Managua" <?php if($getstart_date[0]['timeZone'] == 'America/Managua') {echo "selected";}?>>America/Managua</option>
+                                                            <option value="America/Manaus" <?php if($getstart_date[0]['timeZone'] == 'America/Manaus') {echo "selected";}?>>America/Manaus</option>
+                                                            <option value="America/Marigot" <?php if($getstart_date[0]['timeZone'] == 'America/Marigot') {echo "selected";}?>>America/Marigot</option>
+                                                            <option value="America/Martinique" <?php if($getstart_date[0]['timeZone'] == 'America/Martinique') {echo "selected";}?>>America/Martinique</option>
+                                                            <option value="America/Matamoros" <?php if($getstart_date[0]['timeZone'] == 'America/Matamoros') {echo "selected";}?>>America/Matamoros</option>
+                                                            <option value="America/Mazatlan" <?php if($getstart_date[0]['timeZone'] == 'America/Mazatlan') {echo "selected";}?>>America/Mazatlan</option>
+                                                            <option value="America/Menominee" <?php if($getstart_date[0]['timeZone'] == 'America/Menominee') {echo "selected";}?>>America/Menominee</option>
+                                                            <option value="America/Merida" <?php if($getstart_date[0]['timeZone'] == 'America/Merida') {echo "selected";}?>>America/Merida</option>
+                                                            <option value="America/Metlakatla" <?php if($getstart_date[0]['timeZone'] == 'America/Metlakatla') {echo "selected";}?>>America/Metlakatla</option>
+                                                            <option value="America/Mexico_City" <?php if($getstart_date[0]['timeZone'] == 'America/Mexico_City') {echo "selected";}?>>America/Mexico City</option>
+                                                            <option value="America/Miquelon" <?php if($getstart_date[0]['timeZone'] == 'America/Miquelon') {echo "selected";}?>>America/Miquelon</option>
+                                                            <option value="America/Moncton" <?php if($getstart_date[0]['timeZone'] == 'America/Moncton') {echo "selected";}?>>America/Moncton</option>
+                                                            <option value="America/Monterrey" <?php if($getstart_date[0]['timeZone'] == 'America/Monterrey') {echo "selected";}?>>America/Monterrey</option>
+                                                            <option value="America/Montevideo" <?php if($getstart_date[0]['timeZone'] == 'America/Montevideo') {echo "selected";}?>>America/Montevideo</option>
+                                                            <option value="America/Montserrat" <?php if($getstart_date[0]['timeZone'] == 'America/Montserrat') {echo "selected";}?>>America/Montserrat</option>
+                                                            <option value="America/Nassau" <?php if($getstart_date[0]['timeZone'] == 'America/Nassau') {echo "selected";}?>>America/Nassau</option>
+                                                            <option value="America/New_York" <?php if($getstart_date[0]['timeZone'] == 'America/New_York') {echo "selected";}?>>America/New York</option>
+                                                            <option value="America/Nome" <?php if($getstart_date[0]['timeZone'] == 'America/Nome') {echo "selected";}?>>America/Nome</option>
+                                                            <option value="America/Noronha" <?php if($getstart_date[0]['timeZone'] == 'America/Noronha') {echo "selected";}?>>America/Noronha</option>
+                                                            <option value="America/North_Dakota/Beulah" <?php if($getstart_date[0]['timeZone'] == 'America/North_Dakota/Beulah') {echo "selected";}?>>America/North Dakota/Beulah</option>
+                                                            <option value="America/North_Dakota/Center" <?php if($getstart_date[0]['timeZone'] == 'America/North_Dakota/Center') {echo "selected";}?>>America/North Dakota/Center</option>
+                                                            <option value="America/North_Dakota/New_Salem" <?php if($getstart_date[0]['timeZone'] == 'America/North_Dakota/New_Salem') {echo "selected";}?>>America/North Dakota/New Salem</option>
+                                                            <option value="America/Nuuk" <?php if($getstart_date[0]['timeZone'] == 'America/Nuuk') {echo "selected";}?>>America/Nuuk</option>
+                                                            <option value="America/Ojinaga" <?php if($getstart_date[0]['timeZone'] == 'America/Ojinaga') {echo "selected";}?>>America/Ojinaga</option>
+                                                            <option value="America/Panama" <?php if($getstart_date[0]['timeZone'] == 'America/Panama') {echo "selected";}?>>America/Panama</option>
+                                                            <option value="America/Paramaribo" <?php if($getstart_date[0]['timeZone'] == 'America/Paramaribo') {echo "selected";}?>>America/Paramaribo</option>
+                                                            <option value="America/Phoenix" <?php if($getstart_date[0]['timeZone'] == 'America/Phoenix') {echo "selected";}?>>America/Phoenix</option>
+                                                            <option value="America/Port-au-Prince" <?php if($getstart_date[0]['timeZone'] == 'America/Port-au') {echo "selected";}?>>America/Port-au-Prince</option>
+                                                            <option value="America/Port_of_Spain" <?php if($getstart_date[0]['timeZone'] == 'America/Port_of_Spain') {echo "selected";}?>>America/Port of Spain</option>
+                                                            <option value="America/Porto_Velho" <?php if($getstart_date[0]['timeZone'] == 'America/Porto_Velho') {echo "selected";}?>>America/Porto Velho</option>
+                                                            <option value="America/Puerto_Rico" <?php if($getstart_date[0]['timeZone'] == 'America/Puerto_Rico') {echo "selected";}?>>America/Puerto Rico</option>
+                                                            <option value="America/Punta_Arenas" <?php if($getstart_date[0]['timeZone'] == 'America/Punta_Arenas') {echo "selected";}?>>America/Punta Arenas</option>
+                                                            <option value="America/Rankin_Inlet" <?php if($getstart_date[0]['timeZone'] == 'America/Rankin_Inlet') {echo "selected";}?>>America/Rankin Inlet</option>
+                                                            <option value="America/Recife" <?php if($getstart_date[0]['timeZone'] == 'America/Recife') {echo "selected";}?>>America/Recife</option>
+                                                            <option value="America/Regina" <?php if($getstart_date[0]['timeZone'] == 'America/Regina') {echo "selected";}?>>America/Regina</option>
+                                                            <option value="America/Resolute" <?php if($getstart_date[0]['timeZone'] == 'America/Resolute') {echo "selected";}?>>America/Resolute</option>
+                                                            <option value="America/Rio_Branco" <?php if($getstart_date[0]['timeZone'] == 'America/Rio_Branco') {echo "selected";}?>>America/Rio Branco</option>
+                                                            <option value="America/Santarem" <?php if($getstart_date[0]['timeZone'] == 'America/Santarem') {echo "selected";}?>>America/Santarem</option>
+                                                            <option value="America/Santiago" <?php if($getstart_date[0]['timeZone'] == 'America/Santiago') {echo "selected";}?>>America/Santiago</option>
+                                                            <option value="America/Santo_Domingo" <?php if($getstart_date[0]['timeZone'] == 'America/Santo_Domingo') {echo "selected";}?>>America/Santo Domingo</option>
+                                                            <option value="America/Sao_Paulo" <?php if($getstart_date[0]['timeZone'] == 'America/Sao_Paulo') {echo "selected";}?>>America/Sao Paulo</option>
+                                                            <option value="America/Scoresbysund" <?php if($getstart_date[0]['timeZone'] == 'America/Scoresbysund') {echo "selected";}?>>America/Scoresbysund</option>
+                                                            <option value="America/Sitka" <?php if($getstart_date[0]['timeZone'] == 'America/Sitka') {echo "selected";}?>>America/Sitka</option>
+                                                            <option value="America/St_Barthelemy" <?php if($getstart_date[0]['timeZone'] == 'America/St_Barthelemy') {echo "selected";}?>>America/St Barthelemy</option>
+                                                            <option value="America/St_Johns" <?php if($getstart_date[0]['timeZone'] == 'America/St_Johns') {echo "selected";}?>>America/St Johns</option>
+                                                            <option value="America/St_Kitts" <?php if($getstart_date[0]['timeZone'] == 'America/St_Kitts') {echo "selected";}?>>America/St Kitts</option>
+                                                            <option value="America/St_Lucia" <?php if($getstart_date[0]['timeZone'] == 'America/St_Lucia') {echo "selected";}?>>America/St Lucia</option>
+                                                            <option value="America/St_Thomas" <?php if($getstart_date[0]['timeZone'] == 'America/St_Thomas') {echo "selected";}?>>America/St Thomas</option>
+                                                            <option value="America/St_Vincent" <?php if($getstart_date[0]['timeZone'] == 'America/St_Vincent') {echo "selected";}?>>America/St Vincent</option>
+                                                            <option value="America/Swift_Current" <?php if($getstart_date[0]['timeZone'] == 'America/Swift_Current') {echo "selected";}?>>America/Swift Current</option>
+                                                            <option value="America/Tegucigalpa" <?php if($getstart_date[0]['timeZone'] == 'America/Tegucigalpa') {echo "selected";}?>>America/Tegucigalpa</option>
+                                                            <option value="America/Thule" <?php if($getstart_date[0]['timeZone'] == 'America/Thule') {echo "selected";}?>>America/Thule</option>
+                                                            <option value="America/Tijuana" <?php if($getstart_date[0]['timeZone'] == 'America/Tijuana') {echo "selected";}?>>America/Tijuana</option>
+                                                            <option value="America/Toronto" <?php if($getstart_date[0]['timeZone'] == 'America/Toronto') {echo "selected";}?>>America/Toronto</option>
+                                                            <option value="America/Tortola" <?php if($getstart_date[0]['timeZone'] == 'America/Tortola') {echo "selected";}?>>America/Tortola</option>
+                                                            <option value="America/Vancouver" <?php if($getstart_date[0]['timeZone'] == 'America/Vancouver') {echo "selected";}?>>America/Vancouver</option>
+                                                            <option value="America/Whitehorse" <?php if($getstart_date[0]['timeZone'] == 'America/Whitehorse') {echo "selected";}?>>America/Whitehorse</option>
+                                                            <option value="America/Winnipeg" <?php if($getstart_date[0]['timeZone'] == 'America/Winnipeg') {echo "selected";}?>>America/Winnipeg</option>
+                                                            <option value="America/Yakutat" <?php if($getstart_date[0]['timeZone'] == 'America/Yakutat') {echo "selected";}?>>America/Yakutat</option>
+                                                            <option value="Asia/Kolkata" <?php if($getstart_date[0]['timeZone'] == 'Asia/Kolkata') {echo "selected";}?>>Asia/Kolkata</option>
+                                                            <option value="Australia/Adelaide" <?php if($getstart_date[0]['timeZone'] == 'Australia/Adelaide') {echo "selected";}?>>Australia/Adelaide</option>
+                                                            <option value="Australia/Brisbane" <?php if($getstart_date[0]['timeZone'] == 'Australia/Brisbane') {echo "selected";}?>>Australia/Brisbane</option>
+                                                            <option value="Australia/Broken_Hill" <?php if($getstart_date[0]['timeZone'] == 'Australia/Broken_Hill') {echo "selected";}?>>Australia/Broken Hill</option>
+                                                            <option value="Australia/Darwin" <?php if($getstart_date[0]['timeZone'] == 'Australia/Darwin') {echo "selected";}?>>Australia/Darwin</option>
+                                                            <option value="Australia/Eucla" <?php if($getstart_date[0]['timeZone'] == 'Australia/Eucla') {echo "selected";}?>>Australia/Eucla</option>
+                                                            <option value="Australia/Hobart" <?php if($getstart_date[0]['timeZone'] == 'Australia/Hobart') {echo "selected";}?>>Australia/Hobart</option>
+                                                            <option value="Australia/Lindeman" <?php if($getstart_date[0]['timeZone'] == 'Australia/Lindeman') {echo "selected";}?>>Australia/Lindeman</option>
+                                                            <option value="Australia/Lord_Howe" <?php if($getstart_date[0]['timeZone'] == 'Australia/Lord_Howe') {echo "selected";}?>>Australia/Lord Howe</option>
+                                                            <option value="Australia/Melbourne" <?php if($getstart_date[0]['timeZone'] == 'Australia/Melbourne') {echo "selected";}?>>Australia/Melbourne</option>
+                                                            <option value="Australia/Perth" <?php if($getstart_date[0]['timeZone'] == 'Australia/Perth') {echo "selected";}?>>Australia/Perth</option>
+                                                            <option value="Australia/Sydney" <?php if($getstart_date[0]['timeZone'] == 'Australia/Sydney') {echo "selected";}?>>Australia/Sydney</option>
+                                                            <option value="Europe/Amsterdam" <?php if($getstart_date[0]['timeZone'] == 'Europe/Amsterdam') {echo "selected";}?>>Europe/Amsterdam</option>
+                                                            <option value="Europe/Andorra" <?php if($getstart_date[0]['timeZone'] == 'Europe/Andorra') {echo "selected";}?>>Europe/Andorra</option>
+                                                            <option value="Europe/Astrakhan" <?php if($getstart_date[0]['timeZone'] == 'Europe/Astrakhan') {echo "selected";}?>>Europe/Astrakhan</option>
+                                                            <option value="Europe/Athens" <?php if($getstart_date[0]['timeZone'] == 'Europe/Athens') {echo "selected";}?>>Europe/Athens</option>
+                                                            <option value="Europe/Belgrade" <?php if($getstart_date[0]['timeZone'] == 'Europe/Belgrade') {echo "selected";}?>>Europe/Belgrade</option>
+                                                            <option value="Europe/Berlin" <?php if($getstart_date[0]['timeZone'] == 'Europe/Berlin') {echo "selected";}?>>Europe/Berlin</option>
+                                                            <option value="Europe/Bratislava" <?php if($getstart_date[0]['timeZone'] == 'Europe/Bratislava') {echo "selected";}?>>Europe/Bratislava</option>
+                                                            <option value="Europe/Brussels" <?php if($getstart_date[0]['timeZone'] == 'Europe/Brussels') {echo "selected";}?>>Europe/Brussels</option>
+                                                            <option value="Europe/Bucharest" <?php if($getstart_date[0]['timeZone'] == 'Europe/Bucharest') {echo "selected";}?>>Europe/Bucharest</option>
+                                                            <option value="Europe/Budapest" <?php if($getstart_date[0]['timeZone'] == 'Europe/Budapest') {echo "selected";}?>>Europe/Budapest</option>
+                                                            <option value="Europe/Busingen" <?php if($getstart_date[0]['timeZone'] == 'Europe/Busingen') {echo "selected";}?>>Europe/Busingen</option>
+                                                            <option value="Europe/Chisinau" <?php if($getstart_date[0]['timeZone'] == 'Europe/Chisinau') {echo "selected";}?>>Europe/Chisinau</option>
+                                                            <option value="Europe/Copenhagen" <?php if($getstart_date[0]['timeZone'] == 'Europe/Copenhagen') {echo "selected";}?>>Europe/Copenhagen</option>
+                                                            <option value="Europe/Dublin" <?php if($getstart_date[0]['timeZone'] == 'Europe/Dublin') {echo "selected";}?>>Europe/Dublin</option>
+                                                            <option value="Europe/Gibraltar" <?php if($getstart_date[0]['timeZone'] == 'Europe/Gibraltar') {echo "selected";}?>>Europe/Gibraltar</option>
+                                                            <option value="Europe/Guernsey" <?php if($getstart_date[0]['timeZone'] == 'Europe/Guernsey') {echo "selected";}?>>Europe/Guernsey</option>
+                                                            <option value="Europe/Helsinki" <?php if($getstart_date[0]['timeZone'] == 'Europe/Helsinki') {echo "selected";}?>>Europe/Helsinki</option>
+                                                            <option value="Europe/Isle_of_Man" <?php if($getstart_date[0]['timeZone'] == 'Europe/Isle_of_Man') {echo "selected";}?>>Europe/Isle of Man</option>
+                                                            <option value="Europe/Istanbul" <?php if($getstart_date[0]['timeZone'] == 'Europe/Istanbul') {echo "selected";}?>>Europe/Istanbul</option>
+                                                            <option value="Europe/Jersey" <?php if($getstart_date[0]['timeZone'] == 'Europe/Jersey') {echo "selected";}?>>Europe/Jersey</option>
+                                                            <option value="Europe/Kaliningrad" <?php if($getstart_date[0]['timeZone'] == 'Europe/Kaliningrad') {echo "selected";}?>>Europe/Kaliningrad</option>
+                                                            <option value="Europe/Kirov" <?php if($getstart_date[0]['timeZone'] == 'Europe/Kirov') {echo "selected";}?>>Europe/Kirov</option>
+                                                            <option value="Europe/Kyiv" <?php if($getstart_date[0]['timeZone'] == 'Europe/Kyiv') {echo "selected";}?>>Europe/Kyiv</option>
+                                                            <option value="Europe/Lisbon" <?php if($getstart_date[0]['timeZone'] == 'Europe/Lisbon') {echo "selected";}?>>Europe/Lisbon</option>
+                                                            <option value="Europe/Ljubljana" <?php if($getstart_date[0]['timeZone'] == 'Europe/Ljubljana') {echo "selected";}?>>Europe/Ljubljana</option>
+                                                            <option value="Europe/London" <?php if($getstart_date[0]['timeZone'] == 'Europe/London') {echo "selected";}?>>Europe/London</option>
+                                                            <option value="Europe/Luxembourg" <?php if($getstart_date[0]['timeZone'] == 'Europe/Luxembourg') {echo "selected";}?>>Europe/Luxembourg</option>
+                                                            <option value="Europe/Malta" <?php if($getstart_date[0]['timeZone'] == 'Europe/Malta') {echo "selected";}?>>Europe/Malta</option>
+                                                            <option value="Europe/Mariehamn" <?php if($getstart_date[0]['timeZone'] == 'Europe/Mariehamn') {echo "selected";}?>>Europe/Mariehamn</option>
+                                                            <option value="Europe/Minsk" <?php if($getstart_date[0]['timeZone'] == 'Europe/Minsk') {echo "selected";}?>>Europe/Minsk</option>
+                                                            <option value="Europe/Monaco" <?php if($getstart_date[0]['timeZone'] == 'Europe/Monaco') {echo "selected";}?>>Europe/Monaco</option>
+                                                            <option value="Europe/Moscow" <?php if($getstart_date[0]['timeZone'] == 'Europe/Moscow') {echo "selected";}?>>Europe/Moscow</option>
+                                                            <option value="Europe/Nicosia" <?php if($getstart_date[0]['timeZone'] == 'Europe/Nicosia') {echo "selected";}?>>Europe/Nicosia</option>
+                                                            <option value="Europe/Oslo" <?php if($getstart_date[0]['timeZone'] == 'Europe/Oslo') {echo "selected";}?>>Europe/Oslo</option>
+                                                            <option value="Europe/Paris" <?php if($getstart_date[0]['timeZone'] == 'Europe/Paris') {echo "selected";}?>>Europe/Paris</option>
+                                                            <option value="Europe/Podgorica" <?php if($getstart_date[0]['timeZone'] == 'Europe/Podgorica') {echo "selected";}?>>Europe/Podgorica</option>
+                                                            <option value="Europe/Prague" <?php if($getstart_date[0]['timeZone'] == 'Europe/Prague') {echo "selected";}?>>Europe/Prague</option>
+                                                            <option value="Europe/Riga" <?php if($getstart_date[0]['timeZone'] == 'Europe/Riga') {echo "selected";}?>>Europe/Riga</option>
+                                                            <option value="Europe/Rome" <?php if($getstart_date[0]['timeZone'] == 'Europe/Rome') {echo "selected";}?>>Europe/Rome</option>
+                                                            <option value="Europe/Samara" <?php if($getstart_date[0]['timeZone'] == 'Europe/Samara') {echo "selected";}?>>Europe/Samara</option>
+                                                            <option value="Europe/San_Marino" <?php if($getstart_date[0]['timeZone'] == 'Europe/San_Marino') {echo "selected";}?>>Europe/San Marino</option>
+                                                            <option value="Europe/Sarajevo" <?php if($getstart_date[0]['timeZone'] == 'Europe/Sarajevo') {echo "selected";}?>>Europe/Sarajevo</option>
+                                                            <option value="Europe/Sofia" <?php if($getstart_date[0]['timeZone'] == 'Europe/Sofia') {echo "selected";}?>>Europe/Sofia</option>
+                                                            <option value="Europe/Stockholm" <?php if($getstart_date[0]['timeZone'] == 'Europe/Stockholm') {echo "selected";}?>>Europe/Stockholm</option>
+                                                            <option value="Europe/Tallinn" <?php if($getstart_date[0]['timeZone'] == 'Europe/Tallinn') {echo "selected";}?>>Europe/Tallinn</option>
+                                                            <option value="Europe/Tirane" <?php if($getstart_date[0]['timeZone'] == 'Europe/Tirane') {echo "selected";}?>>Europe/Tirane</option>
+                                                            <option value="Europe/Uzhgorod" <?php if($getstart_date[0]['timeZone'] == 'Europe/Uzhgorod') {echo "selected";}?>>Europe/Uzhgorod</option>
+                                                            <option value="Europe/Vaduz" <?php if($getstart_date[0]['timeZone'] == 'Europe/Vaduz') {echo "selected";}?>>Europe/Vaduz</option>
+                                                            <option value="Europe/Vatican" <?php if($getstart_date[0]['timeZone'] == 'Europe/Vatican') {echo "selected";}?>>Europe/Vatican</option>
+                                                            <option value="Europe/Vienna" <?php if($getstart_date[0]['timeZone'] == 'Europe/Vienna') {echo "selected";}?>>Europe/Vienna</option>
+                                                            <option value="Europe/Vilnius" <?php if($getstart_date[0]['timeZone'] == 'Europe/Vilnius') {echo "selected";}?>>Europe/Vilnius</option>
+                                                            <option value="Europe/Volgograd" <?php if($getstart_date[0]['timeZone'] == 'Europe/Volgograd') {echo "selected";}?>>Europe/Volgograd</option>
+                                                            <option value="Europe/Warsaw" <?php if($getstart_date[0]['timeZone'] == 'Europe/Warsaw') {echo "selected";}?>>Europe/Warsaw</option>
+                                                            <option value="Europe/Zagreb" <?php if($getstart_date[0]['timeZone'] == 'Europe/Zagreb') {echo "selected";}?>>Europe/Zagreb</option>
+                                                            <option value="Europe/Zurich" <?php if($getstart_date[0]['timeZone'] == 'Europe/Zurich') {echo "selected";}?>>Europe/Zurich</option>
+                                                        </select>
+                                                    </div>
+                                                    <?php for($i = 0; $i < count($data); $i++) {
                                                     $value = explode('.', $data[$i]);
                                                     $getavailability = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' AND weekday = '".$value[1]."' AND is_datewise = '0' GROUP BY weekday")->result_array();
                                                     if(!empty($getavailability)) {
@@ -173,6 +389,223 @@
                     <p style="color:red;" class="" id="errfromtimedate"></p>
                     <p style="color:red;" class="" id="errtotimedate"></p>
                     <div class="col-12" style="display: inline-block;">
+                        <?php $getstart_date = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."'")->result(); ?>
+                        <div class="col-6">
+                            <label for="timeZonedate" style="padding: 0;">Current Time Zone <span style="color:red"> * </span></label>
+                            <select id="timeZonedate" name="timeZonedate" class="custom-select" style="margin-bottom: 20px; display: flex; width: 300px;">
+                                <option value="">Select Time Zone</option>
+                                <option value="America/Adak" <?php if($getstart_date[0]->timeZone == 'America/Adak') {echo "selected";}?>>America/Adak</option>
+                                <option value="America/Anchorage" <?php if($getstart_date[0]->timeZone == 'America/Anchorage') {echo "selected";}?>>America/Anchorage</option>
+                                <option value="America/Anguilla" <?php if($getstart_date[0]->timeZone == 'America/Anguilla') {echo "selected";}?>>America/Anguilla</option>
+                                <option value="America/Antigua" <?php if($getstart_date[0]->timeZone == 'America/Antigua') {echo "selected";}?>>America/Antigua</option>
+                                <option value="America/Araguaina" <?php if($getstart_date[0]->timeZone == 'America/Araguaina') {echo "selected";}?>>America/Araguaina</option>
+                                <option value="America/Argentina/Buenos_Aires" <?php if($getstart_date[0]->timeZone == 'America/Argentina/Buenos_Aires') {echo "selected";}?>>America/Argentina/Buenos Aires</option>
+                                <option value="America/Argentina/Catamarca" <?php if($getstart_date[0]->timeZone == 'America/Argentina/Catamarca') {echo "selected";}?>>America/Argentina/Catamarca</option>
+                                <option value="America/Argentina/Cordoba" <?php if($getstart_date[0]->timeZone == 'America/Argentina/Cordoba') {echo "selected";}?>>America/Argentina/Cordoba</option>
+                                <option value="America/Argentina/Jujuy" <?php if($getstart_date[0]->timeZone == 'America/Argentina/Jujuy') {echo "selected";}?>>America/Argentina/Jujuy</option>
+                                <option value="America/Argentina/La_Rioja" <?php if($getstart_date[0]->timeZone == 'America/Argentina/La_Rioja') {echo "selected";}?>>America/Argentina/La Rioja</option>
+                                <option value="America/Argentina/Mendoza" <?php if($getstart_date[0]->timeZone == 'America/Argentina/Mendoza') {echo "selected";}?>>America/Argentina/Mendoza</option>
+                                <option value="America/Argentina/Rio_Gallegos" <?php if($getstart_date[0]->timeZone == 'America/Argentina/Rio_Gallegos') {echo "selected";}?>>America/Argentina/Rio Gallegos</option>
+                                <option value="America/Argentina/Salta" <?php if($getstart_date[0]->timeZone == 'America/Argentina/Salta') {echo "selected";}?>>America/Argentina/Salta</option>
+                                <option value="America/Argentina/San_Juan" <?php if($getstart_date[0]->timeZone == 'America/Argentina/San_Juan') {echo "selected";}?>>America/Argentina/San Juan</option>
+                                <option value="America/Argentina/San_Luis" <?php if($getstart_date[0]->timeZone == 'America/Argentina/San_Luis') {echo "selected";}?>>America/Argentina/San Luis</option>
+                                <option value="America/Argentina/Tucuman" <?php if($getstart_date[0]->timeZone == 'America/Argentina/Tucuman') {echo "selected";}?>>America/Argentina/Tucuman</option>
+                                <option value="America/Argentina/Ushuaia" <?php if($getstart_date[0]->timeZone == 'America/Argentina/Ushuaia') {echo "selected";}?>>America/Argentina/Ushuaia</option>
+                                <option value="America/Aruba" <?php if($getstart_date[0]->timeZone == 'America/Aruba') {echo "selected";}?>>America/Aruba</option>
+                                <option value="America/Asuncion" <?php if($getstart_date[0]->timeZone == 'America/Asuncion') {echo "selected";}?>>America/Asuncion</option>
+                                <option value="America/Atikokan" <?php if($getstart_date[0]->timeZone == 'America/Atikokan') {echo "selected";}?>>America/Atikokan</option>
+                                <option value="America/Bahia" <?php if($getstart_date[0]->timeZone == 'America/Bahia') {echo "selected";}?>>America/Bahia</option>
+                                <option value="America/Bahia_Banderas" <?php if($getstart_date[0]->timeZone == 'America/Bahia_Banderas') {echo "selected";}?>>America/Bahia Banderas</option>
+                                <option value="America/Barbados" <?php if($getstart_date[0]->timeZone == 'America/Barbados') {echo "selected";}?>>America/Barbados</option>
+                                <option value="America/Belem" <?php if($getstart_date[0]->timeZone == 'America/Belem') {echo "selected";}?>>America/Belem</option>
+                                <option value="America/Belize" <?php if($getstart_date[0]->timeZone == 'America/Belize') {echo "selected";}?>>America/Belize</option>
+                                <option value="America/Blanc-Sablon" <?php if($getstart_date[0]->timeZone == 'America/Blanc-Sablon') {echo "selected";}?>>America/Blanc-Sablon</option>
+                                <option value="America/Boa_Vista" <?php if($getstart_date[0]->timeZone == 'America/Boa_Vista') {echo "selected";}?>>America/Boa Vista</option>
+                                <option value="America/Bogota" <?php if($getstart_date[0]->timeZone == 'America/Bogota') {echo "selected";}?>>America/Bogota</option>
+                                <option value="America/Boise" <?php if($getstart_date[0]->timeZone == 'America/Boise') {echo "selected";}?>>America/Boise</option>
+                                <option value="America/Cambridge_Bay" <?php if($getstart_date[0]->timeZone == 'America/Cambridge_Bay') {echo "selected";}?>>America/Cambridge Bay</option>
+                                <option value="America/Campo_Grande" <?php if($getstart_date[0]->timeZone == 'America/Campo_Grande') {echo "selected";}?>>America/Campo Grande</option>
+                                <option value="America/Cancun" <?php if($getstart_date[0]->timeZone == 'America/Cancun') {echo "selected";}?>>America/Cancun</option>
+                                <option value="America/Caracas" <?php if($getstart_date[0]->timeZone == 'America/Caracas') {echo "selected";}?>>America/Caracas</option>
+                                <option value="America/Cayenne" <?php if($getstart_date[0]->timeZone == 'America/Cayenne') {echo "selected";}?>>America/Cayenne</option>
+                                <option value="America/Cayman" <?php if($getstart_date[0]->timeZone == 'America/Cayman') {echo "selected";}?>>America/Cayman</option>
+                                <option value="America/Chicago" <?php if($getstart_date[0]->timeZone == 'America/Chicago') {echo "selected";}?>>America/Chicago</option>
+                                <option value="America/Chihuahua" <?php if($getstart_date[0]->timeZone == 'America/Chihuahua') {echo "selected";}?>>America/Chihuahua</option>
+                                <option value="America/Ciudad_Juarez" <?php if($getstart_date[0]->timeZone == 'America/Ciudad_Juarez') {echo "selected";}?>>America/Ciudad Juarez</option>
+                                <option value="America/Costa_Rica" <?php if($getstart_date[0]->timeZone == 'America/Costa_Rica') {echo "selected";}?>>America/Costa Rica</option>
+                                <option value="America/Creston" <?php if($getstart_date[0]->timeZone == 'America/Creston') {echo "selected";}?>>America/Creston</option>
+                                <option value="America/Cuiaba" <?php if($getstart_date[0]->timeZone == 'America/Cuiaba') {echo "selected";}?>>America/Cuiaba</option>
+                                <option value="America/Curacao" <?php if($getstart_date[0]->timeZone == 'America/Curacao') {echo "selected";}?>>America/Curacao</option>
+                                <option value="America/Danmarkshavn" <?php if($getstart_date[0]->timeZone == 'America/Danmarkshavn') {echo "selected";}?>>America/Danmarkshavn</option>
+                                <option value="America/Dawson" <?php if($getstart_date[0]->timeZone == 'America/Dawson') {echo "selected";}?>>America/Dawson</option>
+                                <option value="America/Dawson_Creek" <?php if($getstart_date[0]->timeZone == 'America/Dawson_Creek') {echo "selected";}?>>America/Dawson Creek</option>
+                                <option value="America/Denver" <?php if($getstart_date[0]->timeZone == 'America/Denver') {echo "selected";}?>>America/Denver</option>
+                                <option value="America/Detroit" <?php if($getstart_date[0]->timeZone == 'America/Detroit') {echo "selected";}?>>America/Detroit</option>
+                                <option value="America/Dominica" <?php if($getstart_date[0]->timeZone == 'America/Dominica') {echo "selected";}?>>America/Dominica</option>
+                                <option value="America/Edmonton" <?php if($getstart_date[0]->timeZone == 'America/Edmonton') {echo "selected";}?>>America/Edmonton</option>
+                                <option value="America/Eirunepe" <?php if($getstart_date[0]->timeZone == 'America/Eirunepe') {echo "selected";}?>>America/Eirunepe</option>
+                                <option value="America/El_Salvador" <?php if($getstart_date[0]->timeZone == 'America/El_Salvador') {echo "selected";}?>>America/El Salvador</option>
+                                <option value="America/Fort_Nelson" <?php if($getstart_date[0]->timeZone == 'America/Fort_Nelson') {echo "selected";}?>>America/Fort Nelson</option>
+                                <option value="America/Fortaleza" <?php if($getstart_date[0]->timeZone == 'America/Fortaleza') {echo "selected";}?>>America/Fortaleza</option>
+                                <option value="America/Glace_Bay" <?php if($getstart_date[0]->timeZone == 'America/Glace_Bay') {echo "selected";}?>>America/Glace Bay</option>
+                                <option value="America/Goose_Bay" <?php if($getstart_date[0]->timeZone == 'America/Goose_Bay') {echo "selected";}?>>America/Goose Bay</option>
+                                <option value="America/Grand_Turk" <?php if($getstart_date[0]->timeZone == 'America/Grand_Turk') {echo "selected";}?>>America/Grand Turk</option>
+                                <option value="America/Grenada" <?php if($getstart_date[0]->timeZone == 'America/Grenada') {echo "selected";}?>>America/Grenada</option>
+                                <option value="America/Guadeloupe" <?php if($getstart_date[0]->timeZone == 'America/Guadeloupe') {echo "selected";}?>>America/Guadeloupe</option>
+                                <option value="America/Guatemala" <?php if($getstart_date[0]->timeZone == 'America/Guatemala') {echo "selected";}?>>America/Guatemala</option>
+                                <option value="America/Guayaquil" <?php if($getstart_date[0]->timeZone == 'America/Guayaquil') {echo "selected";}?>>America/Guayaquil</option>
+                                <option value="America/Guyana" <?php if($getstart_date[0]->timeZone == 'America/Guyana') {echo "selected";}?>>America/Guyana</option>
+                                <option value="America/Halifax" <?php if($getstart_date[0]->timeZone == 'America/Halifax') {echo "selected";}?>>America/Halifax</option>
+                                <option value="America/Havana" <?php if($getstart_date[0]->timeZone == 'America/Havana') {echo "selected";}?>>America/Havana</option>
+                                <option value="America/Hermosillo" <?php if($getstart_date[0]->timeZone == 'America/Hermosillo') {echo "selected";}?>>America/Hermosillo</option>
+                                <option value="America/Indiana/Indianapolis" <?php if($getstart_date[0]->timeZone == 'America/Indiana/Indianapolis') {echo "selected";}?>>America/Indiana/Indianapolis</option>
+                                <option value="America/Indiana/Knox" <?php if($getstart_date[0]->timeZone == 'America/Indiana/Knox') {echo "selected";}?>>America/Indiana/Knox</option>
+                                <option value="America/Indiana/Marengo" <?php if($getstart_date[0]->timeZone == 'America/Indiana/Marengo') {echo "selected";}?>>America/Indiana/Marengo</option>
+                                <option value="America/Indiana/Petersburg" <?php if($getstart_date[0]->timeZone == 'America/Indiana/Petersburg') {echo "selected";}?>>America/Indiana/Petersburg</option>
+                                <option value="America/Indiana/Tell_City" <?php if($getstart_date[0]->timeZone == 'America/Indiana/Tell_City') {echo "selected";}?>>America/Indiana/Tell City</option>
+                                <option value="America/Indiana/Vevay" <?php if($getstart_date[0]->timeZone == 'America/Indiana/Vevay') {echo "selected";}?>>America/Indiana/Vevay</option>
+                                <option value="America/Indiana/Vincennes" <?php if($getstart_date[0]->timeZone == 'America/Indiana/Vincennes') {echo "selected";}?>>America/Indiana/Vincennes</option>
+                                <option value="America/Indiana/Winamac" <?php if($getstart_date[0]->timeZone == 'America/Indiana/Winamac') {echo "selected";}?>>America/Indiana/Winamac</option>
+                                <option value="America/Inuvik" <?php if($getstart_date[0]->timeZone == 'America/Inuvik') {echo "selected";}?>>America/Inuvik</option>
+                                <option value="America/Iqaluit" <?php if($getstart_date[0]->timeZone == 'America/Iqaluit') {echo "selected";}?>>America/Iqaluit</option>
+                                <option value="America/Jamaica" <?php if($getstart_date[0]->timeZone == 'America/Jamaica') {echo "selected";}?>>America/Jamaica</option>
+                                <option value="America/Juneau" <?php if($getstart_date[0]->timeZone == 'America/Juneau') {echo "selected";}?>>America/Juneau</option>
+                                <option value="America/Kentucky/Louisville" <?php if($getstart_date[0]->timeZone == 'America/Kentucky/Louisville') {echo "selected";}?>>America/Kentucky/Louisville</option>
+                                <option value="America/Kentucky/Monticello" <?php if($getstart_date[0]->timeZone == 'America/Kentucky/Monticello') {echo "selected";}?>>America/Kentucky/Monticello</option>
+                                <option value="America/Kralendijk" <?php if($getstart_date[0]->timeZone == 'America/Kralendijk') {echo "selected";}?>>America/Kralendijk</option>
+                                <option value="America/La_Paz" <?php if($getstart_date[0]->timeZone == 'America/La_Paz') {echo "selected";}?>>America/La Paz</option>
+                                <option value="America/Lima" <?php if($getstart_date[0]->timeZone == 'America/Lima') {echo "selected";}?>>America/Lima</option>
+                                <option value="America/Los_Angeles" <?php if($getstart_date[0]->timeZone == 'America/Los_Angeles') {echo "selected";}?>>America/Los Angeles</option>
+                                <option value="America/Lower_Princes" <?php if($getstart_date[0]->timeZone == 'America/Lower_Princes') {echo "selected";}?>>America/Lower Princes</option>
+                                <option value="America/Maceio" <?php if($getstart_date[0]->timeZone == 'America/Maceio') {echo "selected";}?>>America/Maceio</option>
+                                <option value="America/Managua" <?php if($getstart_date[0]->timeZone == 'America/Managua') {echo "selected";}?>>America/Managua</option>
+                                <option value="America/Manaus" <?php if($getstart_date[0]->timeZone == 'America/Manaus') {echo "selected";}?>>America/Manaus</option>
+                                <option value="America/Marigot" <?php if($getstart_date[0]->timeZone == 'America/Marigot') {echo "selected";}?>>America/Marigot</option>
+                                <option value="America/Martinique" <?php if($getstart_date[0]->timeZone == 'America/Martinique') {echo "selected";}?>>America/Martinique</option>
+                                <option value="America/Matamoros" <?php if($getstart_date[0]->timeZone == 'America/Matamoros') {echo "selected";}?>>America/Matamoros</option>
+                                <option value="America/Mazatlan" <?php if($getstart_date[0]->timeZone == 'America/Mazatlan') {echo "selected";}?>>America/Mazatlan</option>
+                                <option value="America/Menominee" <?php if($getstart_date[0]->timeZone == 'America/Menominee') {echo "selected";}?>>America/Menominee</option>
+                                <option value="America/Merida" <?php if($getstart_date[0]->timeZone == 'America/Merida') {echo "selected";}?>>America/Merida</option>
+                                <option value="America/Metlakatla" <?php if($getstart_date[0]->timeZone == 'America/Metlakatla') {echo "selected";}?>>America/Metlakatla</option>
+                                <option value="America/Mexico_City" <?php if($getstart_date[0]->timeZone == 'America/Mexico_City') {echo "selected";}?>>America/Mexico City</option>
+                                <option value="America/Miquelon" <?php if($getstart_date[0]->timeZone == 'America/Miquelon') {echo "selected";}?>>America/Miquelon</option>
+                                <option value="America/Moncton" <?php if($getstart_date[0]->timeZone == 'America/Moncton') {echo "selected";}?>>America/Moncton</option>
+                                <option value="America/Monterrey" <?php if($getstart_date[0]->timeZone == 'America/Monterrey') {echo "selected";}?>>America/Monterrey</option>
+                                <option value="America/Montevideo" <?php if($getstart_date[0]->timeZone == 'America/Montevideo') {echo "selected";}?>>America/Montevideo</option>
+                                <option value="America/Montserrat" <?php if($getstart_date[0]->timeZone == 'America/Montserrat') {echo "selected";}?>>America/Montserrat</option>
+                                <option value="America/Nassau" <?php if($getstart_date[0]->timeZone == 'America/Nassau') {echo "selected";}?>>America/Nassau</option>
+                                <option value="America/New_York" <?php if($getstart_date[0]->timeZone == 'America/New_York') {echo "selected";}?>>America/New York</option>
+                                <option value="America/Nome" <?php if($getstart_date[0]->timeZone == 'America/Nome') {echo "selected";}?>>America/Nome</option>
+                                <option value="America/Noronha" <?php if($getstart_date[0]->timeZone == 'America/Noronha') {echo "selected";}?>>America/Noronha</option>
+                                <option value="America/North_Dakota/Beulah" <?php if($getstart_date[0]->timeZone == 'America/North_Dakota/Beulah') {echo "selected";}?>>America/North Dakota/Beulah</option>
+                                <option value="America/North_Dakota/Center" <?php if($getstart_date[0]->timeZone == 'America/North_Dakota/Center') {echo "selected";}?>>America/North Dakota/Center</option>
+                                <option value="America/North_Dakota/New_Salem" <?php if($getstart_date[0]->timeZone == 'America/North_Dakota/New_Salem') {echo "selected";}?>>America/North Dakota/New Salem</option>
+                                <option value="America/Nuuk" <?php if($getstart_date[0]->timeZone == 'America/Nuuk') {echo "selected";}?>>America/Nuuk</option>
+                                <option value="America/Ojinaga" <?php if($getstart_date[0]->timeZone == 'America/Ojinaga') {echo "selected";}?>>America/Ojinaga</option>
+                                <option value="America/Panama" <?php if($getstart_date[0]->timeZone == 'America/Panama') {echo "selected";}?>>America/Panama</option>
+                                <option value="America/Paramaribo" <?php if($getstart_date[0]->timeZone == 'America/Paramaribo') {echo "selected";}?>>America/Paramaribo</option>
+                                <option value="America/Phoenix" <?php if($getstart_date[0]->timeZone == 'America/Phoenix') {echo "selected";}?>>America/Phoenix</option>
+                                <option value="America/Port-au-Prince" <?php if($getstart_date[0]->timeZone == 'America/Port-au') {echo "selected";}?>>America/Port-au-Prince</option>
+                                <option value="America/Port_of_Spain" <?php if($getstart_date[0]->timeZone == 'America/Port_of_Spain') {echo "selected";}?>>America/Port of Spain</option>
+                                <option value="America/Porto_Velho" <?php if($getstart_date[0]->timeZone == 'America/Porto_Velho') {echo "selected";}?>>America/Porto Velho</option>
+                                <option value="America/Puerto_Rico" <?php if($getstart_date[0]->timeZone == 'America/Puerto_Rico') {echo "selected";}?>>America/Puerto Rico</option>
+                                <option value="America/Punta_Arenas" <?php if($getstart_date[0]->timeZone == 'America/Punta_Arenas') {echo "selected";}?>>America/Punta Arenas</option>
+                                <option value="America/Rankin_Inlet" <?php if($getstart_date[0]->timeZone == 'America/Rankin_Inlet') {echo "selected";}?>>America/Rankin Inlet</option>
+                                <option value="America/Recife" <?php if($getstart_date[0]->timeZone == 'America/Recife') {echo "selected";}?>>America/Recife</option>
+                                <option value="America/Regina" <?php if($getstart_date[0]->timeZone == 'America/Regina') {echo "selected";}?>>America/Regina</option>
+                                <option value="America/Resolute" <?php if($getstart_date[0]->timeZone == 'America/Resolute') {echo "selected";}?>>America/Resolute</option>
+                                <option value="America/Rio_Branco" <?php if($getstart_date[0]->timeZone == 'America/Rio_Branco') {echo "selected";}?>>America/Rio Branco</option>
+                                <option value="America/Santarem" <?php if($getstart_date[0]->timeZone == 'America/Santarem') {echo "selected";}?>>America/Santarem</option>
+                                <option value="America/Santiago" <?php if($getstart_date[0]->timeZone == 'America/Santiago') {echo "selected";}?>>America/Santiago</option>
+                                <option value="America/Santo_Domingo" <?php if($getstart_date[0]->timeZone == 'America/Santo_Domingo') {echo "selected";}?>>America/Santo Domingo</option>
+                                <option value="America/Sao_Paulo" <?php if($getstart_date[0]->timeZone == 'America/Sao_Paulo') {echo "selected";}?>>America/Sao Paulo</option>
+                                <option value="America/Scoresbysund" <?php if($getstart_date[0]->timeZone == 'America/Scoresbysund') {echo "selected";}?>>America/Scoresbysund</option>
+                                <option value="America/Sitka" <?php if($getstart_date[0]->timeZone == 'America/Sitka') {echo "selected";}?>>America/Sitka</option>
+                                <option value="America/St_Barthelemy" <?php if($getstart_date[0]->timeZone == 'America/St_Barthelemy') {echo "selected";}?>>America/St Barthelemy</option>
+                                <option value="America/St_Johns" <?php if($getstart_date[0]->timeZone == 'America/St_Johns') {echo "selected";}?>>America/St Johns</option>
+                                <option value="America/St_Kitts" <?php if($getstart_date[0]->timeZone == 'America/St_Kitts') {echo "selected";}?>>America/St Kitts</option>
+                                <option value="America/St_Lucia" <?php if($getstart_date[0]->timeZone == 'America/St_Lucia') {echo "selected";}?>>America/St Lucia</option>
+                                <option value="America/St_Thomas" <?php if($getstart_date[0]->timeZone == 'America/St_Thomas') {echo "selected";}?>>America/St Thomas</option>
+                                <option value="America/St_Vincent" <?php if($getstart_date[0]->timeZone == 'America/St_Vincent') {echo "selected";}?>>America/St Vincent</option>
+                                <option value="America/Swift_Current" <?php if($getstart_date[0]->timeZone == 'America/Swift_Current') {echo "selected";}?>>America/Swift Current</option>
+                                <option value="America/Tegucigalpa" <?php if($getstart_date[0]->timeZone == 'America/Tegucigalpa') {echo "selected";}?>>America/Tegucigalpa</option>
+                                <option value="America/Thule" <?php if($getstart_date[0]->timeZone == 'America/Thule') {echo "selected";}?>>America/Thule</option>
+                                <option value="America/Tijuana" <?php if($getstart_date[0]->timeZone == 'America/Tijuana') {echo "selected";}?>>America/Tijuana</option>
+                                <option value="America/Toronto" <?php if($getstart_date[0]->timeZone == 'America/Toronto') {echo "selected";}?>>America/Toronto</option>
+                                <option value="America/Tortola" <?php if($getstart_date[0]->timeZone == 'America/Tortola') {echo "selected";}?>>America/Tortola</option>
+                                <option value="America/Vancouver" <?php if($getstart_date[0]->timeZone == 'America/Vancouver') {echo "selected";}?>>America/Vancouver</option>
+                                <option value="America/Whitehorse" <?php if($getstart_date[0]->timeZone == 'America/Whitehorse') {echo "selected";}?>>America/Whitehorse</option>
+                                <option value="America/Winnipeg" <?php if($getstart_date[0]->timeZone == 'America/Winnipeg') {echo "selected";}?>>America/Winnipeg</option>
+                                <option value="America/Yakutat" <?php if($getstart_date[0]->timeZone == 'America/Yakutat') {echo "selected";}?>>America/Yakutat</option>
+                                <option value="Asia/Kolkata" <?php if($getstart_date[0]->timeZone == 'Asia/Kolkata') {echo "selected";}?>>Asia/Kolkata</option>
+                                <option value="Australia/Adelaide" <?php if($getstart_date[0]->timeZone == 'Australia/Adelaide') {echo "selected";}?>>Australia/Adelaide</option>
+                                <option value="Australia/Brisbane" <?php if($getstart_date[0]->timeZone == 'Australia/Brisbane') {echo "selected";}?>>Australia/Brisbane</option>
+                                <option value="Australia/Broken_Hill" <?php if($getstart_date[0]->timeZone == 'Australia/Broken_Hill') {echo "selected";}?>>Australia/Broken Hill</option>
+                                <option value="Australia/Darwin" <?php if($getstart_date[0]->timeZone == 'Australia/Darwin') {echo "selected";}?>>Australia/Darwin</option>
+                                <option value="Australia/Eucla" <?php if($getstart_date[0]->timeZone == 'Australia/Eucla') {echo "selected";}?>>Australia/Eucla</option>
+                                <option value="Australia/Hobart" <?php if($getstart_date[0]->timeZone == 'Australia/Hobart') {echo "selected";}?>>Australia/Hobart</option>
+                                <option value="Australia/Lindeman" <?php if($getstart_date[0]->timeZone == 'Australia/Lindeman') {echo "selected";}?>>Australia/Lindeman</option>
+                                <option value="Australia/Lord_Howe" <?php if($getstart_date[0]->timeZone == 'Australia/Lord_Howe') {echo "selected";}?>>Australia/Lord Howe</option>
+                                <option value="Australia/Melbourne" <?php if($getstart_date[0]->timeZone == 'Australia/Melbourne') {echo "selected";}?>>Australia/Melbourne</option>
+                                <option value="Australia/Perth" <?php if($getstart_date[0]->timeZone == 'Australia/Perth') {echo "selected";}?>>Australia/Perth</option>
+                                <option value="Australia/Sydney" <?php if($getstart_date[0]->timeZone == 'Australia/Sydney') {echo "selected";}?>>Australia/Sydney</option>
+                                <option value="Europe/Amsterdam" <?php if($getstart_date[0]->timeZone == 'Europe/Amsterdam') {echo "selected";}?>>Europe/Amsterdam</option>
+                                <option value="Europe/Andorra" <?php if($getstart_date[0]->timeZone == 'Europe/Andorra') {echo "selected";}?>>Europe/Andorra</option>
+                                <option value="Europe/Astrakhan" <?php if($getstart_date[0]->timeZone == 'Europe/Astrakhan') {echo "selected";}?>>Europe/Astrakhan</option>
+                                <option value="Europe/Athens" <?php if($getstart_date[0]->timeZone == 'Europe/Athens') {echo "selected";}?>>Europe/Athens</option>
+                                <option value="Europe/Belgrade" <?php if($getstart_date[0]->timeZone == 'Europe/Belgrade') {echo "selected";}?>>Europe/Belgrade</option>
+                                <option value="Europe/Berlin" <?php if($getstart_date[0]->timeZone == 'Europe/Berlin') {echo "selected";}?>>Europe/Berlin</option>
+                                <option value="Europe/Bratislava" <?php if($getstart_date[0]->timeZone == 'Europe/Bratislava') {echo "selected";}?>>Europe/Bratislava</option>
+                                <option value="Europe/Brussels" <?php if($getstart_date[0]->timeZone == 'Europe/Brussels') {echo "selected";}?>>Europe/Brussels</option>
+                                <option value="Europe/Bucharest" <?php if($getstart_date[0]->timeZone == 'Europe/Bucharest') {echo "selected";}?>>Europe/Bucharest</option>
+                                <option value="Europe/Budapest" <?php if($getstart_date[0]->timeZone == 'Europe/Budapest') {echo "selected";}?>>Europe/Budapest</option>
+                                <option value="Europe/Busingen" <?php if($getstart_date[0]->timeZone == 'Europe/Busingen') {echo "selected";}?>>Europe/Busingen</option>
+                                <option value="Europe/Chisinau" <?php if($getstart_date[0]->timeZone == 'Europe/Chisinau') {echo "selected";}?>>Europe/Chisinau</option>
+                                <option value="Europe/Copenhagen" <?php if($getstart_date[0]->timeZone == 'Europe/Copenhagen') {echo "selected";}?>>Europe/Copenhagen</option>
+                                <option value="Europe/Dublin" <?php if($getstart_date[0]->timeZone == 'Europe/Dublin') {echo "selected";}?>>Europe/Dublin</option>
+                                <option value="Europe/Gibraltar" <?php if($getstart_date[0]->timeZone == 'Europe/Gibraltar') {echo "selected";}?>>Europe/Gibraltar</option>
+                                <option value="Europe/Guernsey" <?php if($getstart_date[0]->timeZone == 'Europe/Guernsey') {echo "selected";}?>>Europe/Guernsey</option>
+                                <option value="Europe/Helsinki" <?php if($getstart_date[0]->timeZone == 'Europe/Helsinki') {echo "selected";}?>>Europe/Helsinki</option>
+                                <option value="Europe/Isle_of_Man" <?php if($getstart_date[0]->timeZone == 'Europe/Isle_of_Man') {echo "selected";}?>>Europe/Isle of Man</option>
+                                <option value="Europe/Istanbul" <?php if($getstart_date[0]->timeZone == 'Europe/Istanbul') {echo "selected";}?>>Europe/Istanbul</option>
+                                <option value="Europe/Jersey" <?php if($getstart_date[0]->timeZone == 'Europe/Jersey') {echo "selected";}?>>Europe/Jersey</option>
+                                <option value="Europe/Kaliningrad" <?php if($getstart_date[0]->timeZone == 'Europe/Kaliningrad') {echo "selected";}?>>Europe/Kaliningrad</option>
+                                <option value="Europe/Kirov" <?php if($getstart_date[0]->timeZone == 'Europe/Kirov') {echo "selected";}?>>Europe/Kirov</option>
+                                <option value="Europe/Kyiv" <?php if($getstart_date[0]->timeZone == 'Europe/Kyiv') {echo "selected";}?>>Europe/Kyiv</option>
+                                <option value="Europe/Lisbon" <?php if($getstart_date[0]->timeZone == 'Europe/Lisbon') {echo "selected";}?>>Europe/Lisbon</option>
+                                <option value="Europe/Ljubljana" <?php if($getstart_date[0]->timeZone == 'Europe/Ljubljana') {echo "selected";}?>>Europe/Ljubljana</option>
+                                <option value="Europe/London" <?php if($getstart_date[0]->timeZone == 'Europe/London') {echo "selected";}?>>Europe/London</option>
+                                <option value="Europe/Luxembourg" <?php if($getstart_date[0]->timeZone == 'Europe/Luxembourg') {echo "selected";}?>>Europe/Luxembourg</option>
+                                <option value="Europe/Malta" <?php if($getstart_date[0]->timeZone == 'Europe/Malta') {echo "selected";}?>>Europe/Malta</option>
+                                <option value="Europe/Mariehamn" <?php if($getstart_date[0]->timeZone == 'Europe/Mariehamn') {echo "selected";}?>>Europe/Mariehamn</option>
+                                <option value="Europe/Minsk" <?php if($getstart_date[0]->timeZone == 'Europe/Minsk') {echo "selected";}?>>Europe/Minsk</option>
+                                <option value="Europe/Monaco" <?php if($getstart_date[0]->timeZone == 'Europe/Monaco') {echo "selected";}?>>Europe/Monaco</option>
+                                <option value="Europe/Moscow" <?php if($getstart_date[0]->timeZone == 'Europe/Moscow') {echo "selected";}?>>Europe/Moscow</option>
+                                <option value="Europe/Nicosia" <?php if($getstart_date[0]->timeZone == 'Europe/Nicosia') {echo "selected";}?>>Europe/Nicosia</option>
+                                <option value="Europe/Oslo" <?php if($getstart_date[0]->timeZone == 'Europe/Oslo') {echo "selected";}?>>Europe/Oslo</option>
+                                <option value="Europe/Paris" <?php if($getstart_date[0]->timeZone == 'Europe/Paris') {echo "selected";}?>>Europe/Paris</option>
+                                <option value="Europe/Podgorica" <?php if($getstart_date[0]->timeZone == 'Europe/Podgorica') {echo "selected";}?>>Europe/Podgorica</option>
+                                <option value="Europe/Prague" <?php if($getstart_date[0]->timeZone == 'Europe/Prague') {echo "selected";}?>>Europe/Prague</option>
+                                <option value="Europe/Riga" <?php if($getstart_date[0]->timeZone == 'Europe/Riga') {echo "selected";}?>>Europe/Riga</option>
+                                <option value="Europe/Rome" <?php if($getstart_date[0]->timeZone == 'Europe/Rome') {echo "selected";}?>>Europe/Rome</option>
+                                <option value="Europe/Samara" <?php if($getstart_date[0]->timeZone == 'Europe/Samara') {echo "selected";}?>>Europe/Samara</option>
+                                <option value="Europe/San_Marino" <?php if($getstart_date[0]->timeZone == 'Europe/San_Marino') {echo "selected";}?>>Europe/San Marino</option>
+                                <option value="Europe/Sarajevo" <?php if($getstart_date[0]->timeZone == 'Europe/Sarajevo') {echo "selected";}?>>Europe/Sarajevo</option>
+                                <option value="Europe/Sofia" <?php if($getstart_date[0]->timeZone == 'Europe/Sofia') {echo "selected";}?>>Europe/Sofia</option>
+                                <option value="Europe/Stockholm" <?php if($getstart_date[0]->timeZone == 'Europe/Stockholm') {echo "selected";}?>>Europe/Stockholm</option>
+                                <option value="Europe/Tallinn" <?php if($getstart_date[0]->timeZone == 'Europe/Tallinn') {echo "selected";}?>>Europe/Tallinn</option>
+                                <option value="Europe/Tirane" <?php if($getstart_date[0]->timeZone == 'Europe/Tirane') {echo "selected";}?>>Europe/Tirane</option>
+                                <option value="Europe/Uzhgorod" <?php if($getstart_date[0]->timeZone == 'Europe/Uzhgorod') {echo "selected";}?>>Europe/Uzhgorod</option>
+                                <option value="Europe/Vaduz" <?php if($getstart_date[0]->timeZone == 'Europe/Vaduz') {echo "selected";}?>>Europe/Vaduz</option>
+                                <option value="Europe/Vatican" <?php if($getstart_date[0]->timeZone == 'Europe/Vatican') {echo "selected";}?>>Europe/Vatican</option>
+                                <option value="Europe/Vienna" <?php if($getstart_date[0]->timeZone == 'Europe/Vienna') {echo "selected";}?>>Europe/Vienna</option>
+                                <option value="Europe/Vilnius" <?php if($getstart_date[0]->timeZone == 'Europe/Vilnius') {echo "selected";}?>>Europe/Vilnius</option>
+                                <option value="Europe/Volgograd" <?php if($getstart_date[0]->timeZone == 'Europe/Volgograd') {echo "selected";}?>>Europe/Volgograd</option>
+                                <option value="Europe/Warsaw" <?php if($getstart_date[0]->timeZone == 'Europe/Warsaw') {echo "selected";}?>>Europe/Warsaw</option>
+                                <option value="Europe/Zagreb" <?php if($getstart_date[0]->timeZone == 'Europe/Zagreb') {echo "selected";}?>>Europe/Zagreb</option>
+                                <option value="Europe/Zurich" <?php if($getstart_date[0]->timeZone == 'Europe/Zurich') {echo "selected";}?>>Europe/Zurich</option>
+                            </select>
+                        </div>
                         <div class="col-6" style="display: inline-block; float: left;">
                             <p style="margin-bottom: 25px;">Select date(s) you want to assign specific hours.</p>
                             <input type="text" class="form-control" name="specific_date[]" id="specific_date">
@@ -231,7 +664,7 @@ $(document).ready(function() {
             immediateUpdates: true,
             todayHighlight: true,
             startDate:'+0d'
-        });
+        }).datepicker("setDate", "0");
         $("#specific_date").datepicker({
             multidate: true,
             format: "yyyy-mm-dd",
@@ -256,6 +689,7 @@ $('#submit-button').on('click', function() {
     var from_time = $('.getfromtime').val().length;
     var to_time = $('.gettotime').val().length;
     var starting_date = $('#starting_date').val().length;
+    var timeZone = $("#timeZone").val();
     if (schedule === undefined || schedule.trim() === '') {
         $('#validateerrschedule').text('Please enter schedule');
         setInterval(function () {
@@ -271,6 +705,11 @@ $('#submit-button').on('click', function() {
         setInterval(function () {
             $('#validateerrschedule').empty();
         }, 5000);*/
+    } else if(timeZone === ''){
+        $('#validateerrschedule').text('Please enter your timezone');
+        setInterval(function () {
+            $('#validateerrschedule').empty();
+        }, 5000);
     } else if(starting_date === 0){
         $('#validateerrschedule').text('Please enter start date');
         setInterval(function () {
@@ -393,15 +832,22 @@ $('#submit_buttonDate').on('click', function() {
     var specificdate = $('#specific_date').val().length;
     var fromtimedate = $('.getfromtimedate').val().length;
     var totimedate = $('.gettotimedate').val().length;
+    var timeZone = $("#timeZonedate").val();
     if(specificdate === 0) {
         $('#errspecificdate').text('Please enter starting date');
         setInterval(function () {
             $('#errspecificdate').empty();
         }, 5000);
-    } else if(fromtimedate === 0){
+    } /*else if(fromtimedate === 0){
         $('#errfromtimedate').text('Please enter from time');
         setInterval(function () {
             $('#errfromtimedate').empty();
+        }, 5000);
+    }*/
+    else if(timeZone === ''){
+        $('#validateerrschedule').text('Please enter your timezone');
+        setInterval(function () {
+            $('#validateerrschedule').empty();
         }, 5000);
     } else if(totimedate === 0){
         $('#errtotimedate').text('Please enter to time');
@@ -505,4 +951,5 @@ function deletedata(id) {
 	    }
 	});
 }
+
 </script>

@@ -3,7 +3,8 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
     $banner_img = base_url("uploads/banner/" . $get_banner->image);
 } else {
     $banner_img = base_url("assets/images/resource/mslider1.jpg");
-} ?>
+}
+?>
 
 <section class="overlape">
     <div class="block no-padding">
@@ -390,14 +391,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     if(!empty($value['is_booked'] == '1')) { ?>
                         {
                             title:'Booked',
-                            start: '<?= date('Y-m-d', strtotime($value['start_date']))?>',
+                            start: '<?= date('Y-m-d', strtotime($value['utcStartDate']))?>',
                             end: '<?= date('Y-m-d', strtotime($value['end_date']))?>',
                             backgroundColor: 'red'
                         },
                     <?php } else { ?>
                         {
                             title:'Available',
-                            start: '<?= date('Y-m-d', strtotime($value['start_date']))?>',
+                            start: '<?= date('Y-m-d', strtotime($value['utcStartDate']))?>',
                             end: '<?= date('Y-m-d', strtotime($value['end_date']))?>',
                             backgroundColor: 'green'
                         },

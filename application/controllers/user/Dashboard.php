@@ -128,6 +128,7 @@ class Dashboard extends CI_Controller {
 			'longitude' => $_POST['longitude'],
 			'short_bio' => $_POST['short_bio'],
 			'rateperhour' => $_POST['rateperhour'],
+            'timeZone' => $_POST['timeZone'],
 			'resume' => $resume,
 		);
 		//echo "<pre>"; print_r($_FILES['portfolio_file']); die;
@@ -1059,6 +1060,11 @@ class Dashboard extends CI_Controller {
             return 1; // Default to Monday
         }
     }
+    function utcDateTime($dateTimeInput, $inputTimezone) {
+        $dateTime = new DateTime($dateTimeInput, new DateTimeZone($inputTimezone));
+        $dateTime->setTimezone(new DateTimeZone('UTC'));
+        return $dateTime->format('Y-m-d H:i:s');
+    }
     public function create_availability() {
         $action_id = $_POST['action_id'];
         $user_id = $_POST['user_id'];
@@ -1078,6 +1084,7 @@ class Dashboard extends CI_Controller {
                 'day' => $weekDay,
                 'fromtime' => $fromTime,
                 'totime' => $toTime,
+                'timeZone' => $_POST['timeZone'],
                 'repeat_month' => $_POST['repeat_month'],
                 'schedule_status' => '1',
                 'user_id' => $user_id,
@@ -1092,11 +1099,26 @@ class Dashboard extends CI_Controller {
             $weekDay = $entry['weekDay'];
             foreach ($weekDay['fromtime'] as $key => $fromtime) {
                 $totime = isset($weekDay['totime'][$key]) ? $weekDay['totime'][$key] : null;
+                $utcfromTime = new DateTime($fromtime, new DateTimeZone($_POST['timeZone']));
+                $utcfromTime->setTimezone(new DateTimeZone('UTC'));
+                $utcFromTime = $utcfromTime->format('H:i');
+
+                $utctoTime = new DateTime($totime, new DateTimeZone($_POST['timeZone']));
+                $utctoTime->setTimezone(new DateTimeZone('UTC'));
+                $utcToTime = $utctoTime->format('H:i');
+
+                $utcStartDate = new DateTime($weekDay['date']." ".$fromtime, new DateTimeZone($_POST['timeZone']));
+                $utcStartDate->setTimezone(new DateTimeZone('UTC'));
+                $utcStartDate = $utcStartDate->format('Y-m-d');
+
                 $schedule_data = array(
                     'user_id' => $weekDay['user_id'],
                     'weekday' => $weekDay['day'],
                     'weekdayslot' => $fromtime." to ".$totime,
+                    'timeZone' => $_POST['timeZone'],
+                    'utcTime' => $utcFromTime." to ".$utcToTime,
                     'start_date' => $weekDay['date'],
+                    'utcStartDate' => $utcStartDate,
                     'repeat_month' => $weekDay['repeat_month'],
                     'schedule_status' => $weekDay['schedule_status'],
                 );
@@ -1120,12 +1142,19 @@ class Dashboard extends CI_Controller {
                         if ($firstTargetWeekday < $startDate) {
                             $firstTargetWeekday->modify('+1 week');
                         }
+                        $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
+                        $utcStartDate->setTimezone(new DateTimeZone('UTC'));
+                        $utcStartDate = $utcStartDate->format('Y-m-d');
+
                         while ($firstTargetWeekday->format('m') == $currentMonth) {
                             $schedule[] = [
                                 'user_id' => $data['user_id'],
                                 'weekday' => $data['weekday'],
                                 'weekdayslot' => $data['weekdayslot'],
+                                'timeZone' => $data['timeZone'],
+                                'utcTime' => $data['utcTime'],
                                 'start_date' => $firstTargetWeekday->format('Y-m-d'),
+                                'utcStartDate' => $utcStartDate,
                                 'repeat_month' => $data['repeat_month'],
                                 'schedule_status' => $data['schedule_status'],
                             ];
@@ -1142,7 +1171,10 @@ class Dashboard extends CI_Controller {
                         $finalData['user_id'] = $value['user_id'];
                         $finalData['weekday'] = $value['weekday'];
                         $finalData['weekdayslot'] = $value['weekdayslot'];
+                        $finalData['timeZone'] = $value['timeZone'];
+                        $finalData['utcTime'] = $value['utcTime'];
                         $finalData['start_date'] = $value['start_date'];
+                        $finalData['utcStartDate'] = $value['utcStartDate'];
                         $finalData['repeat_month'] = $value['repeat_month'];
                         $finalData['schedule_status'] = $value['schedule_status'];
                         $this->Crud_model->SaveData('user_availability_new', $finalData);
@@ -1166,12 +1198,16 @@ class Dashboard extends CI_Controller {
                         if ($firstTargetWeekday < $startDate) {
                             $firstTargetWeekday->modify('+1 week');
                         }
+
                         while ($firstTargetWeekday->format('m') == $currentMonth) {
                             $schedule[] = [
                                 'user_id' => $data['user_id'],
                                 'weekday' => $data['weekday'],
                                 'weekdayslot' => $data['weekdayslot'],
+                                'timeZone' => $data['timeZone'],
+                                'utcTime' => $data['utcTime'],
                                 'start_date' => $firstTargetWeekday->format('Y-m-d'),
+                                'utcStartDate' => $utcStartDate,
                                 'repeat_month' => $data['repeat_month'],
                                 'schedule_status' => $data['schedule_status'],
                             ];
@@ -1188,7 +1224,10 @@ class Dashboard extends CI_Controller {
                         $finalData['user_id'] = $value['user_id'];
                         $finalData['weekday'] = $value['weekday'];
                         $finalData['weekdayslot'] = $value['weekdayslot'];
+                        $finalData['timeZone'] = $value['timeZone'];
+                        $finalData['utcTime'] = $value['utcTime'];
                         $finalData['start_date'] = $value['start_date'];
+                        $finalData['utcStartDate'] = $value['utcStartDate'];
                         $finalData['repeat_month'] = $value['repeat_month'];
                         $finalData['schedule_status'] = $value['schedule_status'];
                         $this->Crud_model->SaveData('user_availability_new', $finalData);
@@ -1202,16 +1241,33 @@ class Dashboard extends CI_Controller {
         $user_id = $_POST['user_id'];
         $output = array();
         $specific_dates = explode(',', $_POST['specific_date'][0]);
+        $this->db->query("DELETE FROM user_availability_new WHERE user_id = '".$user_id."' AND is_datewise = '1' AND is_booked = '0'");
         foreach ($specific_dates as $date) {
             $weekday = $this->getWeekdayName($date);
             foreach ($_POST['fromtimedate'] as $index => $start_time) {
                 $end_time = $_POST['totimedate'][$index];
                 $time_slot = $start_time . ' to ' . $end_time;
+
+                $utcfromTimedate = new DateTime($start_time, new DateTimeZone($_POST['timeZonedate']));
+                $utcfromTimedate->setTimezone(new DateTimeZone('UTC'));
+                $utcFromTimedate = $utcfromTimedate->format('H:i');
+
+                $utctoTimedate = new DateTime($end_time, new DateTimeZone($_POST['timeZonedate']));
+                $utctoTimedate->setTimezone(new DateTimeZone('UTC'));
+                $utcToTimedate = $utctoTimedate->format('H:i');
+
+                $utcStartDate = new DateTime($date." ".$start_time, new DateTimeZone($_POST['timeZonedate']));
+                $utcStartDate->setTimezone(new DateTimeZone('UTC'));
+                $utcStartDate = $utcStartDate->format('Y-m-d');
+
                 $slot = array(
                     'user_id' => $_POST['user_id'],
                     'weekday' => $weekday,
                     'weekdayslot' => $time_slot,
                     'start_date' => $date,
+                    'timeZone' => $_POST['timeZonedate'],
+                    'utcTime' => $utcFromTimedate." to ".$utcToTimedate,
+                    'utcStartDate' => $utcStartDate,
                     'schedule_status' => 1,
                     'is_booked' => 0
                 );
@@ -1224,11 +1280,13 @@ class Dashboard extends CI_Controller {
             $storedata['user_id'] = $value['user_id'];
             $storedata['weekday'] = $value['weekday'];
             $storedata['weekdayslot'] = $value['weekdayslot'];
+            $storedata['timeZone'] = $value['timeZone'];
             $storedata['start_date'] = $value['start_date'];
+            $storedata['utcTime'] = $value['utcTime'];
+            $storedata['utcStartDate'] = $value['utcStartDate'];
             $storedata['schedule_status'] = $value['schedule_status'];
             $storedata['is_booked'] = $value['is_booked'];
             $storedata['is_datewise'] = '1';
-            $this->db->query("DELETE FROM user_availability_new WHERE user_id = '".$user_id."' AND is_datewise = '".$value['start_date']."' AND is_booked = '0'");
             $this->Crud_model->SaveData('user_availability_new', $storedata);
         }
 		echo "1";
@@ -1251,13 +1309,26 @@ class Dashboard extends CI_Controller {
 	public function getUserAvailability() {
 		$choosendate = $this->input->post('choosendate');
 		$workers_id = $this->input->post('workers_id');
-		$getavailabletime = $this->db->query("SELECT * FROM user_availability_new WHERE start_date = '".$choosendate."' AND user_id = '".$workers_id."' AND is_booked = '0'")->result_array();
+        $gettimezone = $this->db->query("SELECT * FROM users WHERE userId = '".$_SESSION['afrebay']['userId']."'")->row();
+        $timezone = $gettimezone->timeZone;
+		$getavailabletime = $this->db->query("SELECT * FROM user_availability_new WHERE utcStartDate = '".$choosendate."' AND user_id = '".$workers_id."' AND is_booked = '0'")->result_array();
         $output = "";
         if(!empty($getavailabletime)) {
             foreach ($getavailabletime as $key => $avail) {
-                $timeslot = explode(' to ', $avail['weekdayslot']);
-            $output .= '<div class="getdatespecificdatetime" id="getdatespecificdatetime_'.$avail['id'].'" onclick="booktheslot('.$avail['id'].')">'.date('h:i A', strtotime($timeslot[0])).' to '.date('h:i A', strtotime($timeslot[1])).'</div>';
-        }
+                $timeslot = explode(' to ', $avail['utcTime']);
+
+                $utcFromTime = new DateTime($timeslot[0], new DateTimeZone('UTC'));
+                $localTimezone = new DateTimeZone($timezone);
+                $utcFromTime->setTimezone($localTimezone);
+                $localFromTime = $utcFromTime->format('H:i');
+
+                $utcToTime = new DateTime($timeslot[1], new DateTimeZone('UTC'));
+                //$localTimezone = new DateTimeZone($timezone);
+                $utcToTime->setTimezone($localTimezone);
+                $localToTime = $utcToTime->format('H:i');
+
+                $output .= '<div class="getdatespecificdatetime" id="getdatespecificdatetime_'.$avail['id'].'" onclick="booktheslot('.$avail['id'].')">'.date('h:i A', strtotime($localFromTime)).' to '.date('h:i A', strtotime($localToTime)).'</div>';
+            }
         } else {
             $output .= '<div class="getdatespecificdatetime">No Time Available</div>';
         }

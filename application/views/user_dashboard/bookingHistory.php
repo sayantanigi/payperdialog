@@ -126,28 +126,25 @@
         const close = document.querySelector('.btn-close');
         const myEvents = JSON.parse(localStorage.getItem('events')) || [
             <?php
-            $bookingSlot = $this->db->query("SELECT * FROM user_booking WHERE employer_id = '".$_SESSION['afrebay']['userId']."' AND meeting_link IS NOT NULL")->result_array();
+            $bookingSlot = $this->db->query("SELECT user_availability_new.id as avail_id, user_availability_new.start_date, user_booking.employee_id, user_booking.employer_id, user_booking.bookingTime, user_booking.meeting_link, user_booking.meeting_pass FROM user_availability_new JOIN user_booking ON user_booking.available_id = user_availability_new.id WHERE user_booking.employee_id ='".@$_SESSION['afrebay']['userId']."'")->result_array();
             //$availability = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$bookingSlot->available_id."'")->result_array();
             if (!empty($bookingSlot)) {
                 foreach ($bookingSlot as $value) {
-                    $checkBookSlot = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$value['available_id']."'")->result_array();
-                    foreach ($checkBookSlot as $value1) {
-                        if (!empty($checkBookSlot)) { ?>
-                            {
-                                title: 'Booked',
-                                start: '<?= date('Y-m-d', strtotime($value1['start_date'])) ?>',
-                                end: '<?= date('Y-m-d', strtotime($value1['end_date'])) ?>',
-                                backgroundColor: 'red'
-                            },
-                        <?php } else { ?>
-                            {
-                                title: 'Available',
-                                start: '<?= date('Y-m-d', strtotime($value1['start_date'])) ?>',
-                                end: '<?= date('Y-m-d', strtotime($value1['end_date'])) ?>',
-                                backgroundColor: 'green'
-                            },
-                        <?php }
-                    }
+                    if (!empty($bookingSlot)) { ?>
+                        {
+                            title: 'Booked',
+                            start: '<?= date('Y-m-d', strtotime($value['start_date'])) ?>',
+                            end: '<?= date('Y-m-d', strtotime($value['end_date'])) ?>',
+                            backgroundColor: 'red'
+                        },
+                    <?php } else { ?>
+                        {
+                            title: 'Available',
+                            start: '<?= date('Y-m-d', strtotime($value['start_date'])) ?>',
+                            end: '<?= date('Y-m-d', strtotime($value['end_date'])) ?>',
+                            backgroundColor: 'green'
+                        },
+                    <?php }
                 }
             } ?>
         ];

@@ -379,25 +379,27 @@
         const close = document.querySelector('.btn-close');
         const myEvents = JSON.parse(localStorage.getItem('events')) || [
             <?php
-            $availability = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '" . $_SESSION['afrebay']['userId'] . "'")->result_array();
-            if (!empty ($availability)) {
-                foreach ($availability as $value) {
-                    $checkBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='" . $value['id'] . "'")->result_array();
-                    if (!empty ($checkBookSlot)) { ?>
-                    {
-                            title: 'Booked',
-                            start: '<?= date('Y-m-d', strtotime($value['start_date'])) ?>',
-                            end: '<?= date('Y-m-d', strtotime($value['end_date'])) ?>',
-                            backgroundColor: 'red'
-                        },
-                    <?php } else { ?>
-                    {
-                            title: 'Available',
-                            start: '<?= date('Y-m-d', strtotime($value['start_date'])) ?>',
-                            end: '<?= date('Y-m-d', strtotime($value['end_date'])) ?>',
-                            backgroundColor: 'green'
-                        },
-                    <?php }
+            if(!empty($_SESSION['afrebay']['userId'])) {
+                $availability = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".$_SESSION['afrebay']['userId']."' AND is_booked = '1' ")->result_array();
+                if(!empty($availability)) {
+                    foreach ($availability as $value) {
+                        //$checkBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".$value['id']."'")->result_array();
+                        if(!empty($value['is_booked'] == '1')) { ?>
+                            {
+                                title:'Booked',
+                                start: '<?= date('Y-m-d', strtotime($value['start_date']))?>',
+                                end: '<?= date('Y-m-d', strtotime($value['end_date']))?>',
+                                backgroundColor: 'red'
+                            },
+                        <?php } else { ?>
+                            {
+                                title:'Available',
+                                start: '<?= date('Y-m-d', strtotime($value['start_date']))?>',
+                                end: '<?= date('Y-m-d', strtotime($value['end_date']))?>',
+                                backgroundColor: 'green'
+                            },
+                        <?php }
+                    }
                 }
             } ?>
         ];
