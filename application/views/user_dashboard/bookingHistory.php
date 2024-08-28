@@ -17,7 +17,7 @@
     <div class="container-fluid">
         <div class="row align-items-center">
             <div class="col-md-12 col-12">
-                <h2 class="breadcrumb-title">Booking History 2</h2>
+                <h2 class="breadcrumb-title">Booking History</h2>
             </div>
         </div>
     </div>
@@ -119,95 +119,72 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const calendarEl = document.getElementById('calendar');
-        const myModal = new bootstrap.Modal(document.getElementById('form'));
-        const dangerAlert = document.getElementById('danger-alert');
-        const close = document.querySelector('.btn-close');
-        const myEvents = JSON.parse(localStorage.getItem('events')) || [
-            <?php
-            $bookingSlot = $this->db->query("SELECT user_availability_new.id as avail_id, user_availability_new.start_date, user_booking.employee_id, user_booking.employer_id, user_booking.bookingTime, user_booking.meeting_link, user_booking.meeting_pass FROM user_availability_new JOIN user_booking ON user_booking.available_id = user_availability_new.id WHERE user_booking.employee_id ='".@$_SESSION['afrebay']['userId']."'")->result_array();
-            //$availability = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$bookingSlot->available_id."'")->result_array();
-            if (!empty($bookingSlot)) {
-                foreach ($bookingSlot as $value) {
-                    if (!empty($bookingSlot)) { ?>
-                        {
-                            title: 'Booked',
-                            start: '<?= date('Y-m-d', strtotime($value['start_date'])) ?>',
-                            end: '<?= date('Y-m-d', strtotime($value['end_date'])) ?>',
-                            backgroundColor: 'red'
-                        },
-                    <?php } else { ?>
-                        {
-                            title: 'Available',
-                            start: '<?= date('Y-m-d', strtotime($value['start_date'])) ?>',
-                            end: '<?= date('Y-m-d', strtotime($value['end_date'])) ?>',
-                            backgroundColor: 'green'
-                        },
-                    <?php }
-                }
-            } ?>
-        ];
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-            timeZone: 'local',
-            customButtons: {
-                customButton: {
-                    text: 'Availability',
-                    click: function () {
-                        <?php if (!empty($_SESSION['afrebay']['userId'])) { ?>
-                            myModal.show();
-                        <?php } else { ?>
-                            window.location.href = "<?php echo base_url('login') ?>";
-                        <?php } ?>
-                        const modalTitle = document.getElementById('modal-title');
-                        const submitButton = document.getElementById('submit-button');
-                        modalTitle.innerHTML = 'Availability'
-                        submitButton.innerHTML = 'Availability'
-                        submitButton.classList.remove('btn-primary');
-                        submitButton.classList.add('btn-success');
-                        close.addEventListener('click', () => {
-                            myModal.hide()
-                        })
-                    }
-                }
-            },
-            header: {
-                center: 'customButton',
-                right: 'today, prev,next '
-            },
-            plugins: ['dayGrid', 'interaction'],
-            selectable: true,
-            events: myEvents,
-        });
-
-        calendar.on('select', function (info) {
-            var selectDate = info.startStr;
-            var employeeId = $('#employee_id').val();
-            $.ajax({
-                type: "post",
-                url: "<?php echo base_url() ?>user/Dashboard/getBookingDetailsforEmployee",
-                data: { selectDate: selectDate, employeeId: employeeId },
-                success: function (returndata) {
-                    //console.log(returndata);
-                    $('.getBookingDetails').html(returndata);
-                }
-            });
-        });
-        calendar.render();
-        //var date = calendar.getDate();
-        //alert(date.toISOString());
-    });
-    $(document).ready(function () {
-        <?php $i = 1;
-        foreach ($availability as $value) { ?>
-            $('#job_overview_sub_<?= $i ?>').hide();
-            $('#job_overview_main_<?= $i ?>').on('click', function () {
-                $('#job_overview_sub_<?= $i ?>').toggle();
-            })
-            <?php $i++;
+document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendar');
+    const myEvents = JSON.parse(localStorage.getItem('events')) || [
+        <?php
+        $getTimeZone = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->row();
+        $timeZone = $getTimeZone->timeZone;
+        $bookingSlot = $this->db->query("SELECT user_availability_new.id as avail_id, user_availability_new.utcStartDate, user_availability_new.utcTime, user_availability_new.is_booked, user_booking.employee_id, user_booking.employer_id, user_booking.meeting_link, user_booking.meeting_pass FROM user_availability_new JOIN user_booking ON user_booking.available_id = user_availability_new.id WHERE user_booking.employer_id ='".@$_SESSION['afrebay']['userId']."'")->result_array();
+        if (!empty($bookingSlot)) {
+            foreach ($bookingSlot as $value) {
+                $fromtime = explode(' to ', $value['utcTime']);
+                $utcDateTime = new DateTime($value['utcStartDate']." ".$fromtime[0], new DateTimeZone('UTC'));
+                $localTimeZone = new DateTimeZone($timeZone);
+                $utcDateTime->setTimezone($localTimeZone);
+                if(!empty($value['is_booked'] == '1')) { ?>
+                    {
+                        title:'Booked',
+                        start: '<?= $utcDateTime->format('Y-m-d'); ?>',
+                        color: 'red'
+                    },
+                <?php } else { ?>
+                    {
+                        title:'Available',
+                        start: '<?= $utcDateTime->format('Y-m-d'); ?>',
+                        backgroundColor: 'green'
+                    },
+                <?php }
+            }
         } ?>
-    })
-    function closeAvail() {
-        location.reload();
-    }
+    ];
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        headerToolbar: {
+            center: 'title',
+            right: 'today, prev,next '
+        },
+        plugins: ['dayGrid', 'interaction'],
+        selectable: true,
+        events: myEvents
+    });
+    calendar.on('select', function (info) {
+        var selectDate = info.startStr;
+        var employeeId = $('#employee_id').val();
+        $.ajax({
+            type: "post",
+            url: "<?php echo base_url() ?>user/Dashboard/getBookingDetailsforEmployee",
+            data: { selectDate: selectDate, employeeId: employeeId },
+            success: function (returndata) {
+                $('.getBookingDetails').html(returndata);
+            }
+        });
+    });
+    calendar.render();
+});
+
+$(document).ready(function () {
+    <?php $i = 1;
+    foreach ($availability as $value) { ?>
+        $('#job_overview_sub_<?= $i ?>').hide();
+        $('#job_overview_main_<?= $i ?>').on('click', function () {
+            $('#job_overview_sub_<?= $i ?>').toggle();
+        })
+        <?php $i++;
+    } ?>
+})
+
+function closeAvail() {
+    location.reload();
+}
+
 </script>

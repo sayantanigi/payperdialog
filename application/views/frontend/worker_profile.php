@@ -131,7 +131,18 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                     </ul>
                                 </div>
                                 <!-- Calender -->
-                                <div class="Calender_Pick" id="calendar"></div>
+                                <div class="Calender_Pick" id="calendar">
+                                    <div style="display: flex; flex-direction: row; justify-content: space-around; margin-top: 10px;">
+                                        <p style="margin: 0px !important;display: flex;align-items: center;">
+                                            <span style="background: #008000; display: inline-block; width: 10px; height: 10px; margin-right: 10px;">&nbsp;</span>
+                                            <span> Available</span>
+                                        </p>
+                                        <p style="margin: 0px !important;display: flex;align-items: center;">
+                                            <span style="background: #fe0000; display: inline-block; width: 10px; height: 10px; margin-right: 10px;"></span>
+                                            <span> Booked</span>
+                                        </p>
+                                    </div>
+                                </div>
 
                                 <div class="quick-form-job availtimedata" style="">
                                     <h3>Selected Date: <p class="choosendate"></p></h3>
@@ -376,30 +387,28 @@ function bookSlot(id) {
 
 document.addEventListener('DOMContentLoaded', function() {
     const calendarEl = document.getElementById('calendar');
-    const myModal = new bootstrap.Modal(document.getElementById('form'));
-    const dangerAlert = document.getElementById('danger-alert');
-    const close = document.querySelector('.btn-close');
-    //const bookclose = document.querySelector('.bookBtn-close');
-    const bookingModal = new bootstrap.Modal(document.getElementById('bookingmodal'));
     const myEvents = [
         <?php
-        if(!empty($_SESSION['afrebay']['userId'])) {
+        if(!empty(@$_SESSION['afrebay']['userId'])) {
+            $getTimeZone = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->row();
+            $timeZone = $getTimeZone->timeZone;
             $availability = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".$user_detail->userId."' ")->result_array();
             if(!empty($availability)) {
                 foreach ($availability as $value) {
-                    //$checkBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".$value['id']."'")->result_array();
+                    $fromtime = explode(' to ', $value['utcTime']);
+                    $utcDateTime = new DateTime($value['utcStartDate']." ".$fromtime[0], new DateTimeZone('UTC'));
+                    $localTimeZone = new DateTimeZone($timeZone);
+                    $utcDateTime->setTimezone($localTimeZone);
                     if(!empty($value['is_booked'] == '1')) { ?>
                         {
-                            title:'Booked',
-                            start: '<?= date('Y-m-d', strtotime($value['utcStartDate']))?>',
-                            end: '<?= date('Y-m-d', strtotime($value['end_date']))?>',
-                            backgroundColor: 'red'
+                            title:'',
+                            start: '<?= $utcDateTime->format('Y-m-d'); ?>',
+                            color: 'red'
                         },
                     <?php } else { ?>
                         {
-                            title:'Available',
-                            start: '<?= date('Y-m-d', strtotime($value['utcStartDate']))?>',
-                            end: '<?= date('Y-m-d', strtotime($value['end_date']))?>',
+                            title:'',
+                            start: '<?= $utcDateTime->format('Y-m-d'); ?>',
                             backgroundColor: 'green'
                         },
                     <?php }
@@ -408,29 +417,13 @@ document.addEventListener('DOMContentLoaded', function() {
         } ?>
     ];
     const calendar = new FullCalendar.Calendar(calendarEl, {
-        customButtons: {
-            customButton: {
-                text: 'Availability',
-                click: function() {
-                    const modalTitle = document.getElementById('modal-title');
-                    const submitButton = document.getElementById('submit-button');
-                    modalTitle.innerHTML = 'Availability'
-                    submitButton.innerHTML = 'Availability'
-                    submitButton.classList.remove('btn-primary');
-                    submitButton.classList.add('btn-success');
-                    close.addEventListener('click', () => {
-                        myModal.hide();
-                    })
-                }
-            }
-        },
-        header: {
-            center: 'customButton',
+        headerToolbar: {
+            center: 'title',
             right: 'today, prev,next '
         },
         plugins: ['dayGrid', 'interaction'],
         selectable: true,
-        events: myEvents,
+        events: myEvents
     });
     calendar.on('select', function(info) {
         // console.log(info);

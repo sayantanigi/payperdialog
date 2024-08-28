@@ -43,7 +43,7 @@
                                                     $startDate = date('Y-m');
                                                     $calenderday = $this->db->query("SELECT calender FROM setting WHERE id = '1'")->row();
                                                     $data = explode(',', $calenderday->calender);
-                                                    $getstart_date = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' AND is_datewise = '0' ORDER BY `start_date` ASC")->result_array(); ?>
+                                                    $getstart_date = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".@$_SESSION['afrebay']['userId']."' ORDER BY `start_date` ASC")->result_array(); ?>
                                                     <div>
                                                         <label for = "timeZone" style="padding: 0;">Current Time Zone <span style="color:red"> * </span></label>
                                                         <select id="timeZone" name="timeZone" class="custom-select" style="margin-bottom: 20px; display: flex; width: 300px;">
