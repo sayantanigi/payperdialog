@@ -544,7 +544,8 @@ function bookthisslot(slotid) {
                             btnClass: 'btn-secondary paydone_btn',
                             keys: ['enter', 'shift'],
                             action: function(){
-                                location.reload();
+                                //location.reload();
+                                window.location.href = "<?php echo base_url()?>booking-history";
                             }
                         }
                     }

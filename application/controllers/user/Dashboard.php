@@ -1071,6 +1071,7 @@ class Dashboard extends CI_Controller {
         if($action_id == '1') {
             $this->db->query("DELETE FROM user_availability_new WHERE user_id = '".$user_id."' AND is_datewise = '0' AND is_booked = '0'");
         }
+        $this->db->query("UPDATE users SET timeZone = '".$_POST['timeZone']."' WHERE userId = '".$user_id."'");
         $outputArray = [];
         $weekDays = ['weekDay1', 'weekDay2', 'weekDay3', 'weekDay4', 'weekDay5', 'weekDay6', 'weekDay7'];
         $fromTimes = ['fromtime1', 'fromtime2','fromtime3', 'fromtime4','fromtime5', 'fromtime6','fromtime7'];
@@ -1122,6 +1123,7 @@ class Dashboard extends CI_Controller {
                     'repeat_month' => $weekDay['repeat_month'],
                     'schedule_status' => $weekDay['schedule_status'],
                 );
+
                 $data = $schedule_data;
                 if($data['repeat_month'] == '1') {
                     $repeatMonth = '12';
@@ -1142,11 +1144,11 @@ class Dashboard extends CI_Controller {
                         if ($firstTargetWeekday < $startDate) {
                             $firstTargetWeekday->modify('+1 week');
                         }
-                        $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
-                        $utcStartDate->setTimezone(new DateTimeZone('UTC'));
-                        $utcStartDate = $utcStartDate->format('Y-m-d');
 
                         while ($firstTargetWeekday->format('m') == $currentMonth) {
+                            $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
+                            $utcStartDate->setTimezone(new DateTimeZone('UTC'));
+                            $utcStartDate = $utcStartDate->format('Y-m-d');
                             $schedule[] = [
                                 'user_id' => $data['user_id'],
                                 'weekday' => $data['weekday'],
@@ -1199,7 +1201,14 @@ class Dashboard extends CI_Controller {
                             $firstTargetWeekday->modify('+1 week');
                         }
 
+                        // $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
+                        // $utcStartDate->setTimezone(new DateTimeZone('UTC'));
+                        // $utcStartDate = $utcStartDate->format('Y-m-d');
+
                         while ($firstTargetWeekday->format('m') == $currentMonth) {
+                            $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
+                            $utcStartDate->setTimezone(new DateTimeZone('UTC'));
+                            $utcStartDate = $utcStartDate->format('Y-m-d');
                             $schedule[] = [
                                 'user_id' => $data['user_id'],
                                 'weekday' => $data['weekday'],
@@ -1220,6 +1229,7 @@ class Dashboard extends CI_Controller {
                         }
                     }
                     $finalData = [];
+                    //print_r($schedule);
                     foreach ($schedule as $key => $value) {
                         $finalData['user_id'] = $value['user_id'];
                         $finalData['weekday'] = $value['weekday'];
@@ -1332,9 +1342,10 @@ class Dashboard extends CI_Controller {
                 $utcDateTime = $utcDateTime->format('Y-m-d');
                 if($utcDateTime == $choosendate) {
                     $output .= '<div class="getdatespecificdatetime" id="getdatespecificdatetime_'.$avail['id'].'" onclick="booktheslot('.$avail['id'].')">'.date('h:i A', strtotime($localFromTime)).' to '.date('h:i A', strtotime($localToTime)).'</div>';
-                }  else {
-                    $output .= '<div class="getdatespecificdatetime">No Time Available</div>';
                 }
+                /*else {
+                    $output .= '<div class="getdatespecificdatetime">No Time Available</div>';
+                }*/
             }
         } else {
             $output .= '<div class="getdatespecificdatetime">No Time Available</div>';
@@ -1651,8 +1662,7 @@ class Dashboard extends CI_Controller {
         $html = "<div style='width: 100%;display: inline-block;text-align: center;border-radius: 10px;box-shadow: 0 0 10px #dddddd;height: 400px;overflow-y: scroll;overflow-x: hidden;'><p style='padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;'>".date('D dS M Y ', strtotime($selectDate))."</p>";
         if(!empty($availableData)) {
         	for($i = 0; $i < count($availableData); $i++) {
-        		$html .= "<div style='width: 50%; display: inline-block; padding: 0 10px; margin-bottom: 20px;'><div style='width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;'>";
-        		$timeslot = explode(' to ', $availableData[$i]['utcTime']);
+                $timeslot = explode(' to ', $availableData[$i]['utcTime']);
                 $utcFromTime = new DateTime($timeslot[0], new DateTimeZone('UTC'));
                 $localTimezone = new DateTimeZone($availableData[$i]['timeZone']);
                 $utcFromTime->setTimezone($localTimezone);
@@ -1673,7 +1683,8 @@ class Dashboard extends CI_Controller {
 
                 $getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$employee_id."'")->row();
                 $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$employer_id."'")->row();
-                if($utcDateTime == $selectDate) {
+                //if($utcDateTime == $selectDate) {
+                    $html .= "<div style='width: 50%; display: inline-block; padding: 0 10px; margin-bottom: 20px;'><div style='width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;'>";
                     $html .= "
                     <div style='width: 100%;float: left; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'>
                         <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'> Slot: ".date('h:i A', strtotime($localFromTime))." to ".date('h:i A', strtotime($localToTime))."</p>
@@ -1687,9 +1698,10 @@ class Dashboard extends CI_Controller {
                     </div>
                     </div>
                     </div>";
-                } else {
+                //}
+                /*else {
                     $html .= "<div><div style='color: #212529;'>No slot booked for this selected date</div></div>";
-                }
+                }*/
             }
         } else {
         	$html .= "<div><div style='color: #212529;'>No slot booked for this selected date</div></div>";
@@ -1703,10 +1715,10 @@ class Dashboard extends CI_Controller {
         $gettimezone = $this->db->query("SELECT * FROM users WHERE userId = '".$employeeId."'")->row();
         $timezone = $gettimezone->timeZone;
         $availableData = $this->db->query("SELECT user_availability_new.id as avail_id, user_availability_new.utcStartDate, user_availability_new.utcTime, user_availability_new.is_booked, user_booking.employee_id, user_booking.employer_id, user_booking.meeting_link, user_booking.meeting_pass FROM user_availability_new JOIN user_booking ON user_booking.available_id = user_availability_new.id WHERE user_availability_new.is_booked = '1' AND user_booking.employer_id ='".@$employeeId."'")->result_array();
+
 		$html = "<div style='width: 100%;display: inline-block;text-align: center;border-radius: 10px;box-shadow: 0 0 10px #dddddd;height: 400px;overflow-y: scroll;overflow-x: hidden;'><p style='padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;'>".date('D dS M Y ', strtotime($selectDate))."</p>";
         if(!empty($availableData)) {
         	for($i = 0; $i < count($availableData); $i++) {
-        		$html .= "<div style='width: 50%; display: inline-block; padding: 0 10px; margin-bottom: 20px;'><div style='width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;'>";
         		$timeslot = explode(' to ', $availableData[$i]['utcTime']);
 
                 $utcFromTime = new DateTime($timeslot[0], new DateTimeZone('UTC'));
@@ -1727,12 +1739,14 @@ class Dashboard extends CI_Controller {
 				$meetingLink = $availableData[$i]['meeting_link'];
 				$meetingPass = $availableData[$i]['meeting_pass'];
                 if($utcDateTime == $selectDate) {
+                    $html .= "<div style='width: 50%; display: inline-block; padding: 0 10px; margin-bottom: 20px;'><div style='width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;'>";
                     $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$employee_id."'")->row();
                     $html .= "<div style='width: 100%;float: left; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'> Slot: ".date('h:i A', strtotime($localFromTime))." to ".date('h:i A', strtotime($localToTime))."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'>Meeting Link: <a href=".$meetingLink." target='_blank'>Click Here</a></p> <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'>Meeting Pass: ".$meetingPass."</p></div>";
                     $html .= "<div><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px;'>Paid: $".@$getEmployer->rateperhour."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 16px;'>Booked with: ".@$getEmployer->firstname." ".@$getEmployer->lastname."</p></div></div></div>";
-                } else {
-                    $html .= "<div><div style='color: #212529;'>No slot booked for this selected date</div></div>";
                 }
+                /*else {
+                    $html .= "<div><div style='color: #212529;'>No slot booked for this selected date</div></div>";
+                }*/
             }
         } else {
         	$html .= "<div><div style='color: #212529;'>No slot booked for this selected date</div></div>";

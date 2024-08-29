@@ -43,6 +43,11 @@ $get_category=$this->Crud_model->GetData('category','',"status='Active'");
     .blog-details a span, .Career .my-blog .blog-details a span {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;}
     #aggrementmodal1 p {font-size: 10px; line-height: 15px; margin: 2px 0 0 0;}
     #aggrementmodal1 .myForm {margin: 10px}
+    .select2-container--default .select2-selection--multiple .select2-selection__choice {padding: 0 5px !important;}
+    .select2-container--default .select2-selection--multiple .select2-selection__rendered {padding: 0 5px !important;}
+    .select2-container--default .select2-selection--multiple {border-bottom: 2px solid #B1B1B1; border-radius: 10px !important; box-shadow: 0 0 10px #E1E1E1;}
+    .select2-container .select2-search--inline .select2-search__field {margin-top: 2px !important;}
+    .cke_notification_warning {display: none !important;}
 </style>
 <script>
 function completeSub() {

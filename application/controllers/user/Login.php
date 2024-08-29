@@ -33,7 +33,8 @@ class Login extends CI_Controller {
 				'longitude' =>$_POST['longitude'],
 				'password' => base64_encode($_POST['password']),
 				'created'=>date('Y-m-d H:i:s'),
-				'status'=>0
+				'status'=> '1',
+                'email_verified' => '1'
 			);
 
 			$result = $this->Mymodel->insert('users',$data);
@@ -73,7 +74,7 @@ class Login extends CI_Controller {
 					$mail->Password   = "PayperLLC@2024";
 					$mail->send();
 				} catch (Exception $e) {
-					echo $e->getMessage(); //Boring error messages from anything else!
+					//echo $e->getMessage(); //Boring error messages from anything else!
 				}
 				$data=array('result'=>1,'data'=>1);
 			} else {

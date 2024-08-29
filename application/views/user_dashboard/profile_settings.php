@@ -122,7 +122,7 @@ if($data_request=='user'){
                                                 <label for="gender">
                                                     <h4>Gender<span style="color:red;">*</span></h4>
                                                 </label>
-                                                <select name="gender" id="gender" class="form-control"  style="height: 32px;">
+                                                <select name="gender" id="gender" class="form-control"  style="height: 32px;" required>
                                                     <option value="">Gender</option>
                                                     <option value="Male" <?php if(@$userinfo->gender=='Male'){ echo "selected";}?>>Male</option>
                                                     <option value="Female" <?php if(@$userinfo->gender=='Female'){ echo "selected";}?>>Female</option>
@@ -162,9 +162,9 @@ if($data_request=='user'){
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 key-skill">
-                                                <span class="pf-title1">Total Experience</span>
+                                                <span class="pf-title1">Total Experience <span style="color:red;">*</span></span>
                                                 <div class="pf-field">
-                                                    <select data-placeholder="Please Select Experience Level" class="form-control" name="experience" id="experience">
+                                                    <select data-placeholder="Please Select Experience Level" class="form-control" name="experience" id="experience" required>
                                                         <option value="">Select Option</option>
                                                         <option value="1" <?php if(@$userinfo->experience == 1) {echo "selected";}?>>0 to 02 Years</option>
                                                         <option value="2" <?php if(@$userinfo->experience == 2) {echo "selected";}?>>03 to 05 Years</option>
@@ -185,7 +185,7 @@ if($data_request=='user'){
                                             </div>
                                             <div class="col-lg-4">
                                                 <label for="rateperhour">
-                                                    <h4>Rate per Hour <span style="color:red;">*</span></h4>
+                                                    <h4>Rate per Hour ($)<span style="color:red;">*</span></h4>
                                                 </label>
                                                 <input type="text" class="form-control" name="rateperhour" id="rateperhour" placeholder="Rate per Hour" value="<?php echo @$userinfo->rateperhour;?>" required=""/>
                                             </div>
