@@ -6,12 +6,10 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 class Authentication extends CI_Controller {
-
 	public function __construct() {
         parent::__construct();
         $this->load->model('Mymodel');
     }
-
 	public function registration() {
 		try {
 			$formdata = json_decode(file_get_contents('php://input'), true);
@@ -281,7 +279,6 @@ class Authentication extends CI_Controller {
         }
         echo json_encode($response);
 	}
-
     public function logout() {
 	    unset($_SESSION['afrebay']);
         $response = array('status'=> 'success','result'=> 'You have logged out.');

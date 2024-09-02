@@ -11,26 +11,66 @@ class Home extends MY_Controller {
 		$this->load->model('post_job_model');
 		$this->load->model('Users_model');
 	}
-
 	public function home_list() {
 		try {
-			//$data['get_post'] = $this->Crud_model->GetData('postjob', 'id,post_title,description,user_id', "is_delete='0'", '', '(id)desc', '6');
-			$data['get_post'] = $this->db->query("SELECT postjob.id,postjob.post_title,postjob.description,postjob.user_id, users.companyname as company_name, users.profilePic as user_image FROM postjob JOIN users ON postjob.user_id = users.userId WHERE postjob.is_delete = '0' ORDER BY postjob.id DESC LIMIT 0,6")->result_array();
-			$data['countries']=$this->Crud_model->GetData('countries',"","");
-			$data['get_freelancerspost'] = $this->Crud_model->GetData('postjob', '', "is_delete='0'", '', '', '8');
-			$data['get_users'] = $this->db->query("SELECT * FROM users WHERE userType = '2'")->result();
+            $fromdata = json_decode(file_get_contents('php://input'), true);
+            $userType = $fromdata['userType'];
+            $data['get_post'] = $this->db->query("SELECT postjob.id,postjob.post_title,postjob.description,postjob.user_id, users.companyname as company_name, users.profilePic as user_image FROM postjob JOIN users ON postjob.user_id = users.userId WHERE postjob.is_delete = '0' ORDER BY postjob.id DESC LIMIT 0,6")->result_array();
+            if($userType != '2') {
+                $get_availUser = [];
+                $getAvailUser = $this->db->query("SELECT * FROM users WHERE userType = '2' AND status = '1' AND email_verified = '1'")->result_array();
+                foreach ($getAvailUser as $key => $availUser) {
+                    $get_availUser[$key]['userId'] = $availUser['userId'];
+                    if(!empty($availUser['companyname'])) {
+                        $fullname = $availUser['companyname'];
+                    } else {
+                        $fullname = $availUser['firstname']." ".$availUser['lastname'];
+                    }
+                    $get_availUser[$key]['fullname'] = $fullname;
+                    $get_availUser[$key]['userType'] = $availUser['userType'];
+                    $get_availUser[$key]['address'] = $availUser['address'];
+                    if(!empty($availUser['profilePic']) && file_exists('uploads/users/'.$availUser['profilePic'])) {
+                        $get_availUser[$key]['profilePic'] = base_url('uploads/users/'.$availUser['profilePic']);
+                    } else {
+                        $get_availUser[$key]['profilePic'] = base_url('uploads/users/user.png');
+                    }
+                    $get_availUser[$key]['short_bio'] = $availUser['short_bio'];
+                    $totalpost = $this->db->query("SELECT COUNT(id) FROM postjob WHERE user_id = '". $availUser['user_id']."'")->row();
+                    $get_availUser[$key]['jobPost'] = $totalpost;
+                }
+                $data['get_availUser'] = $get_availUser;
+            } else {
+                $get_availUser = [];
+                $getAvailUser = $this->db->query("SELECT * FROM users WHERE userType IN ('1,3') AND status = '1' AND email_verified = '1'")->result_array();
+                foreach ($getAvailUser as $key => $availUser) {
+                    $get_availUser[$key]['userId'] = $availUser['userId'];
+                    if(!empty($availUser['companyname'])) {
+                        $fullname = $availUser['companyname'];
+                    } else {
+                        $fullname = $availUser['firstname']." ".$availUser['lastname'];
+                    }
+                    $get_availUser[$key]['fullname'] = $fullname;
+                    $get_availUser[$key]['userType'] = $availUser['userType'];
+                    $get_availUser[$key]['address'] = $availUser['address'];
+                    if(!empty($availUser['profilePic']) && file_exists('uploads/users/'.$availUser['profilePic'])) {
+                        $get_availUser[$key]['profilePic'] = base_url('uploads/users/'.$availUser['profilePic']);
+                    } else {
+                        $get_availUser[$key]['profilePic'] = base_url('uploads/users/user.png');
+                    }
+                    $get_availUser[$key]['short_bio'] = $availUser['short_bio'];
+                    $totalpost = $this->db->query("SELECT COUNT(id) AS postcount FROM postjob WHERE user_id = '". $availUser['user_id']."'")->row();
+                    $get_availUser[$key]['jobPost'] = $totalpost->postcount;
+                }
+                $data['get_availUser'] = $get_availUser;
+            }
 			$data['get_ourservice'] = $this->Crud_model->GetData('our_service', '', "status='Active'", '', '', '');
-			$data['get_company'] = $this->Crud_model->GetData('company_logo', '', "status='Active'", '', '', '');
 			$data['get_career'] = $this->Crud_model->GetData('career_tips', '', "status='Active'", '', '', '3');
-			//$data['get_banner'] = $this->Crud_model->get_single('banner', "page_name='Home Top'");
-			//$data['get_banner_middle'] = $this->Crud_model->get_single('banner', "page_name='Home Middle'");
 	        $response = array('status'=> 'success','result'=> $data);
 		} catch (\Exception $e) {
 			$response = array('status'=> 'error','result'=> $e->getMessage());
 		}
 		echo json_encode($response);
 	}
-
 	public function post_details() {
 		try {
 			$formdata = json_decode(file_get_contents('php://input'), true);
