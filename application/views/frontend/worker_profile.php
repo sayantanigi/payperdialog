@@ -391,27 +391,29 @@ document.addEventListener('DOMContentLoaded', function() {
         <?php
         if(!empty(@$_SESSION['afrebay']['userId'])) {
             $getTimeZone = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->row();
-            $timeZone = $getTimeZone->timeZone;
+            @$timeZone = $getTimeZone->timeZone;
             $availability = $this->db->query("SELECT * FROM user_availability_new WHERE user_id = '".$user_detail->userId."' ")->result_array();
-            if(!empty($availability)) {
-                foreach ($availability as $value) {
-                    $fromtime = explode(' to ', $value['utcTime']);
-                    $utcDateTime = new DateTime($value['utcStartDate']." ".$fromtime[0], new DateTimeZone('UTC'));
-                    $localTimeZone = new DateTimeZone($timeZone);
-                    $utcDateTime->setTimezone($localTimeZone);
-                    if(!empty($value['is_booked'] == '1')) { ?>
-                        {
-                            title:'',
-                            start: '<?= $utcDateTime->format('Y-m-d'); ?>',
-                            color: 'red'
-                        },
-                    <?php } else { ?>
-                        {
-                            title:'',
-                            start: '<?= $utcDateTime->format('Y-m-d'); ?>',
-                            backgroundColor: 'green'
-                        },
-                    <?php }
+            if(!empty($timeZone)){
+                if(!empty($availability)) {
+                    foreach ($availability as $value) {
+                        $fromtime = explode(' to ', $value['utcTime']);
+                        $utcDateTime = new DateTime($value['utcStartDate']." ".$fromtime[0], new DateTimeZone('UTC'));
+                        $localTimeZone = new DateTimeZone($timeZone);
+                        $utcDateTime->setTimezone($localTimeZone);
+                        if(!empty($value['is_booked'] == '1')) { ?>
+                            {
+                                title:'',
+                                start: '<?= $utcDateTime->format('Y-m-d'); ?>',
+                                color: 'red'
+                            },
+                        <?php } else { ?>
+                            {
+                                title:'',
+                                start: '<?= $utcDateTime->format('Y-m-d'); ?>',
+                                backgroundColor: 'green'
+                            },
+                        <?php }
+                    }
                 }
             }
         } ?>

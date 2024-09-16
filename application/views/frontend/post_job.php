@@ -58,13 +58,13 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                     <div class="col-lg-12">
                                         <span class="pf-title">Description</span>
                                         <div class="pf-field">
-                                            <textarea name="description" id="description" placeholder="Enter Description"><?= @$description; ?></textarea>
+                                            <textarea name="description" id="description" placeholder="Enter Description" required><?= @$description; ?></textarea>
                                         </div>
                                     </div>
                                     <div class="col-lg-12">
                                         <span class="pf-title">Required Skill Set <span style="color:red;">*</span></span>
                                         <div class="pf-field custom-select">
-                                            <select class="form-control key_skills" multiple="multiple" name="key_skills[]" id="key_skills" style="width: 100%;">
+                                            <select class="form-control key_skills" multiple="multiple" name="key_skills[]" id="key_skills" style="width: 100%;" required>
                                             <!-- <?php foreach($getkey_skills as $val) {?>
                                                 <option value="<?php echo $val->specialist_name; ?>"><?php echo $val->specialist_name;?></option>
                                             <?php } ?> -->
@@ -86,80 +86,39 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
-                                        <span class="pf-title">Approximate Duration</span>
+                                    <div class="col-lg-3">
+                                        <span class="pf-title">Employment Duration</span>
                                         <div class="pf-field">
-                                            <!-- <input type="text" placeholder="Enter Duration" name="duration" class="form-control " value="<?= @$duration; ?>"/> -->
                                             <select data-placeholder="Please Select Category" class="form-control" name="duration">
-                                                <option value="">Select Category</option>
-                                                <option value="Less than a Week" <?php if(@$duration == 'Less than a Week') {echo "selected"; }?>>Less than a Week</option>
-                                                <option value="1-2 Weeks" <?php if(@$duration == '1-2 Weeks') {echo "selected"; }?>>1-2 Weeks</option>
-                                                <option value="2-4 Weeks" <?php if(@$duration == '2-4 Weeks') {echo "selected"; }?>>2-4 Weeks</option>
-                                                <option value="1-2 Months" <?php if(@$duration == '1-2 Months') {echo "selected"; }?>>1-2 Months</option>
-                                                <option value="More than 2 Months" <?php if(@$duration == 'More than 2 Months') {echo "selected"; }?>>More than 2 Months</option>
+                                                <option value="">Select Option</option>
+                                                <option value="1" <?php if(@$duration == 1) {echo 'selected';}?>>Permanent</option>
+                                                <option value="2" <?php if(@$duration == 2) {echo 'selected';}?>>Contract</option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-3">
                                         <span class="pf-title">Hourly Remuneration ($)</span>
-                                        <div style="width: 75px;">
+                                        <div style="width: 60px;">
                                         <?php if($countryName == 'Nigeria') { ?>
-                                            <input type="text" class="form-control f1" name="currency" id="currency" value="NGN (₦)" readonly style=" padding: 15px; ">
+                                            <input type="text" class="form-control f1" name="currency" id="currency" value="NGN (₦)" readonly style=" padding: 9px; ">
                                         <?php } else { ?>
-                                            <input type="text" class="form-control f1" name="currency" id="currency" value="USD ($)" readonly style=" padding: 15px; ">
+                                            <input type="text" class="form-control f1" name="currency" id="currency" value="USD ($)" readonly style=" padding: 9px; ">
                                         <?php } ?>
                                         </div>
-                                        <div class="pf-field" style=" float: left; width: 85%; margin-left: 10px; ">
+                                        <div class="pf-field" style=" float: left; width: 73%; margin-left: 10px; ">
                                             <input type="text" placeholder="Enter Charges" name="charges" class="form-control " value="<?= @$charges; ?>"/>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-3">
                                         <span class="pf-title">Industry <span style="color:red;">*</span></span>
                                         <div class="pf-field">
                                             <select data-placeholder="Please Select Category" class="form-control" name="category_id" onchange="get_subcategory(this.value)" required>
-                                                <option value="">Select Category</option>
+                                                <option value="">Select Option</option>
                                                 <?php
                                                 $getcategory = $this->Crud_model->GetData('category', 'id, category_name', "");
                                                 foreach($getcategory as $key) {?>
                                                     <option value="<?= $key->id; ?>" <?php if($key->id == $category) {echo "selected"; }?>><?php echo $key->category_name;?></option>
                                                 <?php } ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <span class="pf-title">Sub Categories </span>
-                                        <div class="pf-field">
-                                            <select data-placeholder="Please Select " class="form-control" name="subcategory_id" value="" id="subcategory_id">
-                                                <?php if(empty($id)) { ?>
-                                                <option>Select Subcategory</option>
-                                                <?php } else { ?>
-                                                <option>Select Subcategory</option>
-                                                    <?php
-                                                    $getsubcategory = $this->Crud_model->GetData('sub_category', 'id, sub_category_name', "");
-                                                    foreach($getsubcategory as $key) {?>
-                                                        <option value="<?= $key->id; ?>" <?php if($key->id == $subcategory) {echo "selected"; }?>><?php echo $key->sub_category_name;?></option>
-                                                    <?php } ?>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <span class="pf-title">Remote Only <span style="color:red;">*</span></span>
-                                        <div class="pf-field">
-                                            <select data-placeholder="Please Select an Option" class="form-control" name="remote" required>
-                                                <option value="">Select Option</option>
-                                                <option value="2" <?php if(@$remote == 2) {echo 'selected';}?>>a&#41; No</option>
-                                                <option value="1" <?php if(@$remote == 1) {echo 'selected';}?>>b&#41; Yes</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-3">
-                                        <span class="pf-title">Job Type <span style="color:red;">*</span></span>
-                                        <div class="pf-field">
-                                            <select data-placeholder="Please Select Job Type" class="form-control" name="job_type" required>
-                                                <option value="">Select Option</option>
-                                                <option value="1" <?php if(@$job_type == 1) {echo 'selected';}?>>Full-time</option>
-                                                <option value="2" <?php if(@$job_type == 2) {echo 'selected';}?>>Part-time</option>
                                             </select>
                                         </div>
                                     </div>
@@ -180,7 +139,7 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                         <span class="pf-title">Education <span style="color:red;">*</span></span>
                                         <div class="pf-field">
                                             <select class="form-control" name="education" required>
-                                                <option value="">Select Degree</option>
+                                                <option value="">Select Option</option>
                                                 <option value="1" <?php if(@$education == 1) {echo 'selected';}?>>Professional Certificate</option>
                                                 <option value="2" <?php if(@$education == 2) {echo 'selected';}?>>Undergraduate Degrees</option>
                                                 <option value="3" <?php if(@$education == 3) {echo 'selected';}?>>Transfer Degree</option>
@@ -192,20 +151,27 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-6">
                                         <span class="pf-title">Application Deadline Date <span style="color:red;">*</span></span>
                                         <div class="pf-field">
                                             <input type="date" placeholder="Enter Complete Address" name="appli_deadeline" class="form-control datepicker" value="<?= @$appli_deadeline; ?>" required/>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-lg-12">
-                                        <span class="pf-title">Complete Address</span>
+                                    <div class="col-lg-3">
+                                        <span class="pf-title">Job Type <span style="color:red;">*</span></span>
                                         <div class="pf-field">
-                                            <textarea id="complete_address"  name="complete_address" placeholder="Enter Address"></textarea>
+                                            <select class="form-control" name="remote" id="remote" required>
+                                                <option value="">Select Option</option>
+                                                <!-- <option value="2" <?php if(@$remote == 2) {echo 'selected';}?>>a&#41; No</option>
+                                                <option value="1" <?php if(@$remote == 1) {echo 'selected';}?>>b&#41; Yes</option> -->
+                                                <option value="3" <?php if(@$remote == 3) {echo 'selected';}?>>Remote Only</option>
+                                                <option value="2" <?php if(@$remote == 2) {echo 'selected';}?>>Hybrid</option>
+                                                <option value="1" <?php if(@$remote == 1) {echo 'selected';}?>>On Site</option>
+                                            </select>
                                         </div>
-                                    </div> -->
+                                    </div>
                                 </div>
-                                <div class="row">
+                                <div class="row remote_only">
                                     <div class="col-lg-4">
                                         <span class="pf-title">Country <span style="color:red;">*</span></span>
                                         <div class="pf-field">
@@ -249,15 +215,16 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                         </div>
                                     </div>
                                 </div>
-                                    <div class="contact-edit">
-                                        <div class="row">
+                                <div class="contact-edit">
+                                    <div class="row">
+                                        <div class="col-lg-12" style="display: flex; padding: 0px">
                                             <div class="col-lg-6">
-                                                <span class="pf-title">Find On Map <span style="color:red;">*</span></span>
+                                                <span class="pf-title">Find On Map </span>
                                                 <div class="pf-field">
-                                                    <input type="text" placeholder="Collins Street West, Victoria 8007, Australia." name="location" value="<?= @$location; ?>" id="location"  required autocomplete="off"/>
+                                                    <input type="text" placeholder="Collins Street West, Victoria 8007, Australia." name="location" value="<?= @$location; ?>" id="location" autocomplete="off"/>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-3">
+                                            <!-- <div class="col-lg-3">
                                                 <span class="pf-title">Latitude</span>
                                                 <div class="pf-field">
                                                     <input type="text" id="search_lat" name="latitude"  placeholder="41.1589654" value="<?= @$latitude; ?>"/>
@@ -268,21 +235,21 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                                 <div class="pf-field">
                                                     <input type="text" id="search_lon" placeholder="21.1589654" name="longitude" value="<?= @$longitude; ?>"/>
                                                 </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <button type="button" class="srch-lctn" onclick="return show_location();">Search Location</button>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <span class="pf-title">Maps</span>
-                                                <div class="pf-map" id="map">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <button type="submit">Submit</button>
-                                                <input type="hidden" name="id" value="<?php echo @$id?>">
-                                            </div>
+                                            </div> -->
                                         </div>
+                                        <!-- <div class="col-lg-12">
+                                            <button type="button" class="srch-lctn" onclick="return show_location();">Search Location</button>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <span class="pf-title">Maps</span>
+                                            <div class="pf-map" id="map">
+                                            </div>
+                                        </div> -->
                                     </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <button type="submit" id="submit_form">Submit</button>
+                                    <input type="hidden" name="id" value="<?php echo @$id?>">
                                 </div>
                             </form>
                         </div>
@@ -292,8 +259,10 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
         </div>
     </div>
 </section>
-
-
+<style>
+    .contact-edit {margin-bottom: 10px;}
+    #submit_form {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; border: 0; color: #fff; border-radius: 30px;}
+</style>
 <!-- <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/taginput.css')?>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" integrity="sha512-xmGTNt20S0t62wHLmQec2DauG9T+owP9e6VU8GigI0anN7OXLip9i7IwEhelasml2osdxX71XcYm6BQunTQeQg==" crossorigin="anonymous" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js" integrity="sha512-VvWznBcyBJK71YKEKDMpZ0pCVxjNuKwApp4zLF3ul+CiflQi6aIJR+aZCP/qWsoFBA28avL5T5HA+RE+zrGQYg==" crossorigin="anonymous"></script> -->
@@ -381,5 +350,30 @@ $(document).ready(function() {
             }
         });
     }
+
+    $('#remote').on('change', function() {
+        if($('#remote').val() != '3') {
+            $('.remote_only').css('display','flex');
+            $('.contact-edit').css('display','block');
+            $('#country-dropdown').attr('required',true);
+            $('#state-dropdown').attr('required',true);
+            $('#city-dropdown').attr('required',true);
+        } else {
+            $('.remote_only').css('display','none');
+            $('.contact-edit').css('display','none');
+            $('#country-dropdown').attr('required',false);
+            $('#state-dropdown').attr('required',false);
+            $('#city-dropdown').attr('required',false);
+        }
+    })
+
+    function updateInputBox() {
+        var value1 = $('#country-dropdown').val();
+        var value2 = $('#state-dropdown').val();
+        var value3 = $('#city-dropdown').val();
+        var combinedValue = [value1, value2, value3].filter(Boolean).join(', ');
+        $('#location').val(combinedValue);
+    }
+    $('#country-dropdown, #state-dropdown, #city-dropdown').on('change', updateInputBox);
 });
 </script>

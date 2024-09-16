@@ -477,12 +477,16 @@ if($data_request=='user'){
                                                 <div id="vld_timeZone" style="color:red; margin-top: 10px;">Please select time zone.</div>
                                             </div>
                                             <?php } ?>
-
+                                            <?php if(@$userinfo->userType == '2') {
+                                                $text = "Please let us know about you";
+                                            } else {
+                                                $text = "Please let us know what differentiates you as a candidate";
+                                            }?>
                                             <div class="col-lg-12">
                                                 <label for="short_bio">
-                                                    <h4>Please let us know what differentiates you as a candidate <span style="color:red;">*</span></h4>
+                                                    <h4><?= $text; ?> <span style="color:red;">*</span></h4>
                                                 </label>
-                                                <textarea class="form-control" name="short_bio" id="short_bio" placeholder="Please let us know what differentiates you as a candidate" maxlength="500"><?= @$userinfo->short_bio ?></textarea>
+                                                <textarea class="form-control" name="short_bio" id="short_bio" placeholder="<?= $text; ?>" maxlength="500"><?= @$userinfo->short_bio ?></textarea>
                                                 <div id="the-count">
                                                     <span id="current">0</span>
                                                     <span id="maximum">/ 500</span>

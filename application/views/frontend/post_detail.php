@@ -88,56 +88,16 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                     </div>
                                     <div class="Bid-Data">
                                         <?php if (!empty($post_data->category_id)) { ?>
-                                        <li><span>Categories </span>
+                                        <li><span>Industry </span>
                                             <?php
                                             $cname = $this->db->query("SELECT * FROM category WHERE id = '" . $post_data->category_id . "'")->result_array();
                                             echo $cname[0]['category_name'];
                                             ?>
                                         </li>
                                         <?php } ?>
-                                        <?php if (!empty($post_data->subcategory_id)) { ?>
-                                        <li><span>Sub Categories </span>
-                                            <?php
-                                            $scname = $this->db->query("SELECT * FROM sub_category WHERE id = '" . $post_data->subcategory_id . "'")->result_array();
-                                            echo $scname[0]['sub_category_name'];
-                                            ?>
-                                        </li>
-                                        <?php } ?>
-                                    </div>
-                                    <div class="Bid-Data">
-                                        <?php if (!empty($post_data->charges)) { ?>
-                                        <li><span>Charges </span><?php echo $post_data->charges." ".$post_data->currency ?></li>
-                                        <?php } ?>
-                                        <?php if (!empty($post_data->duration)) { ?>
-                                        <li><span>Duration </span><?php echo $post_data->duration; ?></li>
-                                        <?php } ?>
-                                    </div>
-                                    <div class="Bid-Data">
-                                        <?php if (!empty($post_data->remote)) { ?>
-                                        <li><span>Remote Job </span>
-                                            <?php 
-                                            if($post_data->charges == '1') {
-                                                echo "Yes";
-                                            } else {
-                                                echo "No";
-                                            } ?>
-                                        </li>
-                                        <?php } ?>
-                                        <?php if (!empty($post_data->job_type)) { ?>
-                                        <li><span>Job Type </span>
-                                            <?php 
-                                            if($post_data->job_type == '1') {
-                                                echo "Full-time";
-                                            } else {
-                                                echo "Part-time";
-                                            } ?>
-                                        </li>
-                                        <?php } ?>
-                                    </div>
-                                    <div class="Bid-Data">
                                         <?php if (!empty($post_data->experience_level)) { ?>
                                         <li><span>Experience Level </span>
-                                            <?php 
+                                            <?php
                                             if($post_data->experience_level == '1') {
                                                 echo "0 to 02 Years";
                                             } else if($post_data->experience_level == '2') {
@@ -153,9 +113,11 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                             } ?>
                                         </li>
                                         <?php } ?>
+                                    </div>
+                                    <div class="Bid-Data">
                                         <?php if (!empty($post_data->education)) { ?>
                                         <li><span>Education Type </span>
-                                            <?php 
+                                            <?php
                                             if($post_data->education == '1') {
                                                 echo "Professional Certificate";
                                             } else if($post_data->education == '2') {
@@ -177,6 +139,46 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                             } ?>
                                         </li>
                                         <?php } ?>
+                                        <?php if (!empty($post_data->duration)) { ?>
+                                        <li>
+                                            <span>Employment Duration </span>
+                                            <?php
+                                            if($post_data->duration == '1') {
+                                                echo "Permanent";
+                                            } else {
+                                                echo "Contract";
+                                            } ?>
+                                        </li>
+                                        <?php } ?>
+                                    </div>
+                                    <div class="Bid-Data">
+                                        <?php if (!empty($post_data->remote)) { ?>
+                                        <li><span>Job Type </span>
+                                            <?php
+                                            if($post_data->remote == '3') {
+                                                echo "Remote Only";
+                                            } else if($post_data->remote == '2') {
+                                                echo "Hybrid";
+                                            } else {
+                                                echo "On Site";
+                                            } ?>
+                                        </li>
+                                        <?php } ?>
+                                        <?php if (!empty($post_data->job_type)) { ?>
+                                        <li><span>Job Type </span>
+                                            <?php
+                                            if($post_data->job_type == '1') {
+                                                echo "Full-time";
+                                            } else {
+                                                echo "Part-time";
+                                            } ?>
+                                        </li>
+                                        <?php } ?>
+                                        <?php if (!empty($post_data->charges)) { ?>
+                                        <li><span>Charges </span><?php echo $post_data->charges." ".$post_data->currency ?></li>
+                                        <?php } ?>
+                                    </div>
+                                    <div class="Bid-Data">
                                     </div>
                                     <?php if (!empty($post_data->country)) { ?>
                                     <li><span>Complete Address </span><?php echo $post_data->city . ', ' . $post_data->state . ', ' . $post_data->country; ?></li>
@@ -224,7 +226,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                 </ul>
                             </div>
                         </div>
-                        <?php if (@$_SESSION['afrebay']['userType'] == '1' || empty(@$_SESSION['afrebay']['userType'])) { 
+                        <?php if (@$_SESSION['afrebay']['userType'] == '1' || empty(@$_SESSION['afrebay']['userType'])) {
                         $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                         if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio']) || empty($profile_check[0]['rateperhour']) || empty($profile_check[0]['resume'])) { ?>
                         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12" style="position: relative;">

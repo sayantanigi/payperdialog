@@ -231,7 +231,7 @@ class Users_model extends My_Model {
         if(isset($title) || isset($search_location) || isset($specialist) || isset($userType) || isset($experience)) {
             $query = "SELECT * FROM users WHERE users.userType = $userType";
             if(isset($title) && !empty($title)) {
-                $query .= " AND users.companyname like '%".$title."%'";
+                $query .= " AND (users.companyname like '%".$title."%' OR users.short_bio like '%".$title."%' OR users.skills like '%".$title."%' OR users.address like '%".$title."%')";
             }
 
             if(isset($search_location) && !empty($search_location)) {
@@ -239,7 +239,22 @@ class Users_model extends My_Model {
             }
 
             if(isset($specialist) && !empty($specialist)) {
-                $query .= " AND instr(concat(',', skills, ','), ',$specialist,')";
+                $query .= " AND ";
+                $specialistdata = explode(',', @$specialist);
+                $length = count($specialistdata);
+                if($length > 1 ) {
+                    $cond = "(";
+                    for($i=0; $i < $length; $i++){
+                        $cond .= " users.skills like '%".$specialistdata[$i]."%' ";
+                        if ($i < $length - 1) {
+                            $cond .= ' OR ';
+                        }
+                    }
+                    $cond .= ")";
+                } else {
+                    $cond = " (users.skills like '%".$specialist."%') ";
+                }
+                $query .= $cond;
             }
 
             if(isset($experience) && !empty($experience)) {
@@ -298,6 +313,7 @@ class Users_model extends My_Model {
             $query = $this->make_workers_query($title, $search_location, $specialist, $userType, $experience);
             $query .= ' AND users.status = 1 and users.email_verified = 1 ORDER BY userId DESC';
             $query .= ' LIMIT '.$start.', ' . $limit;
+            //echo $query;
             $data = $this->db->query($query);
         } else {
             $query = "SELECT * FROM users WHERE status = '1' AND email_verified = '1' ORDER BY userId DESC";

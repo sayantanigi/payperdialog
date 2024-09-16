@@ -200,9 +200,9 @@ $(function () {
                                     if(empty($get_sub_data)) {
                                         echo '<a href="'.base_url('subscription').'" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please activate a subscription package and complete your profile to proceed with the post job activities.</span></a>';
                                     } else if(!empty($get_sub_data)) {
-                                        $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                        if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) {
-                                            echo '<a href="'.base_url('subscription').'" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please activate a subscription package and complete your profile to proceed with the post job activities.</span></a>';
+                                        $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio`, `timeZone` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                        if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize']) || empty($profile_check[0]['short_bio']) || empty($profile_check[0]['timeZone'])) {
+                                            echo '<a href="'.base_url('subscription').'" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please complete your profile to proceed with the post job activities.</span></a>';
                                         } else {
                                             echo '<a href="'.base_url('postjob').'" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>';
                                         }
@@ -210,9 +210,9 @@ $(function () {
                                         echo '<a href="'.base_url('login').'" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>';
                                     }
                                 } else {
-                                    $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                    if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) {
-                                        echo '<a href="'.base_url('subscription').'" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please complete your profile to proceed with the post job activities.</span></a>';
+                                    $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio`, `timeZone` FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                    if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize']) || empty($profile_check[0]['short_bio']) || empty($profile_check[0]['timeZone'])) {
+                                        echo '<a href="'.base_url('profile').'" title="" class="post-job-btn" id="completeSub"><i class="la la-plus"></i>Post Jobs<span id="completeSubtext">Please complete your profile to proceed with the post job activities.</span></a>';
                                     } else {
                                         $checkPostdata = $this->db->query("SELECT COUNT(id) as count FROM postjob WHERE user_id = '".$_SESSION['afrebay']['userId']."'")->row();
                                         if($checkPostdata->count == '0') {
