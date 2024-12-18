@@ -1,7 +1,6 @@
 <section class="overlape">
     <div class="block no-padding">
         <div data-velocity="-.1" style="background: url(<?php echo base_url()?>assets/images/resource/mslider1.jpg) repeat scroll 50% 422.28px transparent;" class="parallax scrolly-invisible no-parallax"></div>
-        <!-- PARALLAX BACKGROUND IMAGE -->
         <div class="container fluid">
             <div class="row">
                 <div class="col-lg-12">
@@ -16,12 +15,6 @@
         <div class="row align-items-center">
             <div class="col-md-12 col-12">
                 <h2 class="breadcrumb-title">Add Work Experience</h2>
-                <!-- <nav aria-label="breadcrumb" class="page-breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Add Education</li>
-                    </ol>
-                </nav> -->
             </div>
         </div>
     </div>
@@ -52,22 +45,20 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <label for="first_name"><h4>Company Name <span style="color: red">*</span></h4></label>
-                                                <input type="text" class="form-control" name="company_name" placeholder="Enter Company Name"  value="<?= @$company_name; ?>" required list="company_name" autocomplete="off"/>
+                                                <input type="text" class="form-control" name="company_name" placeholder="Enter Company Name" value="<?= @$company_name; ?>" required list="company_name" autocomplete="off"/>
                                             </div>
-                                            <!-- <div class="col-lg-6">
-                                                <label for="first_name"><h4>Duration<span style="color: red">*</span></h4></label>
-                                                <input type="text" class="form-control" name="duration" placeholder="Enter Duration"  value="<?= $duration; ?>" required list="duration" autocomplete="off"/>
-                                            </div> -->
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-12">
+                                                <input type="checkbox" name="current_job" id="current_job" value="<?= @$current_job; ?>" <?php if(@$current_job == '1') {echo "checked";} else {echo "";}?> style="opacity: 1; position: relative; z-index: 111111;"/>
+                                                <label for="first_name"><h4>This is your current job</h4></label>
+                                            </div>
+                                            <div class="col-lg-4">
                                                 <label for="first_name"><h4>From Date <span style="color: red">*</span></h4></label>
-                                                <!-- <input type="date" class="form-control" name="from_date" id="from_date" placeholder="From Date"  value="<?= $from_date; ?>" required onkeydown="return false" /> -->
                                                 <input type="date" class="form-control" name="from_date" id="from_date" placeholder="From Date"  value="<?= $from_date; ?>"/>
                                                 <div id="errFromdate">Please enter a valid date</div>
                                                 <div id="errGFromdate">'From Date' cannot be greater than 'To Date'</div>
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-4" id="currentJob_check" style="display: <?php if(@$current_job == '1') {echo "none";} else {echo "block";}?>">
                                                 <label for="first_name"><h4>To Date <span style="color: red">*</span></h4></label>
-                                                <!-- <input type="date" class="form-control" name="to_date" id="to_date" placeholder="To Date" value="<?= $to_date; ?>" required onkeydown="return false" /> -->
                                                 <input type="date" class="form-control" name="to_date" id="to_date" placeholder="To Date" value="<?= $to_date; ?>"/>
                                                 <div id="errTodate">Please enter a valid date</div>
                                             </div>
@@ -143,6 +134,7 @@
 #errFromdate {display: none; color: red;}
 #errTodate {display: none; color: red;}
 #errGFromdate {display: none; color: red;}
+input[type="checkbox"]+label::after {display: none;}
 </style>
 <script>
 //CKEDITOR.replace('description');
@@ -182,42 +174,53 @@ $('#description').keyup(function() {
 
 $(document).ready(function(){
     $('#work_submit').click(function(){
-        if($('#from_date').val() > $('#to_date').val()) {
-            $('#errGFromdate').show();
-            setTimeout(function(){
-                $('#errGFromdate').hide();
-            }, 2000);
-            return false;
-        } else {
-            var fromdate = $('#from_date').val().split("-");
-            fromday = fromdate[2];
-            frommonth = fromdate[1];
-            fromyear = fromdate[0];
-            testfromDate = (frommonth+'/'+fromday+'/'+fromyear);
-            validateFromDate(testfromDate);
-            if(validateFromDate(testfromDate) == false) {
-                $('#errFromdate').show();
+        if($("#current_job").val() == '0') {
+            if($('#from_date').val() > $('#to_date').val()) {
+                $('#errGFromdate').show();
                 setTimeout(function(){
-                    $('#errFromdate').hide();
+                    $('#errGFromdate').hide();
                 }, 2000);
                 return false;
-            }
+            } else {
+                var fromdate = $('#from_date').val().split("-");
+                fromday = fromdate[2];
+                frommonth = fromdate[1];
+                fromyear = fromdate[0];
+                testfromDate = (frommonth+'/'+fromday+'/'+fromyear);
+                validateFromDate(testfromDate);
+                if(validateFromDate(testfromDate) == false) {
+                    $('#errFromdate').show();
+                    setTimeout(function(){
+                        $('#errFromdate').hide();
+                    }, 2000);
+                    return false;
+                }
 
-            var todate = $('#to_date').val().split("-");
-            today = todate[2];
-            tomonth = todate[1];
-            toyear = todate[0];
-            testtoDate = (tomonth1+'/'+today1+'/'+toyear1);
-            validateToDate(testtoDate);
-            if(validateToDate(testtoDate) == false) {
-                $('#errTodate').show();
-                setTimeout(function(){
-                    $('#errTodate').hide();
-                }, 2000);
-                return false;
+                var todate = $('#to_date').val().split("-");
+                today = todate[2];
+                tomonth = todate[1];
+                toyear = todate[0];
+                testtoDate = (tomonth1+'/'+today1+'/'+toyear1);
+                validateToDate(testtoDate);
+                if(validateToDate(testtoDate) == false) {
+                    $('#errTodate').show();
+                    setTimeout(function(){
+                        $('#errTodate').hide();
+                    }, 2000);
+                    return false;
+                }
             }
         }
     })
+})
+$("#current_job").on('click', function() {
+    if($("#current_job").prop('checked') == true) {
+        $("#current_job").val('1');
+        $("#currentJob_check").hide();
+    } else {
+        $("#current_job").val('0');
+        $("#currentJob_check").show();
+    }
 })
 
 function validateFromDate(testfromDate) {

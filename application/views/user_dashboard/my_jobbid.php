@@ -17,7 +17,7 @@
                 <?php if ($_SESSION['afrebay']['userType'] == '1') { ?>
                     <h2 class="breadcrumb-title">My Jobs</h2>
                 <?php } else { ?>
-                    <h2 class="breadcrumb-title">List of Bids</h2>
+                    <h2 class="breadcrumb-title">Job Applicants</h2>
                 <?php } ?>
             </div>
         </div>
@@ -49,29 +49,12 @@
                                                         <?= $key->post_title; ?>
                                                     </td>
                                                     <td class="btn-option" style="width: 205px;">
-                                                        <!-- <?php if ($_SESSION['afrebay']['userType'] == '2') { ?>
-                                                        <?php if (@$key->bidding_status == 'Pending') { ?>
-                                                        <a href="#" onclick="change_biddingstatus('<?= $key->id ?>');"><span class="badge badge-warning" ><?= @$key->bidding_status; ?></span></a>
-                                                        <?php } else if (@$key->bidding_status == 'Accept') { ?>
-                                                        <span class="badge badge-success"><?= @$key->bidding_status; ?></span>
-                                                        <?php } else if (@$key->bidding_status == 'Reject') { ?>
-                                                        <span class="badge badge-danger"><?= @$key->bidding_status; ?></span>
-                                                        <?php } ?>
-                                                        <?php } else {
-                                                            echo @$key->bidding_status;
-                                                        } ?> -->
                                                         <?php
                                                         if ($_SESSION['afrebay']['userType'] == '2') {
-                                                            //if (@$key->bidding_status == 'Under Review' || @$key->bidding_status == 'Short Listed' || @$key->bidding_status == 'Pending' || empty (@$key->bidding_status)) {
                                                             if (@$key->bidding_status == 'Screened In' || @$key->bidding_status == 'Pending' || empty (@$key->bidding_status)) { ?>
                                                                 <select class="jobbid_select form-control" name="change_biddingstatus" id="change_biddingstatus_<?php echo @$key->id ?>" style="width: 80% !important;">
                                                                     <option value="">Select Option</option>
-                                                                    <!-- <option value="Under Review" <?php if (@$key->bidding_status == 'Under Review') { echo "Selected"; } ?>>Under Review</option>
-                                                                    <option value="Short Listed" <?php if (@$key->bidding_status == 'Short Listed') { echo "Selected"; } ?>>Short Listed</option>
-                                                                    <option value="Rejected" <?php if (@$key->bidding_status == 'Rejected') { echo "Selected"; } ?>>Rejected</option>
-                                                                    <option value="Selected" <?php if (@$key->bidding_status == 'Selected') { echo "Selected"; } ?>>Selected</option> -->
                                                                     <option value="Screened Out" <?php if (@$key->bidding_status == 'Screened Out') { echo "Selected"; } ?>>Screened Out</option>
-                                                                    <option value="Screened In" <?php if (@$key->bidding_status == 'Screened In') { echo "Selected"; } ?>>Screened In</option>
                                                                     <option value="Ready for Interview" <?php if (@$key->bidding_status == 'Ready for Interview') { echo "Selected"; } ?>>Ready for Interview</option>
                                                                 </select>
                                                                 <input type="hidden" name="jodBidid" id="jodBidid_<?php echo @$key->id ?>" value="<?php echo @$key->id ?>" />
@@ -90,7 +73,7 @@
                                                                 echo  "<a href='". @$key->meeting_link."'>Meeting Link</a>";
                                                             }
                                                         } ?>
-                                                        <a href="javascript:void(0)" id="view_<?php echo $key->id ?>" data-toggle="tooltip" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                        <!-- <a href="javascript:void(0)" id="view_<?php echo $key->id ?>" data-toggle="tooltip" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                         <div class="modal fade" id="exampleModal_<?php echo $key->id ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                             <div class="modal-dialog list-job-modal">
                                                                 <div class="modal-content">
@@ -103,20 +86,14 @@
                                                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 list-job-modal-col">
                                                                                 <p>Bid Amount : <span>$ <?php echo $key->bid_amount ?> </span></p>
                                                                             </div>
-                                                                            <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 list-job-modal-col">
-                                                                                <p>Email : <span><?php echo $key->email ?></span></p>
-                                                                            </div> -->
                                                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 list-job-modal-col">
                                                                                 <p>Duration : <span><?php echo $key->duration ?></span></p>
                                                                             </div>
-                                                                            <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 list-job-modal-col">
-                                                                                <p>Phone Number : <span><?php echo $key->mobile ?></span></p>
-                                                                            </div> -->
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -133,12 +110,12 @@
                                                         </a>
                                                     </td>
                                                 </tr>
-                                                <tr>
+                                                <!-- <tr>
                                                     <td colspan="2" class="bid-amount">
                                                         <label>Bid Amount:</label>
                                                         <?= "USD" . " " . $key->bid_amount; ?>
                                                     </td>
-                                                </tr>
+                                                </tr> -->
                                                 <tr>
                                                     <td colspan="2" class="year">
                                                         <label>Date:</label>
@@ -243,7 +220,7 @@
 </div>
 </section>
 <div class="modal fade edit-form" id="aggrementmodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog" role="document" style="position: relative;top: -210px;right: 255px;">
+    <div class="modal-dialog modal-dialog" role="document" style="position: relative;top: 0;right: 255px;">
         <div class="modal-content" style="width: 1200px;max-height: 650px;overflow: auto;">
             <div class="modal-header border-bottom-0">
                 <h5 class="modal-title" id="modal-title">Agreement</h5>

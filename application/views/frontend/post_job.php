@@ -177,11 +177,11 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                         <div class="pf-field">
                                             <select class="form-control" name="country-dropdown" id="country-dropdown" style="width: 100%;">
                                                 <option value="">Select Country</option>
-                                            <?php
-                                            $get_country = $this->Crud_model->GetData('countries', 'id, name', "");
-                                            foreach($get_country as $val) {?>
-                                                <option value="<?php echo $val->name; ?>" <?php if($val->name == @$countries) {echo "selected"; }?>><?php echo $val->name;?></option>
-                                            <?php } ?>
+                                                <?php
+                                                $get_country = $this->Crud_model->GetData('countries', 'id, name', "");
+                                                foreach($get_country as $val) {?>
+                                                    <option value="<?php echo $val->name; ?>" <?php if($val->name == @$countries) {echo "selected"; }?>><?php echo $val->name;?></option>
+                                                <?php } ?>
                                             </select>
                                             <input type="hidden" id="select_country_dropdown" value="<?php echo @$countries; ?>">
                                         </div>

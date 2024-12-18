@@ -78,7 +78,7 @@
                                                     foreach ($get_jobbid as $user) {
                                                         //if ($user->postjob_id == $user->post_id && $user->user_id == $_SESSION['afrebay']['userId'] && $user->bidding_status == 'Accept') {
                                                         //if ($user->postjob_id == $user->post_id && $user->user_id == $_SESSION['afrebay']['userId'] && ($user->bidding_status == 'Selected' || $user->bidding_status == 'Short Listed')) {
-                                                        if ($user->postjob_id == $user->post_id && $user->user_id == $_SESSION['afrebay']['userId'] && $user->bidding_status == 'Screened In') {
+                                                        if ($user->postjob_id == $user->post_id && $user->user_id == $_SESSION['afrebay']['userId'] && $user->bidding_status == 'Ready for Interview') {
                                                             $get_user = $this->Crud_model->get_single('users', "userId='" . $user->userid . "'");
                                                             $get_msg = $this->Crud_model->GetData('chat', '', "userto_id='".$user->userid."' and userfrom_id='".$user->user_id."' and postjob_id = '".$user->post_id."'", '', 'id desc', '', '1');
                                                         ?>
@@ -104,7 +104,7 @@
                                                             </div>
                                                         </li>
                                                         <?php } //else if ($user->postjob_id == $user->post_id && $user->userid == $_SESSION['afrebay']['userId'] && ($user->bidding_status == 'Selected' || $user->bidding_status == 'Short Listed')) {
-                                                            else if ($user->postjob_id == $user->post_id && $user->userid == $_SESSION['afrebay']['userId'] && $user->bidding_status == 'Screened In') {
+                                                            else if ($user->postjob_id == $user->post_id && $user->userid == $_SESSION['afrebay']['userId'] && $user->bidding_status == 'Ready for Interview') {
                                                             $get_user = $this->Crud_model->get_single('users', "userId='" . $user->user_id . "'");
                                                             $get_msg1 = $this->Crud_model->GetData('chat', '', "userfrom_id='".$user->user_id."' and userto_id='".$user->userid."' and postjob_id = '".$user->post_id."'", '', 'id desc', '', '1');
                                                         ?>

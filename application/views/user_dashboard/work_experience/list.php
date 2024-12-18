@@ -56,7 +56,14 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td colspan="2" class="year"><?= date('d-m-Y',strtotime($row->from_date)); ?> to <?= date('d-m-Y',strtotime($row->to_date)); ?></td>
+                                        <?php 
+                                        if($row->current_job == '1') { 
+                                            $data = "Present";
+                                        } else {
+                                            $data = date('d-m-Y',strtotime($row->to_date));
+                                        }
+                                        ?>
+                                        <td colspan="2" class="year"><?= date('d-m-Y',strtotime($row->from_date)); ?> to <?= $data; ?></td>
                                     </tr>
                                     <tr>
                                         <td colspan="2" class="desc"><?= $row->description; ?></td>

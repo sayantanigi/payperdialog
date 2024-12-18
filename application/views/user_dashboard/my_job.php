@@ -69,11 +69,11 @@
                                                 <a href="javascript:void(0)" data-toggle="tooltip" title="Delete" onclick="jobDelete(<?php echo $key->id;?>)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <!-- <tr>
                                             <td colspan="2" class="year">
-                                                <label>Duration:</label> <?=$key->duration." "; ?>
+                                                <label>Job Type:</label> <?=$key->job_type." "; ?>
                                             </td>
-                                        </tr>
+                                        </tr> -->
                                         <tr>
                                             <td colspan="2" class="year">
                                                 <label>Deadline:</label> <?=$key->appli_deadeline; ?>
@@ -104,7 +104,7 @@
                                                 <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; border: 0 !important; "><a href="javascript:void(0)" onclick="completeSub()">Post Jobs</a></button>
                                                 <?php } else { ?>
                                                 <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; border: 0 !important; "><a href="<?= base_url('postjob')?>" title="" target="_blank">Post Jobs</a></button>
-                                                <?php } 
+                                                <?php }
                                             } else { ?>
                                                 <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; border: 0 !important; "><a href="javascript:void(0)" onclick="completeSub()">Post Jobs</a></button>
                                         <?php } } else {
@@ -113,7 +113,7 @@
                                             <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; border: 0 !important; "><a href="javascript:void(0)" onclick="completeSub1()">Post Jobs</a></button>
                                             <?php } else { ?>
                                             <button class="post-job-btn pull-right" type="submit" style=" background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; border: 0 !important; "><a href="<?= base_url('postjob')?>" title="" target="_blank">Post Jobs</a></button>
-                                            <?php } 
+                                            <?php }
                                         } } ?>
                                     </td>
                                 </tr>

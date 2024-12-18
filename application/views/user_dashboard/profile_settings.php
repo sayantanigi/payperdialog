@@ -107,7 +107,7 @@ if($data_request=='user'){
                                                 <label for="email">
                                                     <h4>Email Address <span style="color:red;">*</span></h4>
                                                 </label>
-                                                <input type="text" class="form-control" name="email" id="email" placeholder="xyz@example.com" readonly value="<?php echo $userinfo->email;?>" />
+                                                <input type="text" class="form-control" name="email" id="email" placeholder="xyz@example.com" readonly value="<?php echo $userinfo->email;?>"  onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
                                             </div>
                                             <div class="col-lg-6">
                                                 <label for="mobile">
@@ -123,7 +123,7 @@ if($data_request=='user'){
                                                     <h4>Gender<span style="color:red;">*</span></h4>
                                                 </label>
                                                 <select name="gender" id="gender" class="form-control"  style="height: 32px;" required>
-                                                    <option value="">Gender</option>
+                                                    <option value="">Choose an option</option>
                                                     <option value="Male" <?php if(@$userinfo->gender=='Male'){ echo "selected";}?>>Male</option>
                                                     <option value="Female" <?php if(@$userinfo->gender=='Female'){ echo "selected";}?>>Female</option>
                                                 </select>
@@ -132,18 +132,55 @@ if($data_request=='user'){
                                             <?php } ?>
                                             <div class="col-lg-6 location">
                                                 <label for="address">
-                                                    <h4>Legal Address <span style="color:red;">*</span></h4>
+                                                    <h4>Address</h4>
                                                 </label>
-                                                <input type="text" class="form-control" name="address" id="location" placeholder="Legal Address" value="<?= $userinfo->address ?>" style="height: 43px !important;" autocomplete="off" />
+                                                <input type="text" class="form-control" name="address" id="location" placeholder="Address" value="<?= $userinfo->address ?>" style="height: 43px !important;" autocomplete="off" />
                                                 <div id="vld_location" style="color:red; margin-top: 10px;">Please enter Legal Address.</div>
                                                 <input type="hidden" name="latitude" id="search_lat" value="<?= $userinfo->latitude ?>">
                                                 <input type="hidden" name="longitude" id="search_lon" value="<?= $userinfo->longitude ?> ">
                                             </div>
+                                            <div class="col-lg-4 location" style="margin-bottom: 20px;">
+                                                <label for="address">
+                                                    <h4>Country </h4>
+                                                </label>
+                                                <select class="form-control" name="country-dropdown" id="country-dropdown" style="width: 100%;">
+                                                    <option value="">Select Country</option>
+                                                    <?php
+                                                    $get_country = $this->Crud_model->GetData('countries', 'id, name', "");
+                                                    foreach($get_country as $val) {?>
+                                                        <option value="<?php echo $val->name; ?>" <?php if(@$val->name == @$userinfo->country) {echo "selected"; }?>><?php echo $val->name;?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                <input type="hidden" id="select_country_dropdown" value="<?php echo @$userinfo->country; ?>">
+                                            </div>
+                                            <div class="col-lg-4 location" style="margin-bottom: 20px;">
+                                                <label for="address">
+                                                    <h4>State </h4>
+                                                </label>
+                                                <select class="form-control" name="state-dropdown" id="state-dropdown">
+                                                    <option value="">Select Country</option>
+                                                </select>
+                                                <input type="hidden" id="select_state_dropdown" value="<?php echo @$userinfo->state; ?>">
+                                            </div>
+                                            <div class="col-lg-4 location" style="margin-bottom: 20px;">
+                                                <label for="address">
+                                                    <h4>City </h4>
+                                                </label>
+                                                <select class="form-control" name="city-dropdown" id="city-dropdown">
+                                                    <option value="">Select State</option>
+                                                </select>
+                                                <input type="hidden" id="select_city_dropdown" value="<?php echo @$userinfo->city; ?>">
+                                            </div>
+
+
+
                                             <?php //if(@$_SESSION['afrebay']['userType']=='1') { ?>
                                             <?php if(@$userinfo->userType=='1' || @$userinfo->userType=='3') { ?>
                                             <div class="col-lg-6 key-skill">
-                                                <span class="pf-title1">Skill Set</span>
-                                                <div class="pf-field">
+                                                <label for="key-skill">
+                                                    <h4>Skill Set</h4>
+                                                </label>
+                                                <div class="pf-field" style="margin-top: 0px;">
                                                     <select class="form-control key_skills" multiple="multiple" name="key_skills[]" id="key_skills" style="width: 100%;">
                                                     <?php
                                                     $key_skills = $this->Crud_model->GetData('specialist',"","status = 'Active'");
@@ -162,10 +199,12 @@ if($data_request=='user'){
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 key-skill">
-                                                <span class="pf-title1">Total Experience <span style="color:red;">*</span></span>
-                                                <div class="pf-field">
+                                                <label for="key-skill">
+                                                    <h4>Total Experience <span style="color:red;">*</span></h4>
+                                                </label>
+                                                <div class="pf-field" style="margin-top: 0px;">
                                                     <select data-placeholder="Please Select Experience Level" class="form-control" name="experience" id="experience" required>
-                                                        <option value="">Select Option</option>
+                                                        <option value="">Choose an option</option>
                                                         <option value="1" <?php if(@$userinfo->experience == 1) {echo "selected";}?>>0 to 02 Years</option>
                                                         <option value="2" <?php if(@$userinfo->experience == 2) {echo "selected";}?>>03 to 05 Years</option>
                                                         <option value="3" <?php if(@$userinfo->experience == 3) {echo "selected";}?>>06 to 08 Years</option>
@@ -261,7 +300,7 @@ if($data_request=='user'){
                                                 </label>
                                                 <div class="pf-field">
                                                     <select id="timeZone" name="timeZone" class="custom-select">
-                                                        <option value="">Select Time Zone</option>
+                                                        <option value="">Choose an option</option>
                                                         <option value="America/Adak" <?php if($userinfo->timeZone == 'America/Adak') {echo "selected";}?>>America/Adak</option>
                                                         <option value="America/Anchorage" <?php if($userinfo->timeZone == 'America/Anchorage') {echo "selected";}?>>America/Anchorage</option>
                                                         <option value="America/Anguilla" <?php if($userinfo->timeZone == 'America/Anguilla') {echo "selected";}?>>America/Anguilla</option>
@@ -735,4 +774,77 @@ $("form").submit( function(e) {
         }
     }
 });
+$('#country-dropdown').on('change', function() {
+    var country_name = this.value;
+    $.ajax({
+        url: "<?php echo base_url()?>Welcome/states_by_country",
+        type: "POST",
+        data: {
+            country_name: country_name
+        },
+        cache: false,
+        success: function(result){
+            //console.log(result);
+            $("#state-dropdown").html(result);
+            $('#city-dropdown').html('<option value="">Select State First</option>');
+        }
+    });
+});
+
+$('#state-dropdown').on('change', function() {
+    var state_name = this.value;
+    $.ajax({
+        url: "<?php echo base_url()?>Welcome/cities_by_state",
+        type: "POST",
+        data: {
+            state_name: state_name
+        },
+        cache: false,
+        success: function(result){
+            $("#city-dropdown").html(result);
+        }
+    });
+});
+
+$("#location").on("input",function(event) {
+    var inputValue = this.value;
+    console.log(inputValue);
+    this.value = this.value.replace(/[0-9]/g,"")
+});
+
+$(document).ready(function(){
+    if($('#select_country_dropdown').val() != '') {
+        var country_name = $('#select_country_dropdown').val();
+        $.ajax({
+            url: "<?php echo base_url()?>Welcome/states_by_country",
+            type: "POST",
+            data: {
+                country_name: country_name
+            },
+            cache: false,
+            success: function(result){
+                //console.log(result);
+                $("#state-dropdown").html(result);
+                $("#state-dropdown").val(state_name);
+            }
+        });
+    }
+
+    if($('#select_state_dropdown').val() != '') {
+        var state_name = $('#select_state_dropdown').val();
+        $.ajax({
+            url: "<?php echo base_url()?>Welcome/cities_by_state",
+            type: "POST",
+            data: {
+                state_name: state_name
+            },
+            cache: false,
+            success: function(result){
+                console.log(result);
+                $("#city-dropdown").html(result);
+                $("#city-dropdown").val($('#select_city_dropdown').val());
+            }
+        });
+    }
+})
 </script>

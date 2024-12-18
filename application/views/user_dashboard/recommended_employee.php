@@ -66,14 +66,10 @@
                             <div class="cardak custom-cardak">
                                 <div class="table table-modific" id="jobListByemployer">
                                 <?php
-                                if(!empty($jobListByemployer)){
-                                    foreach ($jobListByemployer as $key) {
+                                $usersforinterview = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.user_id = '".@$_SESSION['afrebay']['userId']."' GROUP BY job_bid.user_id")->result_array();
+                                if(!empty($usersforinterview)){
+                                    foreach ($usersforinterview as $key) {
                                         $getUserDetails = $this->db->query("SELECT * FROM users WHERE userId = '".$key['bidUser']."'")->row();
-                                        // if($key['userType'] == 1){
-                                        //     $name = $key['firstname'].' '.$key['lastname'];
-                                        // } else {
-                                        //     $name = $key['companyname'];
-                                        // }
                                         if(!empty($getUserDetails->profilePic) && file_exists('uploads/users/'.$getUserDetails->profilePic)){
                                             $profile_pic= '<img src="'.base_url('uploads/users/'.$getUserDetails->profilePic).'" alt="" />';
                                         } else {
@@ -92,11 +88,16 @@
                                         <div class="emply-resume-info">
                                             <h3><a href="<?= base_url('worker-detail/'.base64_encode($getUserDetails->userId))?>" title=""><?= $getUserDetails->firstname.' '.$getUserDetails->lastname?></a></h3>
                                             <p><i class="la la-map-marker"></i><?=$getUserDetails->address?></p>
-                                            <div class="Employee-Details">
+                                            <div class="Employee-Details" style="width: 530px;">
                                                 <div class="MoreDetailsTxt_<?= $getUserDetails->id?>"><?= $string?></div>
                                             </div>
                                         </div>
-                                        <div class="view-more-less view-more-less-js"><a href="<?= base_url('worker-detail/'.base64_encode($getUserDetails->userId).'#job-overview')?>" target="_blank">Schedule Interview</a></button></div>
+                                        <div class="view-more-less view-more-less-js">
+                                            <a href="<?= base_url('worker-detail/'.base64_encode($getUserDetails->userId).'#job-overview')?>" target="_blank">Schedule Interview</a>
+                                        </div>
+                                        <div class="view-more-less view-more-less-js" style="top: 75px;">
+                                            <a href="<?= base_url('chat')?>" target="_blank">Chat with user</a>
+                                        </div>
                                     </div>
                                 <?php } } else { ?>
                                 <div>
@@ -140,7 +141,7 @@
 #err-messages{display: none; text-align: center;}
 .emply-resume-thumb {display: inline-block !important;}
 .emply-resume-list {padding: 30px !important; margin: 10px 0 0 0 !important;}
-.view-more-less {position: absolute; right: 28px; background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; color: #fff; padding: 10px 16px 10px 16px; border-radius: 23px; font-size: 15px;}
+.view-more-less {position: absolute; right: 28px; background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; color: #fff; padding: 10px 16px 10px 16px; border-radius: 23px; font-size: 15px; top: 25px;}
 </style>
 <script>
 function jobDelete(id) {

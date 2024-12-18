@@ -155,6 +155,11 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
 $(document).ready(function(){
     $('#user_type').val(1);
 })
+$("#location").on("input",function(event) {
+    var inputValue = this.value;
+    console.log(inputValue);
+    this.value = this.value.replace(/[0-9]/g,"")
+});
 function get_value(id) {
     $('#user_type').val(id);
     if(id == 1){

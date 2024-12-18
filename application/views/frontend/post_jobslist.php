@@ -53,25 +53,10 @@
                                     </select>
                                 </div>
                             </div>
-                            <!-- <div class="widget sub_cat">
-                                <h3 class="sb-title open">Subcategory</h3>
-                                <div class="specialism_widget" >
-                                    <div class="simple-checkbox scrollbar" >
-                                        <div id="subcategory_list"></div>
-                                    </div>
-                                </div>
-                            </div> -->
-                            <div class="widget sub_cat">
-                                <h3 class="sb-title closed">Subindustry</h3>
-                                <div class="specialism_widget">
-                                    <select class="chosen_state" name="subcategory_id" id="subcategory_id">
-                                    </select>
-                                </div>
-                            </div>
                             <div class="widget">
                                 <h3 class="sb-title closed">Country</h3>
                                 <div class="specialism_widget">
-                                    <select class="chosen_country" name="country" id="country" onchange="getState(this.value);" style="color: #888; font-size: 13px;">
+                                    <select class="chosen" name="country" id="country" onchange="getState(this.value);" style="color: #888; font-size: 13px;">
                                         <option value="">Select Country</option>
                                         <?php if(!empty($getcountry)){ foreach($getcountry as $item){?>
                                         <option value="<?= $item->name ?>"><?= ucfirst($item->name)?></option>
@@ -96,36 +81,23 @@
                             <div class="widget date_field">
                                 <h3 class="sb-title closed">Date Posted</h3>
                                 <div class="specialism_widget">
-                                    <!-- <input type="text" class="datepicker" name="date_posted" id="date_posted"> -->
                                     <div id="datepicker"></div>
                                     <input type="hidden" name="date_posted" id="date_posted">
                                 </div>
                             </div>
-                            <div class="widget date_field">
-                                <h3 class="sb-title closed">Remote</h3>
-                                <div class="specialism_widget">
-                                    <select data-placeholder="Please Select Category" class="form-control" name="remote_job" id="remote_job" required>
-                                        <option value="">Select Option</option>
-                                        <option value="1">Yes</option>
-                                        <option value="2">No</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <?php $min_price = $this->db->query("SELECT MIN(charges) as min_price FROM postjob WHERE is_delete = 0")->result_array(); ?>
-                            <?php $max_price = $this->db->query("SELECT MAX(charges) as max_price FROM postjob WHERE is_delete = 0")->result_array(); ?>
                             <div class="widget date_field">
                                 <h3 class="sb-title closed">Salary Estimate</h3>
                                 <div class="specialism_widget">
                                     <div class="filter level-filter level-req">
                                         <div id="rangeSlider" class="range-slider">
                                             <div class="number-group">
-                                                <input class="number-input" type="number" value="<?= $min_price[0]['min_price']?>" min="0" max="<?= $max_price[0]['max_price']?>" />
-                                                <input class="number-input" type="number" value="<?= $max_price[0]['max_price']?>" min="0" max="<?= $max_price[0]['max_price']?>" />
+                                                <input class="number-input" type="number" value="0" min="0" max="1,000,000,000" readonly/>
+                                                <input class="number-input" type="number" value="1000000000" min="0" max="1000000000" readonly/>
                                             </div>
 
                                             <div class="range-group">
-                                                <input class="range-input" value="<?= $min_price[0]['min_price']?>" min="<?= $min_price[0]['min_price']?>" max="<?= $max_price[0]['max_price']?>" step="1" type="range" />
-                                                <input class="range-input" value="<?= $max_price[0]['max_price']?>" min="1" max="<?= $max_price[0]['max_price']?>" step="1" type="range" />
+                                                <input class="range-input" value="0" min="0" max="1000000000" step="1" type="range" />
+                                                <input class="range-input" value="1000000000" min="0" max="1000000000" step="1" type="range" />
                                             </div>
                                             <input type="hidden" name="from_price" id="from_price" value="">
                                             <input type="hidden" name="to_price" id="to_price" value="">
@@ -138,21 +110,8 @@
                                 <div class="specialism_widget">
                                     <select data-placeholder="Please Select Category" class="form-control" name="job_type" id="job_type" required>
                                         <option value="">Select Option</option>
-                                        <option value="1">Full-time</option>
-                                        <option value="2">Part-time</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="widget date_field">
-                                <h3 class="sb-title closed">Posted By</h3>
-                                <div class="specialism_widget">
-                                    <select data-placeholder="Please Select Company" class="form-control" name="posted_by" id="posted_by" required>
-                                        <option value="">Select Company</option>
-                                        <?php
-                                        $getcompany = $this->Crud_model->GetData('users',"","userType = '2' AND status = '1' AND email_verified = '1'");
-                                        foreach($getcompany as $key) {?>
-                                            <option value="<?= $key->id; ?>"><?php echo $key->companyname;?></option>
-                                        <?php } ?>
+                                        <option value="1">Permanent</option>
+                                        <option value="2">Contract</option>
                                     </select>
                                 </div>
                             </div>
@@ -189,12 +148,10 @@
                                 <h3 class="sb-title closed">Last Activity</h3>
                                 <div class="specialism_widget">
                                     <div class="simple-checkbox">
-                                        <p><input type="radio" name="days" id="22" value="one"/><label for="22">Last Hour</label></p>
-                                        <p><input type="radio" name="days" id="23" value="1"/><label for="23">Last 24 hours</label></p>
-                                        <p><input type="radio" name="days" id="24" value="7"/><label for="24">Last 7 days</label></p>
-                                        <p><input type="radio" name="days" id="25" value="14"/><label for="25">Last 14 days</label></p>
-                                        <p><input type="radio" name="days" id="26" value="30"/><label for="26">Last 30 days</label></p>
-                                        <p><input type="radio" name="days" id="27" value="All"/><label for="27">All</label></p>
+                                        <p><input type="radio" name="days" id="22" value="one"/><label for="22">less than a week ago</label></p>
+                                        <p><input type="radio" name="days" id="23" value="1"/><label for="23">less than a month ago</label></p>
+                                        <p><input type="radio" name="days" id="24" value="7"/><label for="24">less than 3 months ago</label></p>
+                                        <p><input type="radio" name="days" id="25" value="14"/><label for="25">more than 3 months ago</label></p>
                                     </div>
                                 </div>
                             </div>
@@ -250,7 +207,7 @@
         width: 100%;
     }
     .level-filter .range-slider .number-group .number-input {
-        width: 36px;
+        width: 80px;
         height: 30px;
         text-align: center;
         color: #ffffff;

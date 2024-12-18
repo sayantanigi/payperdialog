@@ -299,7 +299,7 @@ class Welcome extends CI_Controller {
 			'job_type'=>$this->input->post('job_type',TRUE),
 			'experience_level'=>$this->input->post('experience_level',TRUE),
 			'education'=>$this->input->post('education',TRUE),
-			'created_date'=>date('Y-m-d H:i:s'),
+			'created_date'=>date('Y-m-d'),
 		);
 		//echo "<pre>"; print_r($data); die;
 		$this->Crud_model->SaveData('postjob',$data);

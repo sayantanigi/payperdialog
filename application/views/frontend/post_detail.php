@@ -47,23 +47,17 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
 
 <section class="dashboard-gig Bid-page">
     <div class="text-success-msg f-20" style="text-align: center; margin-bottom: 20px;">
-        <?php if ($this->session->flashdata('message')) {
-            echo $this->session->flashdata('message');
-            unset($_SESSION['message']);
-        } ?>
+    <?php if ($this->session->flashdata('message')) {
+        echo $this->session->flashdata('message');
+        unset($_SESSION['message']);
+    } ?>
     </div>
     <div class="container display-table">
         <div class="row display-table-row">
             <div class="col-md-12 col-sm-12 display-table-cell v-align">
                 <div class="user-dashboard">
                     <div class="row row-sm">
-                        <?php if (@$_SESSION['afrebay']['userType'] == '1') { ?>
-                        <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12 col-12">
-                        <?php } else if(@$_SESSION['afrebay']['userType'] == '2'){ ?>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
-                        <?php } else { ?>
-                        <div class="col-lg-8 col-md-12 col-sm-12 col-xs-12 col-12">
-                        <?php } ?>
                             <div class="bid-dis">
                                 <ul>
                                     <li>
@@ -193,6 +187,29 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                         echo $postedBy[0]['companyname'];
                                     } ?>
                                 </a>
+                                <form action="<?= base_url('user/dashboard/save_postbid') ?>" method="post">
+                                    <input type="hidden" name="postjob_id" value="<?php if (!empty($post_data->id)) { echo $post_data->id; } ?>">
+                                    <input type="hidden" name="user_id" value="<?php echo $_SESSION['afrebay']['userId'] ?>">
+                                    <?php if (!empty(@$_SESSION['afrebay']['userType'])) {
+                                        if(@$_SESSION['afrebay']['userType'] == '1' || @$_SESSION['afrebay']['userType'] == '3') {
+                                        $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                        if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio']) || empty($profile_check[0]['rateperhour']) || empty($profile_check[0]['resume'])) { ?>
+                                            <a href="<?= base_url('profile')?>" class="btn btn-info cstm_applybtn">Please complete your profile to apply</a>
+                                        <?php } else { 
+                                            $userBidData = $this->db->query("SELECT * FROM `job_bid` WHERE postjob_id = '".$post_data->id."' and user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array(); 
+                                            if(!empty($userBidData)) { ?>
+                                            <a href="javascript:void(0)" class="btn btn-info cstm_applybtn">Already Applied</a>
+                                        <?php } else { ?>
+                                            <input type="submit" class="btn btn-info cstm_applybtn" value="Apply Now">
+                                            <input type="hidden" name="postjob_id" value="<?php if (!empty($post_data->id)) { echo $post_data->id; } ?>">
+                                            <input type="hidden" name="user_id" value="<?php echo $_SESSION['afrebay']['userId'] ?>">
+                                        <?php } } ?>
+                                    <?php } else { ?>
+                                    <a href="javascript:void(0)" class="btn btn-info cstm_applybtn">Employers are not eligible to apply for jobs</a>
+                                    <?php }} else { ?>
+                                    <a href="<?= base_url('login')?>" class="btn btn-info cstm_applybtn">Login to apply</a>
+                                    <?php } ?>
+                                </form>
                             </div>
                             <div class="employe-about d-none">
                                 <ul>
@@ -226,78 +243,6 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                 </ul>
                             </div>
                         </div>
-                        <?php if (@$_SESSION['afrebay']['userType'] == '1' || empty(@$_SESSION['afrebay']['userType'])) {
-                        $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                        if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio']) || empty($profile_check[0]['rateperhour']) || empty($profile_check[0]['resume'])) { ?>
-                        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12" style="position: relative;">
-                        <p style=" font-size: 24px; margin-top: 50%; text-align: center; line-height: 30px; color: red;">Please complete your profile tab to place your bid</p>
-                        <?php } else { ?>
-                        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12">
-                        <?php } ?>
-                            <?php $userBidData = $this->db->query("SELECT * FROM `job_bid` WHERE postjob_id = '".$post_data->id."' and user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                            if(!empty($userBidData)) { ?>
-                            <div class="bd-form"><a href="<?= base_url()?>jobbid" class="cstm_viewbid_btn"> View Bid</a></div>
-                            <?php } else { ?>
-                            <?php if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio']) || empty($profile_check[0]['rateperhour']) || empty($profile_check[0]['resume'])) { ?>
-                            <form class="bd-form" action="<?= base_url('user/dashboard/save_postbid') ?>" method="post" style="position: absolute; top: 0; left: 0; opacity: 0.2; z-index: -999999;">
-                            <?php } else { ?>
-                                <form class="bd-form" action="<?= base_url('user/dashboard/save_postbid') ?>" method="post">
-                            <?php } ?>
-                                <h3 class="job-bid">Job Bidding</h3>
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <label for="" class="form-label">Bid Amount</label>
-                                        <div style="width: 50px;">
-                                        <?php if($countryName == 'Nigeria') { ?>
-                                            <input type="text" class="form-control f1" name="currency" id="currency" value="NGN (₦)" readonly>
-                                        <?php } else { ?>
-                                            <input type="text" class="form-control f1" name="currency" id="currency" value="USD ($)" readonly>
-                                        <?php } ?>
-                                        </div>
-                                        <div style="display: inline-block;width: 82%; margin-left: 10px;">
-                                            <input type="text" class="form-control f1" placeholder="Your bid Amount" name="bid_amount" id="bid_amount" required>
-                                        </div>
-                                    </div>
-                                    <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <label for="" class="form-label">Email</label>
-                                        <input type="email" class="form-control f1" placeholder="Contact Email" name="email" required>
-                                    </div> -->
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <label for="" class="form-label">Duration</label>
-                                        <input type="text" class="form-control f1" placeholder="Duration" name="duration" required>
-                                    </div>
-                                    <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <label for="" class="form-label">Phone Number</label>
-                                        <input type="text" class="form-control f1" placeholder="Phone" name="phone" onkeypress="only_number(event)" required maxlength="10">
-                                    </div> -->
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <label for="" class="form-label">Details</label>
-                                        <textarea class="form-control" name="description" placeholder="Description"></textarea>
-                                    </div>
-                                    <input type="hidden" name="postjob_id" value="<?php if (!empty($post_data->id)) { echo $post_data->id; } ?>">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <div class="bid-btn">
-                                            <?php if (!empty(@$_SESSION['afrebay']['userType'])) {
-                                                if (@$_SESSION['afrebay']['userType'] == '1') {
-                                                    //$userBidData = $this->db->query("SELECT * FROM `job_bid` WHERE postjob_id = '".$post_data->id."' and user_id = '".$_SESSION['afrebay']['userId']."'")->result_array();
-                                                    //if(!empty($userBidData)) { ?>
-                                                        <!-- <a href="<?= base_url()?>jobbid" class="cstm_viewbid_btn"> View Bid</a> -->
-                                                    <?php //} else { ?>
-                                                        <input type="submit" name="">
-                                                    <?php //} ?>
-                                            <?php } else { ?>
-                                            <h2 class="job-bid" style="font-size:16px;">Verdors are not eligible to Bid for jobs</h2>
-                                            <?php }
-                                            } else { ?>
-                                                <br />
-                                                <a href="<?= base_url('login') ?>" class="btn btn-info postdetail">Submit Query</a>
-                                            <?php } ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    <?php } }?>
                     </div>
                 </div>
             </div>
@@ -352,6 +297,9 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
     </div>
 </section>
 <?php } ?>
+<style type="text/css">
+    .cstm_applybtn {position: absolute; right: 40px; bottom: 21px; background: linear-gradient(180deg, rgba(249, 80, 30, 1) 0%, rgba(252, 119, 33, 1) 100%); border: 0; border-radius: 25px; letter-spacing: 0; font-size: 15px !important; text-transform: uppercase; font-weight: 700; font-family: 'Nunito', sans-serif; box-shadow: none !important; border: 0; padding: 10px 20px !important; color: #fff;}
+</style>
 <script>
 $(document).ready(function(){
     $("#bid_amount").on("keypress keyup blur", function (event) {

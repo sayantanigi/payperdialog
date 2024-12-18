@@ -122,6 +122,9 @@ class Dashboard extends CI_Controller {
 			'profilePic' => $image,
 			'zip' => $_POST['zip'],
 			'address' => $_POST['address'],
+			'country' => $_POST['country-dropdown'],
+			'state' => $_POST['state-dropdown'],
+			'city' => $_POST['city-dropdown'],
 			'foundedyear' => $_POST['foundedyear'],
 			'teamsize' => $_POST['teamsize'],
 			'latitude' => $_POST['latitude'],
@@ -322,10 +325,11 @@ class Dashboard extends CI_Controller {
 			'description' => $_POST['description'],
 			'created_date' => date('Y-m-d H:i:s'),
 		);
+		//print_r($data); die();
 		$this->Crud_model->SaveData('job_bid', $data);
 		$insert_id = $this->db->insert_id();
 		if(!empty($insert_id)) {
-			$this->session->set_flashdata('message', 'Bid Submitted Successfully! You will be notified once the Business has approved your bid');
+			$this->session->set_flashdata('message', 'You have successfully applied this job post');
 			redirect(base_url("postdetail/".base64_encode($_POST['postjob_id'])), "refresh");
 		} else {
 			$this->session->set_flashdata('message', 'Something went wrong. Please try again later.');
@@ -399,7 +403,7 @@ class Dashboard extends CI_Controller {
 	function chat() {
 		$data['get_user'] = $this->Crud_model->get_single('users', "userId ='".$_SESSION['afrebay']['userId']."'");
 		//$cond = "job_bid.bidding_status='Accept'";
-		$cond = "job_bid.bidding_status = 'Screened In'";
+		$cond = "job_bid.bidding_status = 'Ready for Interview'";
 		$data['get_jobbid'] = $this->Users_model->get_jobbidding($cond);
 		$this->load->view('header');
 		$this->load->view('user_dashboard/chat', $data);
@@ -747,6 +751,7 @@ class Dashboard extends CI_Controller {
 			'designation' => set_value('designation'),
 			'company_name' => set_value('company_name'),
 			//'duration' => set_value('duration'),
+			'current_job' => set_value('current_job'),
 			'from_date' => set_value('from_date'),
 			'to_date' => set_value('to_date'),
 			'description' => set_value('description'),
@@ -765,6 +770,7 @@ class Dashboard extends CI_Controller {
 			'designation' => $this->input->post('designation', TRUE),
 			'company_name' => $this->input->post('company_name', TRUE),
 			//'duration' => $this->input->post('duration', TRUE),
+			'current_job' => $this->input->post('current_job', TRUE),
 			'from_date' => $this->input->post('from_date', TRUE),
 			'to_date' => $this->input->post('to_date', TRUE),
 			'description' => $this->input->post('description', TRUE),
@@ -786,6 +792,7 @@ class Dashboard extends CI_Controller {
 			'designation' => $update_data->designation,
 			'company_name' => $update_data->company_name,
 			//'duration' => $update_data->duration,
+			'current_job' => $update_data->current_job,
 			'from_date' => $update_data->from_date,
 			'to_date' => $update_data->to_date,
 			'description' => $update_data->description,
@@ -804,6 +811,7 @@ class Dashboard extends CI_Controller {
 			'designation' => $this->input->post('designation', TRUE),
 			'company_name' => $this->input->post('company_name', TRUE),
 			//'duration' => $this->input->post('duration', TRUE),
+			'current_job' => $this->input->post('current_job', TRUE),
 			'from_date' => $this->input->post('from_date', TRUE),
 			'to_date' => $this->input->post('to_date', TRUE),
 			'description' => $this->input->post('description', TRUE),
@@ -1813,69 +1821,29 @@ class Dashboard extends CI_Controller {
 	}
 	public function recommended_employee() {
 		$data['jobTitleByemployer'] = $this->db->query("SELECT id, post_title, required_key_skills FROM postjob WHERE user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-		//$data['jobListByemployer'] = $this->db->query("SELECT * FROM users WHERE userType = '1'")->result_array();
-		//$data['jobListByemployer'] = $this->db->query("SELECT * FROM job_bid WHERE bidding_status = 'Ready for Interview'")->result_array();
-        $data['jobListByemployer'] = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+		$data['jobListByemployer'] = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
 		$this->load->view('header');
 		$this->load->view('user_dashboard/recommended_employee', $data);
 		$this->load->view('footer');
 	}
 	public function filterEmployeeByJobtitle() {
-		//echo "<pre>"; print_r($_POST); die;
-		/*$skills = explode(',', $_POST['skill']);
-		$count = count($skills);
-		$output = '<div>';
-		for ($s=0; $s < $count; $s++) {
-			if(!empty($skills[0])) {
-				$getUser = $this->db->query("SELECT * FROM users WHERE (instr(concat(',', skills, ','), ',$skills[$s],') OR skills = '".$skills[$s]."') AND userType = '1' AND status = '1' AND email_verified = '1'")->result_array();
-			} else {
-				$getUser = $this->db->query("SELECT * FROM users WHERE userType = '1' AND status = '1' AND email_verified = '1'")->result_array();
-			}
-			if(!empty($getUser)) {
-				foreach ($getUser as $key) {
-					if($key['userType'] == 1){
-						$name = $key['firstname'].' '.$key['lastname'];
-					} else {
-						$name = $key['companyname'];
-					}
-					if(!empty($key['profilePic']) && file_exists('uploads/users/'.$key['profilePic'])){
-						$profile_pic= '<img src="'.base_url('uploads/users/'.$key['profilePic']).'" alt="" />';
-					} else {
-						$profile_pic= '<img src="'.base_url('uploads/users/user.png').'" alt="" />';
-					}
-					$string = strip_tags($key['short_bio']);
-					if (strlen($string) > 200) {
-						$stringCut = substr($string, 0, 200);
-						$endPoint = strrpos($stringCut, ' ');
-						$string = $endPoint? substr($stringCut, 0, $endPoint) : substr($stringCut, 0);
-						$string .= '...';
-					}
-					$output .= '
-					<div class="emply-resume-list"><div class="emply-resume-thumb">'.$profile_pic.'</div>
-					<div class="emply-resume-info"><h3><a href="'.base_url('worker-detail/'.base64_encode($key["userId"])).'" title="">'.$name.'</a></h3>
-					<p><i class="la la-map-marker"></i>'.$key["address"].'</p>
-					<div class="Employee-Details"><div class="MoreDetailsTxt_'.$key['id'].'">'.$string.'</div></div></div></div>';
-				}
-				$output .= '';
-			} else {
-				$output .= '<div class="emply-resume-list"><div class="emply-resume-thumb" style="width: 100%;"><h2>No Data Found</h2></div></div>';
-			}
-		}*/
         $postjob_id = $_POST['p_id'];
         if(!empty($postjob_id)) {
-            $getUser = $this->db->query("SELECT users.userId, users.firstname, users.lastname, users.address, users.short_bio, users.profilePic FROM users JOIN job_bid ON job_bid.user_id = users.userId WHERE job_bid.id = '".@$postjob_id."'")->result_array();
+            //$getUser = $this->db->query("SELECT users.userId, users.firstname, users.lastname, users.address, users.short_bio, users.profilePic FROM users JOIN job_bid ON job_bid.user_id = users.userId WHERE job_bid.id = '".@$postjob_id."'")->result_array();
+            $getUserId = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.id = '".@$postjob_id."'")->result_array();
         } else {
-            $getUser = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+            $getUserId = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
         }
         $output = '<div>';
-        if(!empty($getUser)) {
-            foreach ($getUser as $key) {
-                if(!empty($key['profilePic']) && file_exists('uploads/users/'.$key['profilePic'])){
-                    $profile_pic= '<img src="'.base_url('uploads/users/'.$key['profilePic']).'" alt="" />';
+        if(!empty($getUserId)) {
+            foreach ($getUserId as $key) {
+            	$getUserDetails = $this->db->query("SELECT * FROM users WHERE userId = '".$key['bidUser']."'")->row();
+            	if(!empty($getUserDetails->profilePic) && file_exists('uploads/users/'.$getUserDetails->profilePic)){
+                    $profile_pic= '<img src="'.base_url('uploads/users/'.$getUserDetails->profilePic).'" alt="" />';
                 } else {
                     $profile_pic= '<img src="'.base_url('uploads/users/user.png').'" alt="" />';
                 }
-                $string = strip_tags($key['short_bio']);
+                $string = strip_tags($getUserDetails->short_bio);
                 if (strlen($string) > 200) {
                     $stringCut = substr($string, 0, 200);
                     $endPoint = strrpos($stringCut, ' ');
@@ -1886,14 +1854,14 @@ class Dashboard extends CI_Controller {
                 <div class="emply-resume-list">
                     <div class="emply-resume-thumb">'.$profile_pic.'</div>
                     <div class="emply-resume-info">
-                        <h3><a href="'.base_url('worker-detail/'.base64_encode($key["userId"])).'" title="">'.$key['firstname'].' '.$key['lastname'].'</a></h3>
-                        <p><i class="la la-map-marker"></i>'.$key["address"].'</p>
-                        <div class="Employee-Details">
-                            <div class="MoreDetailsTxt_'.$key['id'].'">'.$string.'</div>
+                        <h3><a href="'.base_url('worker-detail/'.base64_encode($getUserDetails->userId)).'" title="">'.$getUserDetails->firstname.' '.$getUserDetails->lastname.'</a></h3>
+                        <p><i class="la la-map-marker"></i>'.$getUserDetails->address.'</p>
+                        <div class="Employee-Details" style="width: 530px;">
+                            <div class="MoreDetailsTxt_'.$getUserDetails->id.'">'.$string.'</div>
                         </div>
                     </div>
-                    <div class="view-more-less view-more-less-js"><a href="'.base_url('worker-detail/'.base64_encode($key["userId"])).'#job-overview") target="_blank">Schedule Interview</a></button>
-                </div>
+                    <div class="view-more-less view-more-less-js"><a href="'.base_url('worker-detail/'.base64_encode($getUserDetails->userId)).'#job-overview") target="_blank">Schedule Interview</a></div>
+                    <div class="view-more-less view-more-less-js" style="top: 75px;"><a href="'.base_url('chat').'" target="_blank">Chat with user</a></div>
                 </div>';
             }
             $output .= '';
