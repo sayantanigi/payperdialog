@@ -27,7 +27,7 @@
     </div>
 </section>
 <?php $this->load->view('sidebar');?>
-<div class="col-md-7 col-sm-12 display-table-cell v-align">
+<div class="col-md-10 col-sm-12 display-table-cell v-align">
     <div class="user-dashboard">
         <div class="row row-sm">
             <div class="col-xl-12 col-lg-12 col-md-12">
@@ -56,8 +56,8 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <?php 
-                                        if($row->current_job == '1') { 
+                                        <?php
+                                        if($row->current_job == '1') {
                                             $data = "Present";
                                         } else {
                                             $data = date('d-m-Y',strtotime($row->to_date));
@@ -89,43 +89,6 @@
                 <a href="<?php echo base_url('add-workexperience')?>" class="btn btn-primary Work_Btn" style="border-radius: 40px; letter-spacing: 0;">Add Work Experience</a>
             </div>
         </div>
-    </div>
-</div>
-<div class="col-md-3 col-6 v-align CustomDesign" style="display: inline-block; float: left; margin-top: 10px;">
-    <p class="CustomPara">Upcoming Booking</p>
-    <div class="CustomBlock">
-        <?php 
-        $selectDate = date('Y-m-d');
-		$employeeId = $_SESSION['afrebay']['userId'];
-        $availableData = $this->db->query("SELECT user_availability.*, user_booking.* FROM user_availability JOIN user_booking ON user_availability.id = user_booking.available_id WHERE start_date > '".$selectDate."' AND user_id ='".@$employeeId."'")->result_array();
-        foreach ($availableData as $value) { ?>
-        <p class="ParaHeading"><?= $value['start_date']?></p>
-        <div style='width: 100%; display: inline-block; padding: 0 10px; margin-bottom: 20px;'>
-            <div style='width: 100%; display: inline-block; border-radius: 10px; box-shadow: 0 0 10px #dddddd; padding: 10px 0 10px 0;'>
-            <?php $getBookSlot = explode(',', $value['bookingTime']);
-            $meetingLink = explode(',', $value['meeting_link']);
-            for($i = 0; $i < count($getBookSlot); $i++) { ?>
-                <?php 
-                $booking_id = $value[$i]['id'];
-                $employee_id = $value[$i]['employee_id'];
-                $employer_id = $value[$i]['employer_id'];
-                $available_id = $value[$i]['available_id'];
-                $bookingTime = $value[$i]['bookingTime'];
-                ?>
-                <div style='width: 100%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'>
-                    <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'><?= date('h:i A', strtotime($getBookSlot[$i]))?> to <?= date('h:i A', strtotime($getBookSlot[$i]) + 60*60)?></p>
-                    <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;"><a href="<?= $meetingLink[$i] ?>">Meeting Link</a></p>
-                    <!-- <input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck(<?= $booking_id; ?>)'> -->
-                </div>
-            <?php } 
-            $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$value['employer_id']."'")->row();
-            ?>
-                <div>
-                    <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Booked By: <?= @$getEmployer->companyname?></p>
-                </div>
-            </div>
-        </div>
-        <?php } ?>
     </div>
 </div>
 </div>

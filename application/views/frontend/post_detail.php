@@ -59,8 +59,10 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                     <div class="row row-sm">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
                             <div class="bid-dis">
-                                <ul>
-                                    <li>
+                                <a href="<?=base_url(); ?>myjob" style="display: inline-block;float: left;margin-bottom: 25px;padding: 5px 8px;background: linear-gradient(180deg, rgba(249, 80, 30, 1) 0%, rgba(252, 119, 33, 1) 100%);border: 0;border-radius: 25px;font-size: 15px;font-weight: 600;letter-spacing: 0;color: #fff;"><i class="fa fa-arrow-circle-left" aria-hidden="true" style=" display: inline-flex; "></i> Back to Dashboard</a>
+                                <?php $postedBy = $this->db->query("SELECT * FROM users WHERE userId = '" . $post_data->user_id . "'")->result_array(); ?>
+                                <ul style="display: inline-block; width: 100%;">
+                                    <li style="display: inline-block; width: 85%;">
                                         <span>Job Title </span>
                                         <a href="<?= base_url('postdetail/' . base64_encode($post_data->id)) ?>" style="text-transform: uppercase;">
                                         <?php if (!empty($post_data->post_title)) {
@@ -68,10 +70,25 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                         } ?>
                                         </a>
                                     </li>
+                                    <!-- <a class="btn btn-info" href="<?= base_url('employerdetail/' . base64_encode($post_data->user_id)) ?>">
+                                        <?php
+                                        if ($postedBy[0]['userType'] == 1) {
+                                            echo $postedBy[0]['firstname'] . ' ' . $postedBy[0]['lastname'];
+                                        } else if ($postedBy[0]['userType'] == 2) {
+                                            echo $postedBy[0]['companyname'];
+                                        } ?>
+                                    </a> -->
                                     <?php if (!empty($post_data->description)) { ?>
                                     <li class="cstm_desc"><span>Description</span><?php echo $post_data->description; ?>
                                     <?php } ?>
                                     </li>
+                                    <?php
+                                    if ($postedBy[0]['userType'] == 1) {
+                                        $full_name = $postedBy[0]['firstname'] . ' ' . $postedBy[0]['lastname'];
+                                    } else if ($postedBy[0]['userType'] == 2) {
+                                        $full_name = $postedBy[0]['companyname'];
+                                    } ?>
+                                    <li class="cstm_desc"><span>Posted By </span><?php echo $full_name; ?></li>
                                     <div class="Bid-Data">
                                         <?php if (!empty($post_data->required_key_skills)) { ?>
                                             <li><span>Required key skills </span><?php echo ucfirst($post_data->required_key_skills); ?></li>
@@ -178,15 +195,6 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                     <li><span>Complete Address </span><?php echo $post_data->city . ', ' . $post_data->state . ', ' . $post_data->country; ?></li>
                                     <?php } ?>
                                 </ul>
-                                <?php $postedBy = $this->db->query("SELECT * FROM users WHERE userId = '" . $post_data->user_id . "'")->result_array(); ?>
-                                <a class="btn btn-info" href="<?= base_url('employerdetail/' . base64_encode($post_data->user_id)) ?>">
-                                    <?php
-                                    if ($postedBy[0]['userType'] == 1) {
-                                        echo $postedBy[0]['firstname'] . ' ' . $postedBy[0]['lastname'];
-                                    } else if ($postedBy[0]['userType'] == 2) {
-                                        echo $postedBy[0]['companyname'];
-                                    } ?>
-                                </a>
                                 <form action="<?= base_url('user/dashboard/save_postbid') ?>" method="post">
                                     <input type="hidden" name="postjob_id" value="<?php if (!empty($post_data->id)) { echo $post_data->id; } ?>">
                                     <input type="hidden" name="user_id" value="<?php echo $_SESSION['afrebay']['userId'] ?>">
@@ -195,8 +203,8 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                         $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                                         if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio']) || empty($profile_check[0]['rateperhour']) || empty($profile_check[0]['resume'])) { ?>
                                             <a href="<?= base_url('profile')?>" class="btn btn-info cstm_applybtn">Please complete your profile to apply</a>
-                                        <?php } else { 
-                                            $userBidData = $this->db->query("SELECT * FROM `job_bid` WHERE postjob_id = '".$post_data->id."' and user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array(); 
+                                        <?php } else {
+                                            $userBidData = $this->db->query("SELECT * FROM `job_bid` WHERE postjob_id = '".$post_data->id."' and user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                                             if(!empty($userBidData)) { ?>
                                             <a href="javascript:void(0)" class="btn btn-info cstm_applybtn">Already Applied</a>
                                         <?php } else { ?>
@@ -205,7 +213,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                             <input type="hidden" name="user_id" value="<?php echo $_SESSION['afrebay']['userId'] ?>">
                                         <?php } } ?>
                                     <?php } else { ?>
-                                    <a href="javascript:void(0)" class="btn btn-info cstm_applybtn">Employers are not eligible to apply for jobs</a>
+                                    <!-- <a href="javascript:void(0)" class="btn btn-info cstm_applybtn">Employers are not eligible to apply for jobs</a> -->
                                     <?php }} else { ?>
                                     <a href="<?= base_url('login')?>" class="btn btn-info cstm_applybtn">Login to apply</a>
                                     <?php } ?>

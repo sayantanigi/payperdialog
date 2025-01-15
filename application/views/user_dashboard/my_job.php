@@ -47,7 +47,7 @@
                         if(!empty($get_postjob)){
                         $i=1;
                         foreach ($get_postjob as $key) { ?>
-                            <tr>
+                            <tr style="margin-bottom: 24px; display: grid;" id="delete_<?= $key->id?>">
                                 <td class="table-modific-td">
                                     <table class="custom-table">
                                         <tr>
@@ -86,9 +86,6 @@
                                         </tr>
                                     </table>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" class="height"></td>
                             </tr>
                             <?php $i++; }}else{?>
                                 <tr>
@@ -167,7 +164,7 @@ function jobDelete(id) {
                     method:"POST",
                     data:{id: p_id},
                     beforeSend : function(){
-                        $("#loader").show();
+                        $('#delete_'+id).fadeOut(1000);
                     },
                     success:function(data) {
                         if (data == '1'){
@@ -175,24 +172,24 @@ function jobDelete(id) {
                                 $("#loader").hide();
                                 window.scroll({top: 0, behavior: "smooth"});
                                 $('#product-messages').show();
-                            }, 7000);
+                            }, 1000);
                             setTimeout(function () {
                                 $('#product-messages').hide();
-                            }, 9000);
+                            }, 2000);
                             setTimeout(function () {
                                 location.reload(true);
-                            }, 10000);
+                            }, 3000);
                         } else {
                             $('#err-messages').show();
                             setTimeout(function () {
                                 window.scroll({top: 0, behavior: "smooth"})
-                            }, 7000);
+                            }, 1000);
                             setTimeout(function () {
                                 $('#err-messages').hide();
-                            }, 9000);
+                            }, 2000);
                             setTimeout(function () {
                                 location.reload(true);
-                            }, 10000);
+                            }, 3000);
                         }
                     }
 

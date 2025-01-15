@@ -228,9 +228,17 @@ $(function () {
                                     }
                                 }
                             }
-                        } else { ?>
+                        } else {
+                            $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+                            $host = $_SERVER['HTTP_HOST'];
+                            $requestUri = $_SERVER['REQUEST_URI'];
+                            $currentUrl = $protocol . $host . $requestUri;
+                            $lastSegment = basename(parse_url($currentUrl, PHP_URL_PATH));
+                            if($lastSegment === 'workers-list') { ?>
+                            <a href="<?= base_url('register')?>" title="" class="post-job-btn"><i class="la la-plus"></i>New Role? </a>
+                            <?php } else { ?>
                             <a href="<?= base_url('login')?>" title="" class="post-job-btn"><i class="la la-plus"></i>Post Jobs</a>
-                        <?php } ?>
+                        <?php } }?>
 
                         <ul class="account-btns">
                             <?php if(!empty($_SESSION['afrebay']['userId'])) { ?>
@@ -246,52 +254,45 @@ $(function () {
                                     <ul>
                                         <li>
                                             <?php
-                                            if($get_setting->required_subscription != '1')
-                                            {
-                                                $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                                if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio']))
-                                                { ?>
+                                            if($get_setting->required_subscription != '1') {
+                                                if($_SESSION['afrebay']['userType'] != '2') {
+                                                    $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                                    if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['experience'])  || empty($profile_check[0]['rateperhour']) || empty($profile_check[0]['short_bio']))
+                                                    { ?>
                                                     <a href="<?=base_url(); ?>profile" title="">Profile</a>
-                                                <?php
-                                                }
-                                                else
-                                                {
-                                                ?>
-                                                <a href="<?=base_url(); ?>dashboard" title="">Dashboard</a>
-                                                <?php
-                                                }
+                                                    <?php } else { ?>
+                                                    <a href="<?=base_url(); ?>dashboard" title="">Dashboard</a>
+                                                    <?php }
+                                                } else {
+                                                    $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                                    if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) { ?>
+                                                    <a href="<?=base_url(); ?>profile" title="">Profile</a>
+                                                    <?php } else { ?>
+                                                    <a href="<?=base_url(); ?>dashboard" title="">Dashboard</a>
+                                                <?php } }
                                             } else {
                                                 $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='".$_SESSION['afrebay']['userId']."' AND (status = '1' OR status = '2')")->result_array();
-                                                if(empty($get_sub_data))
-                                                {
-                                                    if(@$_SESSION['afrebay']['userType']=='1')
-                                                    { ?>
-                                                        <a href="<?=base_url(); ?>subscription" title="">Subscribe</a>
-                                                    <?php
-                                                    }
-                                                    else
-                                                    { ?>
-                                                        <a href="<?=base_url(); ?>subscription" title="">Subscribe</a>
-                                                    <?php
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-                                                    if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio']))
-                                                    { ?>
+                                                if(empty($get_sub_data)) {
+                                                    if(@$_SESSION['afrebay']['userType']=='1') { ?>
+                                                    <a href="<?=base_url(); ?>subscription" title="">Subscribe</a>
+                                                    <?php } else { ?>
+                                                    <a href="<?=base_url(); ?>subscription" title="">Subscribe</a>
+                                                <?php } } else {
+                                                    if($_SESSION['afrebay']['userType'] != '2') {
+                                                        $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                                        if(empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['experience'])  || empty($profile_check[0]['rateperhour']) || empty($profile_check[0]['short_bio']))
+                                                        { ?>
                                                         <a href="<?=base_url(); ?>profile" title="">Profile</a>
-                                                    <?php
-                                                    }
-                                                    else
-                                                    {
-                                                    ?>
-                                                    <a href="<?=base_url(); ?>dashboard" title="">Dashboard</a>
-                                                    <?php
-                                                    }
-                                                }
-                                            }
-                                            ?>
+                                                        <?php } else { ?>
+                                                        <a href="<?=base_url(); ?>dashboard" title="">Dashboard</a>
+                                                        <?php }
+                                                    } else {
+                                                        $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+                                                        if(empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize'])  || empty($profile_check[0]['short_bio'])) { ?>
+                                                        <a href="<?=base_url(); ?>profile" title="">Profile</a>
+                                                        <?php } else { ?>
+                                                        <a href="<?=base_url(); ?>dashboard" title="">Dashboard</a>
+                                            <?php } } } } ?>
                                         </li>
                                         <li>
                                             <?php

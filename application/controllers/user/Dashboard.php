@@ -1832,7 +1832,8 @@ class Dashboard extends CI_Controller {
             //$getUser = $this->db->query("SELECT users.userId, users.firstname, users.lastname, users.address, users.short_bio, users.profilePic FROM users JOIN job_bid ON job_bid.user_id = users.userId WHERE job_bid.id = '".@$postjob_id."'")->result_array();
             $getUserId = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.id = '".@$postjob_id."'")->result_array();
         } else {
-            $getUserId = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+            //$getUserId = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+            $getUserId = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.user_id = '".@$_SESSION['afrebay']['userId']."' GROUP BY job_bid.user_id")->result_array();
         }
         $output = '<div>';
         if(!empty($getUserId)) {

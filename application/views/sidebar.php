@@ -15,12 +15,33 @@ $get_setting = $this->Crud_model->get_single('setting');
                 <div class="navi">
                     <ul>
                         <?php if ($get_setting->required_subscription == '1') { ?>
-                            <li <?php if ($seg1 == 'subscription') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
-                                <a href="<?= base_url('subscription') ?>"><i class="fa fa-bookmark" aria-hidden="true"></i>
-                                    <span class="hidden-xs hidden-sm">Subscription</span>
-                                </a>
-                            </li>
+                        <li <?php if ($seg1 == 'subscription') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
+                            <a href="<?= base_url('subscription') ?>"><i class="fa fa-bookmark" aria-hidden="true"></i>
+                                <span class="hidden-xs hidden-sm">Subscription</span>
+                            </a>
+                        </li>
                         <?php } ?>
+
+                        <li <?php if ($seg1 == 'chat') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
+                        <?php
+                        if ($get_setting->required_subscription == '1') {
+                            $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='" . $_SESSION['afrebay']['userId'] . "' AND (status = '1' OR status = '2')")->result_array();
+                            if (!empty($get_sub_data)) { ?>
+                                <a href="<?= base_url('chat') ?>"><i class="fa fa-commenting" aria-hidden="true"></i>
+                                    <span class="hidden-xs hidden-sm">Inbox</span>
+                                </a>
+                            <?php } else { ?>
+                                <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-commenting"
+                                        aria-hidden="true"></i>
+                                    <span class="hidden-xs hidden-sm">Inbox</span>
+                                </a>
+                            <?php }
+                        } else { ?>
+                            <a href="<?= base_url('chat') ?>"><i class="fa fa-commenting" aria-hidden="true"></i>
+                                <span class="hidden-xs hidden-sm">Inbox</span>
+                            </a>
+                        <?php } ?>
+                        </li>
 
                         <li <?php if ($seg1 == 'profile') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
                         <?php
@@ -57,10 +78,15 @@ $get_setting = $this->Crud_model->get_single('setting');
                                             </a>
                                         </li>
                                         <li <?php if ($seg1 == 'workexperience-list') { ?>class="active" <?php } ?>>
-
                                             <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-id-card"
                                                     aria-hidden="true"></i>
                                                 <span class="hidden-xs hidden-sm">Work Experience</span>
+                                            </a>
+                                        </li>
+                                        <li <?php if ($seg1 == 'ourjobs') { ?>class="active" <?php } ?>>
+                                            <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-id-card"
+                                                    aria-hidden="true"></i>
+                                                <span class="hidden-xs hidden-sm">Apply to a Job</span>
                                             </a>
                                         </li>
                                     <?php } else { ?>
@@ -72,10 +98,14 @@ $get_setting = $this->Crud_model->get_single('setting');
                                             </a>
                                         </li>
                                         <li <?php if ($seg1 == 'workexperience-list') { ?>class="active" <?php } ?>>
-
                                             <a href="<?= base_url('workexperience-list') ?>"><i class="fa fa-id-card"
                                                     aria-hidden="true"></i>
                                                 <span class="hidden-xs hidden-sm">Work Experience</span>
+                                            </a>
+                                        </li>
+                                        <li <?php if ($seg1 == 'ourjobs') { ?>class="active" <?php } ?>>
+                                        <a href="<?= base_url('ourjobs') ?>"><i class="fa fa-id-card" aria-hidden="true"></i>
+                                                <span class="hidden-xs hidden-sm">Apply to a Job</span>
                                             </a>
                                         </li>
                                     <?php }
@@ -89,6 +119,11 @@ $get_setting = $this->Crud_model->get_single('setting');
                                     <li <?php if ($seg1 == 'workexperience-list') { ?>class="active" <?php } ?>>
                                         <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-id-card" aria-hidden="true"></i>
                                             <span class="hidden-xs hidden-sm">Work Experience</span>
+                                        </a>
+                                    </li>
+                                    <li <?php if ($seg1 == 'ourjobs') { ?>class="active" <?php } ?>>
+                                        <a href="<?= base_url('ourjobs') ?>"><i class="fa fa-id-card" aria-hidden="true"></i>
+                                            <span class="hidden-xs hidden-sm">Apply to a Job</span>
                                         </a>
                                     </li>
                                 <?php }
@@ -107,6 +142,11 @@ $get_setting = $this->Crud_model->get_single('setting');
                                             <span class="hidden-xs hidden-sm">Work Experience</span>
                                         </a>
                                     </li>
+                                    <li <?php if ($seg1 == 'ourjobs') { ?>class="active" <?php } ?>>
+                                        <a href="javascript:void(0)" onclick="completeSub1()"><i class="fa fa-id-card" aria-hidden="true"></i>
+                                            <span class="hidden-xs hidden-sm">Apply to a Job</span>
+                                        </a>
+                                    </li>
                                 <?php } else { ?>
                                     <li <?php if ($seg1 == 'education-list') { ?>class="active" <?php } ?>>
                                         <a href="<?= base_url('education-list') ?>"><i class="fa fa-graduation-cap" aria-hidden="true"></i>
@@ -114,17 +154,20 @@ $get_setting = $this->Crud_model->get_single('setting');
                                         </a>
                                     </li>
                                     <li <?php if ($seg1 == 'workexperience-list') { ?>class="active" <?php } ?>>
-
                                         <a href="<?= base_url('workexperience-list') ?>"><i class="fa fa-id-card"
                                                 aria-hidden="true"></i>
                                             <span class="hidden-xs hidden-sm">Work Experience</span>
                                         </a>
                                     </li>
+                                    <li <?php if ($seg1 == 'ourjobs') { ?>class="active" <?php } ?>>
+                                        <a href="<?= base_url('ourjobs') ?>"><i class="fa fa-id-card"
+                                                aria-hidden="true"></i>
+                                            <span class="hidden-xs hidden-sm">Apply to a Job</span>
+                                        </a>
+                                    </li>
                                 <?php }
                             }
                         } ?>
-
-
                         <?php
                         if ($get_setting->required_subscription == '1') {
                             if (@$_SESSION['afrebay']['userType'] == '2') {
@@ -135,13 +178,13 @@ $get_setting = $this->Crud_model->get_single('setting');
                                         <li <?php if ($seg1 == 'myjob') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
                                             <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-briefcase"
                                                     aria-hidden="true"></i>
-                                                <span class="hidden-xs hidden-sm">My Jobs</span>
+                                                <span class="hidden-xs hidden-sm">Job Posts</span>
                                             </a>
                                         </li>
                                         <li <?php if ($seg1 == 'jobbid') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
                                             <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-tasks"
                                                     aria-hidden="true"></i>
-                                                <span class="hidden-xs hidden-sm">List of Bids</span>
+                                                <span class="hidden-xs hidden-sm">Applications to your jobs</span>
                                             </a>
                                         </li>
                                         <li <?php if ($seg1 == 'recommended-employee') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
@@ -153,13 +196,13 @@ $get_setting = $this->Crud_model->get_single('setting');
                                     <?php } else { ?>
                                         <li <?php if ($seg1 == 'myjob') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
                                             <a href="<?= base_url('myjob') ?>"><i class="fa fa-briefcase" aria-hidden="true"></i>
-                                                <span class="hidden-xs hidden-sm">My Jobs</span>
+                                                <span class="hidden-xs hidden-sm">Job Posts</span>
                                             </a>
                                         </li>
                                         <li <?php if ($seg1 == 'jobbid') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
 
                                             <a href="<?= base_url('jobbid') ?>"><i class="fa fa-tasks" aria-hidden="true"></i>
-                                                <span class="hidden-xs hidden-sm">List of Bids</span>
+                                                <span class="hidden-xs hidden-sm">Applications to your jobs</span>
                                             </a>
                                         </li>
                                         <li <?php if ($seg1 == 'recommended-employee') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
@@ -172,13 +215,13 @@ $get_setting = $this->Crud_model->get_single('setting');
                                     <li <?php if ($seg1 == 'myjob') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
                                         <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-briefcase"
                                                 aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">My Jobs</span>
+                                            <span class="hidden-xs hidden-sm">Job Posts</span>
                                         </a>
                                     </li>
                                     <li <?php if ($seg1 == 'jobbid') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
                                         <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-tasks"
                                                 aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">List of Bids</span>
+                                            <span class="hidden-xs hidden-sm">Applications to your jobs</span>
                                         </a>
                                     </li>
                                     <li <?php if ($seg1 == 'recommended-employee') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
@@ -196,7 +239,7 @@ $get_setting = $this->Crud_model->get_single('setting');
                                         <li <?php if ($seg1 == 'jobbid') { ?> class="active" <?php } ?>>
                                             <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-tasks"
                                                     aria-hidden="true"></i>
-                                                <span class="hidden-xs hidden-sm">My Jobs</span>
+                                                <span class="hidden-xs hidden-sm">My Applications</span>
                                             </a>
                                         </li>
                                         <li <?php if ($seg1 == 'recommended-jobs') { ?> class="active" <?php } ?>>
@@ -210,7 +253,7 @@ $get_setting = $this->Crud_model->get_single('setting');
                                         <li <?php if ($seg1 == 'jobbid') { ?> class="active" <?php } ?>>
 
                                             <a href="<?= base_url('jobbid') ?>"><i class="fa fa-tasks" aria-hidden="true"></i>
-                                                <span class="hidden-xs hidden-sm">My Jobs</span>
+                                                <span class="hidden-xs hidden-sm">My Applications</span>
                                             </a>
                                         </li>
                                         <li <?php if ($seg1 == 'recommended-jobs') { ?> class="active" <?php } ?>>
@@ -225,7 +268,7 @@ $get_setting = $this->Crud_model->get_single('setting');
 
                                         <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-tasks"
                                                 aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">My Jobs</span>
+                                            <span class="hidden-xs hidden-sm">My Applications</span>
                                         </a>
                                     </li>
                                     <li <?php if ($seg1 == 'recommended-jobs') { ?> class="active" <?php } ?>>
@@ -243,7 +286,7 @@ $get_setting = $this->Crud_model->get_single('setting');
                                     <li <?php if ($seg1 == 'myjob') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
                                         <a href="javascript:void(0)" onclick="completeSub1()"><i class="fa fa-briefcase"
                                                 aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">My Jobs</span>
+                                            <span class="hidden-xs hidden-sm">Job Posts</span>
                                         </a>
                                     </li>
                                     <li <?php if ($seg1 == 'jobbid') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
@@ -269,7 +312,7 @@ $get_setting = $this->Crud_model->get_single('setting');
                                 <?php } else { ?>
                                     <li <?php if ($seg1 == 'myjob') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
                                         <a href="<?= base_url('myjob') ?>"><i class="fa fa-briefcase" aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">My Jobs</span>
+                                            <span class="hidden-xs hidden-sm">Job Posts</span>
                                         </a>
                                     </li>
                                     <li <?php if ($seg1 == 'jobbid') { ?> class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
@@ -296,17 +339,16 @@ $get_setting = $this->Crud_model->get_single('setting');
                                 $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
                                 if (empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio'])) { ?>
                                     <li <?php if ($seg1 == 'jobbid') { ?> class="active" <?php } ?>>
-
                                         <a href="javascript:void(0)" onclick="completeSub1()"><i class="fa fa-tasks"
                                                 aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">My Jobs</span>
+                                            <span class="hidden-xs hidden-sm">My Applications</span>
                                         </a>
                                     </li>
                                 <?php } else { ?>
                                     <li <?php if ($seg1 == 'jobbid') { ?> class="active" <?php } ?>>
 
                                         <a href="<?= base_url('jobbid') ?>"><i class="fa fa-tasks" aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">My Jobs</span>
+                                            <span class="hidden-xs hidden-sm">My Applications</span>
                                         </a>
                                     </li>
                                     <li <?php if ($seg1 == 'recommended-jobs') { ?> class="active" <?php } ?>>
@@ -318,122 +360,26 @@ $get_setting = $this->Crud_model->get_single('setting');
                                 <?php }
                             }
                         } ?>
-
-
                         <?php
                         if ($get_setting->required_subscription == '1') {
-                            if (@$_SESSION['afrebay']['userType'] == '2') {
-                                $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='" . $_SESSION['afrebay']['userId'] . "' AND (status = '1' OR status = '2')")->result_array();
-                                if (!empty($get_sub_data)) {
-                                    $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
-                                    if (empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize']) || empty($profile_check[0]['short_bio']) || empty(@$profile_check[0]['timeZone'])) { ?>
-                                        <li <?php if ($seg1 == 'chat') { ?>class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
-
-                                            <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-commenting"
-                                                    aria-hidden="true"></i>
-                                                <span class="hidden-xs hidden-sm">Messages</span>
-                                                <?php
-                                                $countMessage = $this->db->query("Select COUNT(id) as msgcount FROM chat WHERE userto_id ='" . $_SESSION['afrebay']['userId'] . "' AND status = '0'")->result();
-                                                if ($countMessage[0]->msgcount != 0) { ?>
-                                                    <span class="notification notificationv1">
-                                                        <?php echo $countMessage[0]->msgcount; ?>
-                                                    </span>
-                                                <?php } ?>
-                                                <span class="notification notificationv">
-                                                    <?php echo $countMessage[0]->msgcount; ?>
-                                                </span>
-                                            </a>
-                                        </li>
-                                    <?php } else { ?>
-                                        <li <?php if ($seg1 == 'chat') { ?>class="active" <?php } ?>>
-
-                                            <a href="<?= base_url('chat') ?>"><i class="fa fa-commenting" aria-hidden="true"></i>
-                                                <span class="hidden-xs hidden-sm">Messages</span>
-                                                <?php
-                                                $countMessage = $this->db->query("Select COUNT(id) as msgcount FROM chat WHERE userto_id ='" . $_SESSION['afrebay']['userId'] . "' AND status = '0'")->result();
-                                                if ($countMessage[0]->msgcount != 0) { ?>
-                                                    <span class="notification notificationv1">
-                                                        <?php echo $countMessage[0]->msgcount; ?>
-                                                    </span>
-                                                <?php } ?>
-                                                <span class="notification notificationv">
-                                                    <?php echo $countMessage[0]->msgcount; ?>
-                                                </span>
-                                            </a>
-                                        </li>
-                                    <?php }
-                                } else { ?>
-                                    <li <?php if ($seg1 == 'chat') { ?>class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
-
-                                        <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-commenting"
-                                                aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">Messages</span>
-                                            <?php
-                                            $countMessage = $this->db->query("Select COUNT(id) as msgcount FROM chat WHERE userto_id ='" . $_SESSION['afrebay']['userId'] . "' AND status = '0'")->result();
-                                            if ($countMessage[0]->msgcount != 0) { ?>
-                                                <span class="notification notificationv1">
-                                                    <?php echo $countMessage[0]->msgcount; ?>
-                                                </span>
-                                            <?php } ?>
-                                            <span class="notification notificationv">
-                                                <?php echo $countMessage[0]->msgcount; ?>
-                                            </span>
-                                        </a>
-                                    </li>
-                                <?php }
-                            } else {
+                            if (@$_SESSION['afrebay']['userType'] == '1') {
                                 $get_sub_data = $this->db->query("SELECT * FROM employer_subscription WHERE employer_id='" . $_SESSION['afrebay']['userId'] . "' AND (status = '1' OR status = '2')")->result_array();
                                 if (!empty($get_sub_data)) {
                                     $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
                                     if (empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio'])) { ?>
-                                        <li <?php if ($seg1 == 'chat') { ?>class="active" <?php } ?>>
-
-                                            <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-commenting"
-                                                    aria-hidden="true"></i>
-                                                <span class="hidden-xs hidden-sm">Messages</span>
-                                                <?php
-                                                $countMessage = $this->db->query("Select COUNT(id) as msgcount FROM chat WHERE userto_id ='" . $_SESSION['afrebay']['userId'] . "' AND status = '0'")->result();
-                                                if ($countMessage[0]->msgcount != 0) { ?>
-                                                    <span class="notification notificationf1">
-                                                        <?php echo $countMessage[0]->msgcount; ?>
-                                                    </span>
-                                                <?php } ?>
-                                                <span class="notification notificationf">
-                                                    <?php echo $countMessage[0]->msgcount; ?>
-                                                </span>
-                                            </a>
-                                        </li>
                                         <li <?php if ($seg1 == 'availability') { ?>class="active" <?php } ?>>
-
                                             <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-calendar"
                                                     aria-hidden="true"></i>
                                                 <span class="hidden-xs hidden-sm">Availability</span>
                                             </a>
                                         </li>
                                         <li <?php if ($seg1 == 'booking_history') { ?>class="active" <?php } ?>>
-
                                             <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-list"
                                                     aria-hidden="true"></i>
                                                 <span class="hidden-xs hidden-sm">Meetings Scheduled</span>
                                             </a>
                                         </li>
                                     <?php } else { ?>
-                                        <li <?php if ($seg1 == 'chat') { ?>class="active" <?php } ?>>
-
-                                            <a href="<?= base_url('chat') ?>"><i class="fa fa-commenting" aria-hidden="true"></i>
-                                                <span class="hidden-xs hidden-sm">Messages</span>
-                                                <?php
-                                                $countMessage = $this->db->query("Select COUNT(id) as msgcount FROM chat WHERE userto_id ='" . $_SESSION['afrebay']['userId'] . "' AND status = '0'")->result();
-                                                if ($countMessage[0]->msgcount != 0) { ?>
-                                                    <span class="notification notificationf1">
-                                                        <?php echo $countMessage[0]->msgcount; ?>
-                                                    </span>
-                                                <?php } ?>
-                                                <span class="notification notificationf">
-                                                    <?php echo $countMessage[0]->msgcount; ?>
-                                                </span>
-                                            </a>
-                                        </li>
                                         <li <?php if ($seg1 == 'availability') { ?>class="active" <?php } ?>>
 
                                             <a href="<?= base_url('availability') ?>"><i class="fa fa-calender" aria-hidden="true"></i>
@@ -448,23 +394,6 @@ $get_setting = $this->Crud_model->get_single('setting');
                                         </li>
                                     <?php }
                                 } else { ?>
-                                    <li <?php if ($seg1 == 'chat') { ?>class="active" <?php } ?>>
-
-                                        <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-commenting"
-                                                aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">Messages</span>
-                                            <?php
-                                            $countMessage = $this->db->query("Select COUNT(id) as msgcount FROM chat WHERE userto_id ='" . $_SESSION['afrebay']['userId'] . "' AND status = '0'")->result();
-                                            if ($countMessage[0]->msgcount != 0) { ?>
-                                                <span class="notification notificationf1">
-                                                    <?php echo $countMessage[0]->msgcount; ?>
-                                                </span>
-                                            <?php } ?>
-                                            <span class="notification notificationf">
-                                                <?php echo $countMessage[0]->msgcount; ?>
-                                            </span>
-                                        </a>
-                                    </li>
                                     <li <?php if ($seg1 == 'availability') { ?>class="active" <?php } ?>>
 
                                         <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-calender"
@@ -473,7 +402,6 @@ $get_setting = $this->Crud_model->get_single('setting');
                                         </a>
                                     </li>
                                     <li <?php if ($seg1 == 'booking_history') { ?>class="active" <?php } ?>>
-
                                         <a href="javascript:void(0)" onclick="completeSub()"><i class="fa fa-list"
                                                 aria-hidden="true"></i>
                                             <span class="hidden-xs hidden-sm">Meetings Scheduled</span>
@@ -482,52 +410,14 @@ $get_setting = $this->Crud_model->get_single('setting');
                                 <?php }
                             }
                         } else {
-                            if (@$_SESSION['afrebay']['userType'] == '2') {
-                                $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
-                                if (empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize']) || empty($profile_check[0]['short_bio']) || empty(@$profile_check[0]['timeZone'])) { ?>
-                                    <li <?php if ($seg1 == 'chat') { ?>class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
-
-                                        <a href="javascript:void(0)" onclick="completeSub1()"><i class="fa fa-commenting"
-                                                aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">Messages</span>
-                                            <?php
-                                            $countMessage = $this->db->query("Select COUNT(id) as msgcount FROM chat WHERE userto_id ='" . $_SESSION['afrebay']['userId'] . "' AND status = '0'")->result();
-                                            if ($countMessage[0]->msgcount != 0) { ?>
-                                                <span class="notification notificationv1">
-                                                    <?php echo $countMessage[0]->msgcount; ?>
-                                                </span>
-                                            <?php } ?>
-                                            <span class="notification notificationv">
-                                                <?php echo $countMessage[0]->msgcount; ?>
-                                            </span>
-                                        </a>
-                                    </li>
-                                <?php } else { ?>
-                                    <li <?php if ($seg1 == 'chat') { ?>class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
-
-                                        <a href="<?= base_url('chat') ?>"><i class="fa fa-commenting" aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">Messages</span>
-                                            <?php
-                                            $countMessage = $this->db->query("Select COUNT(id) as msgcount FROM chat WHERE userto_id ='" . $_SESSION['afrebay']['userId'] . "' AND status = '0'")->result();
-                                            if ($countMessage[0]->msgcount != 0) { ?>
-                                                <span class="notification notificationv1">
-                                                    <?php echo $countMessage[0]->msgcount; ?>
-                                                </span>
-                                            <?php } ?>
-                                            <span class="notification notificationv">
-                                                <?php echo $countMessage[0]->msgcount; ?>
-                                            </span>
-                                        </a>
-                                    </li>
-                                <?php }
-                            } else {
+                            if (@$_SESSION['afrebay']['userType'] == '1') {
                                 $profile_check = $this->db->query("SELECT * FROM `users` WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
                                 if (empty($profile_check[0]['firstname']) || empty($profile_check[0]['lastname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['gender']) || empty($profile_check[0]['address']) || empty($profile_check[0]['short_bio'])) { ?>
                                     <li <?php if ($seg1 == 'chat') { ?>class="active" <?php } ?>>
 
                                         <a href="javascript:void(0)" onclick="completeSub1()"><i class="fa fa-commenting"
                                                 aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">Messages</span>
+                                            <span class="hidden-xs hidden-sm">Inbox</span>
                                             <?php
                                             $countMessage = $this->db->query("Select COUNT(id) as msgcount FROM chat WHERE userto_id ='" . $_SESSION['afrebay']['userId'] . "' AND status = '0'")->result();
                                             if ($countMessage[0]->msgcount != 0) { ?>
@@ -555,22 +445,6 @@ $get_setting = $this->Crud_model->get_single('setting');
                                         </a>
                                     </li>
                                 <?php } else { ?>
-                                    <li <?php if ($seg1 == 'chat') { ?>class="active" <?php } ?>>
-
-                                        <a href="<?= base_url('chat') ?>"><i class="fa fa-commenting" aria-hidden="true"></i>
-                                            <span class="hidden-xs hidden-sm">Messages</span>
-                                            <?php
-                                            $countMessage = $this->db->query("Select COUNT(id) as msgcount FROM chat WHERE userto_id ='" . $_SESSION['afrebay']['userId'] . "' AND status = '0'")->result();
-                                            if ($countMessage[0]->msgcount != 0) { ?>
-                                                <span class="notification notificationf1">
-                                                    <?php echo $countMessage[0]->msgcount; ?>
-                                                </span>
-                                            <?php } ?>
-                                            <span class="notification notificationf">
-                                                <?php echo $countMessage[0]->msgcount; ?>
-                                            </span>
-                                        </a>
-                                    </li>
                                     <li <?php if ($seg1 == 'availability') { ?>class="active" <?php } ?> <?php if($_SESSION['afrebay']['userType'] == '2') { echo "style='width: auto !important'"; }?>>
 
                                         <a href="<?= base_url('availability') ?>"><i class="fa fa-calendar" aria-hidden="true"></i>
@@ -587,8 +461,7 @@ $get_setting = $this->Crud_model->get_single('setting');
                             }
                         } ?>
                     </ul>
-                    <input type="hidden" name="userto_id" id="userto_id"
-                        value="<?php echo @$_SESSION['afrebay']['userId'] ?>">
+                    <input type="hidden" name="userto_id" id="userto_id" value="<?php echo @$_SESSION['afrebay']['userId'] ?>">
                 </div>
             </div>
             <style>

@@ -52,7 +52,7 @@
 </section>
 
 <?php $this->load->view('sidebar'); ?>
-<div class="<?php if(@$_SESSION['afrebay']['userType'] == '1') { echo "col-md-7";} else {echo "col-md-12"; }?> col-sm-12 display-table-cell v-align">
+<div class="<?php if(@$_SESSION['afrebay']['userType'] == '1') { echo "col-md-10";} else {echo "col-md-12"; }?> col-sm-12 display-table-cell v-align">
     <div class="user-dashboard">
         <div class="row row-sm">
             <div class="col-xl-12 col-lg-12 col-md-12">
@@ -64,89 +64,117 @@
                 </div>
                 <!-- employer list -->
                 <?php if ($_SESSION['afrebay']['userType'] == 2) { ?>
-                    <div class="row justify-content-md-center">
-                        <?php
-                        $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
-                        if (empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize']) || empty($profile_check[0]['short_bio'])) { ?>
-                            <div class="col-md-4 col-sm-12">
-                                <a href="javascript:void(0)" onclick="completeSub()">
-                                    <div class="dashboard">
-                                        <h4>
-                                            <center>My Jobs</center>
-                                        </h4>
-                                        <h3>
-                                            <center>
-                                                <?= count($get_job); ?>
-                                            </center>
-                                        </h3>
-                                    </div>
-                                </a>
+                <div class="row justify-content-md-center">
+                    <?php
+                    $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
+                    if (empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize']) || empty($profile_check[0]['short_bio'])) { ?>
+                    <div class="col-md-4 col-sm-12">
+                        <a href="javascript:void(0)" onclick="completeSub()">
+                            <div class="dashboard">
+                                <h4>
+                                    <center>My Jobs</center>
+                                </h4>
+                                <h3>
+                                    <center>
+                                        <?= count($get_job); ?>
+                                    </center>
+                                </h3>
                             </div>
-                        <?php } else { ?>
-                            <div class="col-md-4 col-sm-12">
-                                <a href="<?= base_url('myjob') ?>">
-                                    <div class="dashboard">
-                                        <h4>
-                                            <center>My Jobs</center>
-                                        </h4>
-                                        <h3>
-                                            <center>
-                                                <?= count($get_job); ?>
-                                            </center>
-                                        </h3>
-                                    </div>
-                                </a>
-                            </div>
-                        <?php } ?>
-
-                        <?php $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
-                        if (empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize']) || empty($profile_check[0]['short_bio'])) { ?>
-                            <div class="col-md-4 col-sm-12">
-                                <a href="javascript:void(0)" onclick="completeSub()">
-                                    <div class="dashboard">
-                                        <h4>
-                                            <center>Applications to your jobs</center>
-                                        </h4>
-                                        <h3>
-                                            <center>
-                                                <?= count($bid_job); ?>
-                                            </center>
-                                        </h3>
-                                    </div>
-                                </a>
-                            </div>
-                        <?php } else { ?>
-                            <div class="col-md-4 col-sm-12">
-                                <a href="<?= base_url('jobbid') ?>">
-                                    <div class="dashboard">
-                                        <h4>
-                                            <center>Applications to your jobs</center>
-                                        </h4>
-                                        <h3>
-                                            <center>
-                                                <?= count($bid_job); ?>
-                                            </center>
-                                        </h3>
-                                    </div>
-                                </a>
-                            </div>
-                        <?php } ?>
-                        <div id="root"></div>
+                        </a>
                     </div>
-                    <!--  end row -->
-                <?php } else if ($_SESSION['afrebay']['userType'] == 1) { ?>
-                        <!--  end employer list -->
-                        <!-- worker list -->
-                        <!-- <div style="background: #f67a49; color:white; padding:10px;">Profile</div>
-                    <div class="row">
-                        <ul class="list_profile">
-                            <li><b>Name : </b> <span style="font-size:16px;"><?php //if(!empty($get_user->firstname)){ echo $get_user->firstname.' '.$get_user->lastname;} ?></span></li>
-                            <li><b>Address : </b><span style="font-size:16px;"><?php //if(!empty($get_user->address)){ echo $get_user->address;} ?></span></li>
-                            <li><b>Email : </b><span style="font-size:16px;"><?php //if(!empty($get_user->email)){ echo $get_user->email;} ?></span></li>
-                            <li><b>Phone : </b><span style="font-size:16px;"><?php //if(!empty($get_user->mobile)){ echo $get_user->mobile;} ?></span></li>
-                        </ul>
-                    </div> -->
-                        <!-- end row -->
+                    <?php } else { ?>
+                    <div class="col-md-4 col-sm-12">
+                        <a href="<?= base_url('myjob') ?>">
+                            <div class="dashboard">
+                                <h4>
+                                    <center>My Jobs</center>
+                                </h4>
+                                <h3>
+                                    <center>
+                                        <?= count($get_job); ?>
+                                    </center>
+                                </h3>
+                            </div>
+                        </a>
+                    </div>
+                    <?php } ?>
+
+                    <?php $profile_check = $this->db->query("SELECT `profilePic`, `companyname`, `email`, `mobile`,`address`, `foundedyear`, `teamsize`, `short_bio` FROM `users` WHERE userId = '" . @$_SESSION['afrebay']['userId'] . "'")->result_array();
+                    if (empty($profile_check[0]['companyname']) || empty($profile_check[0]['email']) || empty($profile_check[0]['address']) || empty($profile_check[0]['teamsize']) || empty($profile_check[0]['short_bio'])) { ?>
+                    <div class="col-md-4 col-sm-12">
+                        <a href="javascript:void(0)" onclick="completeSub()">
+                            <div class="dashboard">
+                                <h4>
+                                    <center>Applications to your jobs</center>
+                                </h4>
+                                <h3>
+                                    <center>
+                                        <?= count($bid_job); ?>
+                                    </center>
+                                </h3>
+                            </div>
+                        </a>
+                    </div>
+                    <?php } else { ?>
+                    <div class="col-md-4 col-sm-12">
+                        <a href="<?= base_url('jobbid') ?>">
+                            <div class="dashboard">
+                                <h4>
+                                    <center>Applications to your jobs</center>
+                                </h4>
+                                <h3>
+                                    <center>
+                                        <?= count($bid_job); ?>
+                                    </center>
+                                </h3>
+                            </div>
+                        </a>
+                    </div>
+                    <?php } ?>
+                    <div id="root"></div>
+                </div>
+                <?php } else if($_SESSION['afrebay']['userType'] == '1' || @$_SESSION['afrebay']['userType'] == '3') { ?>
+                <div class="col-md-6 col-6 v-align CustomDesign" style="display: inline-block; float: left; margin-top: 10px;">
+                    <p class="CustomPara">Upcoming Interview</p>
+                    <div class="CustomBlock">
+                        <?php
+                        $selectDate = date('Y-m-d');
+                        $employeeId = $_SESSION['afrebay']['userId'];
+                        $availableData = $this->db->query("SELECT user_availability.*, user_booking.* FROM user_availability JOIN user_booking ON user_availability.id = user_booking.available_id WHERE start_date > '" . $selectDate . "' AND user_id ='" . @$employeeId . "'")->result_array();
+                        foreach ($availableData as $value) { ?>
+                            <p class="ParaHeading"><?= $value['start_date'] ?></p>
+                            <div style='width: 100%; display: inline-block; padding: 0 10px; margin-bottom: 20px;'>
+                                <div style='width: 100%; display: inline-block; border-radius: 10px; box-shadow: 0 0 10px #dddddd; padding: 10px 0 10px 0;'>
+                                    <?php $getBookSlot = explode(',', $value['bookingTime']);
+                                    $meetingLink = explode(',', $value['meeting_link']);
+                                    for ($i = 0; $i < count($getBookSlot); $i++) { ?>
+                                        <?php
+                                        $booking_id = $value[$i]['id'];
+                                        $employee_id = $value[$i]['employee_id'];
+                                        $employer_id = $value[$i]['employer_id'];
+                                        $available_id = $value[$i]['available_id'];
+                                        $bookingTime = $value[$i]['bookingTime'];
+                                        ?>
+                                        <div style='width: 100%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'>
+                                            <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'>
+                                                <?= date('h:i A', strtotime($getBookSlot[$i])) ?> to
+                                                <?= date('h:i A', strtotime($getBookSlot[$i]) + 60 * 60) ?>
+                                            </p>
+                                            <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;"><a href="<?= $meetingLink[$i] ?>">Meeting Link</a></p>
+                                            <!-- <input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck(<?= $booking_id; ?>)'> -->
+                                        </div>
+                                    <?php }
+                                    $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '" . @$value['employer_id'] . "'")->row(); ?>
+                                    <div>
+                                        <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Booked By:
+                                            <?= @$getEmployer->companyname ?>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
                 <?php } ?>
             </div>
         </div>

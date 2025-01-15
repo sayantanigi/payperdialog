@@ -15,7 +15,7 @@
         <div class="row align-items-center">
             <div class="col-md-12 col-12">
                 <?php if ($_SESSION['afrebay']['userType'] == '1') { ?>
-                    <h2 class="breadcrumb-title">My Jobs</h2>
+                    <h2 class="breadcrumb-title">My Applications    </h2>
                 <?php } else { ?>
                     <h2 class="breadcrumb-title">Job Applicants</h2>
                 <?php } ?>
@@ -24,7 +24,7 @@
     </div>
 </section>
 <?php $this->load->view('sidebar'); ?>
-<div class="<?php if ($_SESSION['afrebay']['userType'] == '1' || @$_SESSION['afrebay']['userType'] == '3') { echo "col-md-7"; } else { echo "col-md-12";} ?> col-sm-12 display-table-cell v-align">
+<div class="<?php if ($_SESSION['afrebay']['userType'] == '1' || @$_SESSION['afrebay']['userType'] == '3') { echo "col-md-10"; } else { echo "col-md-12";} ?> col-sm-12 display-table-cell v-align">
     <div class="text-success-msg f-20" style="text-align: center;">
         <?php if ($this->session->flashdata('message')) {
             echo $this->session->flashdata('message');
@@ -73,33 +73,11 @@
                                                                 echo  "<a href='". @$key->meeting_link."'>Meeting Link</a>";
                                                             }
                                                         } ?>
-                                                        <!-- <a href="javascript:void(0)" id="view_<?php echo $key->id ?>" data-toggle="tooltip" title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                                                        <div class="modal fade" id="exampleModal_<?php echo $key->id ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog list-job-modal">
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="exampleModalLabel">Job Bid Details</h5>
-                                                                        <button type="button" class="btn-close modalClose_<?php echo $key->id ?>" data-bs-dismiss="modal" aria-label="Close">X</button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div class="row">
-                                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 list-job-modal-col">
-                                                                                <p>Bid Amount : <span>$ <?php echo $key->bid_amount ?> </span></p>
-                                                                            </div>
-                                                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 list-job-modal-col">
-                                                                                <p>Duration : <span><?php echo $key->duration ?></span></p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div> -->
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="2" class="bid_contact-profile">
                                                         <?php
-                                                        //if(empty($key->profilePic))
                                                         if (@$key->profilePic && file_exists('uploads/users/' . @$key->profilePic)) { ?>
                                                             <img src="<?php echo base_url() ?>uploads/users/<?php echo $key->profilePic ?>" alt="" style="width: 60px; height: 60px; object-fit: cover;">
                                                         <?php } else { ?>
@@ -110,12 +88,6 @@
                                                         </a>
                                                     </td>
                                                 </tr>
-                                                <!-- <tr>
-                                                    <td colspan="2" class="bid-amount">
-                                                        <label>Bid Amount:</label>
-                                                        <?= "USD" . " " . $key->bid_amount; ?>
-                                                    </td>
-                                                </tr> -->
                                                 <tr>
                                                     <td colspan="2" class="year">
                                                         <label>Date:</label>
@@ -172,50 +144,6 @@
         </div>
     </div>
 </div>
-
-<?php if($_SESSION['afrebay']['userType'] == '1' ||@$_SESSION['afrebay']['userType'] == '3') { ?>
-<div class="col-md-3 col-6 v-align CustomDesign" style="display: inline-block; float: left; margin-top: 10px;">
-    <p class="CustomPara">Upcoming Booking</p>
-    <div class="CustomBlock">
-        <?php
-        $selectDate = date('Y-m-d');
-        $employeeId = $_SESSION['afrebay']['userId'];
-        $availableData = $this->db->query("SELECT user_availability.*, user_booking.* FROM user_availability JOIN user_booking ON user_availability.id = user_booking.available_id WHERE start_date > '" . $selectDate . "' AND user_id ='" . @$employeeId . "'")->result_array();
-        foreach ($availableData as $value) { ?>
-            <p class="ParaHeading"><?= $value['start_date'] ?></p>
-            <div style='width: 100%; display: inline-block; padding: 0 10px; margin-bottom: 20px;'>
-                <div style='width: 100%; display: inline-block; border-radius: 10px; box-shadow: 0 0 10px #dddddd; padding: 10px 0 10px 0;'>
-                    <?php $getBookSlot = explode(',', $value['bookingTime']);
-                    $meetingLink = explode(',', $value['meeting_link']);
-                    for ($i = 0; $i < count($getBookSlot); $i++) { ?>
-                        <?php
-                        $booking_id = $value[$i]['id'];
-                        $employee_id = $value[$i]['employee_id'];
-                        $employer_id = $value[$i]['employer_id'];
-                        $available_id = $value[$i]['available_id'];
-                        $bookingTime = $value[$i]['bookingTime'];
-                        ?>
-                        <div style='width: 100%;float: left;display: flex; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'>
-                            <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;'>
-                                <?= date('h:i A', strtotime($getBookSlot[$i])) ?> to
-                                <?= date('h:i A', strtotime($getBookSlot[$i]) + 60 * 60) ?>
-                            </p>
-                            <p style="width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px; padding-left: 20px;"><a href="<?= $meetingLink[$i] ?>">Meeting Link</a></p>
-                            <!-- <input type='checkbox' style='position: unset; z-index: 1; opacity: 1; margin: 0px 10px 0px 0px;' id='completecheck' name='completecheck' value='1' onclick='completecheck(<?= $booking_id; ?>)'> -->
-                        </div>
-                    <?php }
-                    $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '" . @$value['employer_id'] . "'")->row(); ?>
-                    <div>
-                        <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Booked By:
-                            <?= @$getEmployer->companyname ?>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        <?php } ?>
-    </div>
-</div>
-<?php } ?>
 </div>
 </div>
 </section>
@@ -269,38 +197,11 @@
     }
 </style>
 <script type="text/javascript">
-/*function change_biddingstatus(jobbid_id) {
-    var cnf = confirm('Are you sure to change the status?');
-    if(cnf==true) {
-        $.ajax({
-            type:"POST",
-            url:'<?= base_url('user/dashboard/changebiddingstatus') ?>',
-            data:{jobbid_id:jobbid_id},
-            success:function(returndata) {
-                if(returndata==1){
-                    location.reload();
-                }
-            }
-        });
-    }
-}*/
 $(document).ready(function () {
     $('.erroraggr').hide();
     <?php if (!empty ($get_postjob)) {
         $i = 1;
         foreach ($get_postjob as $value) { ?>
-            $('#view_<?php echo $value->id ?>').click(function () {
-                $('#exampleModal_<?php echo $value->id ?>').css("opacity", "1");
-                $('#exampleModal_<?php echo $value->id ?>').css("display", "block");
-                $('#exampleModal_<?php echo $value->id ?>').css("top", "0");
-                $('#exampleModal_<?php echo $value->id ?>').css("background", "#0e0d0d9e");
-                $('.modal-content').css("top", "220px");
-            })
-            $('.modalClose_<?php echo $value->id ?>').click(function () {
-                $('#exampleModal_<?php echo $value->id ?>').css("opacity", "0");
-                $('#exampleModal_<?php echo $value->id ?>').css("display", "none");
-            })
-
             $('#change_biddingstatus_<?php echo $value->id ?>').change(function () {
                 var bidstatus = $('#change_biddingstatus_<?php echo $value->id ?>').val();
                 var jodBidid = $('#jodBidid_<?php echo $value->id ?>').val();
@@ -312,12 +213,11 @@ $(document).ready(function () {
                     content: confirmationText,
                     buttons: {
                         confirm: function () {
-                            $.ajax({
+                            /*$.ajax({
                                 type: "POST",
                                 url: '<?= base_url('user/dashboard/changebiddingstatus') ?>',
                                 data: { bidstatus: bidstatus, jodBidid: jodBidid, postJobid: postJobid, jobbiduserid: jobbiduserid, jobpostuserid: jobpostuserid },
                                 success: function (returndata) {
-                                    //console.log(returndata);
                                     const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal'));
                                     aggrementmodal.show();
                                     $('#bidstatus').val(bidstatus);
@@ -325,11 +225,27 @@ $(document).ready(function () {
                                     $('#postJobid').val(postJobid);
                                     $('#jobbiduserid').val(jobbiduserid);
                                     $('#jobpostuserid').val(jobpostuserid);
-                                    // if (returndata == 1) {
-                                    //     location.reload();
-                                    // }
                                 }
-                            });
+                            });*/
+                            $('#bidstatus').val(bidstatus);
+                            $('#jodBidid').val(jodBidid);
+                            $('#postJobid').val(postJobid);
+                            $('#jobbiduserid').val(jobbiduserid);
+                            $('#jobpostuserid').val(jobpostuserid);
+                            if(bidstatus === "Ready for Interview"){
+                                const aggrementmodal = new bootstrap.Modal(document.getElementById('aggrementmodal'));
+                                aggrementmodal.show();
+                            } else {
+                                $.ajax({
+                                    type: "POST",
+                                    url: '<?= base_url('user/dashboard/changebiddingstatus') ?>',
+                                    data: { bidstatus: bidstatus, jodBidid: jodBidid, postJobid: postJobid, jobbiduserid: jobbiduserid, jobpostuserid: jobpostuserid },
+                                    success: function (returndata) {
+                                        location.reload();
+                                    }
+                                });
+                            }
+
                         },
                         cancel: function () {
                             location.reload();
@@ -352,21 +268,29 @@ function bookNow() {
         var postJobid = $('#postJobid').val();
         var jobbiduserid = $('#jobbiduserid').val();
         var jobpostuserid = $('#jobpostuserid').val();
+
         $.ajax({
-            type:"post",
-            url:"<?php echo base_url()?>user/Dashboard/checktoaggrement",
-            data:{bidstatus: bidstatus, jodBidid: jodBidid, postJobid: postJobid, jobbiduserid: jobbiduserid, jobpostuserid: jobpostuserid},
-            success:function(returndata) {
-                console.log(returndata);
-                if(returndata == 1) {
-                    location.reload();
-                } else {
-                    $.alert({
-                        title: '',
-                        content: "Something went wrong. Please try again later.",
-                    });
-                    return false;
-                }
+            type: "POST",
+            url: '<?= base_url('user/dashboard/changebiddingstatus') ?>',
+            data: { bidstatus: bidstatus, jodBidid: jodBidid, postJobid: postJobid, jobbiduserid: jobbiduserid, jobpostuserid: jobpostuserid },
+            success: function (returndata) {
+                $.ajax({
+                    type:"post",
+                    url:"<?php echo base_url()?>user/Dashboard/checktoaggrement",
+                    data:{bidstatus: bidstatus, jodBidid: jodBidid, postJobid: postJobid, jobbiduserid: jobbiduserid, jobpostuserid: jobpostuserid},
+                    success:function(returndata) {
+                        console.log(returndata);
+                        if(returndata == 1) {
+                            location.reload();
+                        } else {
+                            $.alert({
+                                title: '',
+                                content: "Something went wrong. Please try again later.",
+                            });
+                            return false;
+                        }
+                    }
+                });
             }
         });
     }  else {

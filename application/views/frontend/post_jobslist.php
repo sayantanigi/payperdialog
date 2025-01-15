@@ -144,7 +144,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="widget">
+                            <!-- <div class="widget">
                                 <h3 class="sb-title closed">Last Activity</h3>
                                 <div class="specialism_widget">
                                     <div class="simple-checkbox">
@@ -154,7 +154,7 @@
                                         <p><input type="radio" name="days" id="25" value="14"/><label for="25">more than 3 months ago</label></p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </form>
                     </div>
                 </aside>
@@ -529,7 +529,7 @@ $(document).ready(function () {
 });
 
 (function() {
-    
+
 
 })();
 </script>

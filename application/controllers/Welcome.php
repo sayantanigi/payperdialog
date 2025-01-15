@@ -306,6 +306,7 @@ class Welcome extends CI_Controller {
 		$this->session->set_flashdata('message', 'Post Job Created Successfull !');
 		$insert_id = $this->db->insert_id();
 		redirect(base_url("postdetail/".base64_encode($insert_id)));
+        //redirect(base_url("ourjobs"));
 	}
 
 	function post_jobinfo($id) {
@@ -386,7 +387,7 @@ class Welcome extends CI_Controller {
 	public function states_by_country() {
 		$c_name = $this->input->post('country_name');
 		$get_cid = $this->db->query("SELECT * FROM countries WHERE name = '".$c_name."'")->result_array();
-		$state_list = $this->db->query("SELECT * FROM states WHERE country_id = '".$get_cid[0]['id']."'")->result_array();
+		$state_list = $this->db->query("SELECT * FROM states WHERE country_id = '".$get_cid[0]['id']."' ORDER BY name ASC")->result_array();
 		if(!empty($state_list)) {
 			$html = "<option value=''>Select State</option>";
 			foreach ($state_list as $row_data) {
