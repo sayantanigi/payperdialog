@@ -337,6 +337,19 @@ class Home extends MY_Controller {
 		$this->load->view('footer');
 	}
 
+    public function workerdetail() {
+        $user_id = $this->input->get('uID', true);
+		$cond = "users.userType='1' and users.userId='" . base64_decode($user_id) . "'";
+		$data['user_detail'] = $this->Users_model->users_detail($cond);
+		$data['user_education'] = $this->Crud_model->GetData('user_education', '', "user_id='" . base64_decode($user_id) . "'", '', '(id)desc');
+		$data['user_work'] = $this->Crud_model->GetData('user_workexperience', '', "user_id='" . base64_decode($user_id) . "'", '', '(id)desc');
+		$data['get_banner'] = $this->Crud_model->get_single('banner', "page_name='Frelancer Details'");
+        $data['jobID'] = base64_decode($this->input->get('jobID', true));
+		$this->load->view('header');
+		$this->load->view('frontend/worker_profile', $data);
+		$this->load->view('footer');
+	}
+
 	function expert_list() {
 		$data['get_specialist'] = $this->Crud_model->GetData('specialist');
 		$data['get_banner'] = $this->Crud_model->get_single('banner', "page_name='Expert'");

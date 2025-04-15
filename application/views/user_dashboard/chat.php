@@ -70,7 +70,7 @@
                                                     </div>
                                                 </div>
                                                 <div id="search">
-                                                   <input type="text" placeholder="Search by Contacts and Job ID" />
+                                                   <input type="text" id="search_professional_all" placeholder="Search by Contacts and Job ID" />
                                                 </div>
                                                 <div id="contacts">
                                                     <ul>
@@ -82,7 +82,7 @@
                                                             $get_user = $this->Crud_model->get_single('users', "userId='" . $user->userid . "'");
                                                             $get_msg = $this->Crud_model->GetData('chat', '', "userto_id='".$user->userid."' and userfrom_id='".$user->user_id."' and postjob_id = '".$user->post_id."'", '', 'id desc', '', '1');
                                                         ?>
-                                                        <li class="contact" onclick="return getuser('<?= $user->userid ?>','<?= $user->post_id ?>');">
+                                                        <li class="contact contactList_all" onclick="return getuser('<?= $user->userid ?>','<?= $user->post_id ?>');">
                                                             <div class="wrap">
                                                                 <span class="contact-status online"></span>
                                                                 <?php if (@$user->profilePic && file_exists('uploads/users/' . @$user->profilePic)) { ?>
@@ -108,7 +108,7 @@
                                                             $get_user = $this->Crud_model->get_single('users', "userId='" . $user->user_id . "'");
                                                             $get_msg1 = $this->Crud_model->GetData('chat', '', "userfrom_id='".$user->user_id."' and userto_id='".$user->userid."' and postjob_id = '".$user->post_id."'", '', 'id desc', '', '1');
                                                         ?>
-                                                        <li class="contact" onclick="return getuser('<?= $get_user->userId ?>','<?= $user->post_id ?>');">
+                                                        <li class="contact contactList_all" onclick="return getuser('<?= $get_user->userId ?>','<?= $user->post_id ?>');">
                                                             <div class="wrap">
                                                                 <span class="contact-status online"></span>
                                                                 <?php if (@$get_user->profilePic && file_exists('uploads/users/'. @$get_user->profilePic)) { ?>
@@ -194,8 +194,8 @@
     .Chat_User #frame #sidepanel {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;}
 </style>
 <!-- <link rel="stylesheet" href="https://unpkg.com/placeholder-loading/dist/css/placeholder-loading.min.css"> -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-<script src="https://use.typekit.net/hoy3lrg.js"></script>
+<!-- <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> -->
+<!-- <script src="https://use.typekit.net/hoy3lrg.js"></script> -->
 <script>
 try {
     Typekit.load({
@@ -209,13 +209,16 @@ try {
 $(".messages").animate({
     scrollTop: $(document).height()
 }, "fast");
+
 $("#profile-img").click(function() {
     $("#status-options").toggleClass("active");
 });
+
 $(".expand-button").click(function() {
     $("#profile").toggleClass("expanded");
     $("#contacts").toggleClass("expanded");
 });
+
 $("#status-options ul li").click(function() {
     $("#profile-img").removeClass();
     $("#status-online").removeClass("active");
@@ -236,6 +239,7 @@ $("#status-options ul li").click(function() {
     };
     $("#status-options").removeClass("active");
 });
+
 function newMessage() {
     //message = $(".message-input input").val();
     var userfromid = $('#userfromid').val();
@@ -282,8 +286,17 @@ $("#message").mouseover(function(){
 $(document).ready(function(){
     $('.EachvChat').hide();
     $('.EachfChat').hide();
+    $('#search_professional_all').on('input', function (e) {
+        let lists = document.querySelectorAll('.contactList_all')
+        lists.forEach((list) => {
+            if (!list.innerHTML.toLowerCase().includes(e.target.value.toLowerCase())) {
+                list.classList.add('d-none')
+            } else {
+                list.classList.remove('d-none')
+            }
+        })
+    })
 });
-
 
 function getMessage(){
     var userfromid = $('#userfromid').val();
@@ -348,7 +361,6 @@ $(window).on('keydown', function(e) {
         return false;
     }
 });
-//# sourceURL=pen.js
 
 function getuser(usert_id,post_id) {
     var displayProduct = 3;

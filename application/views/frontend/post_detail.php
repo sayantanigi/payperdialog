@@ -5,30 +5,17 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
     $banner_img = base_url("assets/images/resource/mslider1.jpg");
 } ?>
 <style media="screen">
-.postdetail {
-    padding: 7px 33px;
-    border-radius: 10px;
-    background: red;
-    color: #fff;
-    margin: 10px;
-    font-size: 20px;
-}
-.cstm_viewbid_btn {
-    background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 75%) 100%) !important;
-    border: 0;
-    border-radius: 35px;
-    letter-spacing: 0;
-    font-weight: 600;
-    width: 100%;
-    display: block;
-    color: #fff;
-    padding: 10px;
-    text-align: center;}
+.postdetail {padding: 7px 33px; border-radius: 10px; background: red; color: #fff; margin: 10px; font-size: 20px;}
+.cstm_viewbid_btn {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 75%) 100%) !important; border: 0; border-radius: 35px; letter-spacing: 0; font-weight: 600; width: 100%; display: block; color: #fff; padding: 10px; text-align: center;}
+.Employees_Search_List {padding: 0 !important;}
+aside .widget {
+    margin-top: 5px !important;
+    margin-bottom: 5px !important;
+    border-bottom: 1px solid #eee !important;}
 </style>
 <section class="overlape">
     <div class="block no-padding">
         <div data-velocity="-.1" style="background: url('<?= $banner_img ?>') repeat scroll 50% 422.28px transparent;" class="parallax scrolly-invisible no-parallax"></div>
-        <!-- PARALLAX BACKGROUND IMAGE -->
         <div class="container fluid">
             <div class="row">
                 <div class="col-lg-12">
@@ -70,14 +57,6 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                         } ?>
                                         </a>
                                     </li>
-                                    <!-- <a class="btn btn-info" href="<?= base_url('employerdetail/' . base64_encode($post_data->user_id)) ?>">
-                                        <?php
-                                        if ($postedBy[0]['userType'] == 1) {
-                                            echo $postedBy[0]['firstname'] . ' ' . $postedBy[0]['lastname'];
-                                        } else if ($postedBy[0]['userType'] == 2) {
-                                            echo $postedBy[0]['companyname'];
-                                        } ?>
-                                    </a> -->
                                     <?php if (!empty($post_data->description)) { ?>
                                     <li class="cstm_desc"><span>Description</span><?php echo $post_data->description; ?>
                                     <?php } ?>
@@ -206,7 +185,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                         <?php } else {
                                             $userBidData = $this->db->query("SELECT * FROM `job_bid` WHERE postjob_id = '".$post_data->id."' and user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
                                             if(!empty($userBidData)) { ?>
-                                            <a href="javascript:void(0)" class="btn btn-info cstm_applybtn">Already Applied</a>
+                                            <a href="javascript:void(0)" class="btn btn-info cstm_applybtn">Application successful</a>
                                         <?php } else { ?>
                                             <input type="submit" class="btn btn-info cstm_applybtn" value="Apply Now">
                                             <input type="hidden" name="postjob_id" value="<?php if (!empty($post_data->id)) { echo $post_data->id; } ?>">
@@ -241,9 +220,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                     <li>
                                         <div class="hope-aus1">
                                             <ul>
-                                                <!-- <li><a href="javascript:void(0)"><i class="fa fa-shield"></i></a></li> -->
                                                 <li><a href="javascript:void(0)"><i class="fa fa-envelope"></i></a></li>
-                                                <!-- <li><a href="javascript:void(0)"><i class="fa fa-user"></i></a></li> -->
                                                 <li><a href="javascript:void(0)"><i class="fa fa-phone"></i></a></li>
                                             </ul>
                                         </div>
@@ -261,61 +238,137 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
 
 <?php if(@$_SESSION['afrebay']['userType'] == '2') { ?>
 <section class="max_height">
-    <!-- <div class="block no-padding Our_Jobs Employees_Search_List"> -->
     <div class="block no-padding Employees_Search_List">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="row no-gape">
-                        <h3>Recommended Employee</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
+            <h3 style="padding: 0 0px 0px 15px;">Recommended Employee</h3>
+            <div class="row no-gape">
+            <?php
+                $key_skills = explode(',', $post_data->required_key_skills);
+                $experience = $post_data->experience_level;
+                $noEmployeesFound = true; // Flag to track if any employees are found
+                $rankedEmployees = []; // Array to store ranked employees
 
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 column Employees_Search_Result">
+                foreach ($key_skills as $skill) {
+                    $recomendedEmployeeList = $this->db->query("SELECT * FROM `users` WHERE instr(concat(',', skills, ','), ',$skill,') AND experience <= '".$experience."' AND `status` = 1 AND `email_verified` = 1 AND userType = '1' ORDER BY experience DESC")->result_array();
+                    if (!empty($recomendedEmployeeList)) {
+                        $noEmployeesFound = false; // Employees found, set flag to false
+                        foreach ($recomendedEmployeeList as $employee) {
+                            $matchScore = substr_count($employee['skills'], $skill); // Count occurrences of the skill for ranking
+                            $employee['rank'] = $matchScore;
+                            $rankedEmployees[] = $employee;
+                        }
+                    }
+                }
+
+                // Sort employees by rank in descending order
+                usort($rankedEmployees, function($a, $b) {
+                    return $b['rank'] - $a['rank'];
+                });
+                ?>
+                <?php if (!$noEmployeesFound) { ?>
+                <aside class="col-lg-3 column border-right Employees_Search_Panel">
+                    <div class="Employees_Search_Panel_Data">
+                        <form method="post" id="filter_form">
+                            <input type="hidden" name="key_skill" id="key_skill" value="<?= $post_data->required_key_skills; ?>" />
+                            <input type="hidden" name="job_experience" id="job_experience" value="<?= $post_data->experience_level; ?>" />
+                            <div class="widget">
+                                <h3 class="sb-title closed">Employment Duration</h3>
+                                <div class="specialism_widget">
+                                    <select class="form-control" name="duration" onchange="filter_job();">
+                                        <option value="">Select Option</option>
+                                        <option value="1" <?php if(@$duration == 1) {echo 'selected';}?>>Permanent</option>
+                                        <option value="2" <?php if(@$duration == 2) {echo 'selected';}?>>Contract</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="widget">
+                                <h3 class="sb-title closed">Industry</h3>
+                                <div class="specialism_widget">
+                                    <select data-placeholder="Select Industry" class="form-control" name="industry" onchange="filter_job();">
+                                        <option value="">Select Option</option>
+                                        <?php
+                                        $getcategory = $this->Crud_model->GetData('category', 'id, category_name', "");
+                                        foreach($getcategory as $key) {?>
+                                            <option value="<?= $key->id; ?>" <?php if($key->id == $category) {echo "selected"; }?>><?php echo $key->category_name;?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="widget">
+                                <h3 class="sb-title closed">Experience Level</h3>
+                                <div class="specialism_widget">
+                                    <select data-placeholder="Select Experience Level" class="form-control" name="experience_level" onchange="filter_job();">
+                                        <option value="">Select Option</option>
+                                        <option value="1" <?php if(@$experience_level == 1) {echo 'selected';}?>>0 to 02 Years</option>
+                                        <option value="2" <?php if(@$experience_level == 2) {echo 'selected';}?>>03 to 05 Years</option>
+                                        <option value="3" <?php if(@$experience_level == 3) {echo 'selected';}?>>06 to 08 Years</option>
+                                        <option value="4" <?php if(@$experience_level == 4) {echo 'selected';}?>>08 to 10 Years</option>
+                                        <option value="5" <?php if(@$experience_level == 5) {echo 'selected';}?>>> 10 Years</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="widget">
+                                <h3 class="sb-title closed">Education</h3>
+                                <div class="specialism_widget">
+                                    <select class="form-control" data-placeholder="Select Education" name="education" onchange="filter_job();">
+                                        <option value="">Select Option</option>
+                                        <option value="1" <?php if(@$education == 1) {echo 'selected';}?>>Professional Certificate</option>
+                                        <option value="2" <?php if(@$education == 2) {echo 'selected';}?>>Undergraduate Degrees</option>
+                                        <option value="3" <?php if(@$education == 3) {echo 'selected';}?>>Transfer Degree</option>
+                                        <option value="4" <?php if(@$education == 4) {echo 'selected';}?>>Associate Degree</option>
+                                        <option value="5" <?php if(@$education == 5) {echo 'selected';}?>>Bachelor Degree</option>
+                                        <option value="6" <?php if(@$education == 6) {echo 'selected';}?>>Graduate Degrees</option>
+                                        <option value="7" <?php if(@$education == 7) {echo 'selected';}?>>Master Degree</option>
+                                        <option value="8" <?php if(@$education == 8) {echo 'selected';}?>>Doctoral Degrees</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- <div class="widget">
+                                <h3 class="sb-title closed">Application Deadline Date</h3>
+                                <div class="specialism_widget">
+                                    <input type="date" placeholder="Select a Date" name="appli_deadeline" class="form-control datepicker" id="datepicker" onchange="filter_job();"/>
+                                </div>
+                            </div> -->
+                        </form>
+                    </div>
+                </aside>
+                <?php } ?>
+                <div class="col-lg-9 column Employees_Search_Result">
                     <div class="padding-left">
                         <div class="emply-resume-sec">
                             <div id="post_list">
                             <?php
-                            $key_skills = explode(',', $post_data->required_key_skills);
-                            $experience = $post_data->experience_level;
-                            for ($i=0; $i < count($key_skills); $i++) {
-                                //$recomendedEmployeeList = $this->db->query("SELECT * FROM users WHERE (skills = '".trim($key_skills[$i])."' OR skills LIKE '%".trim($key_skills[$i])."%') AND experience <= '".$experience."'")->result_array();
-                                $recomendedEmployeeList = $this->db->query("SELECT * FROM `users` WHERE instr(concat(',', skills, ','), ',$key_skills[$i],') AND experience <= '".$experience."' AND `status` = 1 AND `email_verified` = 1 AND userType = '1' ORDER BY experience DESC")->result_array();
-                                foreach ($recomendedEmployeeList as $value) {
-                                    if(!empty($value['profilePic']) && file_exists('uploads/users/'.$value['profilePic'])) {
-                                        $profile_pic= '<img src="'.base_url('uploads/users/'.$value['profilePic']).'" alt="" />';
-                                    } else {
-                                        $profile_pic= '<img src="'.base_url('uploads/no_user.png').'" alt="" />';
-                                    }
+                            if (!$noEmployeesFound) {
+                                foreach ($rankedEmployees as $value) {
+                                    $profile_pic = (!empty($value['profilePic']) && file_exists('uploads/users/'.$value['profilePic']))
+                                        ? '<img src="'.base_url('uploads/users/'.$value['profilePic']).'" alt="" />'
+                                        : '<img src="'.base_url('uploads/no_user.png').'" alt="" />';
 
-                                    if(strlen($value['short_bio'])>100) {
-                                        $desc= substr(strip_tags($value['short_bio']), 0,100).'...';
-                                    } else {
-                                        $desc= strip_tags($value['short_bio']);
-                                    }
+                                    $desc = (strlen($value['short_bio']) > 100)
+                                        ? substr(strip_tags($value['short_bio']), 0, 100).'...'
+                                        : strip_tags($value['short_bio']);
                                 ?>
                                 <div class="emply-resume-list">
                                     <div class="emply-resume-thumb"><?= $profile_pic ?></div>
                                     <div class="emply-resume-info">
                                         <h3>
-                                            <a href="<?= base_url('employerdetail/'.base64_encode($value['userId']))?>" title=""><?= $value['firstname']." ".$value['lastname']?></a>
+                                            <a href="<?= base_url('employerdetail/'.base64_encode($value['userId'])) ?>" title=""><?= $value['firstname']." ".$value['lastname'] ?></a>
                                         </h3>
-                                        <p><i class="la la-map-marker"></i><?= $value['address']?></p>
-                                        <p><?= $value['address']?><?= $desc?></p>
-                                        <p></p>
+                                        <p><i class="la la-map-marker"></i><?= $value['address'] ?></p>
+                                        <p style="width: 80% !important;"><?= $desc ?></p>
+                                        <p>Rank: <?= $value['rank'] ?></p>
                                     </div>
                                     <div class="shortlists" style="width:50px;">
-                                        <a href="<?= base_url('employerdetail/'.base64_encode($value['userId']))?>" title="">View Profile<i class="la la-plus"></i></a>
+                                        <a href="<?= base_url('readyforinterview?uID='.base64_encode($value['userId']).'&jobID='.base64_encode($post_data->id)) ?>" title="" style=" width: 170px !important;">Ready for Interview<i class="la la-plus"></i></a>
                                     </div>
                                 </div>
-                                <?php }
-                            } ?>
+                                <?php
+                                }
+                            } else { ?>
+                                <div id="pagination_link" style="text-align: center;">Unfortunately, no employee has been identified with the data set required for this job posting at this time.</div>
+                            <?php } ?>
                             </div>
-                            <div align="center" id="pagination_link">Unfortunately, no employee has been identified with the specific skill set required for this job posting at this time.</div>
+                            <div class="emply-resume-sec" id="show"></div>
                         </div>
                     </div>
                 </div>
@@ -337,5 +390,19 @@ $(document).ready(function(){
         }
     });
 })
-
+function filter_job() {
+    var base_url = $("#base_url").val();
+    var formData = $('#filter_form').serialize();
+    $.ajax({
+        method:"POST",
+        cache:false,
+        url:base_url+"Welcome/filter_recommended_employer",
+        data: formData,
+        beforeSend:function(){},
+        success:function(returndata) {
+            $('#post_list').hide();
+            $('#show').html(returndata);
+        }
+    });
+}
 </script>

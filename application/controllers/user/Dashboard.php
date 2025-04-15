@@ -19,9 +19,14 @@ class Dashboard extends CI_Controller {
 		$data['get_service'] = $this->Crud_model->GetData('employer_services', '', "employer_id='" . $_SESSION['afrebay']['userId'] . "'");
 		$data['get_job'] = $this->Crud_model->GetData('postjob', '', "user_id='".$_SESSION['afrebay']['userId']."'");
 		$data['bid_job'] = $this->db->query("SELECT `postjob`.*, `job_bid`.* FROM `job_bid` JOIN `postjob` ON `postjob`.`id` = `job_bid`.`postjob_id` where `postjob`.user_id = '".$_SESSION['afrebay']['userId']."' AND postjob.is_delete = '0'")->result_array();
+        $data['job_bid'] = $this->db->query("SELECT * FROM `job_bid` where user_id = '".$_SESSION['afrebay']['userId']."'")->result_array();
 		$data['get_subscribe'] = $this->Crud_model->GetData('employer_subscription', '', "employer_id='" . $_SESSION['afrebay']['userId'] . "'");
 		$data['get_user'] = $this->Crud_model->get_single('users', "userId ='" . $_SESSION['afrebay']['userId'] . "' and userType='1'");
 		$data['get_product'] = $this->Crud_model->GetData('user_product', '', "user_id='".$_SESSION['afrebay']['userId']."' AND status = 1 AND is_delete= 1");
+        $data['interview_conducted'] = $this->db->query("SELECT * FROM user_booking where employer_id = '".$_SESSION['afrebay']['userId']."' OR employee_id = '".$_SESSION['afrebay']['userId']."'")->result_array();
+        $bookingData = $this->db->query("SELECT group_concat(id) as id FROM user_booking where employer_id = '".$_SESSION['afrebay']['userId']."' OR employee_id = '".$_SESSION['afrebay']['userId']."'")->row();
+        $data['average_cost'] = $this->db->query("SELECT AVG(rate) AS average_rate FROM user_booking_txn WHERE booking_id IN ($bookingData->id)")->row();
+        $data['payment_made'] = $this->db->query("SELECT * FROM user_booking_txn WHERE booking_id IN ($bookingData->id)")->result();
 		$this->load->view('header');
 		$this->load->view('user_dashboard/dashboard', $data);
 		$this->load->view('footer');
@@ -131,6 +136,9 @@ class Dashboard extends CI_Controller {
 			'longitude' => $_POST['longitude'],
 			'short_bio' => $_POST['short_bio'],
 			'rateperhour' => $_POST['rateperhour'],
+            'qualification' => $_POST['qualification'],
+            'serviceType' => $_POST['service_type'],
+            'industry' => $_POST['industry'],
             'timeZone' => $_POST['timeZone'],
 			'resume' => $resume,
 		);
@@ -1111,15 +1119,12 @@ class Dashboard extends CI_Controller {
                 $utcfromTime = new DateTime($fromtime, new DateTimeZone($_POST['timeZone']));
                 $utcfromTime->setTimezone(new DateTimeZone('UTC'));
                 $utcFromTime = $utcfromTime->format('H:i');
-
                 $utctoTime = new DateTime($totime, new DateTimeZone($_POST['timeZone']));
                 $utctoTime->setTimezone(new DateTimeZone('UTC'));
                 $utcToTime = $utctoTime->format('H:i');
-
                 $utcStartDate = new DateTime($weekDay['date']." ".$fromtime, new DateTimeZone($_POST['timeZone']));
                 $utcStartDate->setTimezone(new DateTimeZone('UTC'));
                 $utcStartDate = $utcStartDate->format('Y-m-d');
-
                 $schedule_data = array(
                     'user_id' => $weekDay['user_id'],
                     'weekday' => $weekDay['day'],
@@ -1131,7 +1136,6 @@ class Dashboard extends CI_Controller {
                     'repeat_month' => $weekDay['repeat_month'],
                     'schedule_status' => $weekDay['schedule_status'],
                 );
-
                 $data = $schedule_data;
                 if($data['repeat_month'] == '1') {
                     $repeatMonth = '12';
@@ -1152,7 +1156,6 @@ class Dashboard extends CI_Controller {
                         if ($firstTargetWeekday < $startDate) {
                             $firstTargetWeekday->modify('+1 week');
                         }
-
                         while ($firstTargetWeekday->format('m') == $currentMonth) {
                             $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
                             $utcStartDate->setTimezone(new DateTimeZone('UTC'));
@@ -1208,11 +1211,9 @@ class Dashboard extends CI_Controller {
                         if ($firstTargetWeekday < $startDate) {
                             $firstTargetWeekday->modify('+1 week');
                         }
-
                         // $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
                         // $utcStartDate->setTimezone(new DateTimeZone('UTC'));
                         // $utcStartDate = $utcStartDate->format('Y-m-d');
-
                         while ($firstTargetWeekday->format('m') == $currentMonth) {
                             $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
                             $utcStartDate->setTimezone(new DateTimeZone('UTC'));
@@ -1265,19 +1266,15 @@ class Dashboard extends CI_Controller {
             foreach ($_POST['fromtimedate'] as $index => $start_time) {
                 $end_time = $_POST['totimedate'][$index];
                 $time_slot = $start_time . ' to ' . $end_time;
-
                 $utcfromTimedate = new DateTime($start_time, new DateTimeZone($_POST['timeZonedate']));
                 $utcfromTimedate->setTimezone(new DateTimeZone('UTC'));
                 $utcFromTimedate = $utcfromTimedate->format('H:i');
-
                 $utctoTimedate = new DateTime($end_time, new DateTimeZone($_POST['timeZonedate']));
                 $utctoTimedate->setTimezone(new DateTimeZone('UTC'));
                 $utcToTimedate = $utctoTimedate->format('H:i');
-
                 $utcStartDate = new DateTime($date." ".$start_time, new DateTimeZone($_POST['timeZonedate']));
                 $utcStartDate->setTimezone(new DateTimeZone('UTC'));
                 $utcStartDate = $utcStartDate->format('Y-m-d');
-
                 $slot = array(
                     'user_id' => $_POST['user_id'],
                     'weekday' => $weekday,
@@ -1334,16 +1331,13 @@ class Dashboard extends CI_Controller {
         if(!empty($getavailabletime)) {
             foreach ($getavailabletime as $key => $avail) {
                 $timeslot = explode(' to ', $avail['utcTime']);
-
                 $utcFromTime = new DateTime($timeslot[0], new DateTimeZone('UTC'));
                 $localTimezone = new DateTimeZone($timezone);
                 $utcFromTime->setTimezone($localTimezone);
                 $localFromTime = $utcFromTime->format('H:i');
-
                 $utcToTime = new DateTime($timeslot[1], new DateTimeZone('UTC'));
                 $utcToTime->setTimezone($localTimezone);
                 $localToTime = $utcToTime->format('H:i');
-
                 $utcDateTime = new DateTime($avail['utcStartDate']." ".$timeslot[0], new DateTimeZone('UTC'));
                 $localTimeZone = new DateTimeZone($timezone);
                 $utcDateTime->setTimezone($localTimeZone);
@@ -1366,20 +1360,16 @@ class Dashboard extends CI_Controller {
         $timezone = $gettimezone->timeZone;
         $getavailableslot = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$slotid."'")->row();
         $utctimeSlot = explode(' to ', $getavailableslot->utcTime);
-
         $utcFromTime = new DateTime($utctimeSlot[0], new DateTimeZone('UTC'));
         $localTimezone = new DateTimeZone($timezone);
         $utcFromTime->setTimezone($localTimezone);
         $localFromTime = $utcFromTime->format('H:i');
-
         $utcToTime = new DateTime($utctimeSlot[1], new DateTimeZone('UTC'));
         $utcToTime->setTimezone($localTimezone);
         $localToTime = $utcToTime->format('H:i');
-
         $utcDateTime = new DateTime($getavailableslot->utcStartDate." ".$utctimeSlot[0], new DateTimeZone('UTC'));
         $utcDateTime->setTimezone($localTimezone);
         $utcDateTime = $utcDateTime->format('Y-m-d');
-
         $time_slot = date('h:i A', strtotime($localFromTime)).' to '.date('h:i A', strtotime($localToTime));
         $datetime = date('D dS M Y ', strtotime($utcDateTime));
         $getuserdetail = $this->db->query("SELECT * FROM users WHERE userId = '".$getavailableslot->user_id."'")->row();
@@ -1394,13 +1384,14 @@ class Dashboard extends CI_Controller {
     public function addBookingTimeData() {
 		$avail_id = $this->input->post('slotid');
 		$employerID = $this->input->post('user_id');
-		$employeeID = $this->input->post('workers_id');
-
+		$job_id = $this->input->post('job_id');
+        $employeeID = $this->input->post('workers_id');
         $getbookingTime = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$avail_id."'")->row();
         //$weekdayslot = $getbookingTime->utcTime;
         $data = array(
             'employee_id' => $employeeID,
             'employer_id' => $employerID,
+            'post_id' => $job_id,
             'available_id' => $avail_id,
         );
         $this->Crud_model->SaveData('user_booking', $data);
@@ -1459,20 +1450,16 @@ class Dashboard extends CI_Controller {
         $getpostname = $getpostuser->companyname;
         $bookingTime = $getavailDate->utcTime;
         $bt = explode(" to ", $bookingTime);
-
         $utcFromTime = new DateTime($bt[0], new DateTimeZone('UTC'));
         $localTimezone = new DateTimeZone($getpostuser->timeZone);
         $utcFromTime->setTimezone($localTimezone);
         $localFromTime = $utcFromTime->format('H:i');
-
         $utcToTime = new DateTime($bt[1], new DateTimeZone('UTC'));
         $utcToTime->setTimezone($localTimezone);
         $localToTime = $utcToTime->format('H:i');
-
         $utcDateTime = new DateTime($getavailDate->utcStartDate." ".$localFromTime, new DateTimeZone('UTC'));
         $utcDateTime->setTimezone($localTimezone);
         $utcDateTime = $utcDateTime->format('Y-m-d');
-
         $meetingLink = array();
         $meetingPass = array();
         $postData = [
@@ -1640,33 +1627,10 @@ class Dashboard extends CI_Controller {
 			echo '2';
 		}
 	}
-	/*public function getBookingDetailsforEmployer() {
-		//echo "<pre>"; print_r($_POST); die();
-		$selectDate = $_POST['selectDate'];
-		$employeeId = $_POST['employeeId'];
-		$bookingData = $this->db->query("SELECT * FROM user_availability WHERE start_date ='".@$selectDate."' AND end_date ='".@$selectDate."' AND user_id ='".@$employeeId."'")->result_array();
-		$avail_id = $bookingData[0]['id'];
-		$html .= "<div style='width: 100%; display: inline-block; text-align: center; border-radius: 10px; box-shadow: 0 0 10px #dddddd; height: 340px;'><p style='padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;'>".$selectDate."</p>";
-		$getBookSlot = $this->db->query("SELECT * FROM user_booking WHERE available_id ='".@$avail_id."' AND employee_id ='".@$employeeId."'")->result_array();
-		$bookingTime = $getBookSlot[0]['bookingTime'];
-		$bookingTime = explode(',', $bookingTime);
-        if(!empty($getBookSlot)) {
-        	$html .="<div style='width: 100%; display: inline-block; padding: 0 40px'><div style='width: 100%; border: 1px solid #eee;height: auto;display: inline-block;box-shadow: 0 0 10px #dddddd;'>";
-        	for($i = 0; $i < count($bookingTime); $i++) {
-        		$getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-        		$getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$getBookSlot[0]['employer_id']."'")->result_array();
-        		$html .="<div style='width: 33.33%;float: left;display: inline-block;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 12px;'>".date('h:i A', strtotime($bookingTime[$i]))." to ".date('h:i A', strtotime($bookingTime[$i]) + 60*60)."</p></div>";
-        	}
-        	$html .= "<div><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Total Rate: ".count($bookingTime)*@$getEmployee[0]['rateperhour']."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 14px;'>Booked By: ".@$getEmployer[0]['companyname']."</p></div></div></div>";
-        } else {
-        	$html = "<div style='width: 100%; display: inline-block; text-align: center; border-radius: 10px; box-shadow: 0 0 10px #dddddd; height: 340px;'><p style='padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;'>".$selectDate."</p><div style='color: #212529;'>No slot booked for this selected date</div></div>";
-        }
-        echo $html;
-	}*/
 	public function getBookingDetailsforEmployer() {
 		$selectDate = $_POST['selectDate'];
 		$employeeId = $_POST['employeeId'];
-        $availableData = $this->db->query("SELECT user_availability_new.id as avail_id, user_availability_new.utcStartDate, user_availability_new.timeZone, user_availability_new.utcTime, user_availability_new.is_booked, user_booking.employee_id, user_booking.employer_id, user_booking.meeting_link, user_booking.meeting_pass FROM user_availability_new JOIN user_booking ON user_booking.available_id = user_availability_new.id WHERE user_availability_new.is_booked = '1' AND user_booking.employee_id ='".@$employeeId."'")->result_array();
+        $availableData = $this->db->query("SELECT user_availability_new.id as avail_id, user_availability_new.utcStartDate, user_availability_new.timeZone, user_availability_new.utcTime, user_availability_new.is_booked, user_booking.employee_id, user_booking.post_id, user_booking.employer_id, user_booking.meeting_link, user_booking.meeting_pass FROM user_availability_new JOIN user_booking ON user_booking.available_id = user_availability_new.id WHERE user_availability_new.is_booked = '1' AND user_booking.employee_id ='".@$employeeId."'")->result_array();
         $html = "<div style='width: 100%;display: inline-block;text-align: center;border-radius: 10px;box-shadow: 0 0 10px #dddddd;height: 400px;overflow-y: scroll;overflow-x: hidden;'><p style='padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;'>".date('D dS M Y ', strtotime($selectDate))."</p>";
         if(!empty($availableData)) {
         	for($i = 0; $i < count($availableData); $i++) {
@@ -1675,26 +1639,24 @@ class Dashboard extends CI_Controller {
                 $localTimezone = new DateTimeZone($availableData[$i]['timeZone']);
                 $utcFromTime->setTimezone($localTimezone);
                 $localFromTime = $utcFromTime->format('H:i');
-
                 $utcToTime = new DateTime($timeslot[1], new DateTimeZone('UTC'));
                 $utcToTime->setTimezone($localTimezone);
                 $localToTime = $utcToTime->format('H:i');
-
                 $utcDateTime = new DateTime($availableData[$i]['utcStartDate']." ".$timeslot[0], new DateTimeZone('UTC'));
                 $utcDateTime->setTimezone($localTimezone);
                 $utcDateTime = $utcDateTime->format('Y-m-d');
-
                 $employee_id = $availableData[$i]['employee_id'];
                 $employer_id = $availableData[$i]['employer_id'];
 				$meetingLink = $availableData[$i]['meeting_link'];
 				$meetingPass = $availableData[$i]['meeting_pass'];
-
                 $getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$employee_id."'")->row();
                 $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$employer_id."'")->row();
+                $postData = $this->db->query("SELECT * FROM postjob WHERE id = '".@$availableData[$i]['post_id']."'")->row();
                 //if($utcDateTime == $selectDate) {
                     $html .= "<div style='width: 50%; display: inline-block; padding: 0 10px; margin-bottom: 20px;'><div style='width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;'>";
                     $html .= "
                     <div style='width: 100%;float: left; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'>
+                        <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'> Title: <b>".@$postData->post_title."</b></p>
                         <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'> Slot: ".date('h:i A', strtotime($localFromTime))." to ".date('h:i A', strtotime($localToTime))."</p>
                         <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'>Meeting Link: <a href=".$meetingLink." target='_blank'>Click Here</a></p>
                         <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'>Meeting Pass: ".$meetingPass."</p>
@@ -1722,34 +1684,30 @@ class Dashboard extends CI_Controller {
 		$employeeId = $_POST['employeeId'];
         $gettimezone = $this->db->query("SELECT * FROM users WHERE userId = '".$employeeId."'")->row();
         $timezone = $gettimezone->timeZone;
-        $availableData = $this->db->query("SELECT user_availability_new.id as avail_id, user_availability_new.utcStartDate, user_availability_new.utcTime, user_availability_new.is_booked, user_booking.employee_id, user_booking.employer_id, user_booking.meeting_link, user_booking.meeting_pass FROM user_availability_new JOIN user_booking ON user_booking.available_id = user_availability_new.id WHERE user_availability_new.is_booked = '1' AND user_booking.employer_id ='".@$employeeId."'")->result_array();
-
+        $availableData = $this->db->query("SELECT user_availability_new.id as avail_id, user_availability_new.utcStartDate, user_availability_new.utcTime, user_availability_new.is_booked, user_booking.employee_id, user_booking.employer_id, user_booking.post_id, user_booking.meeting_link, user_booking.meeting_pass FROM user_availability_new JOIN user_booking ON user_booking.available_id = user_availability_new.id WHERE user_availability_new.is_booked = '1' AND user_booking.employer_id ='".@$employeeId."'")->result_array();
 		$html = "<div style='width: 100%;display: inline-block;text-align: center;border-radius: 10px;box-shadow: 0 0 10px #dddddd;height: 400px;overflow-y: scroll;overflow-x: hidden;'><p style='padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;'>".date('D dS M Y ', strtotime($selectDate))."</p>";
         if(!empty($availableData)) {
         	for($i = 0; $i < count($availableData); $i++) {
         		$timeslot = explode(' to ', $availableData[$i]['utcTime']);
-
                 $utcFromTime = new DateTime($timeslot[0], new DateTimeZone('UTC'));
                 $localTimezone = new DateTimeZone($timezone);
                 $utcFromTime->setTimezone($localTimezone);
                 $localFromTime = $utcFromTime->format('H:i');
-
                 $utcToTime = new DateTime($timeslot[1], new DateTimeZone('UTC'));
                 $utcToTime->setTimezone($localTimezone);
                 $localToTime = $utcToTime->format('H:i');
-
                 $utcDateTime = new DateTime($availableData[$i]['utcStartDate']." ".$timeslot[0], new DateTimeZone('UTC'));
                 $localTimeZone = new DateTimeZone($timezone);
                 $utcDateTime->setTimezone($localTimeZone);
                 $utcDateTime = $utcDateTime->format('Y-m-d');
-
                 $employee_id = $availableData[$i]['employee_id'];
 				$meetingLink = $availableData[$i]['meeting_link'];
 				$meetingPass = $availableData[$i]['meeting_pass'];
+                $postData = $this->db->query("SELECT * FROM postjob WHERE id = '".@$availableData[$i]['post_id']."'")->row();
                 if($utcDateTime == $selectDate) {
                     $html .= "<div style='width: 50%; display: inline-block; padding: 0 10px; margin-bottom: 20px;'><div style='width: 100%;display: inline-block;border-radius: 10px;box-shadow: 0 0 10px #dddddd;padding: 20px 0 20px 0;'>";
                     $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$employee_id."'")->row();
-                    $html .= "<div style='width: 100%;float: left; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'> Slot: ".date('h:i A', strtotime($localFromTime))." to ".date('h:i A', strtotime($localToTime))."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'>Meeting Link: <a href=".$meetingLink." target='_blank'>Click Here</a></p> <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'>Meeting Pass: ".$meetingPass."</p></div>";
+                    $html .= "<div style='width: 100%;float: left; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'> Title: <b>".@$postData->post_title."</b></p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'> Slot: ".date('h:i A', strtotime($localFromTime))." to ".date('h:i A', strtotime($localToTime))."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'>Meeting Link: <a href=".$meetingLink." target='_blank'>Click Here</a></p> <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'>Meeting Pass: ".$meetingPass."</p></div>";
                     $html .= "<div><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px;'>Paid: $".@$getEmployer->rateperhour."</p><p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 16px;'>Booked with: ".@$getEmployer->firstname." ".@$getEmployer->lastname."</p></div></div></div>";
                 }
                 /*else {
@@ -1821,7 +1779,7 @@ class Dashboard extends CI_Controller {
 	}
 	public function recommended_employee() {
 		$data['jobTitleByemployer'] = $this->db->query("SELECT id, post_title, required_key_skills FROM postjob WHERE user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
-		$data['jobListByemployer'] = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.user_id = '".@$_SESSION['afrebay']['userId']."'")->result_array();
+		$data['jobListByemployer'] = $this->db->query("SELECT postjob.id, postjob.user_id as postuser, postjob.post_title, job_bid.postjob_id, job_bid.user_id as bidUser, job_bid.bidding_status FROM postjob JOIN job_bid ON postjob.id = job_bid.postjob_id WHERE job_bid.bidding_status = 'Ready for Interview' AND postjob.user_id = '".@$_SESSION['afrebay']['userId']."' GROUP BY postjob.id")->result_array();
 		$this->load->view('header');
 		$this->load->view('user_dashboard/recommended_employee', $data);
 		$this->load->view('footer');
@@ -1861,7 +1819,9 @@ class Dashboard extends CI_Controller {
                             <div class="MoreDetailsTxt_'.$getUserDetails->id.'">'.$string.'</div>
                         </div>
                     </div>
-                    <div class="view-more-less view-more-less-js"><a href="'.base_url('worker-detail/'.base64_encode($getUserDetails->userId)).'#job-overview") target="_blank">Schedule Interview</a></div>
+                    <div class="view-more-less view-more-less-js">
+                    <a href="'.base_url('workerdetail?jobID='.base64_encode($key['postjob_id']).'&uID='.base64_encode($getUserDetails->userId)).'#job-overview") target="_blank">Schedule Interview</a>
+                    </div>
                     <div class="view-more-less view-more-less-js" style="top: 75px;"><a href="'.base_url('chat').'" target="_blank">Chat with user</a></div>
                 </div>';
             }
@@ -1893,5 +1853,17 @@ class Dashboard extends CI_Controller {
             $this->db->query("DELETE FROM user_availability_new WHERE id = '".$id."'");
             echo '2';
         }
+    }
+    public function readyforinterview() {
+        $jobID = base64_decode($this->input->get('jobID', true));
+        $uID = base64_decode($this->input->get('uID', true));
+        $bookingData = array(
+            'postjob_id' => $jobID,
+            'user_id' => $uID,
+            'bidding_status' => 'Ready for Interview',
+            'status' => 'Active'
+        );
+        $this->db->insert('job_bid', $bookingData);
+        redirect(base_url('workerdetail?jobID='.base64_encode($jobID).'&uID='.base64_encode($uID).'#job-overview'));
     }
 }

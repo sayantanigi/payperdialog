@@ -192,6 +192,7 @@ $workers = base64_decode(end($link_array));
 ?>
 <input type="hidden" name="workers_id" id="workers_id" value="<?php echo @$user_detail->userId?>">
 <input type="hidden" name="user_id" id="user_id" value="<?php echo @$_SESSION['afrebay']['userId']?>">
+<input type="hidden" name="jobID" id="jobID" value="<?php echo @$jobID?>">
 <style>
     .dashboard-gig a:focus, a:hover, a {text-decoration: none !important;}#calendar {width: 100%;margin: 0;box-shadow: 0 0 10px #dddddd;display: inline-block;padding: 20px;border-radius: 10px;margin-bottom: 20px;}.fc-event {border: 1px solid #eee !important;}.fc-content {padding: 3px !important;}.fc-content .fc-title {display: block !important;overflow: hidden;text-align: center;font-size: 12px;font-weight: 500;text-align: center;}.fc-customButton-button {font-size: 13px !important;position: absolute;top: 60px;left: 50%;transform: translateY(-50%);}.form-group {margin-bottom: 1rem;}.form-group>label {margin-bottom: 10px;}#delete-modal .modal-footer>.btn {border-radius: 3px !important;padding: 0px 8px !important;font-size: 15px;}.fc-scroller {overflow-y: hidden !important;}.context-menu {position: absolute;z-index: 1000;background-color: #fff;border: 1px solid #ccc;border-radius: 4px;box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);padding: 5px;}.context-menu ul {list-style-type: none;margin: 0;padding: 0;}.context-menu ul>li {display: block;padding: 5px 15px;list-style-type: none;color: #333;display: block;cursor: pointer;margin: 0 auto;transition: 0.10s;font-size: 13px;}.context-menu ul>li:hover {color: #fff;background-color: #007bff;border-radius: 2px;}.fa, .fas {font-size: 13px;margin-right: 4px;}button:focus {box-shadow: none !important;}.Calender_Pick .fc-header-toolbar {display: flex;flex-direction: column;}.Calender_Pick .fc-header-toolbar {display: flex;flex-direction: column;margin-bottom: 0px !important;}.Calender_Pick .fc-left {width: 100%;height: 35px;display: flex;justify-content: flex-start;align-items: flex-start;}.Calender_Pick .fc-left h2 {font-weight: 600;font-size: 18px;}.Calender_Pick .fc-center {position: relative;height: 45px;width: 100%; display: none;}.Calender_Pick .fc-center button {transform: translateY(0);position: absolute;top: 0;height: 35px;left: 0;width: 100px;border-radius: 50px;background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;border: 0;font-size: 13px !important;}.Calender_Pick .fc-right {width: 100%;height: 45px;display: flex;align-items: flex-start;justify-content: space-between;}.Calender_Pick .fc-right button {border: 0;height: 35px;width: 100px;border-radius: 50px;background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; opacity: 1;font-size: 13px !important;}.Calender_Pick .fc-button-group {height: 35px;border-radius: 50px;}.Calender_Pick .fc-button-group button {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; border: 0;display: flex;align-items: center;justify-content: center;width: 60px !important;}.Calender_Pick .fc-button-group button span {font-size: 13px;}.Calender_Pick .fc-day-grid-container {height: auto !important;border-bottom: 1px solid #ddd;}.Calender_Pick .fc-view-container .fc-head-container {color: #ED1C24 !important;}div.modal.edit-form.Modal_Show {display: flex !important;align-items: center;justify-content: center;}.edit-form .modal-content {width: 500px;}.edit-form .modal-content .modal-body {border-radius: 0;}.edit-form .modal-content #myForm .form-group label {padding: 0;font-size: 16px;}.edit-form .modal-content #myForm .form-group #event-title {padding: 10px !important;font-size: 15px;}.edit-form .modal-content .modal-footer button {height: 35px;display: flex;align-items: center;justify-content: center;border-radius: 50px;background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;border: 0;letter-spacing: 1px;}
     #err-messages{display: none; text-align: center;}
@@ -229,13 +230,13 @@ $workers = base64_decode(end($link_array));
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'>
 <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.2.0/main.min.css'>
 <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.3.0/main.min.css'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.2.0/main.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.2.0/main.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.2.0/main.js'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js'></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
 <script>
@@ -518,7 +519,6 @@ function booktheslot(slotid) {
         url:"<?php echo base_url()?>user/Dashboard/getUsersAvailableslot",
         data:{slotid: slotid},
         success:function(returndata) {
-            //console.log(returndata);
             $('.availslotdata').html(returndata);
             $('.availslotdata').css('display','flex')
         }
@@ -526,16 +526,16 @@ function booktheslot(slotid) {
 }
 
 function bookthisslot(slotid) {
+    $('#bookthisslot').prop('disabled', true);
     var slotid = slotid;
     var workers_id = $('#workers_id').val();
     var user_id = $('#user_id').val();
+    var job_id = $('#jobID').val();
     $.ajax({
         type:"post",
         url:"<?php echo base_url()?>user/Dashboard/addBookingTimeData",
-        data:{slotid: slotid, workers_id: workers_id, user_id: user_id},
+        data:{slotid: slotid, workers_id: workers_id, user_id: user_id, job_id: job_id},
         success:function(returndata) {
-            //console.log(returndata);
-            // /$('.availslotdata').html(returndata);
             if(returndata == 1) {
                 $.confirm({
                     title: '',
@@ -557,6 +557,7 @@ function bookthisslot(slotid) {
                     title: '',
                     content: "Something went wrong. Please try again later.",
                 });
+                $('#bookthisslot').prop('disabled', false);
                 return false;
             }
         }

@@ -93,7 +93,7 @@
                                             </div>
                                         </div>
                                         <div class="view-more-less view-more-less-js">
-                                            <a href="<?= base_url('worker-detail/'.base64_encode($getUserDetails->userId).'#job-overview')?>" target="_blank">Schedule Interview</a>
+                                            <a href="<?= base_url('workerdetail?jobID='.base64_encode($key['postjob_id']).'&uID='.base64_encode($getUserDetails->userId).'#job-overview')?>" target="_blank">Schedule Interview</a>
                                         </div>
                                         <div class="view-more-less view-more-less-js" style="top: 75px;">
                                             <a href="<?= base_url('chat')?>" target="_blank">Chat with user</a>

@@ -1,13 +1,10 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
 class Welcome extends CI_Controller {
-
 	public function __construct() {
 		parent::__construct();
 		$this->load->model('post_job_model');
 	}
-
 	function employees_list($id) {
 		$data['getcategory']=$this->Crud_model->GetData('category');
 		$data['get_banner']=$this->Crud_model->get_single('banner',"id='2'");
@@ -15,7 +12,6 @@ class Welcome extends CI_Controller {
 		$this->load->view('frontend/new_employees_list',$data);
 		$this->load->view('footer');
 	}
-
 	function searchjob() {
 		$search_title = $this->input->post('search_title');
 		$country = $this->input->post('country');
@@ -36,7 +32,6 @@ class Welcome extends CI_Controller {
 		$this->load->view('frontend/new_employees_list',$data);
 		$this->load->view('footer');
 	}
-
 	function fetch_data() {
 		sleep(1);
 		$category_id = $this->input->post('category_id');
@@ -65,7 +60,6 @@ class Welcome extends CI_Controller {
 			$get_product=$this->Crud_model->GetData('postjob','',"subcategory_id='".$post_id."' and is_delete='0' AND status = 'Active'");
 			$total_count=count($get_product);
 		}
-
 		$this->load->library('pagination');
 		$config = array();
 		$config['base_url'] = '#';
@@ -97,13 +91,11 @@ class Welcome extends CI_Controller {
 		} else {
 			$start = '0';
 		}
-
 		if(isset($category_id) || isset($title)|| isset($days)||isset($subcategory_id)|| isset($location)|| isset($search_title)|| isset($search_location)|| isset($country)|| isset($state)|| isset($city) || isset($date_posted) || isset($remote_job) || isset($from_price) || isset($to_price) || isset($job_type) || isset($posted_by) || isset($experience_level) || isset($education)) {
 			$getdata=$this->post_job_model->subcategory_fetchdata($config["per_page"], $start, $title, $location,$days,$category_id,$subcategory_id,$post_id,$search_title,$search_location,$country,$state,$city,$date_posted,$remote_job,$from_price,$to_price,$job_type,$posted_by,$experience_level,$education);
 		} else {
 			$getdata=$this->post_job_model->subcategory_fetchdata($config["per_page"], $start, $title, $location,$days,$category_id,$subcategory_id,$post_id,$search_title,$search_location,$country,$state,$city,$date_posted,$remote_job,$from_price,$to_price,$job_type,$posted_by,$experience_level,$education);
 		}
-
 		$output = array(
 			'pagination_link'  => $this->pagination->create_links(),
 			'postlist'   =>$getdata,
@@ -115,7 +107,6 @@ class Welcome extends CI_Controller {
 		);
 		echo json_encode($output);
 	}
-
 	function employer_detail($user_id) {
 		/*if(empty($_SESSION['afrebay']['userId'])){
 			$type='admin';
@@ -141,7 +132,6 @@ class Welcome extends CI_Controller {
 		$this->load->view('frontend/employer_detail',$data);
 		$this->load->view('footer');
 	}
-
 	function product_detail($id) {
 		$prod_id = base64_decode($id);
 		$data['prod_details']=$this->db->query("SELECT * FROM user_product WHERE status = 1 AND is_delete = 1 AND id='".$prod_id."'")->result_array();
@@ -149,13 +139,11 @@ class Welcome extends CI_Controller {
 		$this->load->view('frontend/product_detail', $data);
 		$this->load->view('footer');
 	}
-
 	function workers_list() {
 		$this->load->view('header');
 		$this->load->view('frontend/workers_list');
 		$this->load->view('footer');
 	}
-
 	function getVisIpAddr() {
     	if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         	return $_SERVER['HTTP_CLIENT_IP'];
@@ -165,7 +153,6 @@ class Welcome extends CI_Controller {
         	return $_SERVER['REMOTE_ADDR'];
     	}
 	}
-
 	function post_job() {
 		$vis_ip = $this->getVisIPAddr(); // Store the IP address
 		$ipdat = @json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=" . $vis_ip));
@@ -179,7 +166,6 @@ class Welcome extends CI_Controller {
 		$this->load->view('frontend/post_job',$data);
 		$this->load->view('footer');
 	}
-
 	public function update_post_job($id) {
 		$work_id = base64_decode($id);
 		$update_data = $this->Crud_model->get_single('postjob', "id='" . $work_id . "'");
@@ -211,8 +197,6 @@ class Welcome extends CI_Controller {
 		$this->load->view('frontend/post_job', $data);
 		$this->load->view('footer');
 	}
-
-
 	public function edit_post_job() {
 		//echo "<pre>"; print_r($_SESSION); die();
 		$key_skills = $this->input->post('key_skills');
@@ -254,7 +238,6 @@ class Welcome extends CI_Controller {
 		$this->session->set_flashdata('message', 'Post Job Updated Successfully !');
 		redirect(base_url('myjob'));
 	}
-
 	public function get_subcategory() {
 		$id =$_POST['id'];
 		$CategoryData = $this->Crud_model->GetData('sub_category',"","category_id ='".$id."'");
@@ -264,7 +247,6 @@ class Welcome extends CI_Controller {
 		}
 		echo $html;
 	}
-
 	public function save_postjob() {
 		$key_skills = $this->input->post('key_skills');
 		for ($i=0; $i < count($key_skills); $i++) {
@@ -308,7 +290,6 @@ class Welcome extends CI_Controller {
 		redirect(base_url("postdetail/".base64_encode($insert_id)));
         //redirect(base_url("ourjobs"));
 	}
-
 	function post_jobinfo($id) {
 		$post_id=base64_decode($id);
 		$con="postjob.id='".$post_id."' and postjob.is_delete='0' AND postjob.status = 'Active'";
@@ -317,19 +298,6 @@ class Welcome extends CI_Controller {
 		$this->load->view('user_dashboard/jobinfo',$data);
 		$this->load->view('footer');
 	}
-
-
-	// post job list in filter
-	// public function subcategory_data() {
-	// 	$id =$_POST['id'];
-	// 	$CategoryData = $this->Crud_model->GetData('sub_category',"","category_id ='".$id."'");
-	// 	$html = "";
-	// 	foreach ($CategoryData as $row_data) {
-	// 		$html .= '<p> <input type="checkbox" class="common_selector storage" name="subcategory_id[]"  id="subcategory_'.$row_data->id.'"  value='.$row_data->id.'><label for="subcategory_'.$row_data->id.'">'.ucfirst($row_data->sub_category_name).'</label></p>';
-	// 	}
-	// 	echo $html;
-	// }
-
 	public function subcategory_data() {
 		$id =$_POST['id'];
 		$CategoryData = $this->Crud_model->GetData('sub_category',"","category_id ='".$id."'");
@@ -344,21 +312,17 @@ class Welcome extends CI_Controller {
 		}
 		echo $html;
 	}
-
 	public function filter_job() {
 		$con="postjob.is_delete='0' AND postjob.status = 'Active'";
 		if(isset($_POST['title_keyword'])&& !empty($_POST['title_keyword'])) {
 			$con .=" and postjob.post_title like '%".$_POST['title_keyword']."%'";
 		}
-
 		if(isset($_POST['search_location'])&& !empty($_POST['search_location'])) {
 			$con.=" and postjob.location like '%".$_POST['search_location']."%'";
 		}
-
 		if(isset($_POST['category_id'])&& !empty($_POST['category_id'])) {
 			$con.=" and postjob.category_id='".$_POST['category_id']."'";
 		}
-
 		if(isset($_POST['days'])&& !empty($_POST['days'])) {
 			if($_POST['days']=='one') {
 				$con ="postjob.created_date>=NOW()-INTERVAL 1 HOUR";
@@ -368,7 +332,6 @@ class Welcome extends CI_Controller {
 				$con ="postjob.created_date>='".$dates."'";
 			}
 		}
-
 		if(isset($_POST['subcategory_id'])&& !empty($_POST['subcategory_id'])) {
 			$con.=" and (";
 			foreach ($_POST['subcategory_id'] as $key => $value) {
@@ -383,7 +346,6 @@ class Welcome extends CI_Controller {
 		$data['get_postjob']=$this->post_job_model->postjobdata($con);
 		$this->load->view('filter/postjob_filter',$data);
 	}
-
 	public function states_by_country() {
 		$c_name = $this->input->post('country_name');
 		$get_cid = $this->db->query("SELECT * FROM countries WHERE name = '".$c_name."'")->result_array();
@@ -398,7 +360,6 @@ class Welcome extends CI_Controller {
 		}
 		echo $html;
 	}
-
 	public function cities_by_state() {
 		$s_name = $this->input->post('state_name');
 		$get_sid = $this->db->query("SELECT * FROM states WHERE name = '".$s_name."'")->result_array();
@@ -412,5 +373,63 @@ class Welcome extends CI_Controller {
 			$html = '';
 		}
 		echo $html;
+	}
+    function filter_recommended_employer() {
+        sleep(1);
+		$service_type = $this->input->post('duration');
+		$industry = $this->input->post('industry');
+		$experience = $this->input->post('experience_level');
+		$qualification = $this->input->post('education');
+		//$appli_deadeline = $this->input->post('appli_deadeline');
+        $key_skill = $this->input->post('key_skill');
+        $key_skills = explode(',', $key_skill);
+        $job_experience = $this->input->post('job_experience');
+
+		if(isset($service_type) && !empty($service_type) || isset($industry) && !empty($industry) || isset($experience) && !empty($experience) || isset($qualification) && !empty($qualification)) {
+            $rankedEmployees = [];
+            foreach ($key_skills as $skill) {
+                $query = "SELECT * FROM `users` WHERE instr(concat(',', skills, ','), ',$skill,') AND status = '1' AND email_verified = '1'";
+                if(isset($service_type) && !empty($service_type)) {
+                    $query .= " AND serviceType like '%".$service_type."%'";
+                }
+                if(isset($industry) && !empty($industry)) {
+                    $query .= " AND industry like '%".$industry."%'";
+                }
+                if(isset($experience) && !empty($experience)) {
+                    $query .= " AND experience = '".$experience."'";
+                }
+                if(isset($qualification) && !empty($qualification)) {
+                    $query .= " AND qualification LIKE '%".$qualification."%'";
+                }
+                $query .= ' ORDER BY userId DESC';
+                $data = $this->db->query($query);
+                $recomendedEmployeeList = $data->result_array();
+                foreach ($recomendedEmployeeList as $employee) {
+                    $matchScore = substr_count($employee['skills'], $skill); // Count occurrences of the skill for ranking
+                    $employee['rank'] = $matchScore;
+                    $rankedEmployees[] = $employee;
+                }
+            }
+            usort($rankedEmployees, function($a, $b) {
+                return $b['rank'] - $a['rank'];
+            });
+            $output = '';
+            if (!empty($rankedEmployees)) {
+                foreach($rankedEmployees as $value) {
+                    $profile_pic = (!empty($value['profilePic']) && file_exists('uploads/users/'.$value['profilePic']))
+                        ? '<img src="'.base_url('uploads/users/'.$value['profilePic']).'" alt="" />'
+                        : '<img src="'.base_url('uploads/no_user.png').'" alt="" />';
+
+                    $desc = (strlen($value['short_bio']) > 100)
+                        ? substr(strip_tags($value['short_bio']), 0, 100).'...'
+                        : strip_tags($value['short_bio']);
+
+                    $output .= '<div class="emply-resume-list"><div class="emply-resume-thumb">'.$profile_pic.'</div><div class="emply-resume-info"><h3><a href="'.base_url('employerdetail/'.base64_encode($value['userId'])).'" title="">'.$value['firstname']." ".$value['lastname'].'</a></h3><p><i class="la la-map-marker"></i>'.$value['address'].'</p><p style="width: 80% !important;">'.$desc.' </p><p>Rank:'.$value['rank'].'</p></div><div class="shortlists" style="width:50px;"><a href="'.base_url('employerdetail/'.base64_encode($value['userId'])).'" title="">View Profile<i class="la la-plus"></i></a></div></div>';
+                }
+            } else {
+                $output = '<div class="emply-resume-list"><div class="emply-resume-thumb"><h2>Unfortunately, no employee has been identified with the specific data set required for this job posting at this time.</h2></div></div>';
+            }
+            echo $output;
+		}
 	}
 }

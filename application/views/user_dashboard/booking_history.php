@@ -41,7 +41,7 @@
                                             $timezone = date_default_timezone_get();
                                             date_default_timezone_set($timezone);
                                             $date = date('Y-m-d', time());
-                                            $availableData = $this->db->query("SELECT user_availability_new.id as avail_id, user_availability_new.utcStartDate, user_availability_new.timeZone, user_availability_new.utcTime, user_availability_new.is_booked, user_booking.employee_id, user_booking.employer_id, user_booking.meeting_link, user_booking.meeting_pass FROM user_availability_new JOIN user_booking ON user_booking.available_id = user_availability_new.id WHERE user_availability_new.is_booked = '1' AND user_booking.employee_id ='".$_SESSION['afrebay']['userId']."'")->result_array(); ?>
+                                            $availableData = $this->db->query("SELECT user_availability_new.id as avail_id, user_availability_new.utcStartDate, user_availability_new.timeZone, user_availability_new.utcTime, user_availability_new.is_booked, user_booking.employee_id, user_booking.post_id, user_booking.employer_id, user_booking.meeting_link, user_booking.meeting_pass FROM user_availability_new JOIN user_booking ON user_booking.available_id = user_availability_new.id WHERE user_availability_new.is_booked = '1' AND user_booking.employee_id ='".$_SESSION['afrebay']['userId']."'")->result_array(); ?>
                                             <div style='width: 100%;display: inline-block;text-align: center;border-radius: 10px;box-shadow: 0 0 10px #dddddd;height: 400px;overflow-y: scroll;overflow-x: hidden;'>
                                                 <p style='padding: 20px 0 0 0;font-size: 18px;font-weight: 600;color: #212529;'><?= date('D dS M Y ', strtotime($date)); ?></p>
                                                 <?php
@@ -71,8 +71,10 @@
 
                                                                 $getEmployee = $this->db->query("SELECT * FROM users WHERE userId = '".@$employee_id."'")->row();
                                                                 $getEmployer = $this->db->query("SELECT * FROM users WHERE userId = '".@$employer_id."'")->row();
+                                                                $postData = $this->db->query("SELECT * FROM postjob WHERE id = '".@$availableData[$i]['employee_id']."'")->row();
                                                                 if($utcDateTime == $date) { ?>
                                                                     <div style='width: 100%;float: left; position: relative; align-items: center; justify-content: space-between; flex-direction: row;'>
+                                                                    <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'> Title: <b>".@$postData->post_title."</b></p>
                                                                         <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'> Slot: <?= date('h:i A', strtotime($localFromTime)) ?> to <?= date('h:i A', strtotime($localToTime)) ?></p>
                                                                         <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'>Meeting Link: <a href="<?= $meetingLink ?>" target="_blank">Click Here</a></p>
                                                                         <p style='width: 100%;display: inline-block;float: left;margin: 0px;font-size: 18px; padding-left: 20px;'>Meeting Pass: <?= $meetingPass ?></p>

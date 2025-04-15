@@ -161,8 +161,7 @@
                 <div class="col-lg-9 column Employees_Search_Result">
                     <div class="padding-left">
                         <div class="emply-resume-sec">
-                            <div id="post_list">
-                            </div>
+                            <div id="post_list"></div>
                             <div align="center" id="pagination_link"></div>
                         </div>
                     </div>

@@ -172,9 +172,6 @@ if($data_request=='user'){
                                                 </select>
                                                 <input type="hidden" id="select_city_dropdown" value="<?php echo @$userinfo->city; ?>">
                                             </div>
-
-
-
                                             <?php //if(@$_SESSION['afrebay']['userType']=='1') { ?>
                                             <?php if(@$userinfo->userType=='1' || @$userinfo->userType=='3') { ?>
                                             <div class="col-lg-6 key-skill">
@@ -215,7 +212,7 @@ if($data_request=='user'){
                                                 </div>
                                             </div>
                                             <?php } ?>
-                                            <?php //if(@$_SESSION['afrebay']['userType']=='1') { ?>
+
                                             <?php if(@$userinfo->userType=='1' || @$userinfo->userType=='3') { ?>
                                             <div class="col-lg-4">
                                                 <label for="zip">
@@ -229,6 +226,38 @@ if($data_request=='user'){
                                                 </label>
                                                 <input type="text" class="form-control" name="rateperhour" id="rateperhour" placeholder="Rate per Hour" value="<?php echo @$userinfo->rateperhour;?>" required="" min="0" max="1000000"/>
                                                 <div id="vld_rateperhour"></div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <label for="first_name"><h4>Degree <span style="color: red">*</span></h4></label>
+                                                <select class="form-control" name="qualification" required>
+                                                    <option value="">Select Degree</option>
+                                                    <option value="Professional Certificate" <?php if($userinfo->qualification == "Professional Certificate") { echo "selected"; }?>>Professional Certificate</option>
+                                                    <option value="Undergraduate Degree" <?php if($userinfo->qualification == "Undergraduate Degree") { echo "selected"; }?>>Undergraduate Degree</option>
+                                                    <option value="Associate Degree" <?php if($userinfo->qualification == "Associate Degree") { echo "selected"; }?>>Associate Degree</option>
+                                                    <option value="Graduate Degree" <?php if($userinfo->qualification == "Graduate Degree") { echo "selected"; }?>>Graduate Degree</option>
+                                                    <option value="Doctoral Degrees" <?php if($userinfo->qualification == "Doctoral Degrees") { echo "selected"; }?>>Doctoral Degrees</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <label for="first_name"><h4>Employment Type <span style="color: red">*</span></h4></label>
+                                                <select class="form-control" name="service_type" required>
+                                                    <option value="">Select Option</option>
+                                                    <option value="1" <?php if(@$userinfo->serviceType == 1) {echo 'selected';}?>>Permanent</option>
+                                                    <option value="2" <?php if(@$userinfo->serviceType == 2) {echo 'selected';}?>>Contract</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <label for="first_name">
+                                                    <h4>Industry <span style="color: red">*</span></h4>
+                                                </label>
+                                                <select class="form-control" name="industry" required>
+                                                    <option value="">Select Option</option>
+                                                    <?php
+                                                    $getcategory = $this->Crud_model->GetData('category', 'id, category_name', "");
+                                                    foreach($getcategory as $key) {?>
+                                                        <option value="<?= $key->id; ?>" <?php if($key->id == $userinfo->industry) {echo "selected"; }?>><?php echo $key->category_name;?></option>
+                                                    <?php } ?>
+                                                </select>
                                             </div>
                                             <div class="col-lg-4">
                                                 <?php if(!empty($userinfo->resume)) { ?>
