@@ -1081,6 +1081,7 @@ class Dashboard extends CI_Controller {
         $dateTime->setTimezone(new DateTimeZone('UTC'));
         return $dateTime->format('Y-m-d H:i:s');
     }
+    /* Generate calender availabilty code start */
     public function create_availability() {
         $action_id = $_POST['action_id'];
         $user_id = $_POST['user_id'];
@@ -1157,18 +1158,14 @@ class Dashboard extends CI_Controller {
         return $intervals;
     }
     private function saveSchedule($data) {
-        if ($data['repeat_month'] == '1') {
-            $repeatMonth = 12;
-        } else {
-            $repeatMonth = 1;
-        }
+        $repeatMonth = ($data['repeat_month'] == '1') ? 12 : 1;
         $schedule = [];
         $startDate = new DateTime($data['start_date']);
         $targetWeekday = $this->getWeekdayNumber($data['weekday']);
         $currentMonth = $startDate->format('m');
         $currentYear = $startDate->format('Y');
         for ($i = 0; $i < $repeatMonth; $i++) {
-            $firstDayOfMonth = new DateTime($data['start_date']);
+            $firstDayOfMonth = new DateTime("$currentYear-$currentMonth-01");
             $firstTargetWeekday = clone $firstDayOfMonth;
             $firstDayOfWeek = (int)$firstTargetWeekday->format('N');
             $diff = $targetWeekday - $firstDayOfWeek;
@@ -1179,7 +1176,7 @@ class Dashboard extends CI_Controller {
             if ($firstTargetWeekday < $startDate) {
                 $firstTargetWeekday->modify('+1 week');
             }
-            while ($firstTargetWeekday->format('m') == $currentMonth) {
+            while ((int)$firstTargetWeekday->format('m') == $currentMonth) {
                 $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
                 $utcStartDate->setTimezone(new DateTimeZone('UTC'));
                 $utcStartDate = $utcStartDate->format('Y-m-d');
@@ -1206,6 +1203,8 @@ class Dashboard extends CI_Controller {
             $this->Crud_model->SaveData('user_availability_new', $entry);
         }
     }
+    /* Generate calender availabilty code end */
+    /* Generate datewise availability code start */
     public function createdatewiseavailability() {
         $user_id = $_POST['user_id'];
         $output = array();
@@ -1215,30 +1214,41 @@ class Dashboard extends CI_Controller {
             $weekday = $this->getWeekdayName($date);
             foreach ($_POST['fromtimedate'] as $index => $start_time) {
                 $end_time = $_POST['totimedate'][$index];
-                $time_slot = $start_time . ' to ' . $end_time;
-                $utcfromTimedate = new DateTime($start_time, new DateTimeZone($_POST['timeZonedate']));
-                $utcfromTimedate->setTimezone(new DateTimeZone('UTC'));
-                $utcFromTimedate = $utcfromTimedate->format('H:i');
-                $utctoTimedate = new DateTime($end_time, new DateTimeZone($_POST['timeZonedate']));
-                $utctoTimedate->setTimezone(new DateTimeZone('UTC'));
-                $utcToTimedate = $utctoTimedate->format('H:i');
-                $utcStartDate = new DateTime($date." ".$start_time, new DateTimeZone($_POST['timeZonedate']));
-                $utcStartDate->setTimezone(new DateTimeZone('UTC'));
-                $utcStartDate = $utcStartDate->format('Y-m-d');
-                $slot = array(
-                    'user_id' => $_POST['user_id'],
-                    'weekday' => $weekday,
-                    'weekdayslot' => $time_slot,
-                    'start_date' => $date,
-                    'timeZone' => $_POST['timeZonedate'],
-                    'utcTime' => $utcFromTimedate." to ".$utcToTimedate,
-                    'utcStartDate' => $utcStartDate,
-                    'schedule_status' => 1,
-                    'is_booked' => 0
-                );
-                $output[] = $slot;
+                $start = new DateTime($start_time, new DateTimeZone($_POST['timeZonedate']));
+                $end = new DateTime($end_time, new DateTimeZone($_POST['timeZonedate']));
+                while ($start < $end) {
+                    $next_start = clone $start;
+                    $next_start->modify('+30 minutes');
+                    if ($next_start > $end) {
+                        break;
+                    }
+                    $time_slot = $start->format('H:i') . ' to ' . $next_start->format('H:i');
+                    $utcStart = clone $start;
+                    $utcStart->setTimezone(new DateTimeZone('UTC'));
+                    $utcFromTimedate = $utcStart->format('H:i');
+                    $utcEnd = clone $next_start;
+                    $utcEnd->setTimezone(new DateTimeZone('UTC'));
+                    $utcToTimedate = $utcEnd->format('H:i');
+                    $utcStartDate = new DateTime($date . " " . $start->format('H:i'), new DateTimeZone($_POST['timeZonedate']));
+                    $utcStartDate->setTimezone(new DateTimeZone('UTC'));
+                    $utcStartDate = $utcStartDate->format('Y-m-d');
+                    $slot = array(
+                        'user_id' => $_POST['user_id'],
+                        'weekday' => $weekday,
+                        'weekdayslot' => $time_slot,
+                        'start_date' => $date,
+                        'timeZone' => $_POST['timeZonedate'],
+                        'utcTime' => $utcFromTimedate . " to " . $utcToTimedate,
+                        'utcStartDate' => $utcStartDate,
+                        'schedule_status' => 1,
+                        'is_booked' => 0
+                    );
+                    $output[] = $slot;
+                    $start = $next_start;
+                }
             }
         }
+
         $finalArray = $output;
         $storedata = [];
         foreach ($finalArray as $key1 => $value) {
@@ -1254,8 +1264,9 @@ class Dashboard extends CI_Controller {
             $storedata['is_datewise'] = '1';
             $this->Crud_model->SaveData('user_availability_new', $storedata);
         }
-		echo "1";
+        echo "1";
     }
+    /* Generate datewise availability code end */
     function getWeekdayName($date) {
         return date('l', strtotime($date)); // Returns the full weekday name (e.g., "Monday")
     }

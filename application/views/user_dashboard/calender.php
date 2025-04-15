@@ -695,16 +695,6 @@ $('#submit-button').on('click', function() {
         setInterval(function () {
             $('#validateerrschedule').empty();
         }, 5000);
-    /*} else if(from_time === 0){
-        $('#validateerrschedule').text('Please enter from time');
-        setInterval(function () {
-            $('#validateerrschedule').empty();
-        }, 5000);
-    } else if(to_time === 0){
-        $('#validateerrschedule').text('Please enter to time');
-        setInterval(function () {
-            $('#validateerrschedule').empty();
-        }, 5000);*/
     } else if(timeZone === ''){
         $('#validateerrschedule').text('Please enter your timezone');
         setInterval(function () {
@@ -719,42 +709,37 @@ $('#submit-button').on('click', function() {
         var date1 = new Date('1970-01-01T'+$('.getfromtime').val()+':00');
         var date2 = new Date('1970-01-01T'+$('.gettotime').val()+':00');
         var differenceiInms = date2 - date1;
-        //var differenceInDays = Math.floor(differenceiInms / (1000 * 60));
-        //if(differenceInDays > 60) {
-            //$('#validateerrschedule').text('Please select 60 minutes interval slot');
-        //} else {
-            var form_data = $('#myForm').serialize();
-            $.ajax({
-                type:"post",
-                url:"<?php echo base_url()?>user/Dashboard/create_availability",
-                data: form_data,
-                success:function(returndata) {
-                    if(returndata == 1) {
-                        $.confirm({
-                            title: '',
-                            content: "Data added successfuly",
-                            buttons: {
-                                somethingElse: {
-                                    text: 'Ok',
-                                    btnClass: 'btn-secondary',
-                                    keys: ['enter', 'shift'],
-                                    action: function(){
-                                        location.reload();
-                                    }
+        var form_data = $('#myForm').serialize();
+        $.ajax({
+            type:"post",
+            url:"<?php echo base_url()?>user/Dashboard/create_availability",
+            data: form_data,
+            success:function(returndata) {
+                if(returndata == 1) {
+                    $.confirm({
+                        title: '',
+                        content: "Data added successfuly",
+                        buttons: {
+                            somethingElse: {
+                                text: 'Ok',
+                                btnClass: 'btn-secondary',
+                                keys: ['enter', 'shift'],
+                                action: function(){
+                                    location.reload();
                                 }
                             }
-                        });
-                    } else {
-                        $.alert({
-                            title: '',
-                            content: "Something went wrong. Please try again later.",
-                        });
-                        return false;
-                    }
+                        }
+                    });
+                } else {
+                    $.alert({
+                        title: '',
+                        content: "Something went wrong. Please try again later.",
+                    });
+                    return false;
                 }
-            });
-            return false;
-        //}
+            }
+        });
+        return false;
     }
 })
 
@@ -838,13 +823,7 @@ $('#submit_buttonDate').on('click', function() {
         setInterval(function () {
             $('#errspecificdate').empty();
         }, 5000);
-    } /*else if(fromtimedate === 0){
-        $('#errfromtimedate').text('Please enter from time');
-        setInterval(function () {
-            $('#errfromtimedate').empty();
-        }, 5000);
-    }*/
-    else if(timeZone === ''){
+    } else if(timeZone === ''){
         $('#validateerrschedule').text('Please enter your timezone');
         setInterval(function () {
             $('#validateerrschedule').empty();
@@ -951,5 +930,4 @@ function deletedata(id) {
 	    }
 	});
 }
-
 </script>
