@@ -719,10 +719,10 @@ $('#submit-button').on('click', function() {
         var date1 = new Date('1970-01-01T'+$('.getfromtime').val()+':00');
         var date2 = new Date('1970-01-01T'+$('.gettotime').val()+':00');
         var differenceiInms = date2 - date1;
-        var differenceInDays = Math.floor(differenceiInms / (1000 * 60));
-        if(differenceInDays > 60) {
-            $('#validateerrschedule').text('Please select 60 minutes interval slot');
-        } else {
+        //var differenceInDays = Math.floor(differenceiInms / (1000 * 60));
+        //if(differenceInDays > 60) {
+            //$('#validateerrschedule').text('Please select 60 minutes interval slot');
+        //} else {
             var form_data = $('#myForm').serialize();
             $.ajax({
                 type:"post",
@@ -754,7 +754,7 @@ $('#submit-button').on('click', function() {
                 }
             });
             return false;
-        }
+        //}
     }
 })
 

@@ -1084,7 +1084,7 @@ class Dashboard extends CI_Controller {
     public function create_availability() {
         $action_id = $_POST['action_id'];
         $user_id = $_POST['user_id'];
-        if($action_id == '1') {
+        if ($action_id == '1') {
             $this->db->query("DELETE FROM user_availability_new WHERE user_id = '".$user_id."' AND is_datewise = '0' AND is_booked = '0'");
         }
         $this->db->query("UPDATE users SET timeZone = '".$_POST['timeZone']."' WHERE userId = '".$user_id."'");
@@ -1108,7 +1108,7 @@ class Dashboard extends CI_Controller {
             ];
         }
         $output = $outputArray;
-        $filteredArray = array_filter($output, function($item) {
+        $filteredArray = array_filter($output, function ($item) {
             return !$this->isEmptyWeekDay($item['weekDay']);
         });
         $filteredArray = array_values($filteredArray);
@@ -1116,145 +1116,95 @@ class Dashboard extends CI_Controller {
             $weekDay = $entry['weekDay'];
             foreach ($weekDay['fromtime'] as $key => $fromtime) {
                 $totime = isset($weekDay['totime'][$key]) ? $weekDay['totime'][$key] : null;
-                $utcfromTime = new DateTime($fromtime, new DateTimeZone($_POST['timeZone']));
-                $utcfromTime->setTimezone(new DateTimeZone('UTC'));
-                $utcFromTime = $utcfromTime->format('H:i');
-                $utctoTime = new DateTime($totime, new DateTimeZone($_POST['timeZone']));
-                $utctoTime->setTimezone(new DateTimeZone('UTC'));
-                $utcToTime = $utctoTime->format('H:i');
-                $utcStartDate = new DateTime($weekDay['date']." ".$fromtime, new DateTimeZone($_POST['timeZone']));
-                $utcStartDate->setTimezone(new DateTimeZone('UTC'));
-                $utcStartDate = $utcStartDate->format('Y-m-d');
-                $schedule_data = array(
-                    'user_id' => $weekDay['user_id'],
-                    'weekday' => $weekDay['day'],
-                    'weekdayslot' => $fromtime." to ".$totime,
-                    'timeZone' => $_POST['timeZone'],
-                    'utcTime' => $utcFromTime." to ".$utcToTime,
-                    'start_date' => $weekDay['date'],
-                    'utcStartDate' => $utcStartDate,
-                    'repeat_month' => $weekDay['repeat_month'],
-                    'schedule_status' => $weekDay['schedule_status'],
-                );
-                $data = $schedule_data;
-                if($data['repeat_month'] == '1') {
-                    $repeatMonth = '12';
-                    $schedule = [];
-                    $startDate = new DateTime($data['start_date']);
-                    $targetWeekday = $this->getWeekdayNumber($data['weekday']);
-                    $currentMonth = $startDate->format('m');
-                    $currentYear = $startDate->format('Y');
-                    for ($i = 0; $i < $repeatMonth; $i++) {
-                        $firstDayOfMonth = new DateTime("$currentYear-$currentMonth-01");
-                        $firstTargetWeekday = clone $firstDayOfMonth;
-                        $firstDayOfWeek = $firstTargetWeekday->format('N');
-                        $diff = $targetWeekday - $firstDayOfWeek;
-                        if ($diff < 0) {
-                            $diff += 7;
-                        }
-                        $firstTargetWeekday->modify("+$diff days");
-                        if ($firstTargetWeekday < $startDate) {
-                            $firstTargetWeekday->modify('+1 week');
-                        }
-                        while ($firstTargetWeekday->format('m') == $currentMonth) {
-                            $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
-                            $utcStartDate->setTimezone(new DateTimeZone('UTC'));
-                            $utcStartDate = $utcStartDate->format('Y-m-d');
-                            $schedule[] = [
-                                'user_id' => $data['user_id'],
-                                'weekday' => $data['weekday'],
-                                'weekdayslot' => $data['weekdayslot'],
-                                'timeZone' => $data['timeZone'],
-                                'utcTime' => $data['utcTime'],
-                                'start_date' => $firstTargetWeekday->format('Y-m-d'),
-                                'utcStartDate' => $utcStartDate,
-                                'repeat_month' => $data['repeat_month'],
-                                'schedule_status' => $data['schedule_status'],
-                            ];
-                            $firstTargetWeekday->modify('+1 week');
-                        }
-                        $currentMonth++;
-                        if ($currentMonth > 12) {
-                            $currentMonth = 1;
-                            $currentYear++;
-                        }
-                    }
-                    $finalData = [];
-                    foreach ($schedule as $key => $value) {
-                        $finalData['user_id'] = $value['user_id'];
-                        $finalData['weekday'] = $value['weekday'];
-                        $finalData['weekdayslot'] = $value['weekdayslot'];
-                        $finalData['timeZone'] = $value['timeZone'];
-                        $finalData['utcTime'] = $value['utcTime'];
-                        $finalData['start_date'] = $value['start_date'];
-                        $finalData['utcStartDate'] = $value['utcStartDate'];
-                        $finalData['repeat_month'] = $value['repeat_month'];
-                        $finalData['schedule_status'] = $value['schedule_status'];
-                        $this->Crud_model->SaveData('user_availability_new', $finalData);
-                    }
-                } else {
-                    $repeatMonth = '1';
-                    $schedule = [];
-                    $startDate = new DateTime($data['start_date']);
-                    $targetWeekday = $this->getWeekdayNumber($data['weekday']);
-                    $currentMonth = $startDate->format('m');
-                    $currentYear = $startDate->format('Y');
-                    for ($i = 0; $i < $repeatMonth; $i++) {
-                        $firstDayOfMonth = new DateTime($data['start_date']);
-                        $firstTargetWeekday = clone $firstDayOfMonth;
-                        $firstDayOfWeek = (int)$firstTargetWeekday->format('N');
-                        $diff = $targetWeekday - $firstDayOfWeek;
-                        if ($diff < 0) {
-                            $diff += 7;
-                        }
-                        $firstTargetWeekday->modify("+$diff days");
-                        if ($firstTargetWeekday < $startDate) {
-                            $firstTargetWeekday->modify('+1 week');
-                        }
-                        // $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
-                        // $utcStartDate->setTimezone(new DateTimeZone('UTC'));
-                        // $utcStartDate = $utcStartDate->format('Y-m-d');
-                        while ($firstTargetWeekday->format('m') == $currentMonth) {
-                            $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
-                            $utcStartDate->setTimezone(new DateTimeZone('UTC'));
-                            $utcStartDate = $utcStartDate->format('Y-m-d');
-                            $schedule[] = [
-                                'user_id' => $data['user_id'],
-                                'weekday' => $data['weekday'],
-                                'weekdayslot' => $data['weekdayslot'],
-                                'timeZone' => $data['timeZone'],
-                                'utcTime' => $data['utcTime'],
-                                'start_date' => $firstTargetWeekday->format('Y-m-d'),
-                                'utcStartDate' => $utcStartDate,
-                                'repeat_month' => $data['repeat_month'],
-                                'schedule_status' => $data['schedule_status'],
-                            ];
-                            $firstTargetWeekday->modify('+1 week');
-                        }
-                        $currentMonth++;
-                        if ($currentMonth > 12) {
-                            $currentMonth = 1;
-                            $currentYear++;
-                        }
-                    }
-                    $finalData = [];
-                    //print_r($schedule);
-                    foreach ($schedule as $key => $value) {
-                        $finalData['user_id'] = $value['user_id'];
-                        $finalData['weekday'] = $value['weekday'];
-                        $finalData['weekdayslot'] = $value['weekdayslot'];
-                        $finalData['timeZone'] = $value['timeZone'];
-                        $finalData['utcTime'] = $value['utcTime'];
-                        $finalData['start_date'] = $value['start_date'];
-                        $finalData['utcStartDate'] = $value['utcStartDate'];
-                        $finalData['repeat_month'] = $value['repeat_month'];
-                        $finalData['schedule_status'] = $value['schedule_status'];
-                        $this->Crud_model->SaveData('user_availability_new', $finalData);
-                    }
+                $intervals = $this->generateIntervals($fromtime, $totime, 30); // Generate 30-minute intervals
+                foreach ($intervals as $interval) {
+                    $utcfromTime = new DateTime($interval['from'], new DateTimeZone($_POST['timeZone']));
+                    $utcfromTime->setTimezone(new DateTimeZone('UTC'));
+                    $utcFromTime = $utcfromTime->format('H:i');
+                    $utctoTime = new DateTime($interval['to'], new DateTimeZone($_POST['timeZone']));
+                    $utctoTime->setTimezone(new DateTimeZone('UTC'));
+                    $utcToTime = $utctoTime->format('H:i');
+                    $utcStartDate = new DateTime($weekDay['date']." ".$interval['from'], new DateTimeZone($_POST['timeZone']));
+                    $utcStartDate->setTimezone(new DateTimeZone('UTC'));
+                    $utcStartDate = $utcStartDate->format('Y-m-d');
+                    $schedule_data = array(
+                        'user_id' => $weekDay['user_id'],
+                        'weekday' => $weekDay['day'],
+                        'weekdayslot' => $interval['from']." to ".$interval['to'],
+                        'timeZone' => $_POST['timeZone'],
+                        'utcTime' => $utcFromTime." to ".$utcToTime,
+                        'start_date' => $weekDay['date'],
+                        'utcStartDate' => $utcStartDate,
+                        'repeat_month' => $weekDay['repeat_month'],
+                        'schedule_status' => $weekDay['schedule_status'],
+                    );
+                    $this->saveSchedule($schedule_data);
                 }
             }
         }
         echo '1';
+    }
+    private function generateIntervals($fromTime, $toTime, $intervalMinutes) {
+        $intervals = [];
+        $start = new DateTime($fromTime);
+        $end = new DateTime($toTime);
+        while ($start < $end) {
+            $intervalStart = $start->format('H:i');
+            $start->modify("+$intervalMinutes minutes");
+            $intervalEnd = $start <= $end ? $start->format('H:i') : $end->format('H:i');
+            $intervals[] = ['from' => $intervalStart, 'to' => $intervalEnd];
+        }
+        return $intervals;
+    }
+    private function saveSchedule($data) {
+        if ($data['repeat_month'] == '1') {
+            $repeatMonth = 12;
+        } else {
+            $repeatMonth = 1;
+        }
+        $schedule = [];
+        $startDate = new DateTime($data['start_date']);
+        $targetWeekday = $this->getWeekdayNumber($data['weekday']);
+        $currentMonth = $startDate->format('m');
+        $currentYear = $startDate->format('Y');
+        for ($i = 0; $i < $repeatMonth; $i++) {
+            $firstDayOfMonth = new DateTime($data['start_date']);
+            $firstTargetWeekday = clone $firstDayOfMonth;
+            $firstDayOfWeek = (int)$firstTargetWeekday->format('N');
+            $diff = $targetWeekday - $firstDayOfWeek;
+            if ($diff < 0) {
+                $diff += 7;
+            }
+            $firstTargetWeekday->modify("+$diff days");
+            if ($firstTargetWeekday < $startDate) {
+                $firstTargetWeekday->modify('+1 week');
+            }
+            while ($firstTargetWeekday->format('m') == $currentMonth) {
+                $utcStartDate = new DateTime($firstTargetWeekday->format('Y-m-d'), new DateTimeZone($data['timeZone']));
+                $utcStartDate->setTimezone(new DateTimeZone('UTC'));
+                $utcStartDate = $utcStartDate->format('Y-m-d');
+                $schedule[] = [
+                    'user_id' => $data['user_id'],
+                    'weekday' => $data['weekday'],
+                    'weekdayslot' => $data['weekdayslot'],
+                    'timeZone' => $data['timeZone'],
+                    'utcTime' => $data['utcTime'],
+                    'start_date' => $firstTargetWeekday->format('Y-m-d'),
+                    'utcStartDate' => $utcStartDate,
+                    'repeat_month' => $data['repeat_month'],
+                    'schedule_status' => $data['schedule_status'],
+                ];
+                $firstTargetWeekday->modify('+1 week');
+            }
+            $currentMonth++;
+            if ($currentMonth > 12) {
+                $currentMonth = 1;
+                $currentYear++;
+            }
+        }
+        foreach ($schedule as $entry) {
+            $this->Crud_model->SaveData('user_availability_new', $entry);
+        }
     }
     public function createdatewiseavailability() {
         $user_id = $_POST['user_id'];
