@@ -51,6 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'home';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
 $route['register'] = "home/signup";
 $route['email-verification/(:any)'] = "user/login/emailVerification/$1";
 $route['login'] = "home/login_page";
@@ -69,6 +70,7 @@ $route['employerdetail/(:any)'] = "Welcome/employer_detail/$1";
 $route['productdetail/(:any)'] = "Welcome/product_detail/$1";
 $route['workers-list'] = "home/workers_list";
 $route['worker-detail/(:any)'] = "home/worker_detail/$1";
+$route['workerdetail'] = "home/workerdetail";
 $route['expert-list'] = "home/expert_list";
 $route['expert-detail/(:any)'] = "home/expert_detail/$1";
 $route['ourjobs'] = "home/our_jobs";
@@ -112,6 +114,8 @@ $route['update-postjob/(:any)'] = "welcome/update_post_job/$1";
 $route['checkSubscriptionForUser'] = "user/dashboard/checkSubscriptionForUser";
 $route['paystackCheckout/(:any)/(:any)/(:any)'] = "Home/paystackCheckout/$1/$2/$3";
 $route['meetinglink'] = "user/Dashboard/meetinglink";
+$route['readyforinterview'] = "user/Dashboard/readyforinterview";
+
 //ADMIN URL
 $route['admin'] = 'admin/login/index';
 $route['admin/logout'] = 'admin/login/logout';
@@ -127,6 +131,8 @@ $route['admin/chat_details/(:any)/(:any)'] = "admin/chat/adminShowMessage_list/$
 $route['admin/userbookingDetails/(:any)'] = "admin/booking_details/userbookingDetails/$1";
 $route['admin/deletepostdetail'] = "admin/Post_job/deletepostdetail";
 $route['admin/update-postjob/(:any)'] = "admin/Post_job/update_post_job/$1";
+
+
 //API URLS
 $route['api/registration'] = 'api/Authentication/registration';
 $route['api/login'] = 'api/Authentication/login';
@@ -134,11 +140,14 @@ $route['api/user_agreement'] = 'api/Authentication/user_agreement';
 $route['api/send_forget_password'] = 'api/Authentication/send_forget_password';
 $route['api/set_new_password'] = 'api/Authentication/set_new_password';
 $route['api/logout'] = 'api/Authentication/logout';
+
 /*$route['api/profile'] = 'api/User_dashboard/profile_settings';
 $route['api/update_profile'] = 'api/User_dashboard/update_profile';*/
+
 $route['api/user_subscription'] = "api/User_dashboard/userSubscription";
 $route['api/user_subscription_details'] = "api/User_dashboard/subscription_details";
 $route['api/getUserSubscriptionDetails'] = "api/User_dashboard/getUserSubscriptionDetails";
+
 $route['api/home_list'] = 'api/Home/home_list';
 $route['api/vendor_lists'] = "api/Home/vendor_lists";
 $route['api/vendor_detail'] = "api/Home/vendor_details";
@@ -156,6 +165,7 @@ $route['api/privacy'] = 'api/Home/privacy';
 $route['api/term_and_conditions'] = 'api/Home/term_and_conditions';
 $route['api/careertips_details'] = 'api/Home/careertips_details';
 $route['api/search_job'] = 'api/Home/search_job';
+
 $route['api/education_list'] = "api/User_dashboard/education_list";
 $route['api/save_education'] = "api/User_dashboard/save_education";
 $route['api/get_educationDetails'] = "api/User_dashboard/get_educationDetails";
