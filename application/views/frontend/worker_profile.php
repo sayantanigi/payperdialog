@@ -150,6 +150,7 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
                                     <div style="display: inline-block;">
                                         <button id="confirmSlotsButton" style="display: none;">Confirm Slots</button>
                                     </div>
+                                    <div id="paypal-button-container"></div>
                                 </div>
                                 <div class="availslotdata"></div>
                                 <?php if (!empty($_SESSION['afrebay']['userId']) && $_SESSION['afrebay']['userType'] == 2) { ?>
@@ -196,6 +197,8 @@ $workers = base64_decode(end($link_array));
 <input type="hidden" name="user_id" id="user_id" value="<?php echo @$_SESSION['afrebay']['userId']?>">
 <input type="hidden" name="jobID" id="jobID" value="<?php echo @$jobID?>">
 <input type="hidden" name="selectedSlotIds" id="selectedSlotIds" value="">
+<input type="hidden" name="rateperhour" id="rateperhour" value="<?php echo @$user_detail->rateperhour ?>">
+<input type="hidden" name="total_amount" id="total_amount" value="">
 <style>
 .dashboard-gig a:focus, a:hover, a {text-decoration: none !important;}#calendar {width: 100%;margin: 0;box-shadow: 0 0 10px #dddddd;display: inline-block;padding: 20px;border-radius: 10px;margin-bottom: 20px;}.fc-event {border: 1px solid #eee !important;}.fc-content {padding: 3px !important;}.fc-content .fc-title {display: block !important;overflow: hidden;text-align: center;font-size: 12px;font-weight: 500;text-align: center;}.fc-customButton-button {font-size: 13px !important;position: absolute;top: 60px;left: 50%;transform: translateY(-50%);}.form-group {margin-bottom: 1rem;}.form-group>label {margin-bottom: 10px;}#delete-modal .modal-footer>.btn {border-radius: 3px !important;padding: 0px 8px !important;font-size: 15px;}.fc-scroller {overflow-y: hidden !important;}.context-menu {position: absolute;z-index: 1000;background-color: #fff;border: 1px solid #ccc;border-radius: 4px;box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);padding: 5px;}.context-menu ul {list-style-type: none;margin: 0;padding: 0;}.context-menu ul>li {display: block;padding: 5px 15px;list-style-type: none;color: #333;display: block;cursor: pointer;margin: 0 auto;transition: 0.10s;font-size: 13px;}.context-menu ul>li:hover {color: #fff;background-color: #007bff;border-radius: 2px;}.fa, .fas {font-size: 13px;margin-right: 4px;}button:focus {box-shadow: none !important;}.Calender_Pick .fc-header-toolbar {display: flex;flex-direction: column;}.Calender_Pick .fc-header-toolbar {display: flex;flex-direction: column;margin-bottom: 0px !important;}.Calender_Pick .fc-left {width: 100%;height: 35px;display: flex;justify-content: flex-start;align-items: flex-start;}.Calender_Pick .fc-left h2 {font-weight: 600;font-size: 18px;}.Calender_Pick .fc-center {position: relative;height: 45px;width: 100%; display: none;}.Calender_Pick .fc-center button {transform: translateY(0);position: absolute;top: 0;height: 35px;left: 0;width: 100px;border-radius: 50px;background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;border: 0;font-size: 13px !important;}.Calender_Pick .fc-right {width: 100%;height: 45px;display: flex;align-items: flex-start;justify-content: space-between;}.Calender_Pick .fc-right button {border: 0;height: 35px;width: 100px;border-radius: 50px;background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; opacity: 1;font-size: 13px !important;}.Calender_Pick .fc-button-group {height: 35px;border-radius: 50px;}.Calender_Pick .fc-button-group button {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; border: 0;display: flex;align-items: center;justify-content: center;width: 60px !important;}.Calender_Pick .fc-button-group button span {font-size: 13px;}.Calender_Pick .fc-day-grid-container {height: auto !important;border-bottom: 1px solid #ddd;}.Calender_Pick .fc-view-container .fc-head-container {color: #ED1C24 !important;}div.modal.edit-form.Modal_Show {display: flex !important;align-items: center;justify-content: center;}.edit-form .modal-content {width: 500px;}.edit-form .modal-content .modal-body {border-radius: 0;}.edit-form .modal-content #myForm .form-group label {padding: 0;font-size: 16px;}.edit-form .modal-content #myForm .form-group #event-title {padding: 10px !important;font-size: 15px;}.edit-form .modal-content .modal-footer button {height: 35px;display: flex;align-items: center;justify-content: center;border-radius: 50px;background: linear-gradient(180deg, rgba(252, 119, 33, 1) 0%, rgba(249, 80, 30, 1) 100%) !important;border: 0;letter-spacing: 1px;}
 #err-messages{display: none; text-align: center;}
@@ -229,6 +232,9 @@ $workers = base64_decode(end($link_array));
 .getdatespecificslotdatacal{display: flex; align-items: center; font-size: 16px; margin-bottom: 10px;}
 .getdatespecificslotdatacal .fa-calendar {font-size: 18px; margin-right: 15px;}
 #confirmSlotsButton{width: auto !important;margin: 0 !important;background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;border: 0;color: #fff;border-radius: 30px;letter-spacing: 0;pointer-events: auto !important;}
+.paypal-button-row.paypal-button-number-1.paypal-button-layout-vertical.paypal-button-number-multiple.paypal-button-env-sandbox.paypal-button-color-black.paypal-button-text-color-white.paypal-logo-color-white.paypal-button-shape-rect {
+    display: none;
+}
 </style>
 <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css'>
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'>
@@ -242,6 +248,7 @@ $workers = base64_decode(end($link_array));
 <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AeiNnCmTK7o6KYDGukt8JkLVWybra1zSBZlJC6dSJHprrHqHBPe-AZHuvMAmtvIUVc9qxomMB7mJTWoD&currency=USD"></script>
 
 <script>
 function aggrement1() {
@@ -435,7 +442,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     let selectedSlots = [];
     calendar.on('select', function(info) {
-        // console.log(info);
         $('.choosendate').text(new Date(info.startStr).toDateString());
         <?php if(@$_SESSION['afrebay']['userType'] == '2') { ?>
         var choosendate = info.startStr;
@@ -452,10 +458,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 $('.availslotdata').hide();
 
                 $('.getdatespecificdatetime').on('click', function() {
+                    $('#confirmSlotsButton').prop('disabled', false);
+                    $("#paypal-button-container").html('');
                     const slotId = $(this).data('slot-id');
                     const hiddenInput = $("#selectedSlotIds");
                     const confirmButton = $("#confirmSlotsButton");
                     const selectedSlotList = $("#selectedSlotList");
+                    const ratePerHour = parseFloat($("#rateperhour").val() || 0); // Get the rate per hour
+                    const totalAmountInput = $("#total_amount");
 
                     if ($(this).hasClass('selected')) {
                         $(this).removeClass('selected');
@@ -465,7 +475,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         selectedSlots.push(slotId);
                     }
                     hiddenInput.val(selectedSlots.join(','));
-                    //selectedSlotList.html(selectedSlots.map(id => `<li>Slot ID: ${id}</li>`).join(''));
+                    const totalAmount = selectedSlots.length * ratePerHour;
+                    totalAmountInput.val(totalAmount.toFixed(2));
                     if (selectedSlots.length > 0) {
                         confirmButton.show(); // Show the button if slots are selected
                         //selectedSlotList.parent().show(); // Show the selected slots container
@@ -512,13 +523,17 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 $('#confirmSlotsButton').on('click', function() {
+    $("#paypal-button-container").html('');
     var workers_id = $('#workers_id').val();
     var user_id = $('#user_id').val();
     var job_id = $('#jobID').val();
     var selectedSlots = $('#selectedSlotIds').val();
+    var total_amount = $('#total_amount').val();
+    //alert(total_amount);
     $('#confirmSlotsButton').prop('disabled', true);
     if (selectedSlots.length > 0) {
-        $.ajax({
+        $("#paypal-button-container").show();
+        /*$.ajax({
             type: "post",
             url: "<?php echo base_url()?>user/Dashboard/addBookingTimeData",
             data: {workers_id: workers_id, user_id: user_id, job_id: job_id, slotid: selectedSlots},
@@ -548,7 +563,71 @@ $('#confirmSlotsButton').on('click', function() {
                     return false;
                 }
             }
-        });
+        });*/
+        paypal.Buttons({
+            createOrder: function (data, actions) {
+                // Call the backend to create the order
+                return actions.order.create({
+                    purchase_units: [{
+                        amount: {
+                            value: total_amount // Replace with the calculated total cost
+                        }
+                    }]
+                });
+            },
+            onApprove: function (data, actions) {
+                return actions.order.capture().then(function (details) {
+                    const transactionId = details.id; // Transaction ID
+                    const transactionDate = details.create_time; // Transaction date
+                    const paymentStatus = details.status; // Payment status
+                    //const invoiceId = details.purchase_units[0].payments.captures[0].invoice_id || "N/A"; // Invoice ID, if available
+                    //const links = details.purchase_units[0].payments.captures[0].links || []; // Links array
+                    //const invoiceUrl = links.find(link => link.rel === 'self')?.href || "N/A"; // Invoice URL
+
+                    //Payment was successful, call the backend to create the meeting link
+                    $.ajax({
+                        type: "post",
+                        url: "<?php echo base_url()?>user/Dashboard/addBookingTimeData",
+                        data: { workers_id: workers_id, user_id: user_id, job_id: job_id, slotid: selectedSlots, total_amount: total_amount, transaction_id: transactionId, transactionDate: transactionDate, paymentStatus: paymentStatus},
+                        success: function (response) {
+                            if (response == 1) {
+                                $.confirm({
+                                    title: '',
+                                    content: "Slot booked and payment successful",
+                                    buttons: {
+                                        somethingElse: {
+                                            text: 'Ok',
+                                            btnClass: 'btn-secondary paydone_btn',
+                                            keys: ['enter', 'shift'],
+                                            action: function () {
+                                                // Redirect to booking history
+                                                window.location.href = "<?php echo base_url()?>booking-history";
+                                            }
+                                        }
+                                    }
+                                });
+                            } else {
+                                $.alert({
+                                    title: '',
+                                    content: "Something went wrong. Please try again later.",
+                                });
+                                $('#confirmSlotsButton').prop('disabled', false);
+                                return false;
+                            }
+                        }
+                    });
+                });
+            },
+            onError: function (err) {
+                // Handle errors
+                console.error('PayPal Checkout Error:', err);
+                $.alert({
+                    title: 'Error',
+                    content: 'An error occurred during payment. Please try again later.'
+                });
+                $('#confirmSlotsButton').prop('disabled', false);
+            }
+        }).render('#paypal-button-container');
     } else {
         $.alert({
             title: '',
