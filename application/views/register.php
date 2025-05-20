@@ -32,21 +32,19 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                 <div class="col-lg-10">
                     <div class="account-popup-area signup-popup-box static">
                         <div class="account-popup">
-                            <div class="row m-0">
-                                <div class="col-lg-4 col-md-12 col-sm-12 SignUp_Left">
-                                    <h3>Sign Up</h3>
-                                    <span>Let's create your account! Choose to sign up as either a Employer or a Job Seeker.</span>
-                                    <div class="select-user">
-                                        <span class="user-tab active" user_type="1" onclick="get_value(1)">Job Seeker</span>
-                                        <span class="user-tab" user_type="2" onclick="get_value(2)">Employer</span>
-                                    </div>
-                                    <div class="select-user" style="margin-top: 0px !important; margin-left: 20px;">
-                                        <span class="user-tab" user_type="3" onclick="get_value(3)">Subject Matter Expert</span>
-                                    </div>
-                                    <div class="error" id="err_usertype"></div>
-                                </div>
-                                <div class="col-lg-8 col-md-12 col-sm-12 SignUp_Right">
-                                    <div id="register-messages" class="text-success-msg f-20">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8 col-md-12 col-sm-12 SignUp_Left">
+                                    <div class="logBox">
+                                        <h3>Sign Up</h3>
+                                        <span>Let's create your account! Choose to sign up as either a Employer or a Job Seeker.</span>
+                                        <div class="select-user">
+                                            <span class="user-tab active" user_type="1" onclick="get_value(1)">Job Seeker</span>
+                                            <span class="user-tab" user_type="2" onclick="get_value(2)">Employer</span>
+                                            <span class="user-tab" user_type="3" onclick="get_value(3)">Subject Matter Expert</span>
+                                        </div>
+                                      
+                                        <div class="error" id="err_usertype"></div>
+                                        <div id="register-messages" class="text-success-msg f-20">
                                         <h4>Successful Registration</h4>
                                         <p style="color: #28a745;">We have sent an activation link to your account to continue with the registration process.</p>
                                     </div>
@@ -55,7 +53,7 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                         <p style="color: red;">Oops, somthing went wrong. Please try again later.</p>
                                     </div>
                                     <form id="signUp_form" action="#" method="post">
-                                        <div class="row m-0">
+                                        <div class="row SignUp_Right">
                                             <div class="col-lg-6 col-md-6 col-sm-6 first_name">
                                                 <div class="cfield cfield_top">
                                                     <label for="" class="form-label">First Name <span style="color:red">*</span></label>
@@ -131,11 +129,14 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
                                             <div class="col-lg-12 col-md-6 col-sm-6" id="err_check_pass" style="tex-align:center;"></div>
                                             <div class="col-lg-12 col-md-12 col-sm-12 SignUp_Btn">
                                                 <input type="hidden" name="user_type" id="user_type">
-                                                <button type="button" class="btn btn-info" id="rSignUp" onclick="return btn_register();">Sign up</button>
+                                                <button type="button" class="btn btn-info w-100" id="rSignUp" onclick="return btn_register();">Sign up</button>
                                             </div>
                                         </div>
                                     </form>
+                                    </div>
+                                    
                                 </div>
+                             
                             </div>
                         </div>
                     </div>
@@ -148,7 +149,8 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
 #loader {display: none; width: 40px;}
 .company_name {display: none}
 .Sign_Up .account-popup .SignUp_Left .select-user>span.active {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;}
-.Sign_Up .account-popup .SignUp_Right .SignUp_Btn .btn {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important;}
+.Sign_Up .account-popup .SignUp_Right .SignUp_Btn .btn {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 79%) 100%) !important; border-radius: 8px;
+    min-height: 50px;}
 </style>
 <script src="<?= base_url('assets/js/jquery.min.js')?>" type="text/javascript"></script>
 <script type="text/javascript">

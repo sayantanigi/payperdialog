@@ -80,8 +80,8 @@ $(function () {
                     <a href="<?=base_url(); ?>" title=""><img src="<?=base_url(); ?>uploads/logo/<?= $get_setting->logo?>" alt="" /></a>
                 </div>
                 <div class="menu-resaction">
-                    <div class="res-openmenu">Menu</div>
-                    <div class="res-closemenu">Close</div>
+                    <div class="res-openmenu"><i class="fa fa-bars"></i></div>
+                    <div class="res-closemenu"><i class="fa fa-times"></i></div>
                 </div>
             </div>
             <div class="responsive-opensec">

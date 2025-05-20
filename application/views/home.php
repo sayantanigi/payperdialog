@@ -19,13 +19,13 @@
                                 <span>Find Jobs, Employment & Career Opportunities</span>
                                 <form method="post" action="<?= base_url('search-job') ?>">
                                     <div class="row">
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
                                             <div class="job-field">
                                                 <input type="text" name="search_title" placeholder="Job title, keywords or company name" value="" />
-                                                <i class="la la-search"></i>
+                                                <!-- <i class="la la-search"></i> -->
                                             </div>
                                         </div>
-                                        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
                                             <div class="job-field">
                                                 <select class="chosen_country" name="country" id="country" onchange="getState(this.value)">
                                                     <option value="0">Select Country</option>
@@ -37,7 +37,7 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
                                             <div class="job-field">
                                                 <div class="custom-select">
                                                     <select class="chosen_state" name="state" id="state" onchange="getCity(this.value);filter_job();">
@@ -46,7 +46,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
                                             <div class="job-field">
                                                 <div class="custom-select">
                                                     <select class="chosen_city" name="city" id="city" onchange="filter_job();">
@@ -65,7 +65,7 @@
                                             </div>
                                         </div> -->
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 search-btn">
-                                            <button type="submit"><i class="la la-search"></i></button>
+                                            <button type="submit"><i class="la la-search mr-1"></i> Search</button>
                                         </div>
                                     </div>
                                 </form>
@@ -87,7 +87,7 @@
     </div>
 </section>
 <section>
-    <div class="block Opp_Block">
+    <div class="block Opp_Block pt-0">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
@@ -275,7 +275,7 @@
                                     }
                             ?>
                                     <div class="col-lg-3 col-md-6 col-sm-12">
-                                        <div class="p-category">
+                                        <div class="p-category h-100">
                                             <a href="javascript:void(0)" title="">
                                                 <!-- <i class="<?= $item->icon ?>"></i> -->
                                                 <img src="<?php echo base_url() ?>/uploads/services/<?php echo $item->icon ?>" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px;">
@@ -419,7 +419,7 @@
 <style>
     .chosen_country {
         color: #888888;
-        height: 60px;
+        height:55px;
         border-radius: 50px;
         padding: 17px !important;
     }
@@ -427,7 +427,7 @@
     #state {
         display: block;
         color: #888888;
-        height: 60px;
+        height: 55px;
         border-radius: 50px;
         padding: 17px !important;
     }
@@ -435,7 +435,7 @@
     #city {
         display: block;
         color: #888888;
-        height: 60px;
+        height: 55px;
         border-radius: 50px;
         padding: 17px !important;
     }

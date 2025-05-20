@@ -65,9 +65,9 @@ if(!empty($_SESSION['afrebay']['userId'])) {
                         <div class="link_widgets">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <a href="#"><?= $get_setting->address?></a>
-                                    <a href="#"><?= $get_setting->phone ?></a>
-                                    <a href="#"><?= $get_setting->email ?></a>
+                                    <a href="#"><i class="fa fa-map-marker mr-1" aria-hidden="true"></i> <?= $get_setting->address?></a>
+                                    <a href="#"><i class="fa fa-phone mr-1" aria-hidden="true"></i> <?= $get_setting->phone ?></a>
+                                    <a href="#"><i class="fa fa-envelope mr-1" aria-hidden="true"></i> <?= $get_setting->email ?></a>
                                 </div>
                             </div>
                         </div>
@@ -85,9 +85,19 @@ if(!empty($_SESSION['afrebay']['userId'])) {
     </div>
     </div>
     <div class="bottom-line">
-        <div style="color: #fff;text-align: left;width: 48%;display: inline-block;float: left;margin-left: 60px;">Copyright © <?php echo date('Y')?> PayPerLLC. All rights reserved.</div>
-        <div style="color: #fff;text-align: right;width: 38%;display: inline-block;">Designed &amp; Developed By <a href="http://www.goigi.com/" class="igi-link" target="_blank" style="color: #08cbfe;">GOIGI.COM</a></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 order-lg-2  text-lg-right">
+                    Designed &amp; Developed By <a href="http://www.goigi.com/" class="igi-link" target="_blank" style="color: #08cbfe;">GOIGI.COM</a>
+                </div>
+                <div class="col-lg-6 order-lg-1">
+                    Copyright © <?php echo date('Y')?> PayPerLLC. All rights reserved.
+                </div>
+            </div>
+        <!-- <div style="color: #fff;text-align: left;width: 48%;display: inline-block;float: left;margin-left: 60px;"></div>
+        <div style="color: #fff;text-align: right;width: 38%;display: inline-block;">Designed &amp; Developed By <a href="http://www.goigi.com/" class="igi-link" target="_blank" style="color: #08cbfe;">GOIGI.COM</a></div> -->
         <a href="#scrollup" class="scrollup" title=""><i class="la la-arrow-up"></i></a>
+        </div>
     </div>
 </footer>
 <input type="hidden" name="base_url" id="base_url" value="<?= base_url()?>">

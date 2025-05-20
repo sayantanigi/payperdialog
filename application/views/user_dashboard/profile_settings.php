@@ -200,7 +200,7 @@ if($data_request=='user'){
                                                 <label for="key-skill">
                                                     <h4>Total Experience <span style="color:red;">*</span></h4>
                                                 </label>
-                                                <div class="pf-field" style="margin-top: 0px;">
+                                                <div  style="margin-top: 0px;">
                                                     <select data-placeholder="Please Select Experience Level" class="form-control" name="experience" id="experience" required>
                                                         <option value="">Choose an option</option>
                                                         <option value="1" <?php if(@$userinfo->experience == 1) {echo "selected";}?>>0 to 02 Years</option>

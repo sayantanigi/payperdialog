@@ -8,10 +8,8 @@ if (!empty($get_banner->image) && file_exists('uploads/banner/' . $get_banner->i
 .postdetail {padding: 7px 33px; border-radius: 10px; background: red; color: #fff; margin: 10px; font-size: 20px;}
 .cstm_viewbid_btn {background: linear-gradient(180deg, rgb(237 28 36) 0%, rgb(237 28 36 / 75%) 100%) !important; border: 0; border-radius: 35px; letter-spacing: 0; font-weight: 600; width: 100%; display: block; color: #fff; padding: 10px; text-align: center;}
 .Employees_Search_List {padding: 0 !important;}
-aside .widget {
-    margin-top: 5px !important;
-    margin-bottom: 5px !important;
-    border-bottom: 1px solid #eee !important;}
+aside .widget {margin-top: 5px !important; margin-bottom: 5px !important; border-bottom: 1px solid #eee !important;}
+.Employees_Search_List .Employees_Search_Result .emply-resume-list .shortlists a:nth-last-child(1) {background: none !important; color: #000 !important;}
 </style>
 <section class="overlape">
     <div class="block no-padding">
@@ -359,7 +357,8 @@ aside .widget {
                                         <p>Rank: <?= $value['rank'] ?></p>
                                     </div>
                                     <div class="shortlists" style="width:50px;">
-                                        <a href="<?= base_url('readyforinterview?uID='.base64_encode($value['userId']).'&jobID='.base64_encode($post_data->id)) ?>" title="" style=" width: 170px !important;">Ready for Interview<i class="la la-plus"></i></a>
+                                        <a href="<?= base_url('readyforinterview?uID='.base64_encode($value['userId']).'&jobID='.base64_encode($post_data->id)) ?>" title="" style=" width: 170px !important; text-align: center;">Ready for Interview</a>
+                                        <a href="<?= base_url('chatforinterview?uID='.base64_encode($value['userId']).'&jobID='.base64_encode($post_data->id)) ?>" title="" style=" width: 170px !important; text-align: center;">Chat</a>
                                     </div>
                                 </div>
                                 <?php

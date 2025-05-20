@@ -1304,10 +1304,7 @@ class Dashboard extends CI_Controller {
                 $utcDateTime->setTimezone($localTimeZone);
                 $utcDateTime = $utcDateTime->format('Y-m-d');
                 if($utcDateTime == $choosendate) {
-                   // $output .= '<div class="getdatespecificdatetime" id="getdatespecificdatetime_'.$avail['id'].'" onclick="booktheslot('.$avail['id'].')">'.date('h:i A', strtotime($localFromTime)).' to '.date('h:i A', strtotime($localToTime)).'</div>';
-                   $output .= '<div class="getdatespecificdatetime" id="getdatespecificdatetime_'.$avail['id'].'" data-slot-id="'.$avail['id'].'">';
-                    $output .= date('h:i A', strtotime($localFromTime)).' to '.date('h:i A', strtotime($localToTime));
-                    $output .= '</div>';
+                    $output .= '<div class="getdatespecificdatetime" id="getdatespecificdatetime_'.$avail['id'].'" onclick="booktheslot('.$avail['id'].')">'.date('h:i A', strtotime($localFromTime)).' to '.date('h:i A', strtotime($localToTime)).'</div>';
                 }
                 /*else {
                     $output .= '<div class="getdatespecificdatetime">No Time Available</div>';
@@ -1350,28 +1347,16 @@ class Dashboard extends CI_Controller {
 		$employerID = $this->input->post('user_id');
 		$job_id = $this->input->post('job_id');
         $employeeID = $this->input->post('workers_id');
-        $total_amount = $this->input->post('total_amount');
-        $paymentID = $this->input->post('transaction_id');
-        $transactionDate = $this->input->post('transactionDate');
-        $paymentStatus = $this->input->post('paymentStatus');
-
-        if ($paymentStatus == "COMPLETED") {
-            if (isset($avail_id) && is_string($avail_id)) {
-                $avail_ids = explode(',', $avail_id);
-            }
-            foreach ($avail_ids as $index => $id) {
-                $data = array(
-                    'employee_id' => $employeeID,
-                    'employer_id' => $employerID,
-                    'post_id' => $job_id,
-                    'available_id' => $id,
-                );
-                $this->Crud_model->SaveData('user_booking', $data);
-            }
-            return $this->paymentforslotbook($avail_id, $employeeID, $employerID, $total_amount, $paymentID, $transactionDate);
-        } else {
-            return 2;
-        }
+        $getbookingTime = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$avail_id."'")->row();
+        //$weekdayslot = $getbookingTime->utcTime;
+        $data = array(
+            'employee_id' => $employeeID,
+            'employer_id' => $employerID,
+            'post_id' => $job_id,
+            'available_id' => $avail_id,
+        );
+        $this->Crud_model->SaveData('user_booking', $data);
+		return $this->paymentforslotbook($avail_id, $employeeID, $employerID);
 	}
     public function get_access_token() {
         $curl = curl_init();
@@ -1397,178 +1382,172 @@ class Dashboard extends CI_Controller {
         $this->db->query("UPDATE setting SET zoom_token = '$data->access_token' WHERE id = '1'");
         $this->paymentforslotbook();
     }
-	public function paymentforslotbook($avail_id, $employeeID, $employerID, $total_amount, $paymentID, $transactionDate) {
+	public function paymentforslotbook($avail_id, $employeeID, $employerID) {
         $accessToken = $this->db->query("SELECT zoom_token FROM setting WHERE id = '1'")->row();
-        //$get_rate = $this->db->query("SELECT * FROM users WHERE userId = '".$employeeID."'")->row();
-        //$rate = $get_rate->rateperhour;
-        if (isset($avail_id) && is_string($avail_id)) {
-            $avail_ids = explode(',', $avail_id);
+        $get_rate = $this->db->query("SELECT * FROM users WHERE userId = '".$employeeID."'")->row();
+        $rate = $get_rate->rateperhour;
+        $getBookinID = $this->db->query("SELECT * FROM user_booking WHERE available_id = '".$avail_id."'")->row();
+        $length = 24;
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[random_int(0, $charactersLength - 1)];
         }
-        $bookingIds = [];
-        foreach ($avail_ids as $index => $id) {
-            $getBookinID = $this->db->query("SELECT * FROM user_booking WHERE available_id = '".$id."'")->row();
-            $bookingIds[] = $getBookinID->id;
-
-            // create miting link
-            $getavailDate = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$id."'")->row();
-            $getbiduser = $this->db->query("SELECT * FROM users WHERE userId = '" . $employeeID . "'")->row();
-            $getbidemail = $getbiduser->email;
-            $getbidname = $getbiduser->firstname. ' '.$getbiduser->lastname;
-            $getpostuser = $this->db->query("SELECT * FROM users WHERE userId = '" . $employerID . "'")->row();
-            $getpostemail = $getpostuser->email;
-            $getpostname = $getpostuser->companyname;
-            $bookingTime = $getavailDate->utcTime;
-            $bt = explode(" to ", $bookingTime);
-            $utcFromTime = new DateTime($bt[0], new DateTimeZone('UTC'));
-            $localTimezone = new DateTimeZone($getpostuser->timeZone);
-            $utcFromTime->setTimezone($localTimezone);
-            $localFromTime = $utcFromTime->format('H:i');
-            $utcToTime = new DateTime($bt[1], new DateTimeZone('UTC'));
-            $utcToTime->setTimezone($localTimezone);
-            $localToTime = $utcToTime->format('H:i');
-            $utcDateTime = new DateTime($getavailDate->utcStartDate." ".$localFromTime, new DateTimeZone('UTC'));
-            $utcDateTime->setTimezone($localTimezone);
-            $utcDateTime = $utcDateTime->format('Y-m-d');
-            //$meetingLink = array();
-            //$meetingPass = array();
-            $postData = [
-                "topic" => 'Interview Link from Payper LLC ',
-                "type" => 2,
-                "start_time" => $getavailDate->utcStartDate.'T'.$bt[0].':00Z',
-                "duration" => 40,
-                "timezone" => $getpostuser->timeZone,
-                "settings" => [
-                    "waiting_room" => false,
-                    "host_video" => true,
-                    "participant_video" => true,
-                    "join_before_host" => true,
-                    "mute_upon_entry" => true,
-                    "watermark" => true,
-                    "audio" => "voip",
-                    "auto_recording" => "cloud",
-                    "allow_multiple_devices" => true,
-                    "registration_type" => 2,
-                ]
-            ];
-            //print_r($postData);
-            $curl = curl_init();
-            curl_setopt_array($curl,
-                array(
-                    CURLOPT_URL => 'https://api.zoom.us/v2/users/me/meetings',
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING => '',
-                    CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_TIMEOUT => 0,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_POSTFIELDS => json_encode($postData),
-                    CURLOPT_HTTPHEADER => array(
-                        'Content-Type: application/json',
-                        'Authorization: Bearer '.$accessToken->zoom_token,
-                        'Cookie: __cf_bm=GN3ywe1uhIkt8A3lL9gHzHKkp.4qZTLivRpTlPVFJqY-1712669514-1.0.1.1-DJPYX.VcbuLNC1eShWwsac4xiyrEI1D0FAUk6BbEsCgSrHuLUnZNcmSdTgJKAV4dEOMEev5a_8f.MErEwIl5ag; _zm_chtaid=194; _zm_ctaid=bWbmHkt-Rp25q21_dFN0wQ.1712669514172.bc9ee5647144d7a2e253b3c6f2d5b040; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_4Sx_TLg1RXKKrIYAholtOg; _zm_ssid=us04_c_Ro2izO6ERUGvcEXUNIr5dw; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b'
-                        )
-                )
-            );
-            $response = curl_exec($curl);
-            curl_close($curl);
-            $decodedData = json_decode($response, true);
-            if($decodedData['code'] == "124") {
-                $curl = curl_init();
-                curl_setopt_array($curl, array(
-                    CURLOPT_URL => 'https://zoom.us/oauth/token',
-                    CURLOPT_RETURNTRANSFER => true,
-                    CURLOPT_ENCODING => '',
-                    CURLOPT_MAXREDIRS => 10,
-                    CURLOPT_TIMEOUT => 0,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                    CURLOPT_CUSTOMREQUEST => 'POST',
-                    CURLOPT_POSTFIELDS => 'grant_type=account_credentials&account_id=73H-Ll9DSseDWF6dgUeT9A',
-                    CURLOPT_HTTPHEADER => array(
-                        'Content-Type: application/x-www-form-urlencoded',
-                        'Authorization: Basic V1pteDVESzVSNHloOXhkQTRiN190QTp1OXBabnFJcUJHNDdOaE5yS3k4M2h3V1I3QnkybjRvMg==',
-                        'Cookie: __cf_bm=j8d61x5QOrLIXdL1IovzLtyXIDmhn9CSZhJLPEzBUc4-1723196550-1.0.1.1-tBe3gQgo8c.JvYn2UVqs6hszZkGUlR6MX5M_MKK..B02y8K7Tu6MDzl.vu4mM.zJXL_22X.zMNvPfHvvoFVsgw; _zm_chtaid=592; _zm_ctaid=vlK3KdZqThenJprgxfHMRQ.1723189809081.03d77d1c9e5e5b7e047f8eb33209f5d7; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=aw1_c_DISK24aaTaWD80m2aQmW0Q; _zm_ssid=us04_c_zAGVzePSRJG3ZCkTQyKfiA; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b; cred=C1A7EA88374F5E3DEE6F4098789ACC4C'
-                    ),
-                ));
-                $response = curl_exec($curl);
-                curl_close($curl);
-                $data = json_decode($response);
-                $this->db->query("UPDATE setting SET zoom_token = '$data->access_token' WHERE id = '1'");
-                $this->paymentforslotbook($avail_id, $employeeID, $employerID, $total_amount, $paymentID, $transactionDate);
-                exit;
-            }
-            $meetingLink = $decodedData['join_url'];
-            $joinUrl = "https://us04web.zoom.us/j/".$decodedData['id'];
-            $meetingLink = $joinUrl;
-            $meetingpass = $decodedData['password'];
-            if(!empty($decodedData['join_url'])) {
-                $this->db->query("UPDATE user_booking SET meeting_link = '".$joinUrl."', meeting_pass = '".$meetingpass."' WHERE id = '".$getBookinID->id."'");
-                $get_setting=$this->Crud_model->get_single('setting');
-                $htmlContent = "
-                <div style='width:600px; margin: 0 auto;background: #fff;border: 1px solid #e6e6e6;'>
-                    <div style='padding: 30px 30px 15px 30px;box-sizing: border-box;'>
-                    <img src='cid:Logo' style='width:100px;float: right;margin-top: 0 auto;'>
-                    <h3 style='padding-top:40px; line-height: 30px;'>Greetings from<span style='font-weight: 900;font-size: 35px;color: #F44C0D; display: block;'>PayPer LLC</span></h3>
-                    <p style='font-size:24px;'>Hello User,</p>
-                    <p style='font-size:24px;'>Please find the below meeting info.</p>
-                    <p style='font-size:24px;'>Just press the button below and follow the instructions.</p>
-                    <p style='text-align: center;'><a href='".$joinUrl."' style='height: 50px; width: 300px; background: rgb(253,179,2); background: linear-gradient(0deg, rgba(253,179,2,1) 0%, rgba(244,77,9,1) 100%); text-align: center; font-size: 18px; color: #fff; border-radius: 12px; display: inline-block; line-height: 50px; text-decoration: none; text-transform: uppercase; font-weight: 600;'>Meeting Link</a></p>
-                    <p style='font-size:24px;'>Meeting Passcode: ".$decodedData['password']."</p>
-                    <p style='font-size:20px;'>Thank you!</p>
-                    <p style='font-size:20px;list-style: none;'>Sincerly</p>
-                    <p style='list-style: none;'><b>PayPer LLC</b></p>
-                    <p style='list-style:none;'><b>Visit us:</b> <span>$get_setting->address</span></p>
-                    <p style='list-style:none'><b>Email us:</b> <span>$get_setting->email</span></p>
-                    </div>
-                    <table style='width: 100%;'>
-                        <tr>
-                            <td style='height:30px;width:100%; background: red;padding: 10px 0px; font-size:13px; color: #fff; text-align: center;'>Copyright &copy; <?=date('Y')?> Pay Per Dialog. All rights reserved.</td>
-                        </tr>
-                    </table>
-                </div>";
-                require 'vendor/autoload.php';
-                $mail = new PHPMailer(true);
-                try {
-                    //Server settings
-                    //$mail->SMTPDebug = 2;
-                    $mail->CharSet = 'UTF-8';
-                    $mail->SetFrom('info@payperdialog.com', 'Pay Per Dialog');
-                    $mail->AddAddress($getbidemail, $getbidname);
-                    $mail->AddAddress($getpostemail, $getpostname);
-                    $mail->IsHTML(true);
-                    $mail->Subject = "Meeting Link from Pay Per Dialog";
-                    $mail->AddEmbeddedImage('uploads/logo/'.$get_setting->flogo, 'Logo');
-                    $mail->Body = $htmlContent;
-                    //Send email via SMTP
-                    $mail->IsSMTP();
-                    $mail->SMTPAuth = true;
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Host = "smtp.hostinger.com";
-                    $mail->Port = 587; //587 465
-                    $mail->Username = "info@payperdialog.com";
-                    $mail->Password = "PayperLLC@1";
-                    $mail->send();
-                } catch (Exception $e) {
-                    //echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
-                }
-            }
-            //$meetingLink = implode(',', $meetingLink);
-            //$meetingpass = implode(',', $meetingpass);
-            $this->db->query("UPDATE user_booking SET meeting_link = '".$meetingLink."', meeting_pass = '".$meetingpass."' WHERE id = '".$getBookinID->id."'");
-            $this->db->query("UPDATE user_availability_new SET is_booked = '1' WHERE id = '".$id."'");
-        }
-        $commaSeparatedIds = implode(',', $bookingIds);
-        $txn = $paymentID;
-        $date = new DateTime($transactionDate);
-        $formattedDate = $date->format('Y-m-d H:i:s');
+        $txn = "txn_".$randomString;
         $data = array(
-            'booking_id'=> $commaSeparatedIds,
-            'rate'=> $total_amount,
+            'booking_id'=> $getBookinID->id,
+            'rate'=> $rate,
             'txn_id'=> $txn,
-            'txn_date'=> $formattedDate
         );
         $this->Crud_model->SaveData('user_booking_txn', $data);
+        // create miting link
+        $getavailDate = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$avail_id."'")->row();
+        $getbiduser = $this->db->query("SELECT * FROM users WHERE userId = '" . $employeeID . "'")->row();
+        $getbidemail = $getbiduser->email;
+        $getbidname = $getbiduser->firstname. ' '.$getbiduser->lastname;
+        $getpostuser = $this->db->query("SELECT * FROM users WHERE userId = '" . $employerID . "'")->row();
+        $getpostemail = $getpostuser->email;
+        $getpostname = $getpostuser->companyname;
+        $bookingTime = $getavailDate->utcTime;
+        $bt = explode(" to ", $bookingTime);
+        $utcFromTime = new DateTime($bt[0], new DateTimeZone('UTC'));
+        $localTimezone = new DateTimeZone($getpostuser->timeZone);
+        $utcFromTime->setTimezone($localTimezone);
+        $localFromTime = $utcFromTime->format('H:i');
+        $utcToTime = new DateTime($bt[1], new DateTimeZone('UTC'));
+        $utcToTime->setTimezone($localTimezone);
+        $localToTime = $utcToTime->format('H:i');
+        $utcDateTime = new DateTime($getavailDate->utcStartDate." ".$localFromTime, new DateTimeZone('UTC'));
+        $utcDateTime->setTimezone($localTimezone);
+        $utcDateTime = $utcDateTime->format('Y-m-d');
+        $meetingLink = array();
+        $meetingPass = array();
+        $postData = [
+            "topic" => 'Interview Link from Payper LLC ',
+            "type" => 2,
+            "start_time" => $getavailDate->utcStartDate.'T'.$bt[0].':00Z',
+            "duration" => 40,
+            "timezone" => $getpostuser->timeZone,
+            "settings" => [
+                "waiting_room" => false,
+                "host_video" => true,
+                "participant_video" => true,
+                "join_before_host" => true,
+                "mute_upon_entry" => true,
+                "watermark" => true,
+                "audio" => "voip",
+                "auto_recording" => "cloud",
+                "allow_multiple_devices" => true,
+                "registration_type" => 2,
+            ]
+        ];
+        //print_r($postData);
+        $curl = curl_init();
+        curl_setopt_array($curl,
+            array(
+                CURLOPT_URL => 'https://api.zoom.us/v2/users/me/meetings',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => json_encode($postData),
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/json',
+                    'Authorization: Bearer '.$accessToken->zoom_token,
+                    'Cookie: __cf_bm=GN3ywe1uhIkt8A3lL9gHzHKkp.4qZTLivRpTlPVFJqY-1712669514-1.0.1.1-DJPYX.VcbuLNC1eShWwsac4xiyrEI1D0FAUk6BbEsCgSrHuLUnZNcmSdTgJKAV4dEOMEev5a_8f.MErEwIl5ag; _zm_chtaid=194; _zm_ctaid=bWbmHkt-Rp25q21_dFN0wQ.1712669514172.bc9ee5647144d7a2e253b3c6f2d5b040; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=us04_c_4Sx_TLg1RXKKrIYAholtOg; _zm_ssid=us04_c_Ro2izO6ERUGvcEXUNIr5dw; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b'
+                    )
+            )
+        );
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $decodedData = json_decode($response, true);
+        if($decodedData['code'] == "124") {
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://zoom.us/oauth/token',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => 'grant_type=account_credentials&account_id=73H-Ll9DSseDWF6dgUeT9A',
+                CURLOPT_HTTPHEADER => array(
+                    'Content-Type: application/x-www-form-urlencoded',
+                    'Authorization: Basic V1pteDVESzVSNHloOXhkQTRiN190QTp1OXBabnFJcUJHNDdOaE5yS3k4M2h3V1I3QnkybjRvMg==',
+                    'Cookie: __cf_bm=j8d61x5QOrLIXdL1IovzLtyXIDmhn9CSZhJLPEzBUc4-1723196550-1.0.1.1-tBe3gQgo8c.JvYn2UVqs6hszZkGUlR6MX5M_MKK..B02y8K7Tu6MDzl.vu4mM.zJXL_22X.zMNvPfHvvoFVsgw; _zm_chtaid=592; _zm_ctaid=vlK3KdZqThenJprgxfHMRQ.1723189809081.03d77d1c9e5e5b7e047f8eb33209f5d7; _zm_mtk_guid=c133062e5fbc412eace34da570f36f5b; _zm_page_auth=aw1_c_DISK24aaTaWD80m2aQmW0Q; _zm_ssid=us04_c_zAGVzePSRJG3ZCkTQyKfiA; _zm_visitor_guid=c133062e5fbc412eace34da570f36f5b; cred=C1A7EA88374F5E3DEE6F4098789ACC4C'
+                ),
+            ));
+            $response = curl_exec($curl);
+            curl_close($curl);
+            $data = json_decode($response);
+            $this->db->query("UPDATE setting SET zoom_token = '$data->access_token' WHERE id = '1'");
+            $this->paymentforslotbook($avail_id, $employeeID, $employerID);
+        }
+        $meetingLink[$i]= $decodedData['join_url'];
+        $joinUrl = "https://us04web.zoom.us/j/".$decodedData['id'];
+        $meetingLink[$i]= $joinUrl;
+        $meetingpass[$i]= $decodedData['password'];
+        if(!empty($decodedData['join_url'])) {
+            $this->db->query("UPDATE user_booking SET meeting_link = '".$joinUrl."', meeting_pass = '".$meetingpass."' WHERE id = '".$getBookinID->id."'");
+            $get_setting=$this->Crud_model->get_single('setting');
+            $htmlContent = "
+            <div style='width:600px; margin: 0 auto;background: #fff;border: 1px solid #e6e6e6;'>
+                <div style='padding: 30px 30px 15px 30px;box-sizing: border-box;'>
+                <img src='cid:Logo' style='width:100px;float: right;margin-top: 0 auto;'>
+                <h3 style='padding-top:40px; line-height: 30px;'>Greetings from<span style='font-weight: 900;font-size: 35px;color: #F44C0D; display: block;'>PayPer LLC</span></h3>
+                <p style='font-size:24px;'>Hello User,</p>
+                <p style='font-size:24px;'>Please find the below meeting info.</p>
+                <p style='font-size:24px;'>Just press the button below and follow the instructions.</p>
+                <p style='text-align: center;'><a href='".$joinUrl."' style='height: 50px; width: 300px; background: rgb(253,179,2); background: linear-gradient(0deg, rgba(253,179,2,1) 0%, rgba(244,77,9,1) 100%); text-align: center; font-size: 18px; color: #fff; border-radius: 12px; display: inline-block; line-height: 50px; text-decoration: none; text-transform: uppercase; font-weight: 600;'>Meeting Link</a></p>
+                <p style='font-size:24px;'>Meeting Passcode: ".$decodedData['password']."</p>
+                <p style='font-size:20px;'>Thank you!</p>
+                <p style='font-size:20px;list-style: none;'>Sincerly</p>
+                <p style='list-style: none;'><b>PayPer LLC</b></p>
+                <p style='list-style:none;'><b>Visit us:</b> <span>$get_setting->address</span></p>
+                <p style='list-style:none'><b>Email us:</b> <span>$get_setting->email</span></p>
+                </div>
+                <table style='width: 100%;'>
+                    <tr>
+                        <td style='height:30px;width:100%; background: red;padding: 10px 0px; font-size:13px; color: #fff; text-align: center;'>Copyright &copy; <?=date('Y')?> Pay Per Dialog. All rights reserved.</td>
+                    </tr>
+                </table>
+            </div>";
+            require 'vendor/autoload.php';
+            $mail = new PHPMailer(true);
+            try {
+                //Server settings
+                //$mail->SMTPDebug = 2;
+                $mail->CharSet = 'UTF-8';
+                $mail->SetFrom('info@payperdialog.com', 'Pay Per Dialog');
+                $mail->AddAddress($getbidemail, $getbidname);
+                $mail->AddAddress($getpostemail, $getpostemail);
+                $mail->IsHTML(true);
+                $mail->Subject = "Meeting Link from Pay Per Dialog";
+                $mail->AddEmbeddedImage('uploads/logo/'.$get_setting->flogo, 'Logo');
+                $mail->Body = $htmlContent;
+                //Send email via SMTP
+                $mail->IsSMTP();
+                $mail->SMTPAuth = true;
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Host = "smtp.hostinger.com";
+                $mail->Port = 587; //587 465
+                $mail->Username = "info@payperdialog.com";
+                $mail->Password = "PayperLLC@2024";
+                $mail->send();
+            } catch (Exception $e) {
+                //echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+            }
+        }
+        $meetingLink = implode(',', $meetingLink);
+        $meetingpass = implode(',', $meetingpass);
+        $this->db->query("UPDATE user_booking SET meeting_link = '".$meetingLink."', meeting_pass = '".$meetingpass."' WHERE id = '".$getBookinID->id."'");
+        $this->db->query("UPDATE user_availability_new SET is_booked = '1' WHERE id = '".$avail_id."'");
         echo "1";
     }
 	public function edit_availability() {
@@ -1839,31 +1818,13 @@ class Dashboard extends CI_Controller {
     public function readyforinterview() {
         $jobID = base64_decode($this->input->get('jobID', true));
         $uID = base64_decode($this->input->get('uID', true));
-        $getpostuser = $this->db->query("SELECT * FROM job_bid WHERE postjob_id = '".$jobID."' AND user_id = '".$uID."'")->row();
-        if(empty($getpostuser)) {
-            $bookingData = array(
-                'postjob_id' => $jobID,
-                'user_id' => $uID,
-                'bidding_status' => 'Ready for Interview',
-                'status' => 'Active'
-            );
-            $this->db->insert('job_bid', $bookingData);
-        }
+        $bookingData = array(
+            'postjob_id' => $jobID,
+            'user_id' => $uID,
+            'bidding_status' => 'Ready for Interview',
+            'status' => 'Active'
+        );
+        $this->db->insert('job_bid', $bookingData);
         redirect(base_url('workerdetail?jobID='.base64_encode($jobID).'&uID='.base64_encode($uID).'#job-overview'));
-    }
-    public function chatforinterview() {
-        $jobID = base64_decode($this->input->get('jobID', true));
-        $uID = base64_decode($this->input->get('uID', true));
-        $getpostuser = $this->db->query("SELECT * FROM job_bid WHERE postjob_id = '".$jobID."' AND user_id = '".$uID."'")->row();
-        if(empty($getpostuser)) {
-            $bookingData = array(
-                'postjob_id' => $jobID,
-                'user_id' => $uID,
-                'bidding_status' => 'Ready for Interview',
-                'status' => 'Active'
-            );
-            $this->db->insert('job_bid', $bookingData);
-        }
-        redirect(base_url('chat'));
     }
 }

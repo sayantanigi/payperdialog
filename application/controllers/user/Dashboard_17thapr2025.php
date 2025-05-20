@@ -1350,28 +1350,22 @@ class Dashboard extends CI_Controller {
 		$employerID = $this->input->post('user_id');
 		$job_id = $this->input->post('job_id');
         $employeeID = $this->input->post('workers_id');
-        $total_amount = $this->input->post('total_amount');
-        $paymentID = $this->input->post('transaction_id');
-        $transactionDate = $this->input->post('transactionDate');
-        $paymentStatus = $this->input->post('paymentStatus');
-
-        if ($paymentStatus == "COMPLETED") {
-            if (isset($avail_id) && is_string($avail_id)) {
-                $avail_ids = explode(',', $avail_id);
-            }
-            foreach ($avail_ids as $index => $id) {
-                $data = array(
-                    'employee_id' => $employeeID,
-                    'employer_id' => $employerID,
-                    'post_id' => $job_id,
-                    'available_id' => $id,
-                );
-                $this->Crud_model->SaveData('user_booking', $data);
-            }
-            return $this->paymentforslotbook($avail_id, $employeeID, $employerID, $total_amount, $paymentID, $transactionDate);
-        } else {
-            return 2;
+        $getbookingTime = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$avail_id."'")->row();
+        //$weekdayslot = $getbookingTime->utcTime;
+        if (isset($avail_id) && is_string($avail_id)) {
+            $avail_ids = explode(',', $avail_id);
         }
+        foreach ($avail_ids as $index => $id) {
+            $data = array(
+                'employee_id' => $employeeID,
+                'employer_id' => $employerID,
+                'post_id' => $job_id,
+                'available_id' => $id,
+            );
+            //print_r($data); die();
+            $this->Crud_model->SaveData('user_booking', $data);
+        }
+		return $this->paymentforslotbook($avail_id, $employeeID, $employerID);
 	}
     public function get_access_token() {
         $curl = curl_init();
@@ -1397,17 +1391,29 @@ class Dashboard extends CI_Controller {
         $this->db->query("UPDATE setting SET zoom_token = '$data->access_token' WHERE id = '1'");
         $this->paymentforslotbook();
     }
-	public function paymentforslotbook($avail_id, $employeeID, $employerID, $total_amount, $paymentID, $transactionDate) {
+	public function paymentforslotbook($avail_id, $employeeID, $employerID) {
         $accessToken = $this->db->query("SELECT zoom_token FROM setting WHERE id = '1'")->row();
-        //$get_rate = $this->db->query("SELECT * FROM users WHERE userId = '".$employeeID."'")->row();
-        //$rate = $get_rate->rateperhour;
+        $get_rate = $this->db->query("SELECT * FROM users WHERE userId = '".$employeeID."'")->row();
+        $rate = $get_rate->rateperhour;
         if (isset($avail_id) && is_string($avail_id)) {
             $avail_ids = explode(',', $avail_id);
         }
-        $bookingIds = [];
         foreach ($avail_ids as $index => $id) {
             $getBookinID = $this->db->query("SELECT * FROM user_booking WHERE available_id = '".$id."'")->row();
-            $bookingIds[] = $getBookinID->id;
+            $length = 24;
+            $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $charactersLength = strlen($characters);
+            $randomString = '';
+            for ($i = 0; $i < $length; $i++) {
+                $randomString .= $characters[random_int(0, $charactersLength - 1)];
+            }
+            $txn = "txn_".$randomString;
+            $data = array(
+                'booking_id'=> $getBookinID->id,
+                'rate'=> $rate,
+                'txn_id'=> $txn,
+            );
+            $this->Crud_model->SaveData('user_booking_txn', $data);
 
             // create miting link
             $getavailDate = $this->db->query("SELECT * FROM user_availability_new WHERE id = '".$id."'")->row();
@@ -1495,8 +1501,7 @@ class Dashboard extends CI_Controller {
                 curl_close($curl);
                 $data = json_decode($response);
                 $this->db->query("UPDATE setting SET zoom_token = '$data->access_token' WHERE id = '1'");
-                $this->paymentforslotbook($avail_id, $employeeID, $employerID, $total_amount, $paymentID, $transactionDate);
-                exit;
+                $this->paymentforslotbook($avail_id, $employeeID, $employerID);
             }
             $meetingLink = $decodedData['join_url'];
             $joinUrl = "https://us04web.zoom.us/j/".$decodedData['id'];
@@ -1535,7 +1540,7 @@ class Dashboard extends CI_Controller {
                     $mail->CharSet = 'UTF-8';
                     $mail->SetFrom('info@payperdialog.com', 'Pay Per Dialog');
                     $mail->AddAddress($getbidemail, $getbidname);
-                    $mail->AddAddress($getpostemail, $getpostname);
+                    $mail->AddAddress($getpostemail, $getpostemail);
                     $mail->IsHTML(true);
                     $mail->Subject = "Meeting Link from Pay Per Dialog";
                     $mail->AddEmbeddedImage('uploads/logo/'.$get_setting->flogo, 'Logo');
@@ -1547,7 +1552,7 @@ class Dashboard extends CI_Controller {
                     $mail->Host = "smtp.hostinger.com";
                     $mail->Port = 587; //587 465
                     $mail->Username = "info@payperdialog.com";
-                    $mail->Password = "PayperLLC@1";
+                    $mail->Password = "PayperLLC@2024";
                     $mail->send();
                 } catch (Exception $e) {
                     //echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
@@ -1558,17 +1563,6 @@ class Dashboard extends CI_Controller {
             $this->db->query("UPDATE user_booking SET meeting_link = '".$meetingLink."', meeting_pass = '".$meetingpass."' WHERE id = '".$getBookinID->id."'");
             $this->db->query("UPDATE user_availability_new SET is_booked = '1' WHERE id = '".$id."'");
         }
-        $commaSeparatedIds = implode(',', $bookingIds);
-        $txn = $paymentID;
-        $date = new DateTime($transactionDate);
-        $formattedDate = $date->format('Y-m-d H:i:s');
-        $data = array(
-            'booking_id'=> $commaSeparatedIds,
-            'rate'=> $total_amount,
-            'txn_id'=> $txn,
-            'txn_date'=> $formattedDate
-        );
-        $this->Crud_model->SaveData('user_booking_txn', $data);
         echo "1";
     }
 	public function edit_availability() {
@@ -1839,31 +1833,13 @@ class Dashboard extends CI_Controller {
     public function readyforinterview() {
         $jobID = base64_decode($this->input->get('jobID', true));
         $uID = base64_decode($this->input->get('uID', true));
-        $getpostuser = $this->db->query("SELECT * FROM job_bid WHERE postjob_id = '".$jobID."' AND user_id = '".$uID."'")->row();
-        if(empty($getpostuser)) {
-            $bookingData = array(
-                'postjob_id' => $jobID,
-                'user_id' => $uID,
-                'bidding_status' => 'Ready for Interview',
-                'status' => 'Active'
-            );
-            $this->db->insert('job_bid', $bookingData);
-        }
+        $bookingData = array(
+            'postjob_id' => $jobID,
+            'user_id' => $uID,
+            'bidding_status' => 'Ready for Interview',
+            'status' => 'Active'
+        );
+        $this->db->insert('job_bid', $bookingData);
         redirect(base_url('workerdetail?jobID='.base64_encode($jobID).'&uID='.base64_encode($uID).'#job-overview'));
-    }
-    public function chatforinterview() {
-        $jobID = base64_decode($this->input->get('jobID', true));
-        $uID = base64_decode($this->input->get('uID', true));
-        $getpostuser = $this->db->query("SELECT * FROM job_bid WHERE postjob_id = '".$jobID."' AND user_id = '".$uID."'")->row();
-        if(empty($getpostuser)) {
-            $bookingData = array(
-                'postjob_id' => $jobID,
-                'user_id' => $uID,
-                'bidding_status' => 'Ready for Interview',
-                'status' => 'Active'
-            );
-            $this->db->insert('job_bid', $bookingData);
-        }
-        redirect(base_url('chat'));
     }
 }

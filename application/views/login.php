@@ -31,76 +31,76 @@ if(!empty($get_banner->image) && file_exists('uploads/banner/'.$get_banner->imag
     <div class="block remove-bottom Sign_In">
         <div class="container">
             <div class="row justify-content-md-center">
-                <div class="col-lg-10">
+                <div class="col-lg-12">
                     <div class="account-popup-area signin-popup-box static">
                         <div class="account-popup">
-                            <div class="row m-0">
-                                <div class="col-lg-4 col-md-12 col-sm-12 SignIn_Left">
-                                    <h3>Login</h3>
-                                    <span>Get started by signing in using your existing accounts.</span>
-
-                                </div>
-                                <div class="col-lg-8 col-md-12 col-sm-12 SignIn_Right">
-                                    <div id="register-messages" class="text-invalid f-20">
-                                        <span class="text-invalid f-15" style="text-align: center;">
-                                            <?php if($this->session->flashdata('message')) {
-                                                echo $this->session->flashdata('message');
-                                                unset($_SESSION['message']);
-                                            } ?>
-                                        </span>
-                                    </div>
-                                    <?php if($this->session->userdata('error')) { ?>
-                                    <div id="err-messages">
-                                        <span class="text-danger f-15" style="text-align: center;">
-                                            <?php echo $this->session->userdata('error');
-                                                unset($_SESSION['error']); ?>
-                                        </span>
-                                    </div>
-                                    <?php } ?>
-                                    <form action="<?=base_url(); ?>validate" method="post">
-                                        <div class="row m-0">
-                                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                                <div class="cfield">
-                                                    <label for="" class="form-label">Email Address</label>
-                                                    <div class="cfield_Input">
-                                                        <input type="text" placeholder="Email Address" name="email" />
-                                                        <i class="la la-user"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="error text-left"><?php echo form_error('email'); ?></div>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                                <div class="cfield">
-                                                    <label for="" class="form-label">Password</label>
-                                                    <div class="cfield_Input">
-                                                        <input type="password" placeholder="********" name="password" id="login_pass"/>
-                                                        <i class="la la-key" onclick="checkPass()"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="error text-left"><?php echo form_error('password'); ?></div>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 SignIn_Remember">
-                                                <p class="remember-label"><input type="checkbox" name="cb" id="cb1" /><label for="cb1">Remember me</label></p>
-                                                <!-- <a id="ForgotPassModal" title="">Forgot Password?</a> -->
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 SignIn_Remember">
-                                                <a href="<?= base_url('forgot-password')?>" title="">Forgot Password?</a>
-                                            </div>
-                                            <div class="col-lg-12 col-md-12 col-sm-12 SignIn_Btn">
-                                                <button type="submit" class="btn btn-info">LOG IN</button>
-                                            </div>
-                                            <div class="col-lg-12 col-md-12 col-sm-12 d-none">
-                                                <div class="extra-login">
-                                                    <span>OR</span>
-                                                    <div class="login-social">
-                                                        <a class="fb-login" href="<?= base_url('Facebook_login')?>" title=""><i class="fa fa-facebook"></i></a>
-                                                        <a class="tw-login" href="#" title=""><i class="fa fa-google"></i></a>
-                                                    </div>
-                                                </div>
-                                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-lg-6 col-md-12 col-sm-12 SignIn_Left ">
+                                    <div class="logBox">
+                                        <h3>Login</h3>
+                                        <span>Get started by signing in using your existing accounts.</span>
+                                        <div id="register-messages" class="text-invalid f-20 ">
+                                            <span class="text-invalid f-15" style="text-align: center;">
+                                                <?php if($this->session->flashdata('message')) {
+                                                    echo $this->session->flashdata('message');
+                                                    unset($_SESSION['message']);
+                                                } ?>
+                                            </span>
                                         </div>
-                                    </form>
+                                        <?php if($this->session->userdata('error')) { ?>
+                                        <div id="err-messages">
+                                            <span class="text-danger f-15" style="text-align: center;">
+                                                <?php echo $this->session->userdata('error');
+                                                    unset($_SESSION['error']); ?>
+                                            </span>
+                                        </div>
+                                        <?php } ?>
+                                        <form action="<?=base_url(); ?>validate" method="post">
+                                            <div class="row SignIn_Right">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                    <div class="cfield">
+                                                        <label for="" class="form-label">Email Address</label>
+                                                        <div class="cfield_Input">
+                                                            <input type="text" placeholder="Email Address" name="email" />
+                                                            <i class="la la-user"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="error text-left"><?php echo form_error('email'); ?></div>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12  mb-3">
+                                                    <div class="cfield">
+                                                        <label for="" class="form-label">Password</label>
+                                                        <div class="cfield_Input">
+                                                            <input type="password" placeholder="********" name="password" id="login_pass"/>
+                                                            <i class="la la-key" onclick="checkPass()"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="error text-left"><?php echo form_error('password'); ?></div>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 SignIn_Remember">
+                                                    <p class="remember-label"><input type="checkbox" name="cb" id="cb1" /><label for="cb1">Remember me</label></p>
+                                                    <!-- <a id="ForgotPassModal" title="">Forgot Password?</a> -->
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 SignIn_Remember text-md-right justify-content-lg-end">
+                                                    <a href="<?= base_url('forgot-password')?>" title="">Forgot Password?</a>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 SignIn_Btn">
+                                                    <button type="submit" class="btn btn-info w-100">LOG IN</button>
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 d-none">
+                                                    <div class="extra-login">
+                                                        <span>OR</span>
+                                                        <div class="login-social">
+                                                            <a class="fb-login" href="<?= base_url('Facebook_login')?>" title=""><i class="fa fa-facebook"></i></a>
+                                                            <a class="tw-login" href="#" title=""><i class="fa fa-google"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
+                               
                             </div>
                         </div>
                     </div>
